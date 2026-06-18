@@ -5,46 +5,23 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>사회 5-1 공책정리 (3단원 단계별 학습)</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+
 <style>
-    body {
-        font-family: 'Malgun Gothic', '맑은 고딕', sans-serif;
-        background-color: #f4f6f9;
-        color: #333;
-        margin: 0;
-        padding: 20px;
-        line-height: 1.6;
-    }
-    .container {
-        max-width: 900px;
-        margin: 0 auto;
-        background-color: #fff;
-        padding: 40px;
-        border-radius: 12px;
-        box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-    }
+    body { font-family: 'Malgun Gothic', '맑은 고딕', sans-serif; background-color: #f4f6f9; color: #333; margin: 0; padding: 20px; line-height: 1.6; }
+    .container { max-width: 900px; margin: 0 auto; background-color: #fff; padding: 40px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
     h1 { text-align: center; color: #2c3e50; margin-bottom: 5px; }
     .subtitle { text-align: center; color: #7f8c8d; margin-bottom: 30px; font-size: 1.1em; font-weight: bold; }
     
-    .user-info {
-        text-align: center; margin-bottom: 30px; background-color: #fdf2e9;
-        padding: 20px; border-radius: 8px; border: 2px solid #f5b041;
-    }
-    .user-info input {
-        padding: 8px; font-size: 1.1em; border: 1px solid #ccc;
-        border-radius: 4px; text-align: center; margin: 0 5px;
-    }
+    .user-info { text-align: center; margin-bottom: 30px; background-color: #fdf2e9; padding: 20px; border-radius: 8px; border: 2px solid #f5b041; }
+    .user-info input { padding: 8px; font-size: 1.1em; border: 1px solid #ccc; border-radius: 4px; text-align: center; margin: 0 5px; }
     
-    .page-section {
-        border: 2px solid #3498db; border-radius: 8px; margin-bottom: 20px;
-        padding: 20px 30px; background-color: #fafafa; display: none;
-    }
+    .page-section { border: 2px solid #3498db; border-radius: 8px; margin-bottom: 20px; padding: 20px 30px; background-color: #fafafa; display: none; }
     .page-section.active { display: block; animation: fadeIn 0.5s; }
     @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
-    .page-title {
-        font-size: 1.3em; font-weight: bold; color: #fff; background-color: #3498db;
-        display: inline-block; padding: 5px 15px; border-radius: 20px; margin-top: -35px; margin-bottom: 10px;
-    }
+    .page-title { font-size: 1.3em; font-weight: bold; color: #fff; background-color: #3498db; display: inline-block; padding: 5px 15px; border-radius: 20px; margin-top: -35px; margin-bottom: 10px; }
     .tb-page { font-weight: bold; color: #e67e22; margin-bottom: 15px; text-align: right; }
 
     #page-2 { border-color: #27ae60; } #page-2 .page-title { background-color: #27ae60; }
@@ -55,10 +32,7 @@
     li { margin-bottom: 12px; position: relative; padding-left: 15px; }
     li::before { content: "•"; color: #e74c3c; font-weight: bold; display: inline-block; width: 1em; margin-left: -1em; }
     
-    .blank {
-        width: 100px; padding: 2px 5px; font-size: 1em; font-weight: bold; color: #2980b9;
-        border: 1px solid #ccc; border-radius: 4px; background-color: #fff; text-align: center; margin: 0 5px; outline: none;
-    }
+    .blank { width: 100px; padding: 2px 5px; font-size: 1em; font-weight: bold; color: #2980b9; border: 1px solid #ccc; border-radius: 4px; background-color: #fff; text-align: center; margin: 0 5px; outline: none; }
     .blank:focus { border-color: #e74c3c; background-color: #fdfefe; box-shadow: 0 0 5px rgba(231, 76, 60, 0.5); }
     .blank.long { width: 180px; }
 
@@ -66,17 +40,10 @@
     th, td { border: 1px solid #ccc; padding: 12px; text-align: left; }
     th { background-color: #ecf0f1; text-align: center; }
 
-    .btn {
-        display: block; width: 100%; padding: 20px; font-size: 18px; font-weight: bold;
-        color: #fff; background-color: #3498db; border: none; border-radius: 8px; cursor: pointer;
-        box-shadow: 0 4px 6px rgba(0,0,0,0.1); margin-top: 20px;
-    }
+    .btn { display: block; width: 100%; padding: 20px; font-size: 18px; font-weight: bold; color: #fff; background-color: #3498db; border: none; border-radius: 8px; cursor: pointer; box-shadow: 0 4px 6px rgba(0,0,0,0.1); margin-top: 20px; }
     .btn:hover { background-color: #2980b9; }
 
-    #summary-area {
-        display: none; max-width: 750px; margin: 0 auto; background-color: #fff;
-        padding: 40px; border: 4px solid #2c3e50; border-radius: 12px;
-    }
+    #summary-area { display: none; max-width: 750px; margin: 0 auto; background-color: #fff; padding: 40px; border: 4px solid #2c3e50; border-radius: 12px; }
     .score-box { display: flex; justify-content: space-between; gap: 15px; margin-top: 20px; }
     .score-card { flex: 1; text-align: center; padding: 20px; border-radius: 8px; font-weight: bold; }
     .score-card.p1 { background-color: #eaf2f8; color: #2980b9; border: 1px solid #a9cce3; }
@@ -84,11 +51,7 @@
     .score-card.p3 { background-color: #f5eef8; color: #8e44ad; border: 1px solid #d7bde2; }
     .score-card .score-num { font-size: 2em; margin-top: 10px; }
     
-    .total-score {
-        text-align: center; margin-top: 30px; font-size: 1.5em; padding: 20px;
-        background-color: #fef9e7; border: 2px dashed #f39c12; border-radius: 8px;
-    }
-    
+    .total-score { text-align: center; margin-top: 30px; font-size: 1.5em; padding: 20px; background-color: #fef9e7; border: 2px dashed #f39c12; border-radius: 8px; }
     .wrong-list { margin-top: 30px; }
     .wrong-item { background-color: #fdedec; border-left: 4px solid #e74c3c; padding: 10px; margin-bottom: 10px; }
     .correct-text { color: #27ae60; font-weight: bold; }
@@ -100,7 +63,6 @@
     <h1>📝 사회 공책 정리 단계별 학습</h1>
     <div class="subtitle">3. 법과 인권의 보장 - (1) 법의 역할과 인권</div>
 
-    <!-- 학년/반/번호/이름 분리 -->
     <div class="user-info">
         <label>학년:</label> <input type="number" id="s-grade" style="width: 50px;">
         <label>반:</label> <input type="number" id="s-class" style="width: 50px;">
@@ -108,10 +70,8 @@
         <label>이름:</label> <input type="text" id="s-name" style="width: 120px;">
     </div>
     
-    <!-- 1쪽 -->
     <div class="page-section active" id="page-1">
         <div class="page-title">1쪽. 법이란? / 일상 생활 속 법</div>
-        
         <div class="sub-title">법이 생긴 까닭</div>
         <div class="tb-page">교과서 111~113쪽</div>
         <ul>
@@ -120,7 +80,6 @@
             <li>법: 사회 구성원이 반드시 지켜야 하는 <input type="text" class="blank" id="p1-4">이 있는 규범.</li>
             <li>※ 법을 지키지 않으면 국가로부터 <input type="text" class="blank" id="p1-5">를 받음.</li>
         </ul>
-
         <div class="sub-title">일상 생활 속 법</div>
         <div class="tb-page">교과서 114~118쪽</div>
         <ul>
@@ -141,10 +100,8 @@
         <button class="btn" onclick="gradePage1()">1쪽 채점하고 2쪽으로 넘어가기 ➡️</button>
     </div>
 
-    <!-- 2쪽 -->
     <div class="page-section" id="page-2">
         <div class="page-title" style="background-color: #27ae60;">2쪽. 법의 역할</div>
-        
         <div class="sub-title">법의 필요성과 역할</div>
         <div class="tb-page">교과서 119~122쪽</div>
         <ul>
@@ -164,7 +121,6 @@
                 </ul>
             </li>
         </ul>
-
         <div class="sub-title">법 연결하기 (보기의 법 이름을 쓰세요)</div>
         <div style="background:#fff; padding:10px; border:1px dashed #ccc; margin-bottom:10px; font-size:0.9em;">
             [보기] 재난 및 안전관리 기본법 / 민법 / 도로교통법 / 공정거래법 / 폐기물관리법 / 소방기본법 / 개인정보 보호법 / 테러방지법
@@ -183,10 +139,8 @@
         <button class="btn" style="background-color: #27ae60;" onclick="gradePage2()">2쪽 채점하고 3쪽으로 넘어가기 ➡️</button>
     </div>
 
-    <!-- 3쪽 -->
     <div class="page-section" id="page-3">
         <div class="page-title" style="background-color: #9b59b6;">3쪽. 헌법과 인권 보장</div>
-        
         <div class="sub-title">헌법에 담긴 인권 보장 사례</div>
         <div class="tb-page">교과서 123~127쪽</div>
         <ul>
@@ -199,7 +153,6 @@
             <li>청구권 : 권리가 <input type="text" class="blank" id="p3-17"> 되었을 때 국가에 일정한 행위를 <input type="text" class="blank" id="p3-18">할 수 있음.</li>
             <li>사회권 : 더 <input type="text" class="blank" id="p3-19"> 삶을 살 수 있도록 국가에 요구할 수 있음.</li>
         </ul>
-
         <div class="sub-title">법을 지키고 인권을 존중하는 태도</div>
         <div class="tb-page">교과서 128~131쪽</div>
         <ul>
@@ -211,7 +164,6 @@
     </div>
 </div>
 
-<!-- ================= 캡처될 결과 화면 ================= -->
 <div id="summary-area">
     <h2 style="text-align: center; color: #2c3e50; border-bottom: 2px solid #2c3e50; padding-bottom: 10px;">📊 단계별 공책 정리 채점 결과</h2>
     <div style="font-size: 1.2em; text-align: center; margin: 20px 0;">
@@ -219,30 +171,38 @@
     </div>
     
     <div class="score-box">
-        <div class="score-card p1">
-            <div>1쪽 정답률</div>
-            <div class="score-num" id="score-p1"></div>
-        </div>
-        <div class="score-card p2">
-            <div>2쪽 정답률</div>
-            <div class="score-num" id="score-p2"></div>
-        </div>
-        <div class="score-card p3">
-            <div>3쪽 정답률</div>
-            <div class="score-num" id="score-p3"></div>
-        </div>
+        <div class="score-card p1"><div>1쪽 정답률</div><div class="score-num" id="score-p1"></div></div>
+        <div class="score-card p2"><div>2쪽 정답률</div><div class="score-num" id="score-p2"></div></div>
+        <div class="score-card p3"><div>3쪽 정답률</div><div class="score-num" id="score-p3"></div></div>
     </div>
-    
     <div class="total-score">
         총 <strong id="total-blanks"></strong>개의 빈칸 중 <strong id="total-correct" style="color: #e74c3c; font-size:1.5em;"></strong>개를 정확히 맞혔습니다!
     </div>
-    
     <div class="wrong-list" id="wrong-container"></div>
     
-    <button class="btn" id="download-btn" style="background-color: #27ae60; margin-top:30px;" onclick="downloadSummaryImage()">💾 최종 결과 이미지로 다운로드</button>
+    <button class="btn" id="send-db-btn" style="background-color: #8e44ad; margin-top:20px;" onclick="sendToFirebase()">📡 선생님께 점수 전송하기</button>
+    <button class="btn" id="download-btn" style="background-color: #27ae60; margin-top:10px;" onclick="downloadSummaryImage()">💾 내 폰에 결과 저장하기</button>
 </div>
 
 <script>
+    // =========================================================================
+    // ★★★ 선생님의 파이어베이스 설정 코드입니다 ★★★
+    // =========================================================================
+    const firebaseConfig = {
+      apiKey: "AIzaSyDfs4krriQYs41veoY_QemQ63R3Yru1xOs",
+      authDomain: "yang2-66131.firebaseapp.com",
+      databaseURL: "https://yang2-66131-default-rtdb.firebaseio.com",
+      projectId: "yang2-66131",
+      storageBucket: "yang2-66131.firebasestorage.app",
+      messagingSenderId: "905498274446",
+      appId: "1:905498274446:web:585bc3c06cd99e984f77df"
+    };
+
+    // 파이어베이스 실행 준비
+    firebase.initializeApp(firebaseConfig);
+    const database = firebase.database();
+    // =========================================================================
+
     const answersP1 = {
         'p1-1': '혼란', 'p1-2': '질서', 'p1-3': '법', 'p1-4': '강제성', 'p1-5': '제재',
         'p1-6': '법', 'p1-7': '교육', 'p1-8': '안전', 'p1-9': '안전', 'p1-10': '개인정보',
@@ -276,7 +236,6 @@
         keys.forEach(id => {
             const userAns = document.getElementById(id).value.replace(/\s+/g, '');
             const exactAns = answerDict[id].replace(/\s+/g, '');
-            
             if (userAns === exactAns) {
                 correctCount++;
             } else {
@@ -334,7 +293,6 @@
         const cls = document.getElementById('s-class').value.trim();
         const num = document.getElementById('s-num').value.trim();
         const name = document.getElementById('s-name').value.trim();
-        
         const totalCorrect = scoreP1 + scoreP2 + scoreP3;
         const totalItems = Object.keys(answersP1).length + Object.keys(answersP2).length + Object.keys(answersP3).length;
 
@@ -357,24 +315,52 @@
         window.scrollTo(0, 0);
     }
 
+    // ★★★ 파이어베이스로 데이터 전송하는 함수 ★★★
+    function sendToFirebase() {
+        const grade = document.getElementById('s-grade').value.trim();
+        const cls = document.getElementById('s-class').value.trim();
+        const num = document.getElementById('s-num').value.trim();
+        const name = document.getElementById('s-name').value.trim();
+        const totalCorrect = scoreP1 + scoreP2 + scoreP3;
+
+        // 파이어베이스 데이터베이스에 저장할 경로 (예: 5학년/3반/12번_홍길동)
+        const studentPath = `${grade}학년/${cls}반/${num}번_${name}`;
+
+        database.ref('사회공책결과/' + studentPath).set({
+            이름: name,
+            쪽1점수: scoreP1,
+            쪽2점수: scoreP2,
+            쪽3점수: scoreP3,
+            총점: totalCorrect,
+            제출시간: new Date().toLocaleString()
+        }).then(() => {
+            alert("선생님께 점수가 성공적으로 전송되었습니다! 🚀");
+            document.getElementById('send-db-btn').style.display = 'none'; // 두 번 누르지 않게 버튼 숨김
+        }).catch((error) => {
+            alert("전송 중 오류가 발생했습니다. (선생님의 데이터베이스 권한 설정을 확인해주세요!)\n" + error);
+        });
+    }
+
     function downloadSummaryImage() {
         const downloadBtn = document.getElementById('download-btn');
+        const sendBtn = document.getElementById('send-db-btn');
         downloadBtn.style.display = 'none'; 
+        if(sendBtn) sendBtn.style.display = 'none'; 
+
         const captureArea = document.getElementById('summary-area');
         
-        html2canvas(captureArea, {
-            scale: 2, 
-            backgroundColor: "#ffffff"
-        }).then(canvas => {
+        html2canvas(captureArea, { scale: 2, backgroundColor: "#ffffff" }).then(canvas => {
             const link = document.createElement('a');
             const grade = document.getElementById('s-grade').value;
             const cls = document.getElementById('s-class').value;
             const num = document.getElementById('s-num').value;
             const name = document.getElementById('s-name').value;
-            link.download = `${grade}-${cls}-${num}_${name}_사회공책_최종결과.png`;
+            link.download = `${grade}-${cls}-${num}_${name}_사회공책.png`;
             link.href = canvas.toDataURL('image/png');
             link.click();
+
             downloadBtn.style.display = 'block'; 
+            if(sendBtn) sendBtn.style.display = 'block'; 
         });
     }
 </script>
