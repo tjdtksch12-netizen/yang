@@ -32,16 +32,26 @@
     li { margin-bottom: 12px; position: relative; padding-left: 15px; }
     li::before { content: "•"; color: #e74c3c; font-weight: bold; display: inline-block; width: 1em; margin-left: -1em; }
     
-    .blank { width: 100px; padding: 2px 5px; font-size: 1em; font-weight: bold; color: #2980b9; border: 1px solid #ccc; border-radius: 4px; background-color: #fff; text-align: center; margin: 0 5px; outline: none; }
-    .blank:focus { border-color: #e74c3c; background-color: #fdfefe; box-shadow: 0 0 5px rgba(231, 76, 60, 0.5); }
+    .blank { width: 100px; padding: 2px 5px; font-size: 1em; font-weight: bold; color: #2980b9; border: 2px solid #ccc; border-radius: 4px; background-color: #fff; text-align: center; margin: 0 5px; outline: none; transition: border-color 0.3s; }
+    .blank:focus { border-color: #3498db; background-color: #fdfefe; box-shadow: 0 0 5px rgba(52, 152, 219, 0.5); }
     .blank.long { width: 180px; }
+    
+    /* 채점 결과 효과 */
+    .blank.correct { border-color: #27ae60; background-color: #eafaf1; color: #27ae60; pointer-events: none; }
+    .blank.wrong { border-color: #e74c3c; background-color: #fdedec; color: #e74c3c; }
 
     table { width: 100%; border-collapse: collapse; margin-top: 15px; background-color: #fff; }
     th, td { border: 1px solid #ccc; padding: 12px; text-align: left; }
     th { background-color: #ecf0f1; text-align: center; }
 
-    .btn { display: block; width: 100%; padding: 20px; font-size: 18px; font-weight: bold; color: #fff; background-color: #3498db; border: none; border-radius: 8px; cursor: pointer; box-shadow: 0 4px 6px rgba(0,0,0,0.1); margin-top: 20px; }
-    .btn:hover { background-color: #2980b9; }
+    .btn { display: inline-block; padding: 15px 20px; font-size: 18px; font-weight: bold; color: #fff; background-color: #3498db; border: none; border-radius: 8px; cursor: pointer; box-shadow: 0 4px 6px rgba(0,0,0,0.1); margin-top: 10px; transition: 0.2s; }
+    .btn:hover { filter: brightness(0.9); }
+    .btn-retry { background-color: #e74c3c; display: none; }
+    .btn-next { background-color: #2ecc71; display: none; }
+    .btn-submit { width: 100%; margin-top: 20px; }
+
+    .action-area { text-align: center; margin-top: 20px; padding: 15px; background-color: #f8f9fa; border-radius: 8px; border: 1px dashed #ccc; }
+    .feedback-msg { font-size: 1.2em; font-weight: bold; margin-bottom: 15px; color: #2c3e50; }
 
     #summary-area { display: none; max-width: 750px; margin: 0 auto; background-color: #fff; padding: 40px; border: 4px solid #2c3e50; border-radius: 12px; }
     .score-box { display: flex; justify-content: space-between; gap: 15px; margin-top: 20px; }
@@ -64,12 +74,13 @@
     <div class="subtitle">3. 법과 인권의 보장 - (1) 법의 역할과 인권</div>
 
     <div class="user-info">
-        <label>학년:</label> <input type="number" id="s-grade" style="width: 50px;">
+        <label>학년:</label> <input type="number" id="s-grade" style="width: 50px;" value="5">
         <label>반:</label> <input type="number" id="s-class" style="width: 50px;">
-        <label>번호:</label> <input type="number" id="s-num" style="width: 50px;">
+        <label>번호:</label> <input type="number" id="s-num" style="width: 50px;" placeholder="01">
         <label>이름:</label> <input type="text" id="s-name" style="width: 120px;">
     </div>
     
+    <!-- 1쪽 -->
     <div class="page-section active" id="page-1">
         <div class="page-title">1쪽. 법이란? / 일상 생활 속 법</div>
         <div class="sub-title">법이 생긴 까닭</div>
@@ -97,9 +108,16 @@
             <li>「<input type="text" class="blank" id="p1-18"> 안전 기본법」 : 건강하고 안전한 식생활을 보장하기 위한 법</li>
             <li>「<input type="text" class="blank" id="p1-19">법」 : 국민의 건강을 지키기 위한 법</li>
         </ul>
-        <button class="btn" onclick="gradePage1()">1쪽 채점하고 2쪽으로 넘어가기 ➡️</button>
+        
+        <div class="action-area" id="action-1">
+            <div class="feedback-msg" id="msg-1">빈칸을 모두 채운 뒤 채점하기를 누르세요.</div>
+            <button class="btn btn-submit" id="btn-grade-1" onclick="gradePage(1)">1쪽 채점 및 저장하기</button>
+            <button class="btn btn-retry" id="btn-retry-1" onclick="retryPage(1)">🔄 틀린 빈칸 재도전</button>
+            <button class="btn btn-next" id="btn-next-1" onclick="nextPage(1, 2)">2쪽으로 넘어가기 ➡️</button>
+        </div>
     </div>
 
+    <!-- 2쪽 -->
     <div class="page-section" id="page-2">
         <div class="page-title" style="background-color: #27ae60;">2쪽. 법의 역할</div>
         <div class="sub-title">법의 필요성과 역할</div>
@@ -136,9 +154,16 @@
             <tr><td>깨끗한 생활 환경을 만듦 (담당 구역 청소 등)</td><td><input type="text" class="blank long" id="p2-L7"></td></tr>
             <tr><td>공정한 경제 질서를 유지</td><td><input type="text" class="blank long" id="p2-L8"></td></tr>
         </table>
-        <button class="btn" style="background-color: #27ae60;" onclick="gradePage2()">2쪽 채점하고 3쪽으로 넘어가기 ➡️</button>
+        
+        <div class="action-area" id="action-2">
+            <div class="feedback-msg" id="msg-2">빈칸을 모두 채운 뒤 채점하기를 누르세요.</div>
+            <button class="btn btn-submit" id="btn-grade-2" style="background-color:#27ae60;" onclick="gradePage(2)">2쪽 채점 및 저장하기</button>
+            <button class="btn btn-retry" id="btn-retry-2" onclick="retryPage(2)">🔄 틀린 빈칸 재도전</button>
+            <button class="btn btn-next" id="btn-next-2" onclick="nextPage(2, 3)">3쪽으로 넘어가기 ➡️</button>
+        </div>
     </div>
 
+    <!-- 3쪽 -->
     <div class="page-section" id="page-3">
         <div class="page-title" style="background-color: #9b59b6;">3쪽. 헌법과 인권 보장</div>
         <div class="sub-title">헌법에 담긴 인권 보장 사례</div>
@@ -160,12 +185,19 @@
             <li>모두가 조화롭고 <input type="text" class="blank" id="p3-21">된 삶을 누릴 수 있음</li>
             <li>인권을 <input type="text" class="blank" id="p3-22">하고 <input type="text" class="blank" id="p3-23">하는 태도가 중요함</li>
         </ul>
-        <button class="btn" style="background-color: #9b59b6;" onclick="gradePage3()">3쪽 채점하고 최종 결과 확인하기 🚀</button>
+
+        <div class="action-area" id="action-3">
+            <div class="feedback-msg" id="msg-3">빈칸을 모두 채운 뒤 채점하기를 누르세요.</div>
+            <button class="btn btn-submit" id="btn-grade-3" style="background-color:#9b59b6;" onclick="gradePage(3)">3쪽 채점 및 저장하기</button>
+            <button class="btn btn-retry" id="btn-retry-3" onclick="retryPage(3)">🔄 틀린 빈칸 재도전</button>
+            <button class="btn btn-next" id="btn-next-3" onclick="showFinalSummary()">최종 결과 확인하기 🚀</button>
+        </div>
     </div>
 </div>
 
+<!-- ================= 결과 화면 ================= -->
 <div id="summary-area">
-    <h2 style="text-align: center; color: #2c3e50; border-bottom: 2px solid #2c3e50; padding-bottom: 10px;">📊 단계별 공책 정리 채점 결과</h2>
+    <h2 style="text-align: center; color: #2c3e50; border-bottom: 2px solid #2c3e50; padding-bottom: 10px;">📊 최종 채점 결과</h2>
     <div style="font-size: 1.2em; text-align: center; margin: 20px 0;">
         <strong>제출자:</strong> <span id="sum-name" style="color: #e67e22; font-size: 1.2em;"></span>
     </div>
@@ -176,17 +208,21 @@
         <div class="score-card p3"><div>3쪽 정답률</div><div class="score-num" id="score-p3"></div></div>
     </div>
     <div class="total-score">
-        총 <strong id="total-blanks"></strong>개의 빈칸 중 <strong id="total-correct" style="color: #e74c3c; font-size:1.5em;"></strong>개를 정확히 맞혔습니다!
+        총 <strong id="total-blanks"></strong>개의 빈칸 중 <strong id="total-correct" style="color: #e74c3c; font-size:1.5em;"></strong>개를 맞혔습니다!
     </div>
     <div class="wrong-list" id="wrong-container"></div>
     
-    <button class="btn" id="send-db-btn" style="background-color: #8e44ad; margin-top:20px;" onclick="sendToFirebase()">📡 선생님께 점수 전송하기</button>
-    <button class="btn" id="download-btn" style="background-color: #27ae60; margin-top:10px;" onclick="downloadSummaryImage()">💾 내 폰에 결과 저장하기</button>
+    <div style="text-align: center; margin-top: 30px;">
+        <button class="btn" id="download-btn" style="background-color: #27ae60; width:45%; margin-right:5%;" onclick="downloadSummaryImage()">💾 결과 이미지로 저장</button>
+        
+        <!-- 선생님 패들렛 주소로 변경하세요! -->
+        <button class="btn" id="padlet-btn" style="background-color: #e67e22; width:45%;" onclick="window.open('https://padlet.com/선생님아이디/패들렛주소', '_blank')">📌 패들렛에 제출하기</button>
+    </div>
 </div>
 
 <script>
     // =========================================================================
-    // ★★★ 선생님의 파이어베이스 설정 코드입니다 ★★★
+    // ★★★ 선생님의 파이어베이스 설정 코드로 반드시 교체하세요 ★★★
     // =========================================================================
     const firebaseConfig = {
       apiKey: "AIzaSyDfs4krriQYs41veoY_QemQ63R3Yru1xOs",
@@ -198,154 +234,179 @@
       appId: "1:905498274446:web:585bc3c06cd99e984f77df"
     };
 
-    // 파이어베이스 실행 준비
     firebase.initializeApp(firebaseConfig);
     const database = firebase.database();
     // =========================================================================
 
-    const answersP1 = {
-        'p1-1': '혼란', 'p1-2': '질서', 'p1-3': '법', 'p1-4': '강제성', 'p1-5': '제재',
-        'p1-6': '법', 'p1-7': '교육', 'p1-8': '안전', 'p1-9': '안전', 'p1-10': '개인정보',
-        'p1-11': '권리', 'p1-12': '건축', 'p1-13': '보전', 'p1-14': '직무집행', 'p1-15': '소방',
-        'p1-16': '권리', 'p1-17': '책임', 'p1-18': '식품', 'p1-19': '의료'
+    const answers = {
+        1: {
+            'p1-1': '혼란', 'p1-2': '질서', 'p1-3': '법', 'p1-4': '강제성', 'p1-5': '제재',
+            'p1-6': '법', 'p1-7': '교육', 'p1-8': '안전', 'p1-9': '안전', 'p1-10': '개인정보',
+            'p1-11': '권리', 'p1-12': '건축', 'p1-13': '보전', 'p1-14': '직무집행', 'p1-15': '소방',
+            'p1-16': '권리', 'p1-17': '책임', 'p1-18': '식품', 'p1-19': '의료'
+        },
+        2: {
+            'p2-1': '갈등', 'p2-2': '다툼', 'p2-3': '기준', 'p2-4': '권리', 'p2-5': '분쟁',
+            'p2-6': '생명', 'p2-7': '재산', 'p2-8': '정보', 'p2-9': '질서', 'p2-10': '범죄',
+            'p2-11': '사고', 'p2-12': '보호', 'p2-13': '경제', 'p2-14': '혼란', 'p2-15': '환경',
+            'p2-L1': '민법', 'p2-L2': '재난및안전관리기본법', 'p2-L3': '개인정보보호법', 
+            'p2-L4': '소방기본법', 'p2-L5': '테러방지법', 'p2-L6': '도로교통법', 'p2-L7': '폐기물관리법', 'p2-L8': '공정거래법'
+        },
+        3: {
+            'p3-1': '누구나', 'p3-2': '기본', 'p3-3': '태어나는', 'p3-4': '국적', 'p3-5': '평등',
+            'p3-6': '빼앗', 'p3-7': '최고', 'p3-8': '존엄', 'p3-9': '행복', 'p3-10': '보장',
+            'p3-11': '차별', 'p3-12': '동등', 'p3-13': '자유', 'p3-14': '생각', 'p3-15': '정치',
+            'p3-16': '참여', 'p3-17': '침해', 'p3-18': '요구', 'p3-19': '나은', 'p3-20': '권리',
+            'p3-21': '안정', 'p3-22': '존중', 'p3-23': '보호'
+        }
     };
 
-    const answersP2 = {
-        'p2-1': '갈등', 'p2-2': '다툼', 'p2-3': '기준', 'p2-4': '권리', 'p2-5': '분쟁',
-        'p2-6': '생명', 'p2-7': '재산', 'p2-8': '정보', 'p2-9': '질서', 'p2-10': '범죄',
-        'p2-11': '사고', 'p2-12': '보호', 'p2-13': '경제', 'p2-14': '혼란', 'p2-15': '환경',
-        'p2-L1': '민법', 'p2-L2': '재난및안전관리기본법', 'p2-L3': '개인정보보호법', 
-        'p2-L4': '소방기본법', 'p2-L5': '테러방지법', 'p2-L6': '도로교통법', 'p2-L7': '폐기물관리법', 'p2-L8': '공정거래법'
-    };
-
-    const answersP3 = {
-        'p3-1': '누구나', 'p3-2': '기본', 'p3-3': '태어나는', 'p3-4': '국적', 'p3-5': '평등',
-        'p3-6': '빼앗', 'p3-7': '최고', 'p3-8': '존엄', 'p3-9': '행복', 'p3-10': '보장',
-        'p3-11': '차별', 'p3-12': '동등', 'p3-13': '자유', 'p3-14': '생각', 'p3-15': '정치',
-        'p3-16': '참여', 'p3-17': '침해', 'p3-18': '요구', 'p3-19': '나은', 'p3-20': '권리',
-        'p3-21': '안정', 'p3-22': '존중', 'p3-23': '보호'
-    };
-
-    let scoreP1 = 0, scoreP2 = 0, scoreP3 = 0;
+    let scores = { 1: 0, 2: 0, 3: 0 };
     let wrongItemsHTML = "";
-
-    function checkAnswers(answerDict, pageName) {
-        let correctCount = 0;
-        let keys = Object.keys(answerDict);
-
-        keys.forEach(id => {
-            const userAns = document.getElementById(id).value.replace(/\s+/g, '');
-            const exactAns = answerDict[id].replace(/\s+/g, '');
-            if (userAns === exactAns) {
-                correctCount++;
-            } else {
-                let displayCorrectAns = answerDict[id];
-                wrongItemsHTML += `
-                    <div class="wrong-item">
-                        <strong>[${pageName}]</strong> 내가 쓴 답: <span style="text-decoration:line-through;">${document.getElementById(id).value || '(빈칸)'}</span> 
-                        → <span class="correct-text">정답: ${displayCorrectAns}</span>
-                    </div>`;
-            }
-        });
-        return { count: correctCount, total: keys.length };
-    }
 
     function checkUserInfo() {
         const grade = document.getElementById('s-grade').value.trim();
         const cls = document.getElementById('s-class').value.trim();
-        const num = document.getElementById('s-num').value.trim();
+        let num = document.getElementById('s-num').value.trim();
         const name = document.getElementById('s-name').value.trim();
+        
         if (!grade || !cls || !num || !name) { 
             alert("상단의 학년, 반, 번호, 이름을 모두 입력해주세요!"); 
-            return false; 
+            return null; 
         }
-        return true;
+        
+        // 번호를 두 자리로 맞춤 (예: 1 -> 01) 패들렛 정렬을 위해
+        if(num.length === 1) num = "0" + num;
+        document.getElementById('s-num').value = num;
+
+        return { grade, cls, num, name };
     }
 
-    function gradePage1() {
-        if (!checkUserInfo()) return;
-        let result = checkAnswers(answersP1, "1쪽");
-        scoreP1 = result.count;
-        alert(`1쪽 채점 완료!\n총 ${result.total}개 중 ${result.count}개를 맞혔습니다.\n확인을 누르면 2쪽으로 넘어갑니다.`);
-        document.getElementById('page-1').classList.remove('active');
-        document.getElementById('page-2').classList.add('active');
+    // 단계별 채점 함수
+    function gradePage(pageNum) {
+        const userInfo = checkUserInfo();
+        if (!userInfo) return;
+
+        const answerDict = answers[pageNum];
+        let correctCount = 0;
+        let keys = Object.keys(answerDict);
+        let hasWrong = false;
+
+        keys.forEach(id => {
+            const inputEl = document.getElementById(id);
+            const userAns = inputEl.value.replace(/\s+/g, '');
+            const exactAns = answerDict[id].replace(/\s+/g, '');
+            
+            inputEl.classList.remove('correct', 'wrong');
+
+            if (userAns === exactAns) {
+                correctCount++;
+                inputEl.classList.add('correct');
+            } else {
+                hasWrong = true;
+                inputEl.classList.add('wrong');
+            }
+        });
+
+        scores[pageNum] = correctCount;
+        
+        // 화면 피드백 업데이트
+        const msgEl = document.getElementById(`msg-${pageNum}`);
+        msgEl.innerHTML = `총 ${keys.length}개 중 <span style="color:#27ae60;">${correctCount}개</span> 정답입니다!`;
+        
+        document.getElementById(`btn-grade-${pageNum}`).style.display = 'none';
+        
+        if(hasWrong) {
+            document.getElementById(`btn-retry-${pageNum}`).style.display = 'inline-block';
+            msgEl.innerHTML += ` <span style="color:#e74c3c;">(틀린 곳이 있어요!)</span>`;
+        } else {
+            msgEl.innerHTML = `🎉 완벽합니다! 모두 맞혔습니다!`;
+        }
+        
+        document.getElementById(`btn-next-${pageNum}`).style.display = 'inline-block';
+
+        // ★ 채점할 때마다 파이어베이스에 실시간으로 부분 점수 저장 (업데이트)
+        const studentPath = `${userInfo.grade}학년/${userInfo.cls}반/${userInfo.num}번_${userInfo.name}`;
+        let updateData = { 이름: userInfo.name, 최근활동시간: new Date().toLocaleString() };
+        updateData[`쪽${pageNum}점수`] = correctCount;
+        
+        database.ref('사회공책결과/' + studentPath).update(updateData).catch(err => console.log("DB저장 에러:", err));
+    }
+
+    // 틀린 문제 재도전 함수
+    function retryPage(pageNum) {
+        const keys = Object.keys(answers[pageNum]);
+        keys.forEach(id => {
+            const inputEl = document.getElementById(id);
+            // 틀린 칸은 내용을 지우고 원래 상태로 복구
+            if (inputEl.classList.contains('wrong')) {
+                inputEl.value = "";
+                inputEl.classList.remove('wrong');
+            }
+        });
+
+        // 버튼 상태 원래대로 복구
+        document.getElementById(`msg-${pageNum}`).innerHTML = "다시 한번 빈칸을 채우고 채점해 보세요!";
+        document.getElementById(`btn-grade-${pageNum}`).style.display = 'block';
+        document.getElementById(`btn-retry-${pageNum}`).style.display = 'none';
+        document.getElementById(`btn-next-${pageNum}`).style.display = 'none';
+    }
+
+    // 다음 페이지로 이동
+    function nextPage(current, next) {
+        document.getElementById(`page-${current}`).classList.remove('active');
+        document.getElementById(`page-${next}`).classList.add('active');
         window.scrollTo(0, 0);
     }
 
-    function gradePage2() {
-        let result = checkAnswers(answersP2, "2쪽");
-        scoreP2 = result.count;
-        alert(`2쪽 채점 완료!\n총 ${result.total}개 중 ${result.count}개를 맞혔습니다.\n확인을 누르면 마지막 3쪽으로 넘어갑니다.`);
-        document.getElementById('page-2').classList.remove('active');
-        document.getElementById('page-3').classList.add('active');
-        window.scrollTo(0, 0);
-    }
-
-    function gradePage3() {
-        let result = checkAnswers(answersP3, "3쪽");
-        scoreP3 = result.count;
-        alert(`3쪽까지 모든 채점이 끝났습니다!\n최종 결과를 확인해 보세요.`);
-        showFinalSummary();
-    }
-
+    // 최종 결과 요약 생성
     function showFinalSummary() {
-        const grade = document.getElementById('s-grade').value.trim();
-        const cls = document.getElementById('s-class').value.trim();
-        const num = document.getElementById('s-num').value.trim();
-        const name = document.getElementById('s-name').value.trim();
-        const totalCorrect = scoreP1 + scoreP2 + scoreP3;
-        const totalItems = Object.keys(answersP1).length + Object.keys(answersP2).length + Object.keys(answersP3).length;
+        const userInfo = checkUserInfo();
+        const totalCorrect = scores[1] + scores[2] + scores[3];
+        const totalItems = Object.keys(answers[1]).length + Object.keys(answers[2]).length + Object.keys(answers[3]).length;
 
-        document.getElementById('sum-name').innerText = `${grade}학년 ${cls}반 ${num}번 ${name}`;
-        document.getElementById('score-p1').innerText = `${scoreP1} / ${Object.keys(answersP1).length}`;
-        document.getElementById('score-p2').innerText = `${scoreP2} / ${Object.keys(answersP2).length}`;
-        document.getElementById('score-p3').innerText = `${scoreP3} / ${Object.keys(answersP3).length}`;
+        document.getElementById('sum-name').innerText = `${userInfo.grade}학년 ${userInfo.cls}반 ${userInfo.num}번 ${userInfo.name}`;
+        document.getElementById('score-p1').innerText = `${scores[1]} / ${Object.keys(answers[1]).length}`;
+        document.getElementById('score-p2').innerText = `${scores[2]} / ${Object.keys(answers[2]).length}`;
+        document.getElementById('score-p3').innerText = `${scores[3]} / ${Object.keys(answers[3]).length}`;
         document.getElementById('total-blanks').innerText = totalItems;
         document.getElementById('total-correct').innerText = totalCorrect;
 
+        // 최종 오답 노트 생성
+        wrongItemsHTML = "";
+        for(let p = 1; p <= 3; p++) {
+            Object.keys(answers[p]).forEach(id => {
+                const inputEl = document.getElementById(id);
+                if(inputEl.classList.contains('wrong') || inputEl.value === "") {
+                    wrongItemsHTML += `
+                    <div class="wrong-item">
+                        <strong>[${p}쪽]</strong> 내가 쓴 답: <span style="text-decoration:line-through;">${inputEl.value || '(빈칸)'}</span> 
+                        → <span class="correct-text">정답: ${answers[p][id]}</span>
+                    </div>`;
+                }
+            });
+        }
+
         const wrongContainer = document.getElementById('wrong-container');
         if(totalCorrect === totalItems) {
-            wrongContainer.innerHTML = `<div style="text-align:center; font-size:1.3em; color:#27ae60; font-weight:bold; padding:20px;">🎉 완벽합니다! 원본과 똑같이 모든 빈칸을 맞혔어요!</div>`;
+            wrongContainer.innerHTML = `<div style="text-align:center; font-size:1.3em; color:#27ae60; font-weight:bold; padding:20px;">🎉 완벽합니다! 모든 빈칸을 정답으로 채웠습니다!</div>`;
         } else {
             wrongContainer.innerHTML = `<h3 style="color:#c0392b; margin-bottom:10px;">❌ 다시 확인해 볼까요? (오답 노트)</h3>` + wrongItemsHTML;
         }
+
+        // 파이어베이스에 총점 저장
+        const studentPath = `${userInfo.grade}학년/${userInfo.cls}반/${userInfo.num}번_${userInfo.name}`;
+        database.ref('사회공책결과/' + studentPath).update({ 총점: totalCorrect, 최종제출완료: "O" });
 
         document.getElementById('main-container').style.display = 'none';
         document.getElementById('summary-area').style.display = 'block';
         window.scrollTo(0, 0);
     }
 
-    // ★★★ 파이어베이스로 데이터 전송하는 함수 ★★★
-    function sendToFirebase() {
-        const grade = document.getElementById('s-grade').value.trim();
-        const cls = document.getElementById('s-class').value.trim();
-        const num = document.getElementById('s-num').value.trim();
-        const name = document.getElementById('s-name').value.trim();
-        const totalCorrect = scoreP1 + scoreP2 + scoreP3;
-
-        // 파이어베이스 데이터베이스에 저장할 경로 (예: 5학년/3반/12번_홍길동)
-        const studentPath = `${grade}학년/${cls}반/${num}번_${name}`;
-
-        database.ref('사회공책결과/' + studentPath).set({
-            이름: name,
-            쪽1점수: scoreP1,
-            쪽2점수: scoreP2,
-            쪽3점수: scoreP3,
-            총점: totalCorrect,
-            제출시간: new Date().toLocaleString()
-        }).then(() => {
-            alert("선생님께 점수가 성공적으로 전송되었습니다! 🚀");
-            document.getElementById('send-db-btn').style.display = 'none'; // 두 번 누르지 않게 버튼 숨김
-        }).catch((error) => {
-            alert("전송 중 오류가 발생했습니다. (선생님의 데이터베이스 권한 설정을 확인해주세요!)\n" + error);
-        });
-    }
-
+    // 결과 이미지 다운로드
     function downloadSummaryImage() {
-        const downloadBtn = document.getElementById('download-btn');
-        const sendBtn = document.getElementById('send-db-btn');
-        downloadBtn.style.display = 'none'; 
-        if(sendBtn) sendBtn.style.display = 'none'; 
+        const btns = document.querySelectorAll('#summary-area .btn');
+        btns.forEach(btn => btn.style.display = 'none'); // 캡처 시 버튼 숨김
 
         const captureArea = document.getElementById('summary-area');
         
@@ -359,8 +420,8 @@
             link.href = canvas.toDataURL('image/png');
             link.click();
 
-            downloadBtn.style.display = 'block'; 
-            if(sendBtn) sendBtn.style.display = 'block'; 
+            btns.forEach(btn => btn.style.display = 'inline-block'); // 버튼 복구
+            alert("이미지가 저장되었습니다! 이제 패들렛에 이미지를 올려주세요.");
         });
     }
 </script>
