@@ -11,7 +11,7 @@
 
 <style>
     body { font-family: 'Malgun Gothic', '맑은 고딕', sans-serif; background-color: #f4f6f9; color: #333; margin: 0; padding: 20px; line-height: 1.6; }
-    .container { max-width: 900px; margin: 0 auto; background-color: #fff; padding: 40px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
+    .container { max-width: 1000px; margin: 0 auto; background-color: #fff; padding: 40px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
     h1 { text-align: center; color: #2c3e50; margin-bottom: 5px; }
     .subtitle { text-align: center; color: #7f8c8d; margin-bottom: 30px; font-size: 1.1em; font-weight: bold; }
     
@@ -19,6 +19,9 @@
     .quiz-card:hover { transform: translateY(-5px); box-shadow: 0 8px 15px rgba(52, 152, 219, 0.2); }
     .quiz-title { font-size: 1.5em; font-weight: bold; color: #2c3e50; margin-bottom: 10px; }
     
+    .law-os-card { border: 3px solid #8e44ad; background-color: #faf5ff; }
+    .law-os-card:hover { box-shadow: 0 8px 15px rgba(142, 68, 173, 0.3); }
+
     .admin-btn { background-color: #34495e; color: #fff; padding: 10px 20px; border: none; border-radius: 8px; cursor: pointer; display: block; margin: 40px auto 0 auto; font-weight: bold; font-size: 1.1em; }
     
     /* 사용자 정보 입력칸 (학교 '초' 고정) */
@@ -31,7 +34,7 @@
     .page-section.active { display: block; animation: fadeIn 0.5s; }
     @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
-    /* 공통 스타일 */
+    /* 일반 교과 과제 공통 스타일 */
     .page-title { font-size: 1.3em; font-weight: bold; color: #fff; background-color: #3498db; display: inline-block; padding: 5px 15px; border-radius: 20px; margin-bottom: 10px; }
     .tb-page { font-weight: bold; color: #e67e22; margin-bottom: 15px; text-align: right; font-size: 1.05em; background-color: #fef9e7; padding: 5px 10px; border-radius: 5px; display: inline-block; float: right; border: 1px dashed #f39c12; }
     .sub-title { font-size: 1.1em; font-weight: bold; color: #2c3e50; margin-top: 20px; margin-bottom: 10px; border-left: 4px solid #f1c40f; padding-left: 10px; clear: both; }
@@ -58,18 +61,63 @@
     .ws-subtitle { font-size: 1.1em; font-weight: bold; color: #2f3640; }
     .ws-section-title { font-size: 1.2em; font-weight: bold; color: #0984e3; border-bottom: 2px solid #000; display: inline-block; padding: 0 10px; line-height: 30px; margin-top: 15px; background: #fff; }
     .ws-row { margin-left: 20px; position: relative; }
-    
     .ws-red-bracket { border-left: 3px solid #e84118; border-top: 3px solid #e84118; border-bottom: 3px solid #e84118; border-radius: 10px 0 0 10px; padding-left: 15px; position: relative; }
     .ws-red-bracket.geo { margin-left: 100px; }
     .ws-red-bracket.geo::before { content: "지형의 종류"; position: absolute; left: -85px; top: 50%; transform: translateY(-50%); font-weight: bold; color: #e84118; background: #fff; line-height: 20px; text-align: center; }
     .ws-red-bracket.dokdo { margin-left: 140px; }
     .ws-red-bracket.dokdo::before { content: "독도의 중요성"; position: absolute; left: -125px; top: 50%; transform: translateY(-50%); font-weight: bold; color: #e84118; background: #fff; line-height: 20px; text-align: center; }
 
-    /* 드롭다운 연결 부분 스타일 */
     .ws-map-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 15px; line-height: 1.6; }
     @media (max-width: 600px) { .ws-map-grid { grid-template-columns: 1fr; } }
     .ws-matching-box { border: 2px dashed #3498db; padding: 20px; border-radius: 12px; background: #fff; text-align: center; }
     .ws-select { padding: 8px; font-size: 16px; border: 1px solid #2980b9; border-radius: 4px; font-weight: bold; color: #2c3e50; width: 100%; margin-top: 10px; background-color: #f4f6f9; cursor: pointer; }
+
+    /* =========================================================
+       ★ LAW OS 공통 서술형 폼 스타일 ★
+       ========================================================= */
+    .q5-table { width: 100%; border-collapse: collapse; margin-top: 15px; font-size: 0.95em; }
+    .q5-table th { background-color: #2c3e50; color: #fff; padding: 10px; text-align: center; border: 1px solid #bdc3c7; }
+    .q5-table td { border: 1px solid #bdc3c7; padding: 8px; vertical-align: middle; }
+    .q5-input { width: 100%; box-sizing: border-box; padding: 6px; border: 1px solid #ccc; border-radius: 4px; font-family: inherit; font-size: 1em; }
+    .q5-textarea { width: 100%; box-sizing: border-box; padding: 10px; border: 1px solid #ccc; border-radius: 6px; font-family: inherit; font-size: 1em; resize: vertical; }
+    .q5-hint-btn { background-color: #f39c12; color: #fff; border: none; border-radius: 50%; width: 26px; height: 26px; cursor: pointer; font-weight: bold; display: flex; align-items: center; justify-content: center; margin: 0 auto; transition: 0.2s; }
+    .q5-hint-btn:hover { background-color: #e67e22; transform: scale(1.1); }
+    .q5-section-title { font-size: 1.2em; font-weight: bold; color: #2c3e50; margin-top: 30px; margin-bottom: 10px; border-left: 5px solid #8e44ad; padding-left: 10px; }
+
+    /* =========================================================
+       ★ LAW OS 1화 특수 레이아웃 (학습지 완벽 재현) ★
+       ========================================================= */
+    .los1-bg { background-color: #eaf2f8; padding: 20px; border-radius: 12px; border: 2px solid #3498db; }
+    .los1-grid-row { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 20px; }
+    @media (max-width: 800px) { .los1-grid-row { grid-template-columns: 1fr; } }
+    
+    .los1-box { background-color: #fff; border: 2px solid #bdc3c7; border-radius: 10px; padding: 20px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); }
+    .los1-title { font-size: 1.1em; font-weight: bold; color: #1e3799; margin-bottom: 5px; display: flex; align-items: center; }
+    .los1-title-num { background-color: #1e3799; color: #fff; width: 26px; height: 26px; display: inline-flex; justify-content: center; align-items: center; border-radius: 50%; margin-right: 10px; font-size: 0.9em; flex-shrink: 0; }
+    .los1-subtitle { font-size: 0.9em; color: #7f8c8d; margin-bottom: 15px; padding-left: 36px; }
+
+    /* 1번 영역 */
+    .los1-img-wrapper { display: flex; gap: 10px; justify-content: space-between; }
+    @media (max-width: 600px) { .los1-img-wrapper { flex-direction: column; } }
+    .los1-img-card { flex: 1; border: 1px solid #ccc; border-radius: 8px; overflow: hidden; display: flex; flex-direction: column; background: #fdfefe; }
+    .los1-img-title { background: #eaf2f8; text-align: center; padding: 8px 5px; font-weight: bold; font-size: 0.9em; border-bottom: 1px solid #ccc; min-height: 40px; display:flex; align-items:center; justify-content:center; }
+    
+    /* 2번 테이블 */
+    .los1-table { width: 100%; border-collapse: collapse; font-size: 0.9em; text-align: center; }
+    .los1-table th { background-color: #eaf2f8; border: 1px solid #bdc3c7; padding: 8px; }
+    .los1-table td { border: 1px solid #bdc3c7; padding: 8px; text-align: left; }
+    .los1-checkbox-label { display: block; margin-bottom: 5px; cursor: pointer; font-size: 0.9em; }
+
+    /* 3번 규칙 박스 */
+    .los1-rule-box { border: 2px solid #1e3799; border-radius: 8px; padding: 15px; text-align: center; background: #f4f6f9; }
+    .los1-rule-title { background-color: #1e3799; color: #fff; padding: 8px 25px; border-radius: 25px; font-weight: bold; display: inline-block; margin-bottom: 15px; font-size: 1.1em;}
+    .los1-rule-arrows { display: flex; justify-content: space-around; margin-bottom: 10px; font-size: 1.5em; color: #1e3799; }
+    .los1-rule-inputs { display: flex; gap: 10px; }
+    @media (max-width: 600px) { .los1-rule-inputs { flex-direction: column; } }
+
+    /* 5번 규칙 아이템들 */
+    .los1-rule-items-container { display: flex; justify-content: space-around; gap: 10px; flex-wrap: wrap; margin-bottom: 15px; }
+    .los1-rule-item { text-align: center; width: 22%; min-width: 120px; border: 1px solid #e0e0e0; border-radius: 8px; padding: 15px 10px; background: #fafafa;}
 
     /* 버튼 및 상태창 */
     .btn { display: inline-block; padding: 15px 20px; font-size: 18px; font-weight: bold; color: #fff; background-color: #3498db; border: none; border-radius: 8px; cursor: pointer; box-shadow: 0 4px 6px rgba(0,0,0,0.1); margin-top: 10px; transition: 0.2s; }
@@ -121,16 +169,44 @@
     <div class="quiz-card" onclick="startQuiz('quiz4')">
         <div class="quiz-title">⚖️ 과제 4: 3-(1) 법의 역할과 인권</div>
         <div style="color: #7f8c8d;">사회 3단원 공책 정리 빈칸 채우기 (교과서 111~131쪽)</div>
-        <button class="btn" style="background-color: #8e44ad;">이 과제 시작하기 🚀</button>
+        <button class="btn" style="background-color: #3498db;">이 과제 시작하기 🚀</button>
+    </div>
+
+    <!-- LAW OS 전용 메뉴 버튼 -->
+    <div class="quiz-card law-os-card" onclick="openLawOsMenu()">
+        <div class="quiz-title" style="color: #8e44ad;">🕵️ LAW OS 프로젝트 입장하기</div>
+        <div style="color: #7f8c8d;">사라진 권리의 흔적과 헌법 기록을 찾아라!</div>
+        <button class="btn" style="background-color: #8e44ad;">LAW OS 과제 보기 🔍</button>
     </div>
 
     <button class="admin-btn" onclick="openAdmin()">👨‍🏫 선생님 결과 확인</button>
 </div>
 
+<!-- LAW OS 하위 메뉴 -->
+<div class="container" id="law-os-menu" style="display: none;">
+    <h1 style="color: #8e44ad;">🕵️ LAW OS 프로젝트</h1>
+    <div class="subtitle">어떤 에피소드의 사건을 해결하시겠습니까?</div>
+
+    <div class="quiz-card law-os-card" onclick="startQuiz('law_os_1')">
+        <div class="quiz-title" style="color: #8e44ad;">📂 LAW OS 1화</div>
+        <div style="color: #7f8c8d;">에피소드 1: 규칙이 사라진 세상 (서술형 보고서)</div>
+        <button class="btn" style="background-color: #8e44ad;">1화 수사 시작하기 🚀</button>
+    </div>
+
+    <div class="quiz-card law-os-card" onclick="startQuiz('law_os_6')">
+        <div class="quiz-title" style="color: #8e44ad;">📂 LAW OS 6화: 헌법기록 보관소</div>
+        <div style="color: #7f8c8d;">에피소드 6: 사라진 권리를 찾아라 (서술형 보고서)</div>
+        <button class="btn" style="background-color: #8e44ad;">6화 수사 시작하기 🚀</button>
+    </div>
+
+    <button class="admin-btn" style="background-color: #7f8c8d;" onclick="backToMainMenu()">⬅️ 일반 과제 메뉴로 돌아가기</button>
+</div>
+
+<!-- 학습 공용 컨테이너 -->
 <div class="container" id="main-container" style="display: none;">
     <h1 id="task-main-title"></h1>
     
-    <!-- 사용자 정보 입력란 (학교 추가 & 초 고정) -->
+    <!-- 사용자 정보 입력란 -->
     <div class="user-info">
         <div style="display: flex; align-items: center;">
             <label>학교:</label> 
@@ -146,7 +222,7 @@
     </div>
     
     <!-- ============================================== -->
-    <!-- 과제 1 (국토 지형) 영역 (기존 quiz2) -->
+    <!-- 과제 1 (국토 지형) -->
     <!-- ============================================== -->
     <div id="quiz1-content" style="display: none;">
         <div class="page-section" id="q1-page-1">
@@ -213,7 +289,6 @@
                     </div>
                 </div>
             </div>
-
             <div class="action-area">
                 <div class="feedback-msg" id="msg-q1-1">빈칸을 모두 채운 뒤 채점하기를 누르세요.</div>
                 <button class="btn" style="width:100%; background-color:#27ae60;" id="btn-grade-q1-1" onclick="gradePage(1)">채점하기</button>
@@ -274,7 +349,7 @@
     </div>
 
     <!-- ============================================== -->
-    <!-- 과제 2 (독도) 영역 -->
+    <!-- 과제 2 (독도) -->
     <!-- ============================================== -->
     <div id="quiz2-content" style="display: none;">
         <div class="page-section" id="q2-page-1">
@@ -404,7 +479,7 @@
     </div>
 
     <!-- ============================================== -->
-    <!-- ★ 신규 과제 3 (기후) 영역 ★ -->
+    <!-- 과제 3 (기후) -->
     <!-- ============================================== -->
     <div id="quiz3-content" style="display: none;">
         <div class="page-section" id="q3-page-1">
@@ -489,7 +564,6 @@
                         <div>- 국민 <input type="text" class="blank long" id="q3-p1-26">에 따라 행동</div>
                         <div>- 국민 재난 안전 <input type="text" class="blank" id="q3-p1-27"> : 자연재해별 행동 요령 확인</div>
                     </div>
-
                 </div>
             </div>
             <div class="action-area">
@@ -565,7 +639,7 @@
     </div>
     
     <!-- ============================================== -->
-    <!-- 과제 4 (법과 인권) 영역 (기존 과제1 위치 이동) -->
+    <!-- 과제 4 (법과 인권) -->
     <!-- ============================================== -->
     <div id="quiz4-content" style="display: none;">
         <div class="page-section" id="q4-page-1">
@@ -595,7 +669,7 @@
             </ul>
             <div class="action-area">
                 <div class="feedback-msg" id="msg-q4-1">빈칸을 모두 채운 뒤 채점하기를 누르세요.</div>
-                <button class="btn" style="width:100%" id="btn-grade-q4-1" onclick="gradePage(1)">1쪽 채점하기</button>
+                <button class="btn" style="width:100%; background-color:#3498db;" id="btn-grade-q4-1" onclick="gradePage(1)">1쪽 채점하기</button>
                 <button class="btn btn-retry" id="btn-retry-q4-1" onclick="retryPage(1)">🔄 틀린 빈칸 재도전</button>
                 <button class="btn btn-next" id="btn-next-q4-1" onclick="nextPage(1, 2)">2쪽으로 넘어가기 ➡️</button>
             </div>
@@ -673,6 +747,315 @@
             </div>
         </div>
     </div>
+
+    <!-- ============================================== -->
+    <!-- ★ 신규 과제 5 (LAW OS 1화) 영역 (이미지 완전 제거 버전) ★ -->
+    <!-- ============================================== -->
+    <div id="law_os_1-content" style="display: none;">
+        <div class="page-section active" style="background-color: #f0f3f5;">
+            
+            <div class="q5-section-title" style="margin-top: 0; color: #1e3799; border-left-color: #1e3799;">📂 MISSION BRIEFING (사건 파일 확인)</div>
+            <p style="color:#7f8c8d; font-size:0.95em;">※ 아래 이야기(1화)를 꼼꼼히 읽고 사건을 조사해 주세요.</p>
+            
+            <!-- 서술형 학습지 1번/2번 영역 -->
+            <div class="los1-grid-row">
+                <!-- 1번 영역 (이미지 제거됨) -->
+                <div class="los1-box" style="flex: 3;">
+                    <div class="los1-title"><span class="los1-title-num">1</span> 오늘 게임에서 일어난 사건들을 떠올려 봅시다.</div>
+                    <div class="los1-subtitle">다음 장소에서 어떤 일이 일어났는지 간단히 적어보세요.</div>
+                    
+                    <div style="display: flex; gap: 10px;">
+                        <div class="los1-img-card">
+                            <div class="los1-img-title">급식실<br>(새치기 소동)</div>
+                            <textarea id="los1-s1-1" class="q5-textarea" style="border:none; flex:1; min-height: 100px;" placeholder="적어보세요..."></textarea>
+                        </div>
+                        <div class="los1-img-card">
+                            <div class="los1-img-title">정문 앞 횡단보도<br>(무단횡단)</div>
+                            <textarea id="los1-s1-2" class="q5-textarea" style="border:none; flex:1; min-height: 100px;" placeholder="적어보세요..."></textarea>
+                        </div>
+                        <div class="los1-img-card">
+                            <div class="los1-img-title">통학버스 정류장<br>(무임승차)</div>
+                            <textarea id="los1-s1-3" class="q5-textarea" style="border:none; flex:1; min-height: 100px;" placeholder="적어보세요..."></textarea>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 2번 영역 -->
+                <div class="los1-box" style="flex: 2;">
+                    <div class="los1-title"><span class="los1-title-num">2</span> 나의 선택은 어땠을까요?</div>
+                    <div class="los1-subtitle">각 장소에서 내가 선택한 행동을 체크하고 결과를 적어보세요.</div>
+                    
+                    <table class="los1-table">
+                        <tr>
+                            <th style="width: 20%;">장소</th>
+                            <th style="width: 40%;">내가 선택한 행동 (✔)</th>
+                            <th style="width: 40%;">결과 (혼란도 변화)</th>
+                        </tr>
+                        <tr>
+                            <td style="font-weight:bold;">급식실</td>
+                            <td style="text-align: left;">
+                                <label class="los1-checkbox-label"><input type="checkbox" id="los1-cb1-1"> 나도 했다</label>
+                                <label class="los1-checkbox-label"><input type="checkbox" id="los1-cb1-2"> 바로잡았다</label>
+                                <label class="los1-checkbox-label"><input type="checkbox" id="los1-cb1-3"> 기록했다</label>
+                            </td>
+                            <td><textarea id="los1-s2-res1" class="q5-input" style="height: 80px;"></textarea></td>
+                        </tr>
+                        <tr>
+                            <td style="font-weight:bold;">횡단보도</td>
+                            <td style="text-align: left;">
+                                <label class="los1-checkbox-label"><input type="checkbox" id="los1-cb2-1"> 나도 했다</label>
+                                <label class="los1-checkbox-label"><input type="checkbox" id="los1-cb2-2"> 바로잡았다</label>
+                                <label class="los1-checkbox-label"><input type="checkbox" id="los1-cb2-3"> 기록했다</label>
+                            </td>
+                            <td><textarea id="los1-s2-res2" class="q5-input" style="height: 80px;"></textarea></td>
+                        </tr>
+                        <tr>
+                            <td style="font-weight:bold;">통학버스</td>
+                            <td style="text-align: left;">
+                                <label class="los1-checkbox-label"><input type="checkbox" id="los1-cb3-1"> 나도 했다</label>
+                                <label class="los1-checkbox-label"><input type="checkbox" id="los1-cb3-2"> 바로잡았다</label>
+                                <label class="los1-checkbox-label"><input type="checkbox" id="los1-cb3-3"> 기록했다</label>
+                            </td>
+                            <td><textarea id="los1-s2-res3" class="q5-input" style="height: 80px;"></textarea></td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+
+            <!-- 서술형 학습지 3번/4번 영역 -->
+            <div class="los1-grid-row">
+                <!-- 3번 영역 -->
+                <div class="los1-box" style="flex: 3;">
+                    <div class="los1-title"><span class="los1-title-num">3</span> 조사 결과를 정리해 봅시다.</div>
+                    <div class="los1-subtitle">화면 7에서 나온 분석 내용을 바탕으로, '규칙이 없으면 어떤 문제가 생기는지' 정리해 보세요.</div>
+                    
+                    <div class="los1-rule-box">
+                        <div class="los1-rule-title">규칙이 없으면?</div>
+                        <div class="los1-rule-arrows">
+                            <span>↙️</span> <span>⬇️</span> <span>↘️</span>
+                        </div>
+                        <div class="los1-rule-inputs">
+                            <textarea id="los1-s3-1" class="q5-textarea" style="flex:1;"></textarea>
+                            <textarea id="los1-s3-2" class="q5-textarea" style="flex:1;"></textarea>
+                            <textarea id="los1-s3-3" class="q5-textarea" style="flex:1;"></textarea>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 4번 영역 -->
+                <div class="los1-box" style="flex: 2; background-color: #fdfefe;">
+                    <div class="los1-title"><span class="los1-title-num">4</span> 핵심 질문에 대한 내 생각은?</div>
+                    <div class="los1-subtitle">게임 속 질문을 읽고, 가장 가까운 생각에 ✔ 해보세요.</div>
+                    
+                    <div style="background:#fff; padding:15px; border-radius:8px; border:2px solid #3498db; margin-bottom:15px; font-weight:bold; text-align:center; color:#2980b9;">
+                        "규칙이 없으면 정말 자유로워지나요?"
+                    </div>
+                    
+                    <div style="padding-left: 10px;">
+                        <label class="los1-checkbox-label"><input type="checkbox" id="los1-cb4-1"> 자유로워진다.</label>
+                        <label class="los1-checkbox-label"><input type="checkbox" id="los1-cb4-2"> 불공평하고 위험해진다.</label>
+                        <label class="los1-checkbox-label"><input type="checkbox" id="los1-cb4-3"> 불편하지만 꼭 필요하다.</label>
+                    </div>
+                    
+                    <div style="margin-top:15px; font-weight:bold; color:#7f8c8d; font-size:0.9em;">왜 그렇게 생각했나요? 이유를 적어보세요.</div>
+                    <textarea id="los1-s4-reason" class="q5-textarea" style="margin-top:5px;"></textarea>
+                </div>
+            </div>
+
+            <!-- 서술형 학습지 5번 영역 (이미지 제거됨) -->
+            <div class="los1-box" style="margin-bottom: 20px;">
+                <div class="los1-title"><span class="los1-title-num">5</span> 복구한 규칙은 무엇인가요?</div>
+                <div class="los1-subtitle">게임에서 내가 선택해 복구한 규칙에 ✔ 하고, 그 이유를 적어보세요.</div>
+                
+                <div style="display: flex; gap: 20px; flex-wrap: wrap;">
+                    <div style="flex: 3; display: flex; justify-content: space-around; gap: 10px; flex-wrap: wrap;">
+                        <div class="los1-rule-item">
+                            <label class="los1-checkbox-label" style="text-align: center;"><input type="checkbox" id="los1-cb5-1"> 급식 줄서기</label>
+                        </div>
+                        <div class="los1-rule-item">
+                            <label class="los1-checkbox-label" style="text-align: center;"><input type="checkbox" id="los1-cb5-2"> 교통 신호 지키기</label>
+                        </div>
+                        <div class="los1-rule-item">
+                            <label class="los1-checkbox-label" style="text-align: center;"><input type="checkbox" id="los1-cb5-3"> 교통 요금 내기</label>
+                        </div>
+                        <div class="los1-rule-item">
+                            <label class="los1-checkbox-label" style="text-align: center;"><input type="checkbox" id="los1-cb5-4"> 소유권 보호<br>(절도 금지)</label>
+                        </div>
+                    </div>
+                    
+                    <div style="flex: 2; background:#f4f6f9; padding:15px; border-radius:8px; width: 100%; box-sizing: border-box;">
+                        <div style="font-weight:bold; margin-bottom:10px; color:#2c3e50;">내가 이 규칙을 선택한 이유는?</div>
+                        <textarea id="los1-s5-reason" class="q5-textarea" style="height: 100px; width: 100%; box-sizing: border-box;"></textarea>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 서술형 학습지 6번 영역 -->
+            <div class="los1-grid-row" style="margin-bottom: 0;">
+                <div class="los1-box" style="flex: 3; display: flex; flex-direction: column; justify-content: center;">
+                    <div class="los1-title"><span class="los1-title-num">6</span> 정리해 봅시다!</div>
+                    <div class="los1-subtitle">오늘 배운 내용을 바탕으로 빈칸을 채워보세요.</div>
+                    
+                    <ul style="font-size: 1.05em; line-height: 2.2;">
+                        <li style="list-style-type: none; padding:0;">⭐ 법은 나라가 만든 <input type="text" class="blank long" id="los1-s6-1"> 입니다.</li>
+                        <li style="list-style-type: none; padding:0;">⭐ 법은 <input type="text" class="blank long" id="los1-s6-2"> 이 있어서 모두가 반드시 지켜야 합니다.</li>
+                        <li style="list-style-type: none; padding:0;">⭐ 법을 어기면 <input type="text" class="blank long" id="los1-s6-3"> 을(를) 받습니다.</li>
+                        <li style="list-style-type: none; padding:0;">⭐ 법은 우리의 자유를 <input type="text" class="blank long" id="los1-s6-4"> 이 아니라,</li>
+                        <li style="list-style-type: none; padding:0; text-align:right;"><input type="text" class="blank long" id="los1-s6-5"> 를 공평하게 보호하기 위해 있습니다.</li>
+                    </ul>
+                </div>
+                
+                <div class="los1-box" style="flex: 2; background-color: #1e3799; color: #fff; border: 2px solid #1e3799;">
+                    <div style="font-size: 1.2em; font-weight: bold; margin-bottom: 15px; border-bottom: 1px solid #fff; padding-bottom: 10px; text-align: center;">오늘의 핵심 개념 5가지</div>
+                    <div style="display:flex; align-items:center; margin-bottom:10px;"><span style="background:#fff; color:#1e3799; border-radius:50%; width:24px; height:24px; display:inline-flex; justify-content:center; align-items:center; font-weight:bold; margin-right:10px;">1</span> <input type="text" id="los1-s6-c1" class="q5-input" style="flex:1;"></div>
+                    <div style="display:flex; align-items:center; margin-bottom:10px;"><span style="background:#fff; color:#1e3799; border-radius:50%; width:24px; height:24px; display:inline-flex; justify-content:center; align-items:center; font-weight:bold; margin-right:10px;">2</span> <input type="text" id="los1-s6-c2" class="q5-input" style="flex:1;"></div>
+                    <div style="display:flex; align-items:center; margin-bottom:10px;"><span style="background:#fff; color:#1e3799; border-radius:50%; width:24px; height:24px; display:inline-flex; justify-content:center; align-items:center; font-weight:bold; margin-right:10px;">3</span> <input type="text" id="los1-s6-c3" class="q5-input" style="flex:1;"></div>
+                    <div style="display:flex; align-items:center; margin-bottom:10px;"><span style="background:#fff; color:#1e3799; border-radius:50%; width:24px; height:24px; display:inline-flex; justify-content:center; align-items:center; font-weight:bold; margin-right:10px;">4</span> <input type="text" id="los1-s6-c4" class="q5-input" style="flex:1;"></div>
+                    <div style="display:flex; align-items:center;"><span style="background:#fff; color:#1e3799; border-radius:50%; width:24px; height:24px; display:inline-flex; justify-content:center; align-items:center; font-weight:bold; margin-right:10px;">5</span> <input type="text" id="los1-s6-c5" class="q5-input" style="flex:1;"></div>
+                </div>
+            </div>
+
+            <div class="action-area" style="margin-top: 30px;">
+                <div class="feedback-msg" style="color:#8e44ad;">모든 내용을 작성한 뒤 아래 제출 버튼을 누르세요. (서술형은 자동 채점되지 않습니다.)</div>
+                <button class="btn" style="width:100%; background-color:#8e44ad;" onclick="submitLawOs('law_os_1')">최종 제출하기 🚀</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ============================================== -->
+    <!-- ★ 과제 6 (LAW OS 6화 헌법기록 보관소) 영역 ★ -->
+    <!-- ============================================== -->
+    <div id="law_os_6-content" style="display: none;">
+        <div class="page-section active">
+            
+            <div class="q5-section-title" style="margin-top: 0;">1. CASE FILE 조사 기록 & 헌법과 연결해 보기</div>
+            <p style="color:#7f8c8d; font-size:0.95em;">※ 내가 찾은 사례가 누구에게 도움이 되는지, 어떤 권리가 보장되는지, 왜 필요한지 자유롭게 적어보세요.<br>※ 모르겠다면 전구 모양(💡) 버튼을 눌러 힌트를 확인해 보세요!</p>
+            
+            <div style="overflow-x: auto;">
+                <table class="q5-table">
+                    <tr>
+                        <th style="width: 5%;">ID</th>
+                        <th style="width: 25%;">사례 제목</th>
+                        <th style="width: 20%;">누구에게 도움이 되는가?</th>
+                        <th style="width: 20%;">어떤 권리가 보장되는가?</th>
+                        <th style="width: 25%;">왜 필요한가?</th>
+                        <th style="width: 5%;">힌트</th>
+                    </tr>
+                    <tr>
+                        <td style="text-align:center; font-weight:bold;">①</td>
+                        <td><input type="text" id="q5-c1-title" class="q5-input" placeholder="사례 제목"></td>
+                        <td><input type="text" id="q5-c1-who" class="q5-input"></td>
+                        <td><input type="text" id="q5-c1-right" class="q5-input" placeholder="예) 평등(제11조)"></td>
+                        <td><input type="text" id="q5-c1-why" class="q5-input"></td>
+                        <td><button class="q5-hint-btn" onclick="showHint(1)" title="힌트 보기">💡</button></td>
+                    </tr>
+                    <tr>
+                        <td style="text-align:center; font-weight:bold;">②</td>
+                        <td><input type="text" id="q5-c2-title" class="q5-input"></td>
+                        <td><input type="text" id="q5-c2-who" class="q5-input"></td>
+                        <td><input type="text" id="q5-c2-right" class="q5-input"></td>
+                        <td><input type="text" id="q5-c2-why" class="q5-input"></td>
+                        <td><button class="q5-hint-btn" onclick="showHint(2)">💡</button></td>
+                    </tr>
+                    <tr>
+                        <td style="text-align:center; font-weight:bold;">③</td>
+                        <td><input type="text" id="q5-c3-title" class="q5-input"></td>
+                        <td><input type="text" id="q5-c3-who" class="q5-input"></td>
+                        <td><input type="text" id="q5-c3-right" class="q5-input"></td>
+                        <td><input type="text" id="q5-c3-why" class="q5-input"></td>
+                        <td><button class="q5-hint-btn" onclick="showHint(3)">💡</button></td>
+                    </tr>
+                    <tr>
+                        <td style="text-align:center; font-weight:bold;">④</td>
+                        <td><input type="text" id="q5-c4-title" class="q5-input"></td>
+                        <td><input type="text" id="q5-c4-who" class="q5-input"></td>
+                        <td><input type="text" id="q5-c4-right" class="q5-input"></td>
+                        <td><input type="text" id="q5-c4-why" class="q5-input"></td>
+                        <td><button class="q5-hint-btn" onclick="showHint(4)">💡</button></td>
+                    </tr>
+                    <tr>
+                        <td style="text-align:center; font-weight:bold;">⑤</td>
+                        <td><input type="text" id="q5-c5-title" class="q5-input"></td>
+                        <td><input type="text" id="q5-c5-who" class="q5-input"></td>
+                        <td><input type="text" id="q5-c5-right" class="q5-input"></td>
+                        <td><input type="text" id="q5-c5-why" class="q5-input"></td>
+                        <td><button class="q5-hint-btn" onclick="showHint(5)">💡</button></td>
+                    </tr>
+                    <tr>
+                        <td style="text-align:center; font-weight:bold;">⑥</td>
+                        <td><input type="text" id="q5-c6-title" class="q5-input"></td>
+                        <td><input type="text" id="q5-c6-who" class="q5-input"></td>
+                        <td><input type="text" id="q5-c6-right" class="q5-input"></td>
+                        <td><input type="text" id="q5-c6-why" class="q5-input"></td>
+                        <td><button class="q5-hint-btn" onclick="showHint(6)">💡</button></td>
+                    </tr>
+                    <tr>
+                        <td style="text-align:center; font-weight:bold;">⑦</td>
+                        <td><input type="text" id="q5-c7-title" class="q5-input"></td>
+                        <td><input type="text" id="q5-c7-who" class="q5-input"></td>
+                        <td><input type="text" id="q5-c7-right" class="q5-input"></td>
+                        <td><input type="text" id="q5-c7-why" class="q5-input"></td>
+                        <td><button class="q5-hint-btn" onclick="showHint(7)">💡</button></td>
+                    </tr>
+                    <tr>
+                        <td style="text-align:center; font-weight:bold;">⑧</td>
+                        <td><input type="text" id="q5-c8-title" class="q5-input"></td>
+                        <td><input type="text" id="q5-c8-who" class="q5-input"></td>
+                        <td><input type="text" id="q5-c8-right" class="q5-input"></td>
+                        <td><input type="text" id="q5-c8-why" class="q5-input"></td>
+                        <td><button class="q5-hint-btn" onclick="showHint(8)">💡</button></td>
+                    </tr>
+                    <tr>
+                        <td style="text-align:center; font-weight:bold;">⑨</td>
+                        <td><input type="text" id="q5-c9-title" class="q5-input"></td>
+                        <td><input type="text" id="q5-c9-who" class="q5-input"></td>
+                        <td><input type="text" id="q5-c9-right" class="q5-input"></td>
+                        <td><input type="text" id="q5-c9-why" class="q5-input"></td>
+                        <td><button class="q5-hint-btn" onclick="showHint(9)">💡</button></td>
+                    </tr>
+                </table>
+            </div>
+
+            <div class="q5-section-title">2. 조사하며 알게 된 것 ✦</div>
+            <div style="margin-left: 10px;">
+                <p style="font-weight: bold; margin-bottom: 5px; color: #34495e;">💡 헌법이 실제 우리 생활 속에서 어떻게 작동하고 있었나요?</p>
+                <textarea id="q5-s2-1" class="q5-textarea" placeholder="자유롭게 생각을 적어보세요."></textarea>
+                
+                <p style="font-weight: bold; margin-bottom: 5px; margin-top: 15px; color: #34495e;">🧑‍🤝‍🧑 조사하면서 새롭게 알게 된 점이나 궁금해진 점은?</p>
+                <textarea id="q5-s2-2" class="q5-textarea" placeholder="자유롭게 생각을 적어보세요."></textarea>
+            </div>
+
+            <div class="q5-section-title">3. 비밀 로그 분석 (RIA의 흔적을 찾아라!)</div>
+            
+            <div style="display: flex; flex-wrap: wrap; gap: 20px; margin-left: 10px;">
+                <div style="flex: 1; min-width: 300px; display: flex; align-items: center; justify-content: center;">
+                    <img src="https://postfiles.pstatic.net/MjAyNjA2MjJfMTgy/MDAxNzgyMDk1MjAyNTA1.MgoosStFIb90QLNpsIF3_wTtn1TZ14KuUPMt6zOlGHUg.qj0vfd8d7A_YmRG6VXJRBXMRoXkYD5l_4SfvdA4lhH0g.PNG/image.png?type=w580" 
+                         alt="Secret Log" 
+                         style="width: 100%; border-radius: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.2);">
+                </div>
+
+                <div style="flex: 1; min-width: 300px; display: flex; flex-direction: column; gap: 15px; background: #fdfefe; padding: 20px; border-radius: 12px; border: 2px solid #bdc3c7;">
+                    <div>
+                        <p style="font-weight: bold; margin-bottom: 5px; color: #2c3e50;">🔍 이런 화에서 발견한 수상한 점은?</p>
+                        <textarea id="q5-s3-1" class="q5-textarea" style="min-height: 60px;" placeholder="시민을 어떻게 나누고 있었나요?"></textarea>
+                    </div>
+                    <div>
+                        <p style="font-weight: bold; margin-bottom: 5px; color: #2c3e50;">🕵️‍♀️ 비밀 로그를 남긴 사람은 누구라고 생각하나요?</p>
+                        <textarea id="q5-s3-2" class="q5-textarea" style="min-height: 60px;" placeholder="자유롭게 생각을 적어보세요."></textarea>
+                    </div>
+                    <div>
+                        <p style="font-weight: bold; margin-bottom: 5px; color: #2c3e50;">❓ 다음 화에는 어떤 일이 벌어질 것 같나요?</p>
+                        <textarea id="q5-s3-3" class="q5-textarea" style="min-height: 60px;" placeholder="자유롭게 상상해서 적어보세요."></textarea>
+                    </div>
+                </div>
+            </div>
+
+            <div class="action-area" style="margin-top: 30px;">
+                <div class="feedback-msg" style="color:#8e44ad;">모든 내용을 작성한 뒤 아래 제출 버튼을 누르세요. (서술형은 자동 채점되지 않습니다.)</div>
+                <button class="btn" style="width:100%; background-color:#8e44ad;" onclick="submitLawOs('law_os_6')">최종 제출하기 🚀</button>
+            </div>
+        </div>
+    </div>
 </div>
 
 <!-- 최종 요약 화면 -->
@@ -683,25 +1066,21 @@
         <strong>제출자:</strong> <span id="sum-name" style="color: #e67e22;"></span>
     </div>
     
-    <!-- 과제 1 (지형) -->
     <div class="score-box" id="score-box-q1" style="display:none;">
-        <div class="score-card p1"><div>1쪽 공책정리</div><div class="score-num" id="score-q1-p1"></div></div>
-        <div class="score-card p2"><div>2쪽 지도활동</div><div class="score-num" id="score-q1-p2"></div></div>
+        <div class="score-card p1"><div>1쪽 정답률</div><div class="score-num" id="score-q1-p1"></div></div>
+        <div class="score-card p2"><div>2쪽 정답률</div><div class="score-num" id="score-q1-p2"></div></div>
     </div>
 
-    <!-- 과제 2 (독도) -->
     <div class="score-box" id="score-box-q2" style="display:none;">
         <div class="score-card p1"><div>1쪽 정답률</div><div class="score-num" id="score-q2-p1"></div></div>
         <div class="score-card p2"><div>2쪽 정답률</div><div class="score-num" id="score-q2-p2"></div></div>
     </div>
 
-    <!-- 과제 3 (기후) -->
     <div class="score-box" id="score-box-q3" style="display:none;">
         <div class="score-card p1"><div>1쪽 정답률</div><div class="score-num" id="score-q3-p1"></div></div>
         <div class="score-card p2"><div>2쪽 정답률</div><div class="score-num" id="score-q3-p2"></div></div>
     </div>
 
-    <!-- 과제 4 (법과인권) -->
     <div class="score-box" id="score-box-q4" style="display:none;">
         <div class="score-card p1"><div>1쪽 정답률</div><div class="score-num" id="score-q4-p1"></div></div>
         <div class="score-card p2"><div>2쪽 정답률</div><div class="score-num" id="score-q4-p2"></div></div>
@@ -709,12 +1088,12 @@
     </div>
 
     <div class="total-score">
-        총 점수: <strong id="total-correct" style="color: #e74c3c; font-size:1.5em;"></strong> 점!
+        총 점수: <strong id="total-correct" style="color: #e74c3c; font-size:1.5em;"></strong><span id="score-unit"> 점!</span>
     </div>
     <div style="text-align: center; margin-top: 20px;">
         <h3 style="color:#27ae60;">✅ 서버에 성공적으로 수집되었습니다!</h3>
-        <button class="btn" style="background-color: #f39c12; margin-top: 15px;" onclick="downloadResult()">📥 결과 다운로드</button>
-        <button class="btn" style="background-color: #7f8c8d; margin-top: 15px; margin-left: 10px;" onclick="location.reload()">메뉴로 돌아가기</button>
+        <button class="btn" style="background-color: #f39c12; margin-top: 15px;" onclick="downloadResult()">📥 결과 다운로드 (.txt)</button>
+        <button class="btn" style="background-color: #7f8c8d; margin-top: 15px; margin-left: 10px;" onclick="backToMainMenu()">메뉴로 돌아가기</button>
     </div>
 </div>
 
@@ -729,6 +1108,8 @@
                 <option value="과제2_독도">과제 2: 1-(2) 소중한 우리 땅, 독도</option>
                 <option value="과제3_기후">과제 3: 2-(1) 우리나라의 기후</option>
                 <option value="과제4_법과인권">과제 4: 3-(1) 법의 역할과 인권</option>
+                <option value="과제5_LAW_OS_1화">LAW OS 1화 (규칙이 사라진 세상)</option>
+                <option value="과제6_LAW_OS_6화">LAW OS 6화 (헌법기록 보관소)</option>
             </select>
         </div>
         <div>
@@ -755,12 +1136,14 @@
     </table>
 
     <div style="text-align: center; margin-top: 40px;">
-        <button class="btn" style="background-color: #7f8c8d;" onclick="location.reload()">처음 메뉴로 돌아가기</button>
+        <button class="btn" style="background-color: #7f8c8d;" onclick="backToMainMenu()">처음 메뉴로 돌아가기</button>
     </div>
 </div>
 
 <script>
+    // ==========================================
     // 파이어베이스 설정
+    // ==========================================
     const firebaseConfig = {
       apiKey: "AIzaSyDfs4krriQYs41veoY_QemQ63R3Yru1xOs",
       authDomain: "yang2-66131.firebaseapp.com",
@@ -778,38 +1161,34 @@
     let scores = { 1: 0, 2: 0, 3: 0 };
     let currentAdminPwd = "1234";
 
-    // 통합 정답 데이터 
-    const answers = {
-        'quiz1': { // 지형
-            1: { 'q1-p1-1': '지형', 'q1-p1-2': '산지', 'q1-p1-3': '산맥', 'q1-p1-4': '높', 'q1-p1-5': '낮', 'q1-p1-6': '평야', 'q1-p1-7': '하천', 'q1-p1-8': '해안', 'q1-p1-9': '육지', 'q1-p1-10': '해안절벽', 'q1-p1-11': '물', 'q1-p1-12': '땅', 'q1-p1-13': '산지', 'q1-p1-14': '북동', 'q1-p1-15': '남서', 'q1-p1-16': '높', 'q1-p1-17': '낮', 'q1-p1-18': '남', 'q1-p1-19': '서', 'q1-p1-20': '하류', 'q1-p1-21': '평야', 'q1-p1-22': '동', 'q1-p1-23': '서', 'q1-p1-24': '남', 'q1-p1-25': '단순', 'q1-p1-26': '적', 'q1-p1-27': '모래사장', 'q1-p1-28': '해수욕장', 'q1-p1-29': '복잡', 'q1-p1-30': '다도해', 'q1-p1-31': '갯벌' },
-            2: { 'q1-p2-1': '북', 'q1-p2-2': '백두대간', 'q1-p2-3': '백두', 'q1-p2-4': '한라', 'q1-p2-5': '10', 'q1-p2-6': '두만강', 'q1-p2-7': '높', 'q1-p2-8': '낮', 'q1-p2-9': '북동', 'q1-p2-10': '동해정답', 'q1-p2-11': '서남해정답' }
-        },
-        'quiz2': { // 독도
-            1: { 'q2-p1-1': '동쪽', 'q2-p1-2': '경상북도울릉', 'q2-p1-3': '87.4', 'q2-p1-4': '일본', 'q2-p1-5': '러시아', 'q2-p1-6': '배', 'q2-p1-7': '비행기', 'q2-p1-8': '영토', 'q2-p1-9': '끝', 'q2-p1-10': '동식물', 'q2-p1-11': '지형', 'q2-p1-12': '수산', 'q2-p1-13': '천연', 'q2-p1-14': '동', 'q2-p1-15': '서', 'q2-p1-16': '화산', 'q2-p1-17': '바위섬', 'q2-p1-18': '바다', 'q2-p1-19': '발달', 'q2-p1-20': '생태계', 'q2-p1-21': '식물', 'q2-p1-22': '새', 'q2-p1-23': '해조류', 'q2-p1-24': '어류', 'q2-p1-25': '찬', 'q2-p1-26': '따뜻', 'q2-p1-27': '좋음', 'q2-p1-28': '어장', 'q2-p1-29': '어업', 'q2-p1-30': '해양심층수', 'q2-p1-31': '가스하이드레이트', 'q2-p1-32': '고체' },
-            2: { 'q2-p2-1': '이사부', 'q2-p2-2': '우산국', 'q2-p2-3': '지리지', 'q2-p2-4': '우산', 'q2-p2-5': '팔도총도', 'q2-p2-6': '독', 'q2-p2-7': '태정관지', 'q2-p2-8': '41', 'q2-p2-9': '연합국최고사령관각서', 'q2-p2-10': '안용복', 'q2-p2-11': '의용수비대', 'q2-p2-12': '최종덕', 'q2-p2-13': '시설', 'q2-p2-14': '경비대', 'q2-p2-15': '법령', 'q2-p2-16': '시행', 'q2-p2-17': '홍보', 'q2-p2-18': '방문', 'q2-p2-19': '반크', 'q2-p2-20': '수정' }
-        },
-        'quiz3': { // 기후 (신규)
-            1: { 'q3-p1-1': '자연현상', 'q3-p1-2': '인간활동', 'q3-p1-3': '피해', 'q3-p1-4': '계절', 'q3-p1-5': '차이', 'q3-p1-6': '먼지', 'q3-p1-7': '적', 'q3-p1-8': '일상생활', 'q3-p1-9': '많이', 'q3-p1-10': '넘치는', 'q3-p1-11': '남서', 'q3-p1-12': '북동', 'q3-p1-13': '비', 'q3-p1-14': '바람', 'q3-p1-15': '대설', 'q3-p1-16': '짧은', 'q3-p1-17': '갑자기', 'q3-p1-18': '가뭄', 'q3-p1-19': '홍수', 'q3-p1-20': '폭설', 'q3-p1-21': '폭염', 'q3-p1-22': '훈련', 'q3-p1-23': '발표', 'q3-p1-24': '재난문자', 'q3-p1-25': '방송', 'q3-p1-26': '행동요령', 'q3-p1-27': '포털' },
-            2: { 'q3-p2-1': '지구온난화', 'q3-p2-2': '활동', 'q3-p2-3': '기후', 'q3-p2-4': '기온', 'q3-p2-5': '길이', 'q3-p2-6': '예측', 'q3-p2-7': '세', 'q3-p2-8': '횟수', 'q3-p2-9': '인명', 'q3-p2-10': '고온', 'q3-p2-11': '발생', 'q3-p2-12': '경로', 'q3-p2-13': '호우', 'q3-p2-14': '홍수', 'q3-p2-16': '전지구적', 'q3-p2-17': '파리협정', 'q3-p2-18': '기구', 'q3-p2-19': '법', 'q3-p2-20': '제도', 'q3-p2-21': '절약', 'q3-p2-22': '친환경', 'q3-p2-23': '알리', 'q3-p2-24': '캠페인', 'q3-p2-25': '정책' }
-        },
-        'quiz4': { // 법과 인권
-            1: { 'q4-p1-1': '혼란', 'q4-p1-2': '질서', 'q4-p1-3': '법', 'q4-p1-4': '강제성', 'q4-p1-5': '제재', 'q4-p1-6': '법', 'q4-p1-7': '교육', 'q4-p1-8': '안전', 'q4-p1-9': '안전', 'q4-p1-10': '개인정보', 'q4-p1-11': '권리', 'q4-p1-12': '건축', 'q4-p1-13': '보전', 'q4-p1-14': '직무집행', 'q4-p1-15': '소방', 'q4-p1-16': '권리', 'q4-p1-17': '책임', 'q4-p1-18': '식품', 'q4-p1-19': '의료' },
-            2: { 'q4-p2-1': '갈등', 'q4-p2-2': '다툼', 'q4-p2-3': '기준', 'q4-p2-4': '권리', 'q4-p2-5': '분쟁', 'q4-p2-6': '생명', 'q4-p2-7': '재산', 'q4-p2-8': '정보', 'q4-p2-9': '질서', 'q4-p2-10': '범죄', 'q4-p2-11': '사고', 'q4-p2-12': '보호', 'q4-p2-13': '경제', 'q4-p2-14': '혼란', 'q4-p2-15': '환경', 'q4-p2-L1': '민법', 'q4-p2-L2': '재난및안전관리기본법', 'q4-p2-L3': '개인정보보호법', 'q4-p2-L4': '소방기본법', 'q4-p2-L5': '테러방지법', 'q4-p2-L6': '도로교통법', 'q4-p2-L7': '폐기물관리법', 'q4-p2-L8': '공정거래법' },
-            3: { 'q4-p3-1': '누구나', 'q4-p3-2': '기본', 'q4-p3-3': '태어나는', 'q4-p3-4': '국적', 'q4-p3-5': '평등', 'q4-p3-6': '빼앗', 'q4-p3-7': '최고', 'q4-p3-8': '존엄', 'q4-p3-9': '행복', 'q4-p3-10': '보장', 'q4-p3-11': '차별', 'q4-p3-12': '동등', 'q4-p3-13': '자유', 'q4-p3-14': '생각', 'q4-p3-15': '정치', 'q4-p3-16': '참여', 'q4-p3-17': '침해', 'q4-p3-18': '요구', 'q4-p3-19': '나은', 'q4-p3-20': '권리', 'q4-p3-21': '안정', 'q4-p3-22': '존중', 'q4-p3-23': '보호' }
-        }
-    };
+    function openLawOsMenu() {
+        document.getElementById('menu-screen').style.display = 'none';
+        document.getElementById('law-os-menu').style.display = 'block';
+    }
+
+    function backToMainMenu() {
+        document.getElementById('law-os-menu').style.display = 'none';
+        document.getElementById('main-container').style.display = 'none';
+        document.getElementById('summary-area').style.display = 'none';
+        document.getElementById('admin-screen').style.display = 'none';
+        document.getElementById('menu-screen').style.display = 'block';
+    }
 
     function startQuiz(quizId) {
         currentQuizId = quizId;
         scores = { 1: 0, 2: 0, 3: 0 };
         
         document.getElementById('menu-screen').style.display = 'none';
+        document.getElementById('law-os-menu').style.display = 'none';
         document.getElementById('main-container').style.display = 'block';
         
+        // 모든 컨텐츠 숨기기
         document.getElementById('quiz1-content').style.display = 'none';
         document.getElementById('quiz2-content').style.display = 'none';
         document.getElementById('quiz3-content').style.display = 'none';
         document.getElementById('quiz4-content').style.display = 'none';
+        document.getElementById('law_os_1-content').style.display = 'none';
+        document.getElementById('law_os_6-content').style.display = 'none';
 
         if (quizId === 'quiz1') {
             document.getElementById('task-main-title').innerText = "🌍 과제 1: 1-(1) 우리 나라의 지형";
@@ -820,17 +1199,39 @@
         } else if (quizId === 'quiz3') {
             document.getElementById('task-main-title').innerText = "🌤️ 과제 3: 2-(1) 우리나라의 기후";
             document.getElementById('quiz3-content').style.display = 'block';
-        } else {
+        } else if (quizId === 'quiz4') {
             document.getElementById('task-main-title').innerText = "⚖️ 과제 4: 3-(1) 법의 역할과 인권";
             document.getElementById('quiz4-content').style.display = 'block';
+        } else if (quizId === 'law_os_1') {
+            document.getElementById('task-main-title').innerText = "🕵️ LAW OS 1화: 규칙이 사라진 세상";
+            document.getElementById('law_os_1-content').style.display = 'block';
+        } else if (quizId === 'law_os_6') {
+            document.getElementById('task-main-title').innerText = "🕵️ LAW OS 6화: 헌법기록 보관소";
+            document.getElementById('law_os_6-content').style.display = 'block';
         }
         showPage(1);
     }
 
     function showPage(pageNum) {
-        const prefix = currentQuizId === 'quiz1' ? 'q1-' : currentQuizId === 'quiz2' ? 'q2-' : currentQuizId === 'quiz3' ? 'q3-' : 'q4-';
+        let prefix = '';
+        if (currentQuizId === 'quiz1') prefix = 'q1-';
+        else if (currentQuizId === 'quiz2') prefix = 'q2-';
+        else if (currentQuizId === 'quiz3') prefix = 'q3-';
+        else if (currentQuizId === 'quiz4') prefix = 'q4-';
+        else if (currentQuizId === 'law_os_1') prefix = ''; 
+        else if (currentQuizId === 'law_os_6') prefix = 'q5-'; 
+
+        // 모든 활성 클래스 제거
         document.querySelectorAll(`#${currentQuizId}-content .page-section`).forEach(p => p.classList.remove('active'));
-        document.getElementById(`${prefix}page-${pageNum}`).classList.add('active');
+        
+        let targetPage;
+        if(currentQuizId === 'law_os_1') {
+            targetPage = document.querySelector(`#law_os_1-content .page-section`);
+        } else {
+            targetPage = document.getElementById(`${prefix}page-${pageNum}`);
+        }
+        
+        if(targetPage) targetPage.classList.add('active');
         window.scrollTo(0, 0);
     }
 
@@ -849,6 +1250,8 @@
     }
 
     function gradePage(pageNum) {
+        if(currentQuizId === 'law_os_1' || currentQuizId === 'law_os_6') return;
+
         const userInfo = checkUserInfo();
         if (!userInfo) return;
 
@@ -859,58 +1262,95 @@
 
         keys.forEach(id => {
             const inputEl = document.getElementById(id);
-            const userAns = inputEl.value.replace(/\s+/g, '');
-            const exactAns = answerDict[id].replace(/\s+/g, '');
-            inputEl.classList.remove('correct', 'wrong');
+            if(inputEl) {
+                const userAns = inputEl.value.replace(/\s+/g, '');
+                const exactAns = answerDict[id].replace(/\s+/g, '');
+                inputEl.classList.remove('correct', 'wrong');
 
-            if (userAns === exactAns) {
-                correctCount++;
-                inputEl.classList.add('correct');
-            } else {
-                hasWrong = true;
-                inputEl.classList.add('wrong');
+                if (userAns === exactAns) {
+                    correctCount++;
+                    inputEl.classList.add('correct');
+                } else {
+                    hasWrong = true;
+                    inputEl.classList.add('wrong');
+                }
             }
         });
 
         scores[pageNum] = correctCount;
-        const qPrefix = currentQuizId === 'quiz1' ? 'q1-' : currentQuizId === 'quiz2' ? 'q2-' : currentQuizId === 'quiz3' ? 'q3-' : 'q4-';
-        const msgEl = document.getElementById(`msg-${qPrefix}${pageNum}`);
-        msgEl.innerHTML = `총 ${keys.length}개의 항목 중 <span style="color:#27ae60;">${correctCount}개</span> 정답입니다!`;
+        let prefix = currentQuizId === 'quiz1' ? 'q1-' : currentQuizId === 'quiz2' ? 'q2-' : currentQuizId === 'quiz3' ? 'q3-' : 'q4-';
+        const msgEl = document.getElementById(`msg-${prefix}${pageNum}`);
+        if(msgEl) msgEl.innerHTML = `총 ${keys.length}개의 항목 중 <span style="color:#27ae60;">${correctCount}개</span> 정답입니다!`;
         
-        document.getElementById(`btn-grade-${qPrefix}${pageNum}`).style.display = 'none';
+        document.getElementById(`btn-grade-${prefix}${pageNum}`).style.display = 'none';
         
         if(hasWrong) {
-            document.getElementById(`btn-retry-${qPrefix}${pageNum}`).style.display = 'inline-block';
-            msgEl.innerHTML += ` <span style="color:#e74c3c;">(틀린 곳이 있어요!)</span>`;
+            document.getElementById(`btn-retry-${prefix}${pageNum}`).style.display = 'inline-block';
+            if(msgEl) msgEl.innerHTML += ` <span style="color:#e74c3c;">(틀린 곳이 있어요!)</span>`;
         } else {
-            msgEl.innerHTML = `🎉 완벽합니다! 모두 맞혔습니다!`;
+            if(msgEl) msgEl.innerHTML = `🎉 완벽합니다! 모두 맞혔습니다!`;
         }
-        document.getElementById(`btn-next-${qPrefix}${pageNum}`).style.display = 'inline-block';
+        document.getElementById(`btn-next-${prefix}${pageNum}`).style.display = 'inline-block';
     }
 
     function retryPage(pageNum) {
         const answerDict = answers[currentQuizId][pageNum];
         Object.keys(answerDict).forEach(id => {
             const inputEl = document.getElementById(id);
-            if (inputEl.classList.contains('wrong')) {
+            if (inputEl && inputEl.classList.contains('wrong')) {
                 inputEl.value = "";
                 inputEl.classList.remove('wrong');
             }
         });
-        const qPrefix = currentQuizId === 'quiz1' ? 'q1-' : currentQuizId === 'quiz2' ? 'q2-' : currentQuizId === 'quiz3' ? 'q3-' : 'q4-';
-        document.getElementById(`msg-${qPrefix}${pageNum}`).innerHTML = "다시 한번 빈칸을 채우고 채점해 보세요!";
-        document.getElementById(`btn-grade-${qPrefix}${pageNum}`).style.display = 'block';
-        document.getElementById(`btn-retry-${qPrefix}${pageNum}`).style.display = 'none';
-        document.getElementById(`btn-next-${qPrefix}${pageNum}`).style.display = 'none';
+        let prefix = currentQuizId === 'quiz1' ? 'q1-' : currentQuizId === 'quiz2' ? 'q2-' : currentQuizId === 'quiz3' ? 'q3-' : 'q4-';
+        document.getElementById(`msg-${prefix}${pageNum}`).innerHTML = "다시 한번 빈칸을 채우고 채점해 보세요!";
+        document.getElementById(`btn-grade-${prefix}${pageNum}`).style.display = 'block';
+        document.getElementById(`btn-retry-${prefix}${pageNum}`).style.display = 'none';
+        document.getElementById(`btn-next-${prefix}${pageNum}`).style.display = 'none';
     }
 
     function nextPage(current, next) { showPage(next); }
+
+    function submitLawOs(episodeId) {
+        const userInfo = checkUserInfo();
+        if (!userInfo) return;
+
+        document.getElementById('sum-name').innerText = `[${userInfo.school}] ${userInfo.grade}학년 ${userInfo.cls}반 ${userInfo.num}번 ${userInfo.name}`;
+        
+        if(episodeId === 'law_os_1') {
+            document.getElementById('sum-task-name').innerText = "LAW OS 1화 서술형 보고서";
+        } else {
+            document.getElementById('sum-task-name').innerText = "LAW OS 6화 헌법기록 보관소";
+        }
+        
+        document.getElementById('score-box-q1').style.display = 'none';
+        document.getElementById('score-box-q2').style.display = 'none';
+        document.getElementById('score-box-q3').style.display = 'none';
+        document.getElementById('score-box-q4').style.display = 'none';
+        
+        document.getElementById('total-correct').innerText = "제출 완료";
+        document.getElementById('score-unit').innerText = "";
+
+        const dbFolder = episodeId === 'law_os_1' ? '과제5_LAW_OS_1화' : '과제6_LAW_OS_6화';
+        const dbRef = database.ref(dbFolder + '/' + `${userInfo.grade}학년${userInfo.cls}반_${userInfo.num}번`);
+        
+        let payload = {
+            학교: userInfo.school, 학년: userInfo.grade, 반: userInfo.cls, 번호: userInfo.num, 이름: userInfo.name,
+            총점: "제출완료", 제출시간: new Date().toLocaleString()
+        };
+        dbRef.set(payload);
+
+        document.getElementById('main-container').style.display = 'none';
+        document.getElementById('summary-area').style.display = 'block';
+        window.scrollTo(0, 0);
+    }
 
     function showFinalSummary() {
         const userInfo = checkUserInfo();
         let totalCorrect = 0;
         
         document.getElementById('sum-name').innerText = `[${userInfo.school}] ${userInfo.grade}학년 ${userInfo.cls}반 ${userInfo.num}번 ${userInfo.name}`;
+        document.getElementById('score-unit').innerText = " 점!";
 
         document.getElementById('score-box-q1').style.display = 'none';
         document.getElementById('score-box-q2').style.display = 'none';
@@ -935,7 +1375,7 @@
             document.getElementById('score-box-q3').style.display = 'flex';
             document.getElementById('score-q3-p1').innerText = `${scores[1]} / ${Object.keys(answers['quiz3'][1]).length}`;
             document.getElementById('score-q3-p2').innerText = `${scores[2]} / ${Object.keys(answers['quiz3'][2]).length}`;
-        } else {
+        } else if (currentQuizId === 'quiz4') {
             totalCorrect = scores[1] + scores[2] + scores[3];
             document.getElementById('sum-task-name').innerText = "과제 4: 3-(1) 법의 역할과 인권";
             document.getElementById('score-box-q4').style.display = 'flex';
@@ -946,7 +1386,6 @@
 
         document.getElementById('total-correct').innerText = totalCorrect;
 
-        // Firebase 데이터 저장 
         const dbFolder = currentQuizId === 'quiz1' ? '과제1_지형' : currentQuizId === 'quiz2' ? '과제2_독도' : currentQuizId === 'quiz3' ? '과제3_기후' : '과제4_법과인권';
         const dbRef = database.ref(dbFolder + '/' + `${userInfo.grade}학년${userInfo.cls}반_${userInfo.num}번`);
         
@@ -963,13 +1402,71 @@
         window.scrollTo(0, 0);
     }
 
-    // 결과 다운로드 (txt)
     function downloadResult() {
         const userInfo = checkUserInfo();
         const taskName = document.getElementById('sum-task-name').innerText;
         const totalScore = document.getElementById('total-correct').innerText;
         
-        const content = `[온라인 과제 제출 결과]\n\n과제명: ${taskName}\n학교: ${userInfo.school}\n학번: ${userInfo.grade}학년 ${userInfo.cls}반 ${userInfo.num}번\n이름: ${userInfo.name}\n\n총점: ${totalScore}점\n제출 일시: ${new Date().toLocaleString()}\n`;
+        let content = `[온라인 과제 제출 결과]\n\n과제명: ${taskName}\n학교: ${userInfo.school}\n학번: ${userInfo.grade}학년 ${userInfo.cls}반 ${userInfo.num}번\n이름: ${userInfo.name}\n\n`;
+
+        if (currentQuizId === 'law_os_6') {
+            content += `[1. CASE FILE 조사 기록]\n`;
+            for(let i=1; i<=9; i++) {
+                content += `사례 ${i} 제목: ${document.getElementById('q5-c'+i+'-title').value}\n`;
+                content += ` - 누구에게 도움?: ${document.getElementById('q5-c'+i+'-who').value}\n`;
+                content += ` - 어떤 권리 보장?: ${document.getElementById('q5-c'+i+'-right').value}\n`;
+                content += ` - 왜 필요한가?: ${document.getElementById('q5-c'+i+'-why').value}\n\n`;
+            }
+            content += `[2. 조사하며 알게 된 것]\n`;
+            content += `Q. 생활 속 헌법 작동: ${document.getElementById('q5-s2-1').value}\n`;
+            content += `Q. 새롭게 알게된 점: ${document.getElementById('q5-s2-2').value}\n\n`;
+            
+            content += `[3. 비밀 로그 분석]\n`;
+            content += `Q. 수상한 점: ${document.getElementById('q5-s3-1').value}\n`;
+            content += `Q. 로그를 남긴 사람: ${document.getElementById('q5-s3-2').value}\n`;
+            content += `Q. 다음 화 예상: ${document.getElementById('q5-s3-3').value}\n`;
+            
+        } else if (currentQuizId === 'law_os_1') {
+            content += `[1. CASE FILE 조사 기록 (LAW OS 1화)]\n`;
+            content += `- 급식실 사건: ${document.getElementById('los1-s1-1').value}\n`;
+            content += `- 횡단보도 사건: ${document.getElementById('los1-s1-2').value}\n`;
+            content += `- 통학버스 사건: ${document.getElementById('los1-s1-3').value}\n\n`;
+            
+            content += `[2. 나의 선택]\n`;
+            content += `- 급식실 결과: ${document.getElementById('los1-s2-res1').value}\n`;
+            content += `- 횡단보도 결과: ${document.getElementById('los1-s2-res2').value}\n`;
+            content += `- 통학버스 결과: ${document.getElementById('los1-s2-res3').value}\n\n`;
+
+            content += `[3. 규칙이 없으면 어떤 문제가 생길까?]\n`;
+            content += `-> ${document.getElementById('los1-s3-1').value}\n`;
+            content += `-> ${document.getElementById('los1-s3-2').value}\n`;
+            content += `-> ${document.getElementById('los1-s3-3').value}\n\n`;
+
+            content += `[4. 핵심 질문 - 규칙이 없으면 자유로워지나요?]\n`;
+            content += `나의 이유: ${document.getElementById('los1-s4-reason').value}\n\n`;
+
+            content += `[5. 복구한 규칙 선택 이유]\n`;
+            content += `나의 이유: ${document.getElementById('los1-s5-reason').value}\n\n`;
+
+            content += `[6. 정리해 봅시다]\n`;
+            content += `1) ${document.getElementById('los1-s6-1').value}\n`;
+            content += `2) ${document.getElementById('los1-s6-2').value}\n`;
+            content += `3) ${document.getElementById('los1-s6-3').value}\n`;
+            content += `4) ${document.getElementById('los1-s6-4').value}\n`;
+            content += `5) ${document.getElementById('los1-s6-5').value}\n\n`;
+            
+            content += `[오늘의 핵심 개념]\n`;
+            content += `1. ${document.getElementById('los1-s6-c1').value}\n`;
+            content += `2. ${document.getElementById('los1-s6-c2').value}\n`;
+            content += `3. ${document.getElementById('los1-s6-c3').value}\n`;
+            content += `4. ${document.getElementById('los1-s6-c4').value}\n`;
+            content += `5. ${document.getElementById('los1-s6-c5').value}\n`;
+
+        } else {
+            content += `총점: ${totalScore}점\n`;
+        }
+
+        content += `\n제출 일시: ${new Date().toLocaleString()}\n`;
         
         const blob = new Blob([content], { type: 'text/plain;charset=utf-8' });
         const url = URL.createObjectURL(blob);
@@ -980,7 +1477,6 @@
         URL.revokeObjectURL(url);
     }
 
-    // 관리자 모드
     function openAdmin() {
         database.ref('설정/관리자비밀번호').once('value').then((snapshot) => {
             currentAdminPwd = snapshot.val() || "1234";
@@ -1029,29 +1525,35 @@
                 const isTask2 = taskPath === '과제2_독도';
                 const isTask3 = taskPath === '과제3_기후';
                 const isTask4 = taskPath === '과제4_법과인권';
+                const isLawOs = taskPath.includes('LAW_OS');
                 
                 let max1 = 0, max2 = 0, max3 = 0;
                 if (isTask1) { max1 = 31; max2 = 11; max3 = 0; }
                 else if (isTask2) { max1 = 32; max2 = 20; max3 = 0; }
                 else if (isTask3) { max1 = 27; max2 = 25; max3 = 0; }
-                else { max1 = 19; max2 = 23; max3 = 23; }
+                else if (isTask4) { max1 = 19; max2 = 23; max3 = 23; }
                 
                 const totalMax = max1 + max2 + max3;
                 const schoolName = s.학교 !== undefined ? s.학교 : "정보없음";
-                const s1 = s.쪽1점수 !== undefined ? s.쪽1점수 : "-";
-                const s2 = s.쪽2점수 !== undefined ? s.쪽2점수 : "-";
-                const s3 = s.쪽3점수 !== undefined ? s.쪽3점수 : (isTask4 ? "-" : "없음");
-                const tot = s.총점 !== undefined ? s.총점 : "-";
+                
+                let s1 = s.쪽1점수 !== undefined ? s.쪽1점수 : "-";
+                let s2 = s.쪽2점수 !== undefined ? s.쪽2점수 : "-";
+                let s3 = s.쪽3점수 !== undefined ? s.쪽3점수 : (isTask4 ? "-" : "없음");
+                let tot = s.총점 !== undefined ? s.총점 : "-";
+
+                if (isLawOs) {
+                    s1 = "서술형"; s2 = "서술형"; s3 = "없음"; tot = s.총점;
+                }
 
                 tbody.innerHTML += `
                     <tr>
                         <td style="font-size:0.9em; color:#7f8c8d;">${schoolName}</td>
                         <td>${s.학년||'-'}학년 ${s.반||'-'}반 ${s.번호||'-'}번</td>
                         <td>${s.이름||'-'}</td>
-                        <td style="color:#2980b9;">${s1} / ${max1}</td>
-                        <td style="color:#27ae60;">${s2} / ${max2}</td>
+                        <td style="color:#2980b9;">${isLawOs ? s1 : `${s1} / ${max1}`}</td>
+                        <td style="color:#27ae60;">${isLawOs ? s2 : `${s2} / ${max2}`}</td>
                         <td style="color:#8e44ad;">${isTask4 ? `${s3} / ${max3}` : s3}</td>
-                        <td style="color:#e74c3c; font-weight:bold;">${tot} / ${totalMax}</td>
+                        <td style="color:#e74c3c; font-weight:bold;">${isLawOs ? tot : `${tot} / ${totalMax}`}</td>
                         <td style="font-size:0.9em; color:#7f8c8d;">${s.제출시간||'-'}</td>
                     </tr>
                 `;
