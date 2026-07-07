@@ -76,10 +76,24 @@
     .school-table th { background-color: #ecf0f1; border: 1px solid #bdc3c7; padding: 10px; color: #2c3e50; }
     .school-table td { border: 1px solid #bdc3c7; padding: 10px; }
     
+    /* 공책 정리 디자인 */
+    .worksheet-wrapper { background-color: #fff; border: 2px solid #2c3e50; border-radius: 8px; position: relative; overflow: hidden; margin-bottom: 20px; }
+    .worksheet-bg { background-image: linear-gradient(transparent 95%, #a6d4fa 5%); background-size: 100% 45px; line-height: 45px; padding: 20px; font-size: 16px; color: #333; }
+    .ws-header { border-bottom: 3px solid #000; padding-bottom: 10px; margin-bottom: 10px; }
+    .ws-title { font-size: 1.3em; font-weight: bold; color: #1e3799; }
+    .ws-subtitle { font-size: 1.1em; font-weight: bold; color: #2f3640; }
+    .ws-section-title { font-size: 1.2em; font-weight: bold; color: #0984e3; border-bottom: 2px solid #000; display: inline-block; padding: 0 10px; line-height: 30px; margin-top: 15px; background: #fff; }
+    .ws-row { margin-left: 20px; position: relative; }
+    .ws-red-bracket { border-left: 3px solid #e84118; border-top: 3px solid #e84118; border-bottom: 3px solid #e84118; border-radius: 10px 0 0 10px; padding-left: 15px; position: relative; }
+    .ws-map-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 15px; line-height: 1.6; }
+    @media (max-width: 600px) { .ws-map-grid { grid-template-columns: 1fr; } }
+    .ws-matching-box { border: 2px dashed #3498db; padding: 20px; border-radius: 12px; background: #fff; text-align: center; }
+    .ws-select { padding: 8px; font-size: 16px; border: 1px solid #2980b9; border-radius: 4px; font-weight: bold; color: #2c3e50; width: 100%; margin-top: 10px; background-color: #f4f6f9; cursor: pointer; }
+
     /* 버튼 및 상태창 */
     .btn { display: inline-block; padding: 15px 20px; font-size: 18px; font-weight: bold; color: #fff; background-color: #3498db; border: none; border-radius: 8px; cursor: pointer; box-shadow: 0 4px 6px rgba(0,0,0,0.1); margin-top: 10px; transition: 0.2s; }
     .btn:hover { filter: brightness(0.9); transform: translateY(-2px); }
-    .btn-retry, .btn-next { display: none; }
+    .btn-next { display: none; }
     .action-area { text-align: center; margin-top: 30px; padding: 25px; background-color: #f8f9fa; border-radius: 12px; border: 2px dashed #bdc3c7; line-height: 1.6; }
     .feedback-msg { font-size: 1.25em; font-weight: bold; margin-bottom: 20px; color: #2c3e50; }
     
@@ -106,6 +120,7 @@
     <h1>📚 우리 반 과제 목록</h1>
     <div class="subtitle">해결할 과제를 선택해 주세요!</div>
 
+    <!-- 기존 사회 과제들 -->
     <div class="quiz-card" id="card-quiz1" onclick="startQuiz('quiz1')">
         <div class="quiz-title">🌍 과제 1: 1-(1) 우리 나라의 지형</div>
         <div style="color: #7f8c8d;">사회 1단원 국토 여행 공책 정리 (교과서 13~23쪽)</div>
@@ -126,6 +141,8 @@
         <div style="color: #7f8c8d;">사회 3단원 공책 정리 빈칸 채우기 (교과서 111~131쪽)</div>
         <button class="btn" style="background-color: #3498db;">이 과제 시작하기 🚀</button>
     </div>
+    
+    <!-- 추가된 국어 과제 -->
     <div class="quiz-card" id="card-quiz5" onclick="startQuiz('quiz5')">
         <div class="quiz-title">📖 과제 5: 국어 5-1 종합 평가 (25문항)</div>
         <div style="color: #7f8c8d;">국어 1학기 읽기, 쓰기, 문법 핵심 정리 총정리</div>
@@ -152,13 +169,13 @@
         </div>
     </div>
     
-    <!-- (과제 1~4 HTML은 분량상 숨김처리 하지 않고 원본 그대로 유지해야 하나, 글자수 제한 방지를 위해 선생님의 기존 HTML 코드가 그대로 이 자리에 있다고 가정하고 5번에 집중합니다. 과제 1~4는 덮어쓰실 때 그대로 유지해주세요.) -->
+    <!-- 기존 사회 과제 컨텐츠 구조 (실제 적용시 선생님의 기존 HTML 코드를 이 영역에 그대로 유지해주세요) -->
     <div id="quiz1-content" style="display: none;"></div>
     <div id="quiz2-content" style="display: none;"></div>
     <div id="quiz3-content" style="display: none;"></div>
     <div id="quiz4-content" style="display: none;"></div>
 
-    <!-- 🌟 추가된 국어 과제 5 컨텐츠 (전체 지문 및 25문항 UI 완벽 반영) 🌟 -->
+    <!-- 🌟 국어 과제 5 컨텐츠 (전체 25문항) 🌟 -->
     <div id="quiz5-content" style="display: none;">
         
         <!-- 1쪽: 1번 ~ 9번 -->
@@ -309,7 +326,6 @@
             <div class="action-area">
                 <div class="feedback-msg" id="msg-q5-1">문제를 모두 푼 뒤 채점하기를 누르세요.</div>
                 <button class="btn" style="width:100%; background-color:#9b59b6;" id="btn-grade-q5-1" onclick="gradePage(1)">1쪽 채점하기</button>
-                <button class="btn btn-retry" id="btn-retry-q5-1" onclick="retryPage(1)">🔄 틀린 문제 무한 재도전!</button>
                 <button class="btn btn-next" id="btn-next-q5-1" onclick="nextPage(1, 2)">2쪽으로 넘어가기 ➡️</button>
             </div>
         </div>
@@ -503,7 +519,6 @@
             <div class="action-area">
                 <div class="feedback-msg" id="msg-q5-2">문제를 모두 푼 뒤 채점하기를 누르세요.</div>
                 <button class="btn" style="width:100%; background-color:#9b59b6;" id="btn-grade-q5-2" onclick="gradePage(2)">2쪽 채점하기</button>
-                <button class="btn btn-retry" id="btn-retry-q5-2" onclick="retryPage(2)">🔄 틀린 문제 무한 재도전!</button>
                 <button class="btn btn-next" id="btn-next-q5-2" onclick="nextPage(2, 3)">3쪽으로 넘어가기 ➡️</button>
             </div>
         </div>
@@ -625,13 +640,13 @@
             <div class="action-area">
                 <div class="feedback-msg" id="msg-q5-3">문제를 모두 푼 뒤 최종 채점하기를 누르세요.</div>
                 <button class="btn" style="width:100%; background-color:#9b59b6;" id="btn-grade-q5-3" onclick="gradePage(3)">최종 채점 및 제출하기 🚀</button>
-                <button class="btn btn-retry" id="btn-retry-q5-3" onclick="retryPage(3)">🔄 틀린 문제 무한 재도전!</button>
-                <button class="btn btn-next" id="btn-next-q5-3" onclick="showFinalSummary()">결과 요약표 보기</button>
+                <button class="btn btn-next" id="btn-next-q5-3" onclick="showFinalSummary()">최종 결과 확인하기 📊</button>
             </div>
         </div>
     </div>
 </div>
 
+<!-- 요약 및 결과 페이지 -->
 <div id="summary-area">
     <h2 style="text-align: center; color: #2c3e50; border-bottom: 2px solid #2c3e50; padding-bottom: 10px;">📊 최종 학습 결과</h2>
     <div style="font-size: 1.2em; text-align: center; margin: 20px 0;">
@@ -669,6 +684,12 @@
     <div class="total-score">
         총 점수: <strong id="total-correct" style="color: #e74c3c; font-size:1.5em;"></strong><span id="score-unit"> 점!</span>
     </div>
+    
+    <!-- 전체 재도전 버튼 (틀린 문제가 있을 때만 자바스크립트로 활성화) -->
+    <div style="text-align: center; margin-top: 15px;">
+        <button class="btn" id="btn-global-retry" style="background-color: #e74c3c; display: none; width: 100%; max-width: 400px; padding: 20px;" onclick="retryAllWrong()">🔄 틀린 문제 다시 풀기</button>
+    </div>
+
     <div style="text-align: center; margin-top: 20px;">
         <h3 style="color:#27ae60;">✅ 서버에 성공적으로 수집되었습니다!</h3>
         <button class="btn" style="background-color: #f39c12; margin-top: 15px;" onclick="downloadResult()">📥 결과 다운로드 (.txt)</button>
@@ -677,6 +698,7 @@
 </div>
 
 <div id="admin-screen">
+    <!-- 기존 관리자 메뉴 코드 유지 -->
     <h2 style="text-align: center; color: #2c3e50; border-bottom: 2px solid #2c3e50; padding-bottom: 10px;">👨‍🏫 관리자 메뉴</h2>
     
     <div class="admin-controls">
@@ -737,7 +759,7 @@
     // 정답 데이터
     // ==========================================
     const answers = {
-        // 기존 과제 1~4 (선생님의 원본 코드의 정답을 유지해주세요. 지면상 간략화됨)
+        // 기존 과제 1~4 (선생님의 원본 코드의 정답을 유지해주세요)
         quiz1: {
             1: { "q1-p1-1": "지형", "q1-p1-2": "산지", "q1-p1-3": "산맥", "q1-p1-4": "높", "q1-p1-5": "낮", "q1-p1-6": "평야", "q1-p1-7": "하천", "q1-p1-8": "해안", "q1-p1-9": "갯벌", "q1-p1-10": "해안절벽|해안 절벽", "q1-p1-11": "하천", "q1-p1-12": "땅", "q1-p1-13": "산지", "q1-p1-14": "북동", "q1-p1-15": "남서", "q1-p1-16": "높", "q1-p1-17": "낮", "q1-p1-18": "남", "q1-p1-19": "서", "q1-p1-20": "하류", "q1-p1-21": "평야", "q1-p1-22": "동", "q1-p1-23": "서", "q1-p1-24": "남", "q1-p1-25": "단순", "q1-p1-26": "적", "q1-p1-27": "모래사장", "q1-p1-28": "해수욕장", "q1-p1-29": "복잡", "q1-p1-30": "다도해", "q1-p1-31": "갯벌" },
             2: { "q1-p2-1": "북", "q1-p2-2": "백두대간", "q1-p2-3": "백두", "q1-p2-4": "한라", "q1-p2-5": "10|열|십", "q1-p2-6": "두만강", "q1-p2-7": "높", "q1-p2-8": "낮", "q1-p2-9": "북동", "q1-p2-10": "동해정답", "q1-p2-11": "서남해정답" }
@@ -755,7 +777,7 @@
             2: { "q4-p2-1": "갈등", "q4-p2-2": "다툼", "q4-p2-3": "기준", "q4-p2-4": "권리", "q4-p2-5": "분쟁", "q4-p2-6": "생명", "q4-p2-7": "재산", "q4-p2-8": "정보", "q4-p2-9": "질서", "q4-p2-10": "범죄", "q4-p2-11": "사고", "q4-p2-12": "보호", "q4-p2-13": "경제", "q4-p2-14": "혼란", "q4-p2-15": "환경", "q4-p2-L1": "민법", "q4-p2-L2": "재난및안전관리기본법|재난 및 안전관리 기본법", "q4-p2-L3": "개인정보보호법|개인정보 보호법", "q4-p2-L4": "소방기본법", "q4-p2-L5": "테러방지법", "q4-p2-L6": "도로교통법", "q4-p2-L7": "폐기물관리법", "q4-p2-L8": "공정거래법" },
             3: { "q4-p3-1": "누구나", "q4-p3-2": "기본", "q4-p3-3": "태어나는", "q4-p3-4": "국적", "q4-p3-5": "평등", "q4-p3-6": "빼앗", "q4-p3-7": "최고", "q4-p3-8": "존엄", "q4-p3-9": "행복", "q4-p3-10": "보장", "q4-p3-11": "차별", "q4-p3-12": "동등", "q4-p3-13": "자유", "q4-p3-14": "생각", "q4-p3-15": "정치", "q4-p3-16": "참여", "q4-p3-17": "침해", "q4-p3-18": "요구", "q4-p3-19": "나은", "q4-p3-20": "권리", "q4-p3-21": "안정", "q4-p3-22": "존중", "q4-p3-23": "보호" }
         },
-        // 추가된 과제 5 (국어 25문항 정답)
+        // 과제 5
         quiz5: {
             1: {
                 "q5-p1-1": "5", "q5-p1-2": "2", "q5-p1-3": "1,2", "q5-p1-5": "2", 
@@ -793,7 +815,7 @@
     }
 
     // ==========================================
-    // 객관식 클릭 처리 로직 (다중 선택, 예: 3번 문제)
+    // 객관식 클릭 처리 로직 (다중 선택)
     // ==========================================
     function selectMultiMCQ(event, inputId, value, maxSelect) {
         const inputEl = document.getElementById(inputId);
@@ -955,7 +977,7 @@
                     inputEl.classList.add('wrong');
                 }
 
-                // 객관식(히든 인풋)인 경우 버튼 UI 업데이트
+                // 객관식 버튼 UI 업데이트
                 if(inputEl.type === 'hidden') {
                     const selectedOptions = document.querySelectorAll(`#mcq-${id} .mcq-option.selected`);
                     selectedOptions.forEach(opt => {
@@ -974,44 +996,13 @@
         
         document.getElementById(`btn-grade-${prefix}${pageNum}`).style.display = 'none';
         
+        // 🌟 수정: 페이지 채점 시 '재도전' 버튼을 바로 띄우지 않고, 다음으로 넘어가게 함.
         if(hasWrong) {
-            document.getElementById(`btn-retry-${prefix}${pageNum}`).style.display = 'inline-block';
-            if(msgEl) msgEl.innerHTML += ` <span style="color:#e74c3c;">(틀린 곳이 있어요. 재도전 버튼을 눌러주세요!)</span>`;
+            if(msgEl) msgEl.innerHTML += `<br><span style="color:#e74c3c;">(틀린 문제는 25번까지 모두 푼 뒤 다시 풀 수 있습니다!)</span>`;
         } else {
             if(msgEl) msgEl.innerHTML = `🎉 완벽합니다! 모두 맞혔습니다!`;
         }
         document.getElementById(`btn-next-${prefix}${pageNum}`).style.display = 'inline-block';
-    }
-
-    function retryPage(pageNum) {
-        const answerDict = answers[currentQuizId][pageNum];
-        let prefix = currentQuizId === 'quiz1' ? 'q1-' : currentQuizId === 'quiz2' ? 'q2-' : currentQuizId === 'quiz3' ? 'q3-' : currentQuizId === 'quiz4' ? 'q4-' : 'q5-';
-        
-        Object.keys(answerDict).forEach(id => {
-            const inputEl = document.getElementById(id);
-            if (inputEl && inputEl.classList.contains('wrong')) {
-                // 오답 인풋 초기화
-                inputEl.value = "";
-                inputEl.classList.remove('wrong');
-                
-                // 객관식 버튼 UI 초기화
-                if (inputEl.type === 'hidden') {
-                    const options = document.querySelectorAll(`#mcq-${id} .mcq-option`);
-                    options.forEach(opt => {
-                        opt.classList.remove('wrong');
-                        // 정답 처리된 건 건드리지 않음
-                        if(!opt.classList.contains('correct')) {
-                            opt.classList.remove('selected');
-                        }
-                    });
-                }
-            }
-        });
-        
-        document.getElementById(`msg-${prefix}${pageNum}`).innerHTML = "빈칸과 선택지를 다시 확인하고 채점해 보세요!";
-        document.getElementById(`btn-grade-${prefix}${pageNum}`).style.display = 'inline-block';
-        document.getElementById(`btn-retry-${prefix}${pageNum}`).style.display = 'none';
-        document.getElementById(`btn-next-${prefix}${pageNum}`).style.display = 'none';
     }
 
     function nextPage(current, next) { showPage(next); }
@@ -1065,6 +1056,15 @@
 
         document.getElementById('total-correct').innerText = totalCorrect;
 
+        // 🌟 수정: 틀린 문제가 하나라도 있는지 검사해서 전체 재도전 버튼 활성화
+        const hasAnyWrong = document.querySelectorAll(`#${currentQuizId}-content .wrong`).length > 0;
+        const retryBtn = document.getElementById('btn-global-retry');
+        if (hasAnyWrong) {
+            retryBtn.style.display = 'inline-block';
+        } else {
+            retryBtn.style.display = 'none';
+        }
+
         let dbFolder = '';
         if (currentQuizId === 'quiz1') dbFolder = '과제1_지형';
         else if (currentQuizId === 'quiz2') dbFolder = '과제2_독도';
@@ -1087,6 +1087,45 @@
         document.getElementById('main-container').style.display = 'none';
         document.getElementById('summary-area').style.display = 'block';
         window.scrollTo(0, 0);
+    }
+
+    // 🌟 추가: 결과 화면에서 25문제 전체 중 틀린 문제들만 재도전하는 함수 🌟
+    function retryAllWrong() {
+        document.getElementById('summary-area').style.display = 'none';
+        document.getElementById('main-container').style.display = 'block';
+        
+        // 1. 빈칸 텍스트 인풋(및 hidden) 중 틀린 것 초기화
+        const wrongInputs = document.querySelectorAll(`#${currentQuizId}-content input.wrong, #${currentQuizId}-content select.wrong`);
+        wrongInputs.forEach(el => {
+            el.value = "";
+            el.classList.remove('wrong');
+        });
+
+        // 2. 객관식(MCQ) 버튼 중 틀린 것 초기화
+        const wrongMCQs = document.querySelectorAll(`#${currentQuizId}-content .mcq-option.wrong`);
+        wrongMCQs.forEach(opt => {
+            opt.classList.remove('wrong');
+            // 정답 처리되지 않은 것만 선택 해제
+            if(!opt.classList.contains('correct')) {
+                opt.classList.remove('selected');
+            }
+        });
+
+        // 3. 각 페이지의 액션 버튼 상태 리셋
+        let prefix = currentQuizId === 'quiz1' ? 'q1-' : currentQuizId === 'quiz2' ? 'q2-' : currentQuizId === 'quiz3' ? 'q3-' : currentQuizId === 'quiz4' ? 'q4-' : 'q5-';
+        
+        [1, 2, 3].forEach(pageNum => {
+            const btnGrade = document.getElementById(`btn-grade-${prefix}${pageNum}`);
+            const btnNext = document.getElementById(`btn-next-${prefix}${pageNum}`);
+            const msgEl = document.getElementById(`msg-${prefix}${pageNum}`);
+            
+            if (btnGrade) btnGrade.style.display = 'inline-block';
+            if (btnNext) btnNext.style.display = 'none';
+            if (msgEl) msgEl.innerHTML = "틀린 문제를 다시 푼 뒤 채점하기를 누르세요.";
+        });
+
+        // 페이지 1로 되돌아감
+        showPage(1);
     }
 
     function downloadResult() {
