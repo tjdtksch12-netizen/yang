@@ -41,37 +41,47 @@
     th, td { border: 1px solid #ccc; padding: 12px; text-align: left; }
     th { background-color: #ecf0f1; text-align: center; }
 
-    /* 국어 평가용 스타일 추가 */
-    .passage-box { background-color: #fdfefe; border: 2px solid #bdc3c7; padding: 20px; border-radius: 8px; margin-bottom: 25px; font-size: 1.05em; line-height: 1.8; box-shadow: inset 0 0 5px rgba(0,0,0,0.05); }
-    .q-box { margin-bottom: 25px; padding-bottom: 15px; border-bottom: 1px dashed #ecf0f1; }
-    .q-box:last-child { border-bottom: none; }
-    .q-num { font-weight: bold; color: #2980b9; font-size: 1.1em; }
-    .choice-list { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 10px; color: #2c3e50; font-weight: bold; }
-    .choice-item { background: #f4f6f9; padding: 8px 12px; border-radius: 5px; font-size: 0.95em; border: 1px solid #dcdde1; }
+    /* 🌟 국어 평가용 업그레이드 디자인 🌟 */
+    /* 지문 박스 */
+    .passage-box { background: #fbfcfc; border: 2px solid #95a5a6; border-left: 6px solid #34495e; padding: 25px 20px 20px; border-radius: 8px; margin-bottom: 30px; font-size: 1.05em; line-height: 1.8; box-shadow: 2px 2px 8px rgba(0,0,0,0.05); position: relative; }
+    .passage-label { position: absolute; top: -14px; left: 15px; background: #34495e; color: #fff; padding: 4px 15px; font-size: 0.85em; border-radius: 20px; font-weight: bold; letter-spacing: 1px; }
+    
+    /* 문제 박스 */
+    .q-box { background: #ffffff; padding: 20px; margin-bottom: 25px; border-radius: 10px; border: 1px solid #e0e6ed; box-shadow: 0 4px 6px rgba(0,0,0,0.03); transition: 0.2s; }
+    .q-box:hover { border-color: #bdc3c7; box-shadow: 0 6px 12px rgba(0,0,0,0.06); }
+    .q-text { font-size: 1.1em; font-weight: bold; color: #2c3e50; margin-bottom: 15px; line-height: 1.5; }
+    .q-num { color: #e74c3c; font-size: 1.2em; margin-right: 5px; }
+    
+    /* 클릭형 객관식(선택형) 버튼 */
+    .mcq-container { display: flex; flex-direction: column; gap: 8px; margin-top: 15px; }
+    .mcq-container.inline { flex-direction: row; flex-wrap: wrap; }
+    .mcq-option { padding: 12px 18px; border: 2px solid #dcdde1; border-radius: 8px; cursor: pointer; transition: 0.2s; background: #fff; font-size: 0.95em; color: #2f3640; display: flex; align-items: center; }
+    .mcq-option:hover { background: #f5f6fa; border-color: #a4b0be; }
+    .mcq-option.selected { border-color: #3498db; background: #ebf5fb; font-weight: bold; color: #2980b9; box-shadow: 0 2px 5px rgba(52,152,219,0.2); }
+    /* 채점 결과 색상 */
+    .mcq-option.correct { border-color: #27ae60 !important; background: #eafaf1 !important; color: #27ae60 !important; font-weight: bold; pointer-events: none; }
+    .mcq-option.wrong { border-color: #e74c3c !important; background: #fdedec !important; color: #e74c3c !important; }
 
     /* 빈칸 스타일 */
-    .blank { width: 90px; padding: 2px 5px; font-size: 1em; font-weight: bold; color: #2980b9; border: 1px solid #ccc; border-radius: 4px; background-color: #fff; text-align: center; margin: 0 5px; outline: none; }
+    .blank { width: 90px; padding: 4px 8px; font-size: 1em; font-weight: bold; color: #2980b9; border: 2px solid #bdc3c7; border-radius: 4px; background-color: #fff; text-align: center; margin: 0 5px; outline: none; transition: 0.2s; }
+    .blank:focus { border-color: #3498db; }
     .blank.long { width: 150px; }
     .blank.xl-long { width: 220px; }
     .blank.short { width: 50px; }
     .blank.correct { border-color: #27ae60; background-color: #eafaf1; color: #27ae60; pointer-events: none; }
     .blank.wrong { border-color: #e74c3c; background-color: #fdedec; color: #e74c3c; }
 
-    /* 공책 정리 디자인 */
-    .worksheet-wrapper { background-color: #fff; border: 2px solid #2c3e50; border-radius: 8px; position: relative; overflow: hidden; margin-bottom: 20px; }
-    .worksheet-bg { background-image: linear-gradient(transparent 95%, #a6d4fa 5%); background-size: 100% 45px; line-height: 45px; padding: 20px; font-size: 16px; color: #333; }
-    .ws-header { border-bottom: 3px solid #000; padding-bottom: 10px; margin-bottom: 10px; }
-    .ws-title { font-size: 1.3em; font-weight: bold; color: #1e3799; }
-    .ws-subtitle { font-size: 1.1em; font-weight: bold; color: #2f3640; }
-    .ws-section-title { font-size: 1.2em; font-weight: bold; color: #0984e3; border-bottom: 2px solid #000; display: inline-block; padding: 0 10px; line-height: 30px; margin-top: 15px; background: #fff; }
-    .ws-row { margin-left: 20px; position: relative; }
+    /* 표 디자인 (15번) */
+    .school-table { width: 100%; border-collapse: collapse; margin-top: 10px; border: 2px solid #2c3e50; font-size: 0.95em; text-align: center; }
+    .school-table th { background-color: #ecf0f1; border: 1px solid #bdc3c7; padding: 10px; color: #2c3e50; }
+    .school-table td { border: 1px solid #bdc3c7; padding: 10px; }
     
     /* 버튼 및 상태창 */
     .btn { display: inline-block; padding: 15px 20px; font-size: 18px; font-weight: bold; color: #fff; background-color: #3498db; border: none; border-radius: 8px; cursor: pointer; box-shadow: 0 4px 6px rgba(0,0,0,0.1); margin-top: 10px; transition: 0.2s; }
-    .btn:hover { filter: brightness(0.9); }
+    .btn:hover { filter: brightness(0.9); transform: translateY(-2px); }
     .btn-retry, .btn-next { display: none; }
-    .action-area { text-align: center; margin-top: 20px; padding: 15px; background-color: #f8f9fa; border-radius: 8px; border: 1px dashed #ccc; line-height: 1.6; }
-    .feedback-msg { font-size: 1.2em; font-weight: bold; margin-bottom: 15px; color: #2c3e50; }
+    .action-area { text-align: center; margin-top: 30px; padding: 25px; background-color: #f8f9fa; border-radius: 12px; border: 2px dashed #bdc3c7; line-height: 1.6; }
+    .feedback-msg { font-size: 1.25em; font-weight: bold; margin-bottom: 20px; color: #2c3e50; }
     
     #summary-area, #admin-screen { display: none; max-width: 850px; margin: 0 auto; background-color: #fff; padding: 40px; border: 4px solid #2c3e50; border-radius: 12px; }
     .score-box { display: flex; justify-content: space-between; gap: 15px; margin-top: 20px; flex-wrap: wrap; }
@@ -101,25 +111,21 @@
         <div style="color: #7f8c8d;">사회 1단원 국토 여행 공책 정리 (교과서 13~23쪽)</div>
         <button class="btn" style="background-color: #27ae60;">이 과제 시작하기 🚀</button>
     </div>
-
     <div class="quiz-card" id="card-quiz2" onclick="startQuiz('quiz2')">
         <div class="quiz-title">🏝️ 과제 2: 1-(2) 소중한 우리 땅, 독도</div>
         <div style="color: #7f8c8d;">사회 1단원 국토 여행 공책 정리 (교과서 31~45쪽)</div>
         <button class="btn" style="background-color: #16a085;">이 과제 시작하기 🚀</button>
     </div>
-
     <div class="quiz-card" id="card-quiz3" onclick="startQuiz('quiz3')">
         <div class="quiz-title">🌤️ 과제 3: 2-(1) 우리나라의 기후</div>
         <div style="color: #7f8c8d;">사회 2단원 우리나라 지리 탐구 공책 정리 (교과서 68~79쪽)</div>
         <button class="btn" style="background-color: #e67e22;">이 과제 시작하기 🚀</button>
     </div>
-
     <div class="quiz-card" id="card-quiz4" onclick="startQuiz('quiz4')">
         <div class="quiz-title">⚖️ 과제 4: 3-(1) 법의 역할과 인권</div>
         <div style="color: #7f8c8d;">사회 3단원 공책 정리 빈칸 채우기 (교과서 111~131쪽)</div>
         <button class="btn" style="background-color: #3498db;">이 과제 시작하기 🚀</button>
     </div>
-
     <div class="quiz-card" id="card-quiz5" onclick="startQuiz('quiz5')">
         <div class="quiz-title">📖 과제 5: 국어 5-1 종합 평가 (25문항)</div>
         <div style="color: #7f8c8d;">국어 1학기 읽기, 쓰기, 문법 핵심 정리 총정리</div>
@@ -146,17 +152,21 @@
         </div>
     </div>
     
+    <!-- (과제 1~4 HTML은 분량상 숨김처리 하지 않고 원본 그대로 유지해야 하나, 글자수 제한 방지를 위해 선생님의 기존 HTML 코드가 그대로 이 자리에 있다고 가정하고 5번에 집중합니다. 과제 1~4는 덮어쓰실 때 그대로 유지해주세요.) -->
     <div id="quiz1-content" style="display: none;"></div>
     <div id="quiz2-content" style="display: none;"></div>
     <div id="quiz3-content" style="display: none;"></div>
     <div id="quiz4-content" style="display: none;"></div>
 
+    <!-- 🌟 추가된 국어 과제 5 컨텐츠 (전체 지문 및 25문항 UI 완벽 반영) 🌟 -->
     <div id="quiz5-content" style="display: none;">
         
+        <!-- 1쪽: 1번 ~ 9번 -->
         <div class="page-section" id="q5-page-1">
             <div class="page-title" style="background-color: #9b59b6;">1쪽. 이야기 내용 파악하기 (1~9번)</div>
 
             <div class="passage-box">
+                <div class="passage-label">📖 지문</div>
                 ※ 다음 대화를 읽고 물음에 답하시오. <br><br>
                 <strong>민재:</strong> 혜민아, 너 혼합 계산 문제 잘 푸는구나!<br>
                 <strong>혜민:</strong> 고마워.<br>
@@ -169,17 +179,19 @@
             </div>
 
             <div class="q-box">
-                <span class="q-num">1.</span> 민재가 화가 난 까닭은 무엇입니까? ▶ <input type="text" class="blank short" id="q5-p1-1" placeholder="번호">
-                <div class="choice-list">
-                    <span class="choice-item">① 혜민이보다 문제를 늦게 풀어서</span>
-                    <span class="choice-item">② 문제를 못 푼 자신에게 실망해서</span>
-                    <span class="choice-item">③ 수업 시간에 들은 내용이 기억나지 않아서</span>
-                    <span class="choice-item">④ 혜민이가 문제 푸는 방법을 잘못 알려 줘서</span>
-                    <span class="choice-item">⑤ 혜민이가 민재의 기분을 생각하지 않고 말해서</span>
+                <div class="q-text"><span class="q-num">1.</span> 민재가 화가 난 까닭은 무엇입니까?</div>
+                <div class="mcq-container" id="mcq-q5-p1-1">
+                    <div class="mcq-option" data-val="1" onclick="selectMCQ(event, 'q5-p1-1', '1')">① 혜민이보다 문제를 늦게 풀어서</div>
+                    <div class="mcq-option" data-val="2" onclick="selectMCQ(event, 'q5-p1-1', '2')">② 문제를 못 푼 자신에게 실망해서</div>
+                    <div class="mcq-option" data-val="3" onclick="selectMCQ(event, 'q5-p1-1', '3')">③ 수업 시간에 들은 내용이 기억나지 않아서</div>
+                    <div class="mcq-option" data-val="4" onclick="selectMCQ(event, 'q5-p1-1', '4')">④ 혜민이가 문제 푸는 방법을 잘못 알려 줘서</div>
+                    <div class="mcq-option" data-val="5" onclick="selectMCQ(event, 'q5-p1-1', '5')">⑤ 혜민이가 민재의 기분을 생각하지 않고 말해서</div>
                 </div>
+                <input type="hidden" id="q5-p1-1" value="">
             </div>
 
             <div class="passage-box">
+                <div class="passage-label">📖 지문</div>
                 [2~6] ※ 다음 글을 읽고 물음에 답하시오.<br><br>
                 <strong>(가)</strong> 첫 장을 펼치니 누군가 써 놓은 굵은 글자가 보였어. 진서가 태어나기도 전의 날짜와 책을 산 사람의 이름이었지. 진서는 가슴이 콩닥콩닥 뛰었어.<br>
                 "난 낡은 책이 좋아. 도깨비는 원래 오래된 물건을 좋아해." 도깨비가 슬며시 와서 말했어.<br>
@@ -196,59 +208,66 @@
             </div>
 
             <div class="q-box">
-                <span class="q-num">2.</span> (가)와 (나)를 통해 알 수 있는 진서와 도깨비의 공통점은 무엇입니까? ▶ <input type="text" class="blank short" id="q5-p1-2" placeholder="번호">
-                <div class="choice-list">
-                    <span class="choice-item">① 친구가 많다.</span>
-                    <span class="choice-item">② 책을 좋아한다.</span>
-                    <span class="choice-item">③ 장난을 잘 친다.</span>
-                    <span class="choice-item">④ 거짓말을 잘한다.</span>
-                    <span class="choice-item">⑤ 속마음을 잘 숨긴다.</span>
+                <div class="q-text"><span class="q-num">2.</span> (가)와 (나)를 통해 알 수 있는 진서와 도깨비의 공통점은 무엇입니까?</div>
+                <div class="mcq-container" id="mcq-q5-p1-2">
+                    <div class="mcq-option" data-val="1" onclick="selectMCQ(event, 'q5-p1-2', '1')">① 친구가 많다.</div>
+                    <div class="mcq-option" data-val="2" onclick="selectMCQ(event, 'q5-p1-2', '2')">② 책을 좋아한다.</div>
+                    <div class="mcq-option" data-val="3" onclick="selectMCQ(event, 'q5-p1-2', '3')">③ 장난을 잘 친다.</div>
+                    <div class="mcq-option" data-val="4" onclick="selectMCQ(event, 'q5-p1-2', '4')">④ 거짓말을 잘한다.</div>
+                    <div class="mcq-option" data-val="5" onclick="selectMCQ(event, 'q5-p1-2', '5')">⑤ 속마음을 잘 숨긴다.</div>
                 </div>
+                <input type="hidden" id="q5-p1-2" value="">
             </div>
 
             <div class="q-box">
-                <span class="q-num">3.</span> (가)와 (나)를 읽고 생략된 내용을 다음처럼 짐작했을 때 빈칸에 들어갈 말을 번호로 <strong>두 가지</strong> 고르시오.<br>
-                <div style="background:#f4f6f9; padding:10px; margin-top:10px; border-radius:5px;">
-                    ▶ 도깨비의 <input type="text" class="blank short" id="q5-p1-3"> 와(과) <input type="text" class="blank short" id="q5-p1-4"> 을/를 통해 도깨비가 책을 소중하게 생각한다는 것을 알 수 있다.
+                <div class="q-text"><span class="q-num">3.</span> (가)와 (나)를 읽고 생략된 내용을 다음처럼 짐작했을 때 빈칸에 들어갈 말을 아래 보기에서 <strong>두 가지</strong> 고르시오.</div>
+                <div style="background:#f4f6f9; padding:15px; margin-bottom:15px; border-left: 4px solid #3498db; font-size: 1.05em;">
+                    ▶ 도깨비의 ( &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ) 와(과) ( &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ) 을/를 통해 도깨비가 책을 소중하게 생각한다는 것을 알 수 있다.
                 </div>
-                <div class="choice-list">
-                    <span class="choice-item">① 말</span>
-                    <span class="choice-item">② 행동</span>
-                    <span class="choice-item">③ 가족</span>
-                    <span class="choice-item">④ 생김새</span>
-                    <span class="choice-item">⑤ 옷차림</span>
+                <div class="mcq-container inline" id="mcq-q5-p1-3">
+                    <div class="mcq-option" data-val="1" onclick="selectMultiMCQ(event, 'q5-p1-3', '1', 2)">① 말</div>
+                    <div class="mcq-option" data-val="2" onclick="selectMultiMCQ(event, 'q5-p1-3', '2', 2)">② 행동</div>
+                    <div class="mcq-option" data-val="3" onclick="selectMultiMCQ(event, 'q5-p1-3', '3', 2)">③ 가족</div>
+                    <div class="mcq-option" data-val="4" onclick="selectMultiMCQ(event, 'q5-p1-3', '4', 2)">④ 생김새</div>
+                    <div class="mcq-option" data-val="5" onclick="selectMultiMCQ(event, 'q5-p1-3', '5', 2)">⑤ 옷차림</div>
                 </div>
+                <div style="font-size: 0.9em; color: #7f8c8d; margin-top: 5px;">* 두 개를 클릭하여 선택하세요.</div>
+                <input type="hidden" id="q5-p1-3" value="">
             </div>
 
             <div class="q-box">
-                <span class="q-num">4.</span> (가)의 다음 부분에서 진서에 대해 짐작할 수 있는 내용으로 알맞은 것은 무엇입니까? ▶ <input type="text" class="blank short" id="q5-p1-5" placeholder="번호"><br>
-                <div style="background:#f4f6f9; padding:10px; margin-top:5px; border-radius:5px; font-style: italic;">
+                <div class="q-text"><span class="q-num">4.</span> (가)의 다음 부분에서 진서에 대해 짐작할 수 있는 내용으로 알맞은 것은 무엇입니까?</div>
+                <div style="background:#fdf2e9; padding:15px; margin-bottom:15px; border-radius:5px; font-style: italic; border-left: 4px solid #e67e22;">
                     "여기서 읽을게. 읽어도 되지?" 진서가 책을 꼭 끌어안고 말했어.
                 </div>
-                <div class="choice-list">
-                    <span class="choice-item">① 상상력이 풍부하다.</span>
-                    <span class="choice-item">② 책을 꼭 읽고 싶어 한다.</span>
-                    <span class="choice-item">③ 도깨비를 존중하지 않는다.</span>
-                    <span class="choice-item">④ 욕심이 많고 성격이 급하다.</span>
-                    <span class="choice-item">⑤ 자기 물건을 소중하게 여긴다.</span>
+                <div class="mcq-container" id="mcq-q5-p1-5">
+                    <div class="mcq-option" data-val="1" onclick="selectMCQ(event, 'q5-p1-5', '1')">① 상상력이 풍부하다.</div>
+                    <div class="mcq-option" data-val="2" onclick="selectMCQ(event, 'q5-p1-5', '2')">② 책을 꼭 읽고 싶어 한다.</div>
+                    <div class="mcq-option" data-val="3" onclick="selectMCQ(event, 'q5-p1-5', '3')">③ 도깨비를 존중하지 않는다.</div>
+                    <div class="mcq-option" data-val="4" onclick="selectMCQ(event, 'q5-p1-5', '4')">④ 욕심이 많고 성격이 급하다.</div>
+                    <div class="mcq-option" data-val="5" onclick="selectMCQ(event, 'q5-p1-5', '5')">⑤ 자기 물건을 소중하게 여긴다.</div>
+                </div>
+                <input type="hidden" id="q5-p1-5" value="">
+            </div>
+
+            <div class="q-box">
+                <div class="q-text"><span class="q-num">5.</span> (나)의 내용을 다음처럼 간추릴 때 빈칸에 알맞은 단어를 직접 쓰시오.</div>
+                <div style="background:#f4f6f9; padding:15px; border-radius:5px; font-size: 1.05em; text-align: center;">
+                    진서는 책방에서 도깨비가 들려주는 이야기를 들으며<br><br>
+                    <input type="text" class="blank" id="q5-p1-6"> 나라의 첫 번째 <input type="text" class="blank" id="q5-p1-7"> 이/가 되었다.
                 </div>
             </div>
 
             <div class="q-box">
-                <span class="q-num">5.</span> (나)의 내용을 다음처럼 간추릴 때 빈칸에 들어갈 내용을 쓰시오.<br>
-                <div style="background:#f4f6f9; padding:10px; margin-top:10px; border-radius:5px;">
-                    ▶ 진서는 책방에서 도깨비가 들려주는 이야기를 들으며 <input type="text" class="blank" id="q5-p1-6"> 나라의 첫 번째 <input type="text" class="blank" id="q5-p1-7"> 이/가 되었다.
-                </div>
-            </div>
-
-            <div class="q-box">
-                <span class="q-num">6.</span> (가)와 (나)에서 인상 깊게 읽은 부분을 다음과 같이 쓸 때 빈칸을 채우시오.<br>
-                <div style="background:#f4f6f9; padding:10px; margin-top:10px; border-radius:5px;">
-                    ▶ "진서와 <input type="text" class="blank" id="q5-p1-8"> 가 책을 아끼는 모습을 보니 책을 사랑하고 소중히 여기는 <input type="text" class="blank" id="q5-p1-9"> 이/가 느껴져."
+                <div class="q-text"><span class="q-num">6.</span> (가)와 (나)에서 인상 깊게 읽은 부분을 다음과 같이 쓸 때 빈칸을 채우시오.</div>
+                <div style="background:#f4f6f9; padding:15px; border-radius:5px; font-size: 1.05em; text-align: center;">
+                    "진서와 <input type="text" class="blank" id="q5-p1-8"> 가 책을 아끼는 모습을 보니<br><br>
+                    책을 사랑하고 소중히 여기는 <input type="text" class="blank" id="q5-p1-9"> 이/가 느껴져."
                 </div>
             </div>
 
             <div class="passage-box">
+                <div class="passage-label">📖 지문</div>
                 [7~9] ※ 다음 글을 읽고 물음에 답하시오.<br><br>
                 <strong>(가)</strong> 도깨비는 재미있어 보이는 책을 진서의 눈앞에 대령했지. 진서는 웃음이 나는 걸 꾹 참았어. 이렇게 쉽게 용서해 주면 안 될 것 같았거든. 그보다 사서 선생님한테 도깨비가 한 짓을 모두 일러야겠다고 생각했어. 그런데 선생님의 책상이 비어 있었어. 그리고 다른 친구들의 모습도 보이지 않았어. 도깨비를 혼내는 일은 진서만의 몫이 된 거야.<br>
                 "너 말이야......." 진서가 도깨비를 은근히 바라봤어.<br>
@@ -258,44 +277,49 @@
             </div>
 
             <div class="q-box">
-                <span class="q-num">7.</span> (가)와 (나)에 공통으로 등장하는 인물은 누구누구인지 쓰시오.<br>
-                ▶ <input type="text" class="blank short" id="q5-p1-10"> , <input type="text" class="blank short" id="q5-p1-11">
-            </div>
-
-            <div class="q-box">
-                <span class="q-num">8.</span> 다음은 (가)와 (나) 중 어떤 글에서 생략된 내용을 짐작한 것인지 <strong>글의 기호(가, 나)</strong>를 쓰시오.<br>
-                <div style="background:#f4f6f9; padding:10px; margin-top:10px; border-radius:5px; line-height: 2;">
-                    (1) 도깨비는 진서가 읽고 싶어 하는 책을 매우 아낀다. ▶ ( <input type="text" class="blank short" id="q5-p1-12"> )<br>
-                    (2) 도깨비는 책을 돌려주지 않은 행동이 잘못된 것을 안다. ▶ ( <input type="text" class="blank short" id="q5-p1-13"> )
+                <div class="q-text"><span class="q-num">7.</span> (가)와 (나)에 공통으로 등장하는 인물은 누구누구인지 쓰시오.</div>
+                <div style="text-align: center; margin-top: 10px;">
+                    ▶ <input type="text" class="blank short" id="q5-p1-10"> , <input type="text" class="blank short" id="q5-p1-11">
                 </div>
             </div>
 
             <div class="q-box">
-                <span class="q-num">9.</span> 다음 친구는 무엇에 대해 이야기하고 있습니까? ▶ <input type="text" class="blank short" id="q5-p1-14" placeholder="번호"><br>
-                <div style="background:#f4f6f9; padding:10px; margin-top:5px; border-radius:5px;">
+                <div class="q-text"><span class="q-num">8.</span> 다음은 (가)와 (나) 중 어떤 글에서 생략된 내용을 짐작한 것인지 <strong>글의 기호(가, 나)</strong>를 직접 쓰시오.</div>
+                <div style="background:#f4f6f9; padding:15px; border-radius:5px; line-height: 2.5; font-size: 1.05em;">
+                    (1) 도깨비는 진서가 읽고 싶어 하는 책을 매우 아낀다. ▶ ( <input type="text" class="blank short" id="q5-p1-12" placeholder="가/나"> )<br>
+                    (2) 도깨비는 책을 돌려주지 않은 행동이 잘못된 것을 안다. ▶ ( <input type="text" class="blank short" id="q5-p1-13" placeholder="가/나"> )
+                </div>
+            </div>
+
+            <div class="q-box">
+                <div class="q-text"><span class="q-num">9.</span> 다음 친구는 무엇에 대해 이야기하고 있습니까?</div>
+                <div style="background:#fdf2e9; padding:15px; margin-bottom:15px; border-radius:5px; border-left: 4px solid #e67e22;">
                     <strong>영준:</strong> 진서와 도깨비가 책을 아끼는 모습을 보니 책을 사랑하고 소중히 여기는 마음이 느껴져.
                 </div>
-                <div class="choice-list">
-                    <span class="choice-item">① 인물에게 하고 싶은 말</span>
-                    <span class="choice-item">② 이야기를 들려주고 싶은 사람</span>
-                    <span class="choice-item">③ 이야기를 읽고 떠오르는 경험</span>
-                    <span class="choice-item">④ 이야기에서 인상 깊게 읽은 부분</span>
-                    <span class="choice-item">⑤ 이야기에서 가장 실감 나는 부분</span>
+                <div class="mcq-container" id="mcq-q5-p1-14">
+                    <div class="mcq-option" data-val="1" onclick="selectMCQ(event, 'q5-p1-14', '1')">① 인물에게 하고 싶은 말</div>
+                    <div class="mcq-option" data-val="2" onclick="selectMCQ(event, 'q5-p1-14', '2')">② 이야기를 들려주고 싶은 사람</div>
+                    <div class="mcq-option" data-val="3" onclick="selectMCQ(event, 'q5-p1-14', '3')">③ 이야기를 읽고 떠오르는 경험</div>
+                    <div class="mcq-option" data-val="4" onclick="selectMCQ(event, 'q5-p1-14', '4')">④ 이야기에서 인상 깊게 읽은 부분</div>
+                    <div class="mcq-option" data-val="5" onclick="selectMCQ(event, 'q5-p1-14', '5')">⑤ 이야기에서 가장 실감 나는 부분</div>
                 </div>
+                <input type="hidden" id="q5-p1-14" value="">
             </div>
 
             <div class="action-area">
-                <div class="feedback-msg" id="msg-q5-1">빈칸을 모두 채운 뒤 1쪽 채점하기를 누르세요.</div>
+                <div class="feedback-msg" id="msg-q5-1">문제를 모두 푼 뒤 채점하기를 누르세요.</div>
                 <button class="btn" style="width:100%; background-color:#9b59b6;" id="btn-grade-q5-1" onclick="gradePage(1)">1쪽 채점하기</button>
-                <button class="btn btn-retry" id="btn-retry-q5-1" onclick="retryPage(1)">🔄 틀린 빈칸 재도전</button>
+                <button class="btn btn-retry" id="btn-retry-q5-1" onclick="retryPage(1)">🔄 틀린 문제 무한 재도전!</button>
                 <button class="btn btn-next" id="btn-next-q5-1" onclick="nextPage(1, 2)">2쪽으로 넘어가기 ➡️</button>
             </div>
         </div>
 
+        <!-- 2쪽: 10번 ~ 17번 -->
         <div class="page-section" id="q5-page-2">
             <div class="page-title" style="background-color: #9b59b6;">2쪽. 시간 표현과 자료 특성 (10~17번)</div>
 
             <div class="passage-box">
+                <div class="passage-label">📖 지문</div>
                 [10~13] ※ 다음 글을 읽고 물음에 답하시오.<br><br>
                 첨벙! 물수리는 물속에 발을 넣어 날카로운 발톱으로 물고기를 움켜쥐고 하늘로 날아오른다.<br>
                 날계를 열심히 펄럭이며 해변 위를 날아가 미끄러운 물고기를 바오바브나무 위에 내려놓는다. 이제 식사 시간이다.<br>
@@ -306,63 +330,125 @@
             </div>
 
             <div class="q-box">
-                <span class="q-num">10.</span> ㉠'출발했다'의 시간 표현과 관련 있는 것에 'O', 관련 없는 것에 'X'를 쓰시오.<br>
-                <div style="background:#f4f6f9; padding:10px; margin-top:10px; border-radius:5px; line-height: 2;">
-                    (1) 이미 지나간 일 ( <input type="text" class="blank short" id="q5-p2-1"> )<br>
-                    (2) 앞으로 일어날 일 ( <input type="text" class="blank short" id="q5-p2-2"> )<br>
-                    (3) 지금 일어나고 있는 일 ( <input type="text" class="blank short" id="q5-p2-3"> )
+                <div class="q-text"><span class="q-num">10.</span> ㉠'출발했다'의 시간 표현과 관련 있는 것에 'O', 관련 없는 것에 'X' 버튼을 누르시오.</div>
+                
+                <div style="display:flex; justify-content:space-between; align-items:center; background:#f4f6f9; padding:10px 15px; margin-bottom:10px; border-radius:5px;">
+                    <span style="font-size:1.1em; font-weight:bold;">(1) 이미 지나간 일</span>
+                    <div class="mcq-container inline" id="mcq-q5-p2-1" style="margin-top:0;">
+                        <div class="mcq-option" style="padding:8px 20px;" data-val="O" onclick="selectMCQ(event, 'q5-p2-1', 'O')">O</div>
+                        <div class="mcq-option" style="padding:8px 20px;" data-val="X" onclick="selectMCQ(event, 'q5-p2-1', 'X')">X</div>
+                    </div>
                 </div>
+                <input type="hidden" id="q5-p2-1" value="">
+
+                <div style="display:flex; justify-content:space-between; align-items:center; background:#f4f6f9; padding:10px 15px; margin-bottom:10px; border-radius:5px;">
+                    <span style="font-size:1.1em; font-weight:bold;">(2) 앞으로 일어날 일</span>
+                    <div class="mcq-container inline" id="mcq-q5-p2-2" style="margin-top:0;">
+                        <div class="mcq-option" style="padding:8px 20px;" data-val="O" onclick="selectMCQ(event, 'q5-p2-2', 'O')">O</div>
+                        <div class="mcq-option" style="padding:8px 20px;" data-val="X" onclick="selectMCQ(event, 'q5-p2-2', 'X')">X</div>
+                    </div>
+                </div>
+                <input type="hidden" id="q5-p2-2" value="">
+
+                <div style="display:flex; justify-content:space-between; align-items:center; background:#f4f6f9; padding:10px 15px; margin-bottom:10px; border-radius:5px;">
+                    <span style="font-size:1.1em; font-weight:bold;">(3) 지금 일어나고 있는 일</span>
+                    <div class="mcq-container inline" id="mcq-q5-p2-3" style="margin-top:0;">
+                        <div class="mcq-option" style="padding:8px 20px;" data-val="O" onclick="selectMCQ(event, 'q5-p2-3', 'O')">O</div>
+                        <div class="mcq-option" style="padding:8px 20px;" data-val="X" onclick="selectMCQ(event, 'q5-p2-3', 'X')">X</div>
+                    </div>
+                </div>
+                <input type="hidden" id="q5-p2-3" value="">
             </div>
 
             <div class="q-box">
-                <span class="q-num">11.</span> ㉡에 대해 말한 것으로 알맞지 <strong>않은</strong> 친구의 이름을 쓰시오. ▶ <input type="text" class="blank" id="q5-p2-4"><br>
-                <div style="background:#f4f6f9; padding:10px; margin-top:5px; border-radius:5px;">
+                <div class="q-text"><span class="q-num">11.</span> ㉡'돌보았고'에 대해 말한 것으로 알맞지 <strong>않은</strong> 친구의 이름을 직접 쓰시오.</div>
+                <div style="background:#fdf2e9; padding:15px; margin-bottom:15px; border-radius:5px; border-left: 4px solid #e67e22;">
                     <strong>수연:</strong> 이미 지나간 일을 표현하는 문장이야.<br>
                     <strong>원훈:</strong> '돌보았고'의 '-았-'이 과거를 나타내.<br>
                     <strong>동민:</strong> '매일'을 '가끔'이라는 말로 바꾸어도 문장의 뜻은 달라지지 않아.
                 </div>
+                <div style="text-align: center;">▶ <input type="text" class="blank" id="q5-p2-4" placeholder="이름"></div>
             </div>
 
             <div class="q-box">
-                <span class="q-num">12.</span> ㉢('날아왔다')에 나타난 시간 표현과 <strong>같은 시간</strong>을 나타내는 문장은 무엇입니까? ▶ <input type="text" class="blank short" id="q5-p2-5" placeholder="번호">
-                <div class="choice-list">
-                    <span class="choice-item">① 점심을 먹는다.</span>
-                    <span class="choice-item">② 교실이 깨끗하다.</span>
-                    <span class="choice-item">③ 친구와 축구를 했다.</span>
-                    <span class="choice-item">④ 동생과 영화를 보겠다.</span>
-                    <span class="choice-item">⑤ 주말에 자전거를 탈 것이다.</span>
+                <div class="q-text"><span class="q-num">12.</span> ㉢('날아왔다')에 나타난 시간 표현과 <strong>같은 시간</strong>을 나타내는 문장은 무엇입니까?</div>
+                <div class="mcq-container" id="mcq-q5-p2-5">
+                    <div class="mcq-option" data-val="1" onclick="selectMCQ(event, 'q5-p2-5', '1')">① 점심을 먹는다.</div>
+                    <div class="mcq-option" data-val="2" onclick="selectMCQ(event, 'q5-p2-5', '2')">② 교실이 깨끗하다.</div>
+                    <div class="mcq-option" data-val="3" onclick="selectMCQ(event, 'q5-p2-5', '3')">③ 친구와 축구를 했다.</div>
+                    <div class="mcq-option" data-val="4" onclick="selectMCQ(event, 'q5-p2-5', '4')">④ 동생과 영화를 보겠다.</div>
+                    <div class="mcq-option" data-val="5" onclick="selectMCQ(event, 'q5-p2-5', '5')">⑤ 주말에 자전거를 탈 것이다.</div>
                 </div>
+                <input type="hidden" id="q5-p2-5" value="">
             </div>
 
             <div class="q-box">
-                <span class="q-num">13.</span> 보기를 참고하여 ㉢의 시간 표현에 대해 설명할 때 빈칸을 채우시오.<br>
-                <div style="background:#f4f6f9; padding:10px; margin-top:10px; border-radius:5px;">
-                    [보기] 날아오른다: '날아오른다'는 '날아오르-'에 '-ㄴ-'을 써서 현재를 나타냈다.<br><br>
+                <div class="q-text"><span class="q-num">13.</span> 보기를 참고하여 ㉢의 시간 표현에 대해 설명할 때 빈칸을 채우시오.</div>
+                <div style="background:#f4f6f9; padding:15px; border-radius:5px; line-height: 2;">
+                    <span style="color:#2980b9; font-weight:bold;">[보기]</span> 날아오른다: '날아오른다'는 '날아오르-'에 '-ㄴ-'을 써서 <u>현재</u>를 나타냈다.<br><br>
                     ▶ '날아왔다'는 '날아오-'에 '-( <input type="text" class="blank short" id="q5-p2-6"> )-'을/를 써서 ( <input type="text" class="blank" id="q5-p2-7"> )를 나타냈다.
                 </div>
             </div>
 
-            <div class="q-box" style="border-top: 2px solid #bdc3c7; padding-top: 20px;">
-                <span class="q-num">14.</span> 다음 낱말의 뜻을 찾아 알맞은 번호를 쓰시오.<br>
-                <div style="background:#f4f6f9; padding:10px; margin-top:10px; border-radius:5px;">
-                    [보기] 1. 조금 전에. &nbsp;&nbsp; 2. 조금 지난 뒤에.<br><br>
-                    (1) 이따 ▶ ( <input type="text" class="blank short" id="q5-p2-8"> )<br>
-                    (2) 아까 ▶ ( <input type="text" class="blank short" id="q5-p2-9"> )
+            <div class="q-box">
+                <div class="q-text"><span class="q-num">14.</span> 다음 낱말의 뜻에 알맞은 번호를 클릭하시오.</div>
+                <div style="background:#f4f6f9; padding:15px; margin-bottom:15px; border-radius:5px;">
+                    <strong>[보기]</strong> <br>1. 조금 전에. <br>2. 조금 지난 뒤에.
                 </div>
+                <div style="display:flex; justify-content:flex-start; gap: 20px; align-items:center; margin-bottom:10px;">
+                    <span style="font-size:1.1em; font-weight:bold; width:80px;">(1) 이따</span>
+                    <div class="mcq-container inline" id="mcq-q5-p2-8" style="margin-top:0;">
+                        <div class="mcq-option" style="padding:8px 20px;" data-val="1" onclick="selectMCQ(event, 'q5-p2-8', '1')">1번</div>
+                        <div class="mcq-option" style="padding:8px 20px;" data-val="2" onclick="selectMCQ(event, 'q5-p2-8', '2')">2번</div>
+                    </div>
+                </div>
+                <input type="hidden" id="q5-p2-8" value="">
+
+                <div style="display:flex; justify-content:flex-start; gap: 20px; align-items:center;">
+                    <span style="font-size:1.1em; font-weight:bold; width:80px;">(2) 아까</span>
+                    <div class="mcq-container inline" id="mcq-q5-p2-9" style="margin-top:0;">
+                        <div class="mcq-option" style="padding:8px 20px;" data-val="1" onclick="selectMCQ(event, 'q5-p2-9', '1')">1번</div>
+                        <div class="mcq-option" style="padding:8px 20px;" data-val="2" onclick="selectMCQ(event, 'q5-p2-9', '2')">2번</div>
+                    </div>
+                </div>
+                <input type="hidden" id="q5-p2-9" value="">
             </div>
 
             <div class="q-box">
-                <span class="q-num">15.</span> [백두산 화산 분화 현황] 과 같은 자료 유형(표)의 특성은 무엇입니까? ▶ <input type="text" class="blank short" id="q5-p2-10" placeholder="번호">
-                <div class="choice-list">
-                    <span class="choice-item">① 대상의 특징을 강조해 보여 줄 수 있다.</span>
-                    <span class="choice-item">② 주제에 대한 자세한 설명을 찾을 수 있다.</span>
-                    <span class="choice-item">③ 수치나 정보를 정리해서 보여 줄 수 있다.</span>
-                    <span class="choice-item">④ 움직임이나 변화 과정을 보여 줄 수 있다.</span>
-                    <span class="choice-item">⑤ 대상에 대한 내용을 알기 쉽게 전달할 수 있다.</span>
+                <div class="q-text"><span class="q-num">15.</span> 다음 표와 같은 자료 유형의 특성은 무엇입니까?</div>
+                
+                <!-- 표 디자인 개선 -->
+                <div style="border: 2px solid #2c3e50; border-radius: 5px; overflow: hidden; margin: 20px 0;">
+                    <div style="background-color: #34495e; color: white; text-align: center; padding: 10px; font-weight: bold; font-size: 1.1em;">백두산 화산 분화 현황</div>
+                    <table class="school-table" style="margin-top: 0; border: none;">
+                        <tr style="background-color: #f8f9fa;">
+                            <th style="border-right: 2px solid #bdc3c7; width:15%;">시기<br>(연대)</th>
+                            <td>900</td><td>1000</td><td>1100</td><td>1200</td><td>1300</td><td>1400</td><td>1500</td><td>1600</td><td>1700</td><td>1800</td><td>1900</td>
+                        </tr>
+                        <tr>
+                            <th style="border-right: 2px solid #bdc3c7; background-color: #f8f9fa;">횟수<br>(회)</th>
+                            <td>3</td><td>3</td><td>7</td><td>3</td><td>1</td><td>5</td><td>3</td><td>2</td><td>1</td><td>1</td><td>2</td>
+                        </tr>
+                        <tr style="background-color: #fdfefe;">
+                            <th style="border-right: 2px solid #bdc3c7;">총계</th>
+                            <td colspan="11" style="font-weight: bold; font-size: 1.1em; color: #c0392b;">31 (회)</td>
+                        </tr>
+                    </table>
+                    <div style="text-align: right; padding: 8px 15px; font-size: 0.9em; color: #7f8c8d; background: #ecf0f1;">출처: 기상청 날씨누리</div>
                 </div>
+
+                <div class="mcq-container" id="mcq-q5-p2-10">
+                    <div class="mcq-option" data-val="1" onclick="selectMCQ(event, 'q5-p2-10', '1')">① 대상의 특징을 강조해 보여 줄 수 있다.</div>
+                    <div class="mcq-option" data-val="2" onclick="selectMCQ(event, 'q5-p2-10', '2')">② 주제에 대한 자세한 설명을 찾을 수 있다.</div>
+                    <div class="mcq-option" data-val="3" onclick="selectMCQ(event, 'q5-p2-10', '3')">③ 수치나 정보를 정리해서 보여 줄 수 있다.</div>
+                    <div class="mcq-option" data-val="4" onclick="selectMCQ(event, 'q5-p2-10', '4')">④ 움직임이나 변화 과정을 보여 줄 수 있다.</div>
+                    <div class="mcq-option" data-val="5" onclick="selectMCQ(event, 'q5-p2-10', '5')">⑤ 대상에 대한 내용을 알기 쉽게 전달할 수 있다.</div>
+                </div>
+                <input type="hidden" id="q5-p2-10" value="">
             </div>
 
             <div class="passage-box">
+                <div class="passage-label">📖 지문</div>
                 [16~17] ※ 다음 글을 읽고 물음에 답하시오.<br><br>
                 <strong>(가)</strong> "너 어릴 때 모래사장에 앉혀 두면 온종일 있었던 거 기억나? 물때 맞춰서 자리 옮겨 다니면서 바다랑 놀았잖아." 엄마가 바닷가를 거닐면서 물었다.<br>
                 "소금 만들기?" / "응, 소금 만들기." / "재미있었어."<br>
@@ -373,58 +459,89 @@
             </div>
 
             <div class="q-box">
-                <span class="q-num">16.</span> 엄마에게 다음 질문을 한 목적으로 알맞은 것에 'O', 아닌 것에 'X'를 쓰시오.<br>
-                <div style="background:#f4f6f9; padding:10px; margin-top:5px; border-radius:5px; line-height: 2;">
-                    <strong>[질문]</strong> 하늘이가 만든 소금을 '마법의 소금'이라고 표현하셨는데 그렇게 표현한 까닭을 말씀해 주실 수 있나요?<br>
-                    (1) 의도를 파악하기 위한 질문 ( <input type="text" class="blank short" id="q5-p2-11"> )<br>
-                    (2) 명료하게 이해하기 위한 질문 ( <input type="text" class="blank short" id="q5-p2-12"> )<br>
-                    (3) 대안이나 정보를 찾기 위한 질문 ( <input type="text" class="blank short" id="q5-p2-13"> )
+                <div class="q-text"><span class="q-num">16.</span> 엄마에게 다음 질문을 한 목적으로 알맞은 것에 'O', 아닌 것에 'X' 버튼을 누르시오.</div>
+                <div style="background:#fdf2e9; padding:15px; margin-bottom:15px; border-radius:5px; border-left: 4px solid #e67e22;">
+                    <strong>[질문]</strong> 하늘이가 만든 소금을 '마법의 소금'이라고 표현하셨는데 그렇게 표현한 까닭을 말씀해 주실 수 있나요?
                 </div>
+                
+                <div style="display:flex; justify-content:space-between; align-items:center; background:#f4f6f9; padding:10px 15px; margin-bottom:10px; border-radius:5px;">
+                    <span style="font-size:1.1em; font-weight:bold;">(1) 의도를 파악하기 위한 질문</span>
+                    <div class="mcq-container inline" id="mcq-q5-p2-11" style="margin-top:0;">
+                        <div class="mcq-option" style="padding:8px 20px;" data-val="O" onclick="selectMCQ(event, 'q5-p2-11', 'O')">O</div>
+                        <div class="mcq-option" style="padding:8px 20px;" data-val="X" onclick="selectMCQ(event, 'q5-p2-11', 'X')">X</div>
+                    </div>
+                </div>
+                <input type="hidden" id="q5-p2-11" value="">
+
+                <div style="display:flex; justify-content:space-between; align-items:center; background:#f4f6f9; padding:10px 15px; margin-bottom:10px; border-radius:5px;">
+                    <span style="font-size:1.1em; font-weight:bold;">(2) 명료하게 이해하기 위한 질문</span>
+                    <div class="mcq-container inline" id="mcq-q5-p2-12" style="margin-top:0;">
+                        <div class="mcq-option" style="padding:8px 20px;" data-val="O" onclick="selectMCQ(event, 'q5-p2-12', 'O')">O</div>
+                        <div class="mcq-option" style="padding:8px 20px;" data-val="X" onclick="selectMCQ(event, 'q5-p2-12', 'X')">X</div>
+                    </div>
+                </div>
+                <input type="hidden" id="q5-p2-12" value="">
+
+                <div style="display:flex; justify-content:space-between; align-items:center; background:#f4f6f9; padding:10px 15px; margin-bottom:10px; border-radius:5px;">
+                    <span style="font-size:1.1em; font-weight:bold;">(3) 대안이나 정보를 찾기 위한 질문</span>
+                    <div class="mcq-container inline" id="mcq-q5-p2-13" style="margin-top:0;">
+                        <div class="mcq-option" style="padding:8px 20px;" data-val="O" onclick="selectMCQ(event, 'q5-p2-13', 'O')">O</div>
+                        <div class="mcq-option" style="padding:8px 20px;" data-val="X" onclick="selectMCQ(event, 'q5-p2-13', 'X')">X</div>
+                    </div>
+                </div>
+                <input type="hidden" id="q5-p2-13" value="">
             </div>
 
             <div class="q-box">
-                <span class="q-num">17.</span> 다음은 어떤 등장인물에게 한 질문인지 글에서 찾아 쓰시오. ▶ <input type="text" class="blank" id="q5-p2-14"><br>
-                <div style="background:#f4f6f9; padding:10px; margin-top:5px; border-radius:5px;">
+                <div class="q-text"><span class="q-num">17.</span> 다음은 어떤 등장인물에게 한 질문인지 글에서 찾아 쓰시오.</div>
+                <div style="background:#fdf2e9; padding:15px; margin-bottom:15px; border-radius:5px; border-left: 4px solid #e67e22;">
                     <strong>[질문]</strong> 마람 언니가 떠날 때 음식을 건넨 까닭은 무엇인가요?
                 </div>
+                <div style="text-align: center;">▶ <input type="text" class="blank" id="q5-p2-14"></div>
             </div>
 
             <div class="action-area">
-                <div class="feedback-msg" id="msg-q5-2">빈칸을 모두 채운 뒤 2쪽 채점하기를 누르세요.</div>
+                <div class="feedback-msg" id="msg-q5-2">문제를 모두 푼 뒤 채점하기를 누르세요.</div>
                 <button class="btn" style="width:100%; background-color:#9b59b6;" id="btn-grade-q5-2" onclick="gradePage(2)">2쪽 채점하기</button>
-                <button class="btn btn-retry" id="btn-retry-q5-2" onclick="retryPage(2)">🔄 틀린 빈칸 재도전</button>
+                <button class="btn btn-retry" id="btn-retry-q5-2" onclick="retryPage(2)">🔄 틀린 문제 무한 재도전!</button>
                 <button class="btn btn-next" id="btn-next-q5-2" onclick="nextPage(2, 3)">3쪽으로 넘어가기 ➡️</button>
             </div>
         </div>
 
+        <!-- 3쪽: 18번 ~ 25번 -->
         <div class="page-section" id="q5-page-3">
             <div class="page-title" style="background-color: #9b59b6;">3쪽. 인물 성격과 설명하는 글 (18~25번)</div>
 
             <div class="passage-box">
+                <div class="passage-label">📖 지문</div>
                 [18~19] ※ 앞의 글에서 이어집니다.<br><br>
                 <strong>(다)</strong> 사실 내 진짜 소원은 혼자서도 어디든지 다니는 거다. 사람들이 나를 이상하게 쳐다보지 않고, 계단이나 턱 때문에 돌아서지 않고, 지금보다 훨씬 자유롭고 편하게 휠체어를 타고 다니는 것.<br>
                 하지만 그건 너무 어려운 일일 것 같아서 두 번째 소원인 전동 휠체어를 말했다. 마람 언니가 실패한 요정이 되는 건 싫으니까.
             </div>
 
             <div class="q-box">
-                <span class="q-num">18.</span> 이 글에서 알 수 있는 하늘이의 성격이 <strong>아닌</strong> 것은 무엇입니까? ▶ <input type="text" class="blank short" id="q5-p3-1" placeholder="번호">
-                <div class="choice-list">
-                    <span class="choice-item">① 정이 많다.</span>
-                    <span class="choice-item">② 무뚝뚝하다.</span>
-                    <span class="choice-item">③ 생각이 깊다.</span>
-                    <span class="choice-item">④ 배려심이 많다.</span>
-                    <span class="choice-item">⑤ 다른 사람을 먼저 생각할 줄 안다.</span>
+                <div class="q-text"><span class="q-num">18.</span> 이 글에서 알 수 있는 하늘이의 성격이 <strong>아닌</strong> 것은 무엇입니까?</div>
+                <div class="mcq-container" id="mcq-q5-p3-1">
+                    <div class="mcq-option" data-val="1" onclick="selectMCQ(event, 'q5-p3-1', '1')">① 정이 많다.</div>
+                    <div class="mcq-option" data-val="2" onclick="selectMCQ(event, 'q5-p3-1', '2')">② 무뚝뚝하다.</div>
+                    <div class="mcq-option" data-val="3" onclick="selectMCQ(event, 'q5-p3-1', '3')">③ 생각이 깊다.</div>
+                    <div class="mcq-option" data-val="4" onclick="selectMCQ(event, 'q5-p3-1', '4')">④ 배려심이 많다.</div>
+                    <div class="mcq-option" data-val="5" onclick="selectMCQ(event, 'q5-p3-1', '5')">⑤ 다른 사람을 먼저 생각할 줄 안다.</div>
                 </div>
+                <input type="hidden" id="q5-p3-1" value="">
             </div>
 
             <div class="q-box">
-                <span class="q-num">19.</span> 하늘이가 (다)처럼 생각하여 한 행동은 무엇인지 빈칸을 채우시오.<br>
-                <div style="background:#f4f6f9; padding:10px; margin-top:10px; border-radius:5px;">
-                    ▶ 마람 언니에게 <input type="text" class="blank" id="q5-p3-2"> 소원을 빌면 마람 언니가 <input type="text" class="blank" id="q5-p3-3"> 요정이 될까 봐 걱정해서 진짜 소원 대신 두 번째 소원을 빌었다.
+                <div class="q-text"><span class="q-num">19.</span> 하늘이가 (다)처럼 생각하여 한 행동은 무엇인지 빈칸을 직접 채우시오.</div>
+                <div style="background:#f4f6f9; padding:15px; border-radius:5px; line-height: 2.2; text-align: center; font-size: 1.05em;">
+                    마람 언니에게 <input type="text" class="blank" id="q5-p3-2"> 소원을 빌면<br>
+                    마람 언니가 <input type="text" class="blank" id="q5-p3-3"> 요정이 될까 봐 걱정해서<br>
+                    진짜 소원 대신 두 번째 소원을 빌었다.
                 </div>
             </div>
 
             <div class="passage-box">
+                <div class="passage-label">📖 지문</div>
                 [20~22] ※ 다음 글을 읽고 물음에 답하시오.<br><br>
                 홍보하려고 만든 현수막은 사용하고 난 뒤에 대부분 폐기됩니다. 폐현수막은 플라스틱이 주성분이라 소각할 때 유해 물질을 배출하기 때문에 환경 문제를 일으킵니다. 그러나 폐현수막을 가방, 지갑, 우산, 부채로 재탄생시킬 수 있습니다. <strong>㉠[ &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ]</strong>을/를 알아봅시다.<br><br>
                 먼저, 폐현수막을 분리합니다. 폐현수막을 고정하는 데 사용한 각목, 종이찍개 심을 제거해야 합니다. 각목과 종이찍개 심을 빼낸 다음에 현수막 천으로 가방을 만들 수 있습니다.<br>
@@ -434,42 +551,46 @@
             </div>
 
             <div class="q-box">
-                <span class="q-num">20.</span> 이 글의 내용으로 보아 ㉠에 들어갈 알맞은 내용은 무엇입니까? ▶ <input type="text" class="blank short" id="q5-p3-4" placeholder="번호">
-                <div class="choice-list">
-                    <span class="choice-item">① 환경이 오염되는 원인</span>
-                    <span class="choice-item">② 환경 보호가 필요한 까닭</span>
-                    <span class="choice-item">③ 환경 보호를 실천하는 방법</span>
-                    <span class="choice-item">④ 친환경 현수막을 만드는 방법</span>
-                    <span class="choice-item">⑤ 폐현수막으로 가방을 만드는 방법</span>
+                <div class="q-text"><span class="q-num">20.</span> 이 글의 내용으로 보아 ㉠에 들어갈 알맞은 내용은 무엇입니까?</div>
+                <div class="mcq-container" id="mcq-q5-p3-4">
+                    <div class="mcq-option" data-val="1" onclick="selectMCQ(event, 'q5-p3-4', '1')">① 환경이 오염되는 원인</div>
+                    <div class="mcq-option" data-val="2" onclick="selectMCQ(event, 'q5-p3-4', '2')">② 환경 보호가 필요한 까닭</div>
+                    <div class="mcq-option" data-val="3" onclick="selectMCQ(event, 'q5-p3-4', '3')">③ 환경 보호를 실천하는 방법</div>
+                    <div class="mcq-option" data-val="4" onclick="selectMCQ(event, 'q5-p3-4', '4')">④ 친환경 현수막을 만드는 방법</div>
+                    <div class="mcq-option" data-val="5" onclick="selectMCQ(event, 'q5-p3-4', '5')">⑤ 폐현수막으로 가방을 만드는 방법</div>
                 </div>
+                <input type="hidden" id="q5-p3-4" value="">
             </div>
 
             <div class="q-box">
-                <span class="q-num">21.</span> 이 글의 구조로 보아 ㉡에 들어갈 알맞은 말은 무엇입니까? ▶ <input type="text" class="blank short" id="q5-p3-5" placeholder="번호">
-                <div class="choice-list">
-                    <span class="choice-item">① 우선</span>
-                    <span class="choice-item">② 첫째</span>
-                    <span class="choice-item">③ 끝으로</span>
-                    <span class="choice-item">④ 그런데</span>
-                    <span class="choice-item">⑤ 다음으로</span>
+                <div class="q-text"><span class="q-num">21.</span> 이 글의 구조로 보아 ㉡에 들어갈 알맞은 말은 무엇입니까?</div>
+                <div class="mcq-container" id="mcq-q5-p3-5">
+                    <div class="mcq-option" data-val="1" onclick="selectMCQ(event, 'q5-p3-5', '1')">① 우선</div>
+                    <div class="mcq-option" data-val="2" onclick="selectMCQ(event, 'q5-p3-5', '2')">② 첫째</div>
+                    <div class="mcq-option" data-val="3" onclick="selectMCQ(event, 'q5-p3-5', '3')">③ 끝으로</div>
+                    <div class="mcq-option" data-val="4" onclick="selectMCQ(event, 'q5-p3-5', '4')">④ 그런데</div>
+                    <div class="mcq-option" data-val="5" onclick="selectMCQ(event, 'q5-p3-5', '5')">⑤ 다음으로</div>
                 </div>
+                <input type="hidden" id="q5-p3-5" value="">
             </div>
 
             <div class="q-box">
-                <span class="q-num">22.</span> 이 글에서 대상을 설명한 방법으로 볼 때 빈칸에 들어갈 알맞은 말은? ▶ <input type="text" class="blank short" id="q5-p3-6" placeholder="번호"><br>
-                <div style="background:#f4f6f9; padding:10px; margin-top:5px; border-radius:5px;">
-                    ▶ ( &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ) 설명했다.
+                <div class="q-text"><span class="q-num">22.</span> 이 글에서 대상을 설명한 방법으로 볼 때 빈칸에 들어갈 알맞은 말은 무엇입니까?</div>
+                <div style="background:#f4f6f9; padding:15px; margin-bottom:15px; border-radius:5px; text-align:center;">
+                    ▶ ( &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ) 설명했다.
                 </div>
-                <div class="choice-list">
-                    <span class="choice-item">① 장소의 변화에 따라 차례대로</span>
-                    <span class="choice-item">② 단계에 따라 일어난 일을 차례대로</span>
-                    <span class="choice-item">③ 설명하려는 대상의 특징을 나열하여</span>
-                    <span class="choice-item">④ 두 가지 이상의 대상에서 공통점을 찾으면서</span>
-                    <span class="choice-item">⑤ 두 가지 이상의 대상에서 차이점을 찾으면서</span>
+                <div class="mcq-container" id="mcq-q5-p3-6">
+                    <div class="mcq-option" data-val="1" onclick="selectMCQ(event, 'q5-p3-6', '1')">① 장소의 변화에 따라 차례대로</div>
+                    <div class="mcq-option" data-val="2" onclick="selectMCQ(event, 'q5-p3-6', '2')">② 단계에 따라 일어난 일을 차례대로</div>
+                    <div class="mcq-option" data-val="3" onclick="selectMCQ(event, 'q5-p3-6', '3')">③ 설명하려는 대상의 특징을 나열하여</div>
+                    <div class="mcq-option" data-val="4" onclick="selectMCQ(event, 'q5-p3-6', '4')">④ 두 가지 이상의 대상에서 공통점을 찾으면서</div>
+                    <div class="mcq-option" data-val="5" onclick="selectMCQ(event, 'q5-p3-6', '5')">⑤ 두 가지 이상의 대상에서 차이점을 찾으면서</div>
                 </div>
+                <input type="hidden" id="q5-p3-6" value="">
             </div>
 
             <div class="passage-box">
+                <div class="passage-label">📖 지문</div>
                 [23~25] ※ 다음 글을 읽고 물음에 답하시오.<br><br>
                 <strong>(가)</strong> 천년 넘게 울려 퍼진 종소리가 있다면 믿을 수 있을까? 통일 신라 시대에 만들어진 성덕 대왕 신종은 지금도 그 울림으로 사람들의 마음을 움직이는 우리나라의 소중한 국가유산이다. 국가유산지킴이의 날을 맞아, 우리나라의 소중한 국가유산 가운데 하나인 성덕 대왕 신종을 알아보자.<br><br>
                 <strong>(나)</strong> 성덕 대왕 신종은 통일 신라 시대 왕 가운데 한 명인 성덕왕의 공덕을 기리려고 만들어졌다. 그래서 성덕왕의 이름을 따서 성덕 대왕 신종이라고 불리게 되었다. 우리나라 국가유산인 성덕 대왕 신종은 에밀레종이라는 이름으로도 잘 알려져 있다.<br><br>
@@ -478,32 +599,33 @@
             </div>
 
             <div class="q-box">
-                <span class="q-num">23.</span> 성덕 대왕 신종에 대해 이 글에서 설명한 내용이 <strong>아닌</strong> 것은 무엇입니까? ▶ <input type="text" class="blank short" id="q5-p3-7" placeholder="번호">
-                <div class="choice-list">
-                    <span class="choice-item">① 통일 신라 시대에 만들어졌다.</span>
-                    <span class="choice-item">② 에밀레종이라는 이름으로 알려져 있다.</span>
-                    <span class="choice-item">③ 소리의 울림을 도와주는 소리통이 있다.</span>
-                    <span class="choice-item">④ 지금은 훼손되어 사진으로만 남아 있다.</span>
-                    <span class="choice-item">⑤ 성덕왕의 공덕을 기리기 위해 만들어졌다.</span>
+                <div class="q-text"><span class="q-num">23.</span> 성덕 대왕 신종에 대해 이 글에서 설명한 내용이 <strong>아닌</strong> 것은 무엇입니까?</div>
+                <div class="mcq-container" id="mcq-q5-p3-7">
+                    <div class="mcq-option" data-val="1" onclick="selectMCQ(event, 'q5-p3-7', '1')">① 통일 신라 시대에 만들어졌다.</div>
+                    <div class="mcq-option" data-val="2" onclick="selectMCQ(event, 'q5-p3-7', '2')">② 에밀레종이라는 이름으로 알려져 있다.</div>
+                    <div class="mcq-option" data-val="3" onclick="selectMCQ(event, 'q5-p3-7', '3')">③ 소리의 울림을 도와주는 소리통이 있다.</div>
+                    <div class="mcq-option" data-val="4" onclick="selectMCQ(event, 'q5-p3-7', '4')">④ 지금은 훼손되어 사진으로만 남아 있다.</div>
+                    <div class="mcq-option" data-val="5" onclick="selectMCQ(event, 'q5-p3-7', '5')">⑤ 성덕왕의 공덕을 기리기 위해 만들어졌다.</div>
                 </div>
+                <input type="hidden" id="q5-p3-7" value="">
             </div>
 
             <div class="q-box">
-                <span class="q-num">24.</span> (가)~(라) 중 성덕 대왕 신종이 <strong>만들어진 까닭</strong>을 설명하고 있는 문단을 찾아 글의 기호(가~라)를 쓰시오.<br>
-                ▶ ( <input type="text" class="blank short" id="q5-p3-8"> )
+                <div class="q-text"><span class="q-num">24.</span> (가)~(라) 중 성덕 대왕 신종이 <strong>만들어진 까닭</strong>을 설명하고 있는 문단을 찾아 글의 기호(가~라)를 쓰시오.</div>
+                <div style="text-align: center;">▶ ( <input type="text" class="blank short" id="q5-p3-8" placeholder="기호"> )</div>
             </div>
 
             <div class="q-box">
-                <span class="q-num">25.</span> 다음은 글쓴이가 이 글을 쓰기 전에 생각한 내용입니다. 빈칸에 들어갈 알맞은 말을 쓰시오.<br>
-                <div style="background:#f4f6f9; padding:10px; margin-top:5px; border-radius:5px;">
+                <div class="q-text"><span class="q-num">25.</span> 다음은 글쓴이가 이 글을 쓰기 전에 생각한 내용입니다. 빈칸에 직접 단어를 쓰시오.</div>
+                <div style="background:#f4f6f9; padding:15px; border-radius:5px; border-left: 4px solid #3498db; font-size: 1.05em; font-style: italic;">
                     '나는 <input type="text" class="blank short" id="q5-p3-9"> 구조를 활용해 성덕 대왕 신종이 만들어진 까닭, 크기와 모양, 종소리의 특징을 포함하여 설명하는 글을 쓸 거야.'
                 </div>
             </div>
 
             <div class="action-area">
-                <div class="feedback-msg" id="msg-q5-3">빈칸을 모두 채운 뒤 최종 제출을 누르세요.</div>
+                <div class="feedback-msg" id="msg-q5-3">문제를 모두 푼 뒤 최종 채점하기를 누르세요.</div>
                 <button class="btn" style="width:100%; background-color:#9b59b6;" id="btn-grade-q5-3" onclick="gradePage(3)">최종 채점 및 제출하기 🚀</button>
-                <button class="btn btn-retry" id="btn-retry-q5-3" onclick="retryPage(3)">🔄 틀린 빈칸 재도전</button>
+                <button class="btn btn-retry" id="btn-retry-q5-3" onclick="retryPage(3)">🔄 틀린 문제 무한 재도전!</button>
                 <button class="btn btn-next" id="btn-next-q5-3" onclick="showFinalSummary()">결과 요약표 보기</button>
             </div>
         </div>
@@ -615,7 +737,7 @@
     // 정답 데이터
     // ==========================================
     const answers = {
-        // ※ 실제 적용 시 여기에 선생님의 기존 과제 1~4 정답 코드 (quiz1, quiz2, quiz3, quiz4)가 그대로 유지되어야 합니다.
+        // 기존 과제 1~4 (선생님의 원본 코드의 정답을 유지해주세요. 지면상 간략화됨)
         quiz1: {
             1: { "q1-p1-1": "지형", "q1-p1-2": "산지", "q1-p1-3": "산맥", "q1-p1-4": "높", "q1-p1-5": "낮", "q1-p1-6": "평야", "q1-p1-7": "하천", "q1-p1-8": "해안", "q1-p1-9": "갯벌", "q1-p1-10": "해안절벽|해안 절벽", "q1-p1-11": "하천", "q1-p1-12": "땅", "q1-p1-13": "산지", "q1-p1-14": "북동", "q1-p1-15": "남서", "q1-p1-16": "높", "q1-p1-17": "낮", "q1-p1-18": "남", "q1-p1-19": "서", "q1-p1-20": "하류", "q1-p1-21": "평야", "q1-p1-22": "동", "q1-p1-23": "서", "q1-p1-24": "남", "q1-p1-25": "단순", "q1-p1-26": "적", "q1-p1-27": "모래사장", "q1-p1-28": "해수욕장", "q1-p1-29": "복잡", "q1-p1-30": "다도해", "q1-p1-31": "갯벌" },
             2: { "q1-p2-1": "북", "q1-p2-2": "백두대간", "q1-p2-3": "백두", "q1-p2-4": "한라", "q1-p2-5": "10|열|십", "q1-p2-6": "두만강", "q1-p2-7": "높", "q1-p2-8": "낮", "q1-p2-9": "북동", "q1-p2-10": "동해정답", "q1-p2-11": "서남해정답" }
@@ -633,11 +755,11 @@
             2: { "q4-p2-1": "갈등", "q4-p2-2": "다툼", "q4-p2-3": "기준", "q4-p2-4": "권리", "q4-p2-5": "분쟁", "q4-p2-6": "생명", "q4-p2-7": "재산", "q4-p2-8": "정보", "q4-p2-9": "질서", "q4-p2-10": "범죄", "q4-p2-11": "사고", "q4-p2-12": "보호", "q4-p2-13": "경제", "q4-p2-14": "혼란", "q4-p2-15": "환경", "q4-p2-L1": "민법", "q4-p2-L2": "재난및안전관리기본법|재난 및 안전관리 기본법", "q4-p2-L3": "개인정보보호법|개인정보 보호법", "q4-p2-L4": "소방기본법", "q4-p2-L5": "테러방지법", "q4-p2-L6": "도로교통법", "q4-p2-L7": "폐기물관리법", "q4-p2-L8": "공정거래법" },
             3: { "q4-p3-1": "누구나", "q4-p3-2": "기본", "q4-p3-3": "태어나는", "q4-p3-4": "국적", "q4-p3-5": "평등", "q4-p3-6": "빼앗", "q4-p3-7": "최고", "q4-p3-8": "존엄", "q4-p3-9": "행복", "q4-p3-10": "보장", "q4-p3-11": "차별", "q4-p3-12": "동등", "q4-p3-13": "자유", "q4-p3-14": "생각", "q4-p3-15": "정치", "q4-p3-16": "참여", "q4-p3-17": "침해", "q4-p3-18": "요구", "q4-p3-19": "나은", "q4-p3-20": "권리", "q4-p3-21": "안정", "q4-p3-22": "존중", "q4-p3-23": "보호" }
         },
-        // 추가된 국어 25문항 평가 정답 데이터
+        // 추가된 과제 5 (국어 25문항 정답)
         quiz5: {
             1: {
-                "q5-p1-1": "5", "q5-p1-2": "2", "q5-p1-3": "1|말", "q5-p1-4": "2|행동",
-                "q5-p1-5": "2", "q5-p1-6": "기쁨의|기쁨", "q5-p1-7": "손님", "q5-p1-8": "도깨비",
+                "q5-p1-1": "5", "q5-p1-2": "2", "q5-p1-3": "1,2", "q5-p1-5": "2", 
+                "q5-p1-6": "기쁨의|기쁨", "q5-p1-7": "손님", "q5-p1-8": "도깨비",
                 "q5-p1-9": "마음", "q5-p1-10": "진서", "q5-p1-11": "도깨비", "q5-p1-12": "나",
                 "q5-p1-13": "가", "q5-p1-14": "4"
             },
@@ -654,7 +776,54 @@
     };
 
     // ==========================================
-    // 파이어베이스 설정
+    // 객관식 클릭 처리 로직 (단일 선택)
+    // ==========================================
+    function selectMCQ(event, inputId, value) {
+        const inputEl = document.getElementById(inputId);
+        if (inputEl.classList.contains('correct')) return; // 정답이면 수정 불가
+        
+        inputEl.value = value;
+        const options = document.querySelectorAll(`#mcq-${inputId} .mcq-option`);
+        options.forEach(opt => opt.classList.remove('selected'));
+        event.currentTarget.classList.add('selected');
+        
+        // 오답 상태에서 다시 클릭했을 때 색상 복구
+        inputEl.classList.remove('wrong');
+        options.forEach(opt => opt.classList.remove('wrong'));
+    }
+
+    // ==========================================
+    // 객관식 클릭 처리 로직 (다중 선택, 예: 3번 문제)
+    // ==========================================
+    function selectMultiMCQ(event, inputId, value, maxSelect) {
+        const inputEl = document.getElementById(inputId);
+        if (inputEl.classList.contains('correct')) return;
+        
+        let currentVals = inputEl.value ? inputEl.value.split(',') : [];
+        const btn = event.currentTarget;
+        
+        if (currentVals.includes(value)) {
+            // 이미 선택된 항목 클릭 시 해제
+            currentVals = currentVals.filter(v => v !== value);
+            btn.classList.remove('selected');
+        } else {
+            // 최대 개수 초과 시 가장 먼저 선택했던 것 해제
+            if (currentVals.length >= maxSelect) {
+                const firstVal = currentVals.shift();
+                document.querySelector(`#mcq-${inputId} .mcq-option[data-val="${firstVal}"]`).classList.remove('selected');
+            }
+            currentVals.push(value);
+            btn.classList.add('selected');
+        }
+        
+        inputEl.value = currentVals.sort().join(','); // 정답 비교를 위해 자동 정렬
+        
+        inputEl.classList.remove('wrong');
+        document.querySelectorAll(`#mcq-${inputId} .mcq-option`).forEach(opt => opt.classList.remove('wrong'));
+    }
+
+    // ==========================================
+    // 파이어베이스 및 기본 기능 설정
     // ==========================================
     const firebaseConfig = {
       apiKey: "AIzaSyDfs4krriQYs41veoY_QemQ63R3Yru1xOs",
@@ -726,33 +895,17 @@
         document.getElementById('quiz4-content').style.display = 'none';
         document.getElementById('quiz5-content').style.display = 'none';
 
-        if (quizId === 'quiz1') {
-            document.getElementById('task-main-title').innerText = "🌍 과제 1: 1-(1) 우리 나라의 지형";
-            document.getElementById('quiz1-content').style.display = 'block';
-        } else if (quizId === 'quiz2') {
-            document.getElementById('task-main-title').innerText = "🏝️ 과제 2: 1-(2) 소중한 우리 땅, 독도";
-            document.getElementById('quiz2-content').style.display = 'block';
-        } else if (quizId === 'quiz3') {
-            document.getElementById('task-main-title').innerText = "🌤️ 과제 3: 2-(1) 우리나라의 기후";
-            document.getElementById('quiz3-content').style.display = 'block';
-        } else if (quizId === 'quiz4') {
-            document.getElementById('task-main-title').innerText = "⚖️ 과제 4: 3-(1) 법의 역할과 인권";
-            document.getElementById('quiz4-content').style.display = 'block';
-        } else if (quizId === 'quiz5') {
-            document.getElementById('task-main-title').innerText = "📖 과제 5: 국어 5-1 종합 평가";
-            document.getElementById('quiz5-content').style.display = 'block';
-        }
+        if (quizId === 'quiz1') { document.getElementById('task-main-title').innerText = "🌍 과제 1: 1-(1) 우리 나라의 지형"; document.getElementById('quiz1-content').style.display = 'block'; }
+        else if (quizId === 'quiz2') { document.getElementById('task-main-title').innerText = "🏝️ 과제 2: 1-(2) 소중한 우리 땅, 독도"; document.getElementById('quiz2-content').style.display = 'block'; }
+        else if (quizId === 'quiz3') { document.getElementById('task-main-title').innerText = "🌤️ 과제 3: 2-(1) 우리나라의 기후"; document.getElementById('quiz3-content').style.display = 'block'; }
+        else if (quizId === 'quiz4') { document.getElementById('task-main-title').innerText = "⚖️ 과제 4: 3-(1) 법의 역할과 인권"; document.getElementById('quiz4-content').style.display = 'block'; }
+        else if (quizId === 'quiz5') { document.getElementById('task-main-title').innerText = "📖 과제 5: 국어 5-1 종합 평가"; document.getElementById('quiz5-content').style.display = 'block'; }
+        
         showPage(1);
     }
 
     function showPage(pageNum) {
-        let prefix = '';
-        if (currentQuizId === 'quiz1') prefix = 'q1-';
-        else if (currentQuizId === 'quiz2') prefix = 'q2-';
-        else if (currentQuizId === 'quiz3') prefix = 'q3-';
-        else if (currentQuizId === 'quiz4') prefix = 'q4-';
-        else if (currentQuizId === 'quiz5') prefix = 'q5-';
-
+        let prefix = currentQuizId === 'quiz1' ? 'q1-' : currentQuizId === 'quiz2' ? 'q2-' : currentQuizId === 'quiz3' ? 'q3-' : currentQuizId === 'quiz4' ? 'q4-' : 'q5-';
         document.querySelectorAll(`#${currentQuizId}-content .page-section`).forEach(p => p.classList.remove('active'));
         
         let targetPage = document.getElementById(`${prefix}page-${pageNum}`);
@@ -770,7 +923,6 @@
         if (!schoolInput || !grade || !cls || !num || !name) { alert("상단의 학교, 학년, 반, 번호, 이름을 모두 입력해주세요!"); return null; }
         if(num.length === 1) num = "0" + num;
         document.getElementById('s-num').value = num;
-        
         return { school: schoolInput + "초등학교", grade, cls, num, name };
     }
 
@@ -793,12 +945,23 @@
                 
                 inputEl.classList.remove('correct', 'wrong');
 
-                if (userAns !== '' && correctOptions.includes(userAns)) {
+                const isCorrect = userAns !== '' && correctOptions.includes(userAns);
+                
+                if (isCorrect) {
                     correctCount++;
                     inputEl.classList.add('correct');
                 } else {
                     hasWrong = true;
                     inputEl.classList.add('wrong');
+                }
+
+                // 객관식(히든 인풋)인 경우 버튼 UI 업데이트
+                if(inputEl.type === 'hidden') {
+                    const selectedOptions = document.querySelectorAll(`#mcq-${id} .mcq-option.selected`);
+                    selectedOptions.forEach(opt => {
+                        if(isCorrect) opt.classList.add('correct');
+                        else opt.classList.add('wrong');
+                    });
                 }
             }
         });
@@ -806,13 +969,14 @@
         scores[pageNum] = correctCount;
         let prefix = currentQuizId === 'quiz1' ? 'q1-' : currentQuizId === 'quiz2' ? 'q2-' : currentQuizId === 'quiz3' ? 'q3-' : currentQuizId === 'quiz4' ? 'q4-' : 'q5-';
         const msgEl = document.getElementById(`msg-${prefix}${pageNum}`);
+        
         if(msgEl) msgEl.innerHTML = `총 ${keys.length}개의 항목 중 <span style="color:#27ae60;">${correctCount}개</span> 정답입니다!`;
         
         document.getElementById(`btn-grade-${prefix}${pageNum}`).style.display = 'none';
         
         if(hasWrong) {
             document.getElementById(`btn-retry-${prefix}${pageNum}`).style.display = 'inline-block';
-            if(msgEl) msgEl.innerHTML += ` <span style="color:#e74c3c;">(틀린 곳이 있어요!)</span>`;
+            if(msgEl) msgEl.innerHTML += ` <span style="color:#e74c3c;">(틀린 곳이 있어요. 재도전 버튼을 눌러주세요!)</span>`;
         } else {
             if(msgEl) msgEl.innerHTML = `🎉 완벽합니다! 모두 맞혔습니다!`;
         }
@@ -821,16 +985,31 @@
 
     function retryPage(pageNum) {
         const answerDict = answers[currentQuizId][pageNum];
+        let prefix = currentQuizId === 'quiz1' ? 'q1-' : currentQuizId === 'quiz2' ? 'q2-' : currentQuizId === 'quiz3' ? 'q3-' : currentQuizId === 'quiz4' ? 'q4-' : 'q5-';
+        
         Object.keys(answerDict).forEach(id => {
             const inputEl = document.getElementById(id);
             if (inputEl && inputEl.classList.contains('wrong')) {
+                // 오답 인풋 초기화
                 inputEl.value = "";
                 inputEl.classList.remove('wrong');
+                
+                // 객관식 버튼 UI 초기화
+                if (inputEl.type === 'hidden') {
+                    const options = document.querySelectorAll(`#mcq-${id} .mcq-option`);
+                    options.forEach(opt => {
+                        opt.classList.remove('wrong');
+                        // 정답 처리된 건 건드리지 않음
+                        if(!opt.classList.contains('correct')) {
+                            opt.classList.remove('selected');
+                        }
+                    });
+                }
             }
         });
-        let prefix = currentQuizId === 'quiz1' ? 'q1-' : currentQuizId === 'quiz2' ? 'q2-' : currentQuizId === 'quiz3' ? 'q3-' : currentQuizId === 'quiz4' ? 'q4-' : 'q5-';
-        document.getElementById(`msg-${prefix}${pageNum}`).innerHTML = "다시 한번 빈칸을 채우고 채점해 보세요!";
-        document.getElementById(`btn-grade-${prefix}${pageNum}`).style.display = 'block';
+        
+        document.getElementById(`msg-${prefix}${pageNum}`).innerHTML = "빈칸과 선택지를 다시 확인하고 채점해 보세요!";
+        document.getElementById(`btn-grade-${prefix}${pageNum}`).style.display = 'inline-block';
         document.getElementById(`btn-retry-${prefix}${pageNum}`).style.display = 'none';
         document.getElementById(`btn-next-${prefix}${pageNum}`).style.display = 'none';
     }
@@ -983,7 +1162,7 @@
                 else if (isTask2) { max1 = 32; max2 = 20; max3 = 0; }
                 else if (isTask3) { max1 = 27; max2 = 25; max3 = 0; }
                 else if (isTask4) { max1 = 19; max2 = 23; max3 = 23; }
-                else if (isTask5) { max1 = 14; max2 = 14; max3 = 9; }
+                else if (isTask5) { max1 = 13; max2 = 14; max3 = 9; }
                 
                 const totalMax = max1 + max2 + max3;
                 const schoolName = s.학교 !== undefined ? s.학교 : "정보없음";
