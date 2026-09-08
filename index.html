@@ -260,6 +260,21 @@
 
         @keyframes shake { 0%, 100% {transform: translateX(0);} 25% {transform: translateX(-5px);} 75% {transform: translateX(5px);} }
         .shake { animation: shake 0.15s ease-in-out 0s 2; }
+
+        /* 🚀 로켓 레이스 (실시간 경쟁 타이핑 레이스) */
+        .race-track-container { background: #0b1220; background-image: radial-gradient(1px 1px at 20% 30%, rgba(255,255,255,0.5) 1px, transparent 0), radial-gradient(1px 1px at 60% 70%, rgba(255,255,255,0.35) 1px, transparent 0), radial-gradient(1px 1px at 85% 20%, rgba(255,255,255,0.4) 1px, transparent 0), radial-gradient(1px 1px at 40% 85%, rgba(255,255,255,0.3) 1px, transparent 0); background-size: 160px 160px; border-radius: 14px; padding: 16px 14px; margin-bottom: 18px; }
+        .race-lane { position: relative; height: 48px; background: rgba(255,255,255,0.06); border-radius: 24px; margin-bottom: 12px; }
+        .race-lane:last-child { margin-bottom: 0; }
+        .race-track-line { position: absolute; left: 14px; right: 54px; top: 50%; height: 2px; background: repeating-linear-gradient(90deg, rgba(255,255,255,0.25) 0 8px, transparent 8px 18px); }
+        .race-finish-flag { position: absolute; right: 12px; top: 50%; transform: translateY(-50%); font-size: 1.3rem; }
+        .race-runner { position: absolute; top: 50%; transform: translate(-50%, -50%); font-size: 1.5rem; left: 4%; transition: left 0.45s cubic-bezier(.34,1.56,.64,1); z-index: 5; line-height: 1; }
+        .race-runner-name { position: absolute; bottom: 26px; left: 50%; transform: translateX(-50%); font-size: 0.62rem; font-weight: bold; color: white; padding: 2px 7px; border-radius: 8px; white-space: nowrap; box-shadow: 0 1px 3px rgba(0,0,0,0.4); }
+        .race-runner.finished { filter: drop-shadow(0 0 6px #fbbf24); }
+        .race-interaction-box { text-align: center; background: #f1f5f9; padding: 18px; border-radius: 12px; border: 2px dashed #94a3b8; }
+        .race-interaction-box.finished-box { border-color: var(--success); background: #ecfdf5; }
+        .race-progress-label { font-weight: bold; color: #ea580c; margin-bottom: 8px; font-size: 0.95rem; }
+        .race-target-mean { font-size: 1.25rem; font-weight: bold; margin-bottom: 15px; color: var(--text); min-height: 34px; word-break: keep-all; }
+        .race-rank-badge { background: #fff7ed; color: #c2410c; padding: 4px 10px; border-radius: 8px; font-weight: bold; font-size: 0.95rem; }
     </style>
 </head>
 <body>
@@ -291,6 +306,7 @@
         <button id="tabMaster" class="main-tab" onclick="switchMainTab('master')">👑 스피드런</button>
         <button id="tabRain" class="main-tab" onclick="switchMainTab('rain')">🏰 디펜스</button>
         <button id="tabLand" class="main-tab" onclick="switchMainTab('land')">🏁 땅따먹기</button>
+        <button id="tabRace" class="main-tab" onclick="switchMainTab('race')">🚀 로켓 레이스</button>
     </div>
 
     <div id="homeScreen" class="screen">
@@ -335,6 +351,17 @@
         <div class="day-grid" id="landGrid"></div>
     </div>
 
+    <div id="raceStageScreen" class="screen">
+        <div class="dashboard" style="background: #0b1220; color: white; border: 2px solid #f97316;">
+            <div class="dashboard-header">
+                <span class="dashboard-title" style="color: #fb923c;">🚀 실시간 로켓 레이스 대결</span>
+                <button class="ranking-btn" style="background:#fed7aa; color:#9a3412;" onclick="showRankingMenu(1, 'race')">🏆 순위 보기</button>
+            </div>
+            <p style="font-size: 0.95rem; color: #cbd5e1; margin-top: 10px; word-break: keep-all; line-height: 1.4;">같은 방에 모인 친구들과 동시에 출발! 뜻을 보고 정확한 낱말을 <b>직접 타이핑</b>해야 로켓이 앞으로 나갑니다.<br>🥇 객관식 없이, 가장 먼저 결승선을 통과하는 사람이 1등!</p>
+        </div>
+        <div class="day-grid" id="raceGrid"></div>
+    </div>
+
     <div id="rankingScreen" class="screen">
         <div class="top-bar">
             <span class="screen-title" id="rankingTitle">🏆 명예의 전당</span>
@@ -360,6 +387,7 @@
             <button class="btn-home" style="background: var(--success); color:white; flex:1; min-width: 120px;" onclick="downloadAdminCSV()">💾 엑셀 다운로드</button>
             <button class="btn-home" style="background: #64748b; color:white; flex:1; min-width: 120px;" onclick="changeAdminPassword()">🔑 암호 변경</button>
             <button class="btn-home" style="background: #f59e0b; color:white; flex:1; min-width: 120px;" onclick="resetAllLandRooms()">💣 땅따먹기 방 폭파</button>
+            <button class="btn-home" style="background: #ea580c; color:white; flex:1; min-width: 120px;" onclick="resetAllRaceRooms()">🚀 레이스 방 폭파</button>
             <button class="btn-home" style="background: var(--error); color:white; flex:1; min-width: 120px;" onclick="deleteAllData()">🗑️ 전체 초기화</button>
         </div>
         <div style="overflow-x: auto; max-height: 400px;">
@@ -420,6 +448,37 @@
                     <h4>💡 남은 단어 목록 (가나다순 힌트)</h4>
                     <div class="land-word-list" id="landWordBankList"></div>
                 </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 🚀 로켓 레이스 대기실 -->
+    <div id="raceLobbyScreen" class="screen">
+        <div class="top-bar"><span class="screen-title" id="raceLobbyStageTitleText">1탄 대기실</span><button class="stop-btn" onclick="quitRaceLobby()">나가기</button></div>
+        <div class="land-lobby-box">
+            <h4 style="margin-bottom:10px; color:var(--text-light);">🚀 참여중인 선수들</h4>
+            <div class="lobby-player-list" id="raceLobbyPlayerList"></div>
+            <div class="lobby-actions" id="raceLobbyHostActions">
+                <button class="btn-lobby-start" style="background:#ea580c;" onclick="startRaceGame()">🚀 레이스 시작!</button>
+            </div>
+            <div id="raceLobbyGuestMessage" style="display:none; text-align:center; padding:15px; font-weight:bold; color:#ea580c;">방장이 레이스를 시작할 때까지 기다려주세요...</div>
+        </div>
+    </div>
+
+    <!-- 🚀 로켓 레이스 게임 화면 -->
+    <div id="raceGameScreen" class="screen land-screen">
+        <div class="land-header">
+            <div class="land-status-box"><span id="raceGameStageTitle">1탄</span><span>내 순위 <span class="race-rank-badge" id="raceMyRankDisplay">-</span></span></div>
+            <button id="btnRaceReset" style="display:none; margin-right:8px; font-size:0.85rem; padding:8px 12px; border-radius:8px; background:var(--error); color:white; border:none; cursor:pointer; font-weight:bold;" onclick="resetRaceRoom()">중단</button>
+            <button class="stop-btn" onclick="quitRaceGame()">나가기</button>
+        </div>
+        <div class="race-track-container" id="raceTrackContainer"></div>
+        <div class="race-interaction-box" id="raceInteractionBox">
+            <div class="race-progress-label" id="raceProgressLabel">1 / 15</div>
+            <div class="race-target-mean" id="raceTargetMean">뜻이 여기 표시됩니다</div>
+            <div class="land-input-group">
+                <input type="text" id="raceInput" class="land-input" autocomplete="off" placeholder="단어 입력 후 엔터">
+                <button id="raceSubmitBtn" class="land-submit" onclick="submitRaceWord()">발사 🚀</button>
             </div>
         </div>
     </div>
@@ -521,6 +580,7 @@
     const TOTAL_MASTER_STAGES = Math.ceil(rawWords.length / MASTER_WORDS_PER_STAGE);
     const LAND_WORDS_PER_STAGE = 100;
     const TOTAL_LAND_STAGES = Math.ceil(rawWords.length / LAND_WORDS_PER_STAGE);
+    const RACE_WORDS_PER_STAGE = 15;
     const PLAYER_COLORS = ['#ef4444', '#f97316', '#f59e0b', '#84cc16', '#22c55e', '#10b981', '#14b8a6', '#06b6d4', '#0ea5e9', '#38bdf8', '#d946ef', '#ec4899', '#9f1239', '#ea580c', '#4d7c0f', '#047857', '#0f766e', '#1d4ed8', '#6b21a8'];
 
     function getPlayerColor(index) {
@@ -531,9 +591,25 @@
     // 💡 마침표/쉼표 등 문장부호 무시 공용 함수
     function normalizeForCompare(str) { return String(str || '').replace(/[\s.,·~!?"'"'()]/g, ''); }
 
+    // 🔒 학생이 이름/학교 등에 입력한 텍스트를 화면(innerHTML)에 안전하게 표시하기 위한 이스케이프 함수
+    // (예: 이름란에 특수문자나 코드 비슷한 문자열을 입력해도 다른 학생/선생님 화면에서 실행되지 않도록 방지)
+    function escapeHTML(str) {
+        return String(str === undefined || str === null ? '' : str).replace(/[&<>"']/g, ch => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));
+    }
+
+    // 🎲 배열을 고르게 섞는 셔플 함수 (피셔-예이츠)
+    function shuffleArray(arr) {
+        let a = [...arr];
+        for(let i = a.length - 1; i > 0; i--) {
+            let j = Math.floor(Math.random() * (i + 1));
+            [a[i], a[j]] = [a[j], a[i]];
+        }
+        return a;
+    }
+
     function safeParseJSON(key, fallback) {
         try { return JSON.parse(localStorage.getItem(key)) || fallback; } 
-        catch(e) { localStorage.removeItem(key); return fallback; }
+        catch(e) { try { localStorage.removeItem(key); } catch(e2) {} return fallback; }
     }
     
     let userProfile = safeParseJSON('userProfile', null);
@@ -541,6 +617,7 @@
     let masterRecords = safeParseJSON('masterRecords', {});
     let rainRecords = safeParseJSON('rainRecords', {});
     let landRecords = safeParseJSON('landRecords', {}); 
+    let raceRecords = safeParseJSON('raceRecords', {});
 
     // 게임 상태 변수들
     let currentDay = 1, studyQueue = [], quizQueue = [], missedWords = [];
@@ -551,6 +628,10 @@
     
     let inLandGrabRoom = false, currentLandStage = 1, currentLandRoomCode = "", landRoomRef = null;
     let myLandColor = '#fff', myLandPenaltyUntil = 0, currentSelectedLandIndex = -1, landPenaltyInterval = null, currentLandBoardData = [];
+
+    // 🚀 로켓 레이스 상태 변수
+    let inRaceRoom = false, currentRaceStage = 1, currentRaceRoomCode = "", raceRoomRef = null;
+    let raceLaneOrder = [], myRaceFinishShown = false, currentRaceRoomData = null;
 
     // 땅따먹기 랭킹 모드 플래그
     let landRankMode = 'solo'; 
@@ -567,11 +648,12 @@
                     if(snapshot.exists()) {
                         let data = snapshot.val();
                         dailyRecords = data.daily || {}; masterRecords = data.master || {};
-                        rainRecords = data.rain || {}; landRecords = data.land || {};
+                        rainRecords = data.rain || {}; landRecords = data.land || {}; raceRecords = data.race || {};
                         localStorage.setItem('dailyRecords', JSON.stringify(dailyRecords));
                         localStorage.setItem('masterRecords', JSON.stringify(masterRecords));
                         localStorage.setItem('rainRecords', JSON.stringify(rainRecords));
                         localStorage.setItem('landRecords', JSON.stringify(landRecords));
+                        localStorage.setItem('raceRecords', JSON.stringify(raceRecords));
                     }
                     finalizeLogin();
                 }).catch(() => finalizeLogin());
@@ -601,14 +683,15 @@
                 if(snapshot.exists()) {
                     let data = snapshot.val();
                     dailyRecords = data.daily || {}; masterRecords = data.master || {};
-                    rainRecords = data.rain || {}; landRecords = data.land || {};
+                    rainRecords = data.rain || {}; landRecords = data.land || {}; raceRecords = data.race || {};
                 } else {
-                    dailyRecords = {}; masterRecords = {}; rainRecords = {}; landRecords = {};
+                    dailyRecords = {}; masterRecords = {}; rainRecords = {}; landRecords = {}; raceRecords = {};
                 }
                 localStorage.setItem('dailyRecords', JSON.stringify(dailyRecords));
                 localStorage.setItem('masterRecords', JSON.stringify(masterRecords));
                 localStorage.setItem('rainRecords', JSON.stringify(rainRecords));
                 localStorage.setItem('landRecords', JSON.stringify(landRecords));
+                localStorage.setItem('raceRecords', JSON.stringify(raceRecords));
                 finalizeLogin();
             }).catch(() => finalizeLogin());
         } else { finalizeLogin(); }
@@ -617,8 +700,8 @@
     function logout() {
         if(confirm("로그아웃 하시겠습니까?\n(기기에 저장된 임시 기록은 사라지지만, 서버 기록은 유지됩니다.)")) {
             // 학생 데이터 키만 삭제, adminPwd는 보존
-            ['userProfile','dailyRecords','masterRecords','rainRecords','landRecords'].forEach(k => localStorage.removeItem(k));
-            userProfile = null; dailyRecords = {}; masterRecords = {}; rainRecords = {}; landRecords = {};
+            ['userProfile','dailyRecords','masterRecords','rainRecords','landRecords','raceRecords'].forEach(k => localStorage.removeItem(k));
+            userProfile = null; dailyRecords = {}; masterRecords = {}; rainRecords = {}; landRecords = {}; raceRecords = {};
             document.getElementById('userProfileBar').style.display = 'none'; document.getElementById('mainTabs').style.display = 'none';
             document.getElementById('inputClass').value = ''; document.getElementById('inputNum').value = ''; document.getElementById('inputName').value = '';
             showScreen('loginScreen');
@@ -634,7 +717,7 @@
     function syncToFirebase() {
         if(!isFirebaseActive || !getUserKey()) return;
         getDB().ref('students_vocab/' + getUserKey()).set({
-            profile: userProfile, daily: dailyRecords, master: masterRecords, rain: rainRecords, land: landRecords, lastUpdated: new Date().toISOString()
+            profile: userProfile, daily: dailyRecords, master: masterRecords, rain: rainRecords, land: landRecords, race: raceRecords, lastUpdated: new Date().toISOString()
         });
     }
 
@@ -654,12 +737,15 @@
                     let data = child.val();
                     if(!data || !data.profile) return;
                     let clearedCount = data.daily ? Object.values(data.daily).filter(r => r.cleared).length : 0;
-                    html += `<tr><td>${data.profile.school}</td><td>${data.profile.gradeClass}</td><td>${data.profile.studentNum}</td>
-                        <td>${data.profile.studentName}</td><td><b>${clearedCount} / ${TOTAL_DAYS}</b></td>
-                        <td><button class="btn-delete" onclick="deleteStudentData('${child.key}')">삭제</button></td></tr>`;
+                    html += `<tr><td>${escapeHTML(data.profile.school)}</td><td>${escapeHTML(data.profile.gradeClass)}</td><td>${escapeHTML(data.profile.studentNum)}</td>
+                        <td>${escapeHTML(data.profile.studentName)}</td><td><b>${clearedCount} / ${TOTAL_DAYS}</b></td>
+                        <td><button class="btn-delete" data-key="${escapeHTML(child.key)}">삭제</button></td></tr>`;
                 });
             } else { html = '<tr><td colspan="6">저장된 학생 기록이 없습니다.</td></tr>'; }
             document.getElementById('adminTableBody').innerHTML = html;
+            document.querySelectorAll('#adminTableBody .btn-delete').forEach(btn => {
+                btn.addEventListener('click', () => deleteStudentData(btn.dataset.key));
+            });
         }).catch(err => { document.getElementById('adminTableBody').innerHTML = '<tr><td colspan="6">데이터 불러오기 실패!</td></tr>'; });
     }
 
@@ -675,12 +761,18 @@
         }
     }
 
+    function resetAllRaceRooms() {
+        if(confirm("현재 진행 중인 모든 [로켓 레이스 방]을 강제로 종료(폭파)하시겠습니까?")) {
+            if(isFirebaseActive) getDB().ref('raceRooms_vocab').remove().then(() => alert("모든 방이 초기화되었습니다."));
+        }
+    }
+
     function deleteAllData() {
         if(confirm("⚠️ 경고: 서버에 저장된 '모든 학생'의 기록을 완전히 삭제합니다.\n정말 진행하시겠습니까?")) {
             Promise.all([ 
                 getDB().ref('students_vocab').remove(), getDB().ref('rankings_vocab').remove(), 
                 getDB().ref('rankings_vocab_rain').remove(), getDB().ref('rankings_vocab_land_solo').remove(), getDB().ref('rankings_vocab_land_team').remove(), 
-                getDB().ref('landGrabRooms_vocab').remove() 
+                getDB().ref('rankings_vocab_race').remove(), getDB().ref('landGrabRooms_vocab').remove(), getDB().ref('raceRooms_vocab').remove()
             ]).then(() => { alert("모든 기록이 초기화되었습니다."); fetchAdminData(); });
         }
     }
@@ -719,7 +811,7 @@
     let currentRankingType = 'master'; 
     function showRankingMenu(initialStage = 1, type = 'master') {
         currentRankingType = type; showScreen('rankingScreen');
-        document.getElementById('rankingTitle').innerText = type === 'master' ? '🏆 스피드런 명예의 전당' : (type === 'rain' ? '🏆 디펜스 명예의 전당' : '🏆 땅따먹기 명예의 전당');
+        document.getElementById('rankingTitle').innerText = type === 'master' ? '🏆 스피드런 명예의 전당' : (type === 'rain' ? '🏆 디펜스 명예의 전당' : (type === 'race' ? '🏆 로켓 레이스 명예의 전당' : '🏆 땅따먹기 명예의 전당'));
         
         let toggleDiv = document.getElementById('landRankingToggle');
         if(type === 'land') {
@@ -764,11 +856,13 @@
         let dbPath;
         if (currentRankingType === 'master') dbPath = `rankings_vocab/stage_${stage}`;
         else if (currentRankingType === 'rain') dbPath = `rankings_vocab_rain/stage_${stage}`;
+        else if (currentRankingType === 'race') dbPath = `rankings_vocab_race/stage_${stage}`;
         else dbPath = landRankMode === 'solo' ? `rankings_vocab_land_solo/stage_${stage}` : `rankings_vocab_land_team/stage_${stage}`;
 
         let query;
         if (currentRankingType === 'master') query = getDB().ref(dbPath).orderByChild('time').limitToFirst(10);
         else if (currentRankingType === 'rain') query = getDB().ref(dbPath).orderByChild('score').limitToLast(10);
+        else if (currentRankingType === 'race') query = getDB().ref(dbPath).orderByChild('firsts').limitToLast(10);
         else if (currentRankingType === 'land') {
             if (landRankMode === 'solo') query = getDB().ref(dbPath).orderByChild('soloFirsts').limitToLast(10);
             else query = getDB().ref(dbPath).orderByChild('teamWins').limitToLast(10);
@@ -779,6 +873,7 @@
             snapshot.forEach(child => { results.push(child.val()); });
             
             if(currentRankingType === 'rain') { results.sort((a,b) => b.score - a.score); } 
+            else if(currentRankingType === 'race') { results.sort((a,b) => b.firsts - a.firsts); }
             else if (currentRankingType === 'land') {
                 if (landRankMode === 'solo') results.sort((a,b) => b.soloFirsts - a.soloFirsts);
                 else results.sort((a,b) => {
@@ -794,11 +889,12 @@
                 let displayVal = '';
                 if (currentRankingType === 'master') displayVal = formatTime(data.time);
                 else if (currentRankingType === 'rain') displayVal = formatTime(data.score);
+                else if (currentRankingType === 'race') displayVal = `🥇 1등 ${data.firsts}회`;
                 else if (currentRankingType === 'land') {
                     if (landRankMode === 'solo') displayVal = `👑 1등 ${data.soloFirsts}회`;
                     else displayVal = `${data.teamWins}승 ${data.teamDraws||0}무 ${data.teamLosses||0}패`;
                 }
-                item.innerHTML = `<span>${index+1}위: ${data.name} (${data.classInfo}반)</span><span>${displayVal}</span>`;
+                item.innerHTML = `<span>${index+1}위: ${escapeHTML(data.name)} (${escapeHTML(data.classInfo)}반)</span><span>${displayVal}</span>`;
                 list.appendChild(item);
             });
         });
@@ -810,6 +906,7 @@
         else if (tab === 'master') { document.getElementById('tabMaster').classList.add('active'); initMasterHome(); showScreen('masterStageScreen'); } 
         else if (tab === 'rain') { document.getElementById('tabRain').classList.add('active'); initRainHome(); showScreen('rainStageScreen'); }
         else if (tab === 'land') { document.getElementById('tabLand').classList.add('active'); initLandGrabHome(); showScreen('landStageScreen'); }
+        else if (tab === 'race') { document.getElementById('tabRace').classList.add('active'); initRaceHome(); showScreen('raceStageScreen'); }
     }
 
     function initHome() {
@@ -914,6 +1011,29 @@
         }
     }
 
+    function initRaceHome() {
+        const grid = document.getElementById('raceGrid'); grid.innerHTML = '';
+        for(let s = 1; s <= TOTAL_MASTER_STAGES; s++) {
+            const btn = document.createElement('button'); btn.classList.add('day-btn');
+            const record = raceRecords[s]; let rateText = "전적: 없음";
+            if(record && record.plays > 0) { rateText = `🥇 1등 ${record.firsts||0}회 / 총 ${record.plays}회 참가`; }
+
+            let reqDay1 = (s - 1) * 2 + 1, reqDay2 = s * 2, isLocked = false;
+            if (!(dailyRecords[reqDay1] && dailyRecords[reqDay1].cleared)) isLocked = true;
+            if (reqDay2 <= TOTAL_DAYS && !(dailyRecords[reqDay2] && dailyRecords[reqDay2].cleared)) isLocked = true;
+
+            if (isLocked) {
+                btn.innerHTML = `${s}탄 <div style="font-size:0.8rem; color:var(--error); margin-top:5px;">🔒 매일학습 ${reqDay1}~${reqDay2 <= TOTAL_DAYS ? reqDay2 : TOTAL_DAYS}일차 필요</div>`;
+                btn.classList.add('locked-btn'); btn.onclick = () => alert(`🔒 먼저 [매일학습 ${reqDay1}~${reqDay2 <= TOTAL_DAYS ? reqDay2 : TOTAL_DAYS}일차]를 클리어하세요!`);
+            } else {
+                btn.innerHTML = `${s}탄 <span class="clear-badge" style="background:#f97316;">✅ 참가 가능</span><div class="daily-rate">${rateText}</div>`;
+                if(record && record.plays > 0) { btn.classList.add('cleared'); btn.style.borderColor = '#f97316'; btn.style.backgroundColor = '#fff7ed'; }
+                btn.onclick = () => joinRaceRoom(s);
+            }
+            grid.appendChild(btn);
+        }
+    }
+
     function showScreen(screenId) {
         document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
         document.getElementById(screenId).classList.add('active');
@@ -923,6 +1043,7 @@
         if(document.getElementById('tabMaster').classList.contains('active')) switchMainTab('master');
         else if(document.getElementById('tabRain').classList.contains('active')) switchMainTab('rain');
         else if(document.getElementById('tabLand').classList.contains('active')) switchMainTab('land');
+        else if(document.getElementById('tabRace').classList.contains('active')) switchMainTab('race');
         else switchMainTab('daily');
     }
 
@@ -1371,12 +1492,27 @@
         });
     }
 
+    // 방장이 접속을 끊어 사라진 경우, 남아있는 학생 중 한 명이 자동으로 방장 권한을 이어받도록 함
+    // (여러 클라이언트가 동시에 시도해도 트랜잭션으로 안전하게 한 번만 반영됨 - 땅따먹기/로켓 레이스 공용)
+    function attemptHostMigration(roomRef) {
+        roomRef.transaction(data => {
+            if(!data) return data;
+            let curPlayers = data.players || {};
+            if (data.host && curPlayers[data.host]) return data; // 방장이 이미 정상이면 그대로 둠
+            let remaining = Object.keys(curPlayers).filter(k => curPlayers[k] && curPlayers[k].name).sort();
+            if (remaining.length === 0) return data; // 아무도 없으면 그대로 둠 (곧 방 자체가 정리됨)
+            data.host = remaining[0];
+            return data;
+        });
+    }
+
     function handleLandRoomUpdate(snap) {
         if(!inLandGrabRoom) return; let data = snap.val();
         if(!data || !data.players || !data.players[getUserKey()]) return quitLandLobby();
 
-        let players = data.players || {}, hostKey = data.host, isHost = (hostKey === getUserKey());
-        if (hostKey && !players[hostKey] && !isHost) { alert("방장이 퇴장하여 방이 폭파되었습니다."); return quitLandLobby(); }
+        let players = data.players || {}, hostKey = data.host;
+        if (hostKey && !players[hostKey]) { attemptHostMigration(landRoomRef); }
+        let isHost = (hostKey === getUserKey());
 
         let modeSelect = document.getElementById('lobbyModeSelect'), hostActions = document.getElementById('lobbyHostActions'), guestMsg = document.getElementById('lobbyGuestMessage'), resetBtn = document.getElementById('btnLandReset');
         if(modeSelect) modeSelect.disabled = !isHost; if(hostActions) hostActions.style.display = isHost ? 'flex' : 'none';
@@ -1397,11 +1533,11 @@
         if(mode === 'solo') {
             document.getElementById('lobbySoloUI').style.display = 'block'; document.getElementById('lobbyTeamUI').style.display = 'none'; document.getElementById('btnRandomTeam').style.display = 'none';
             let listEl = document.getElementById('lobbySoloList'); listEl.innerHTML = '';
-            Object.values(players).forEach(p => { let div = document.createElement('div'); div.className = 'lobby-player'; div.innerHTML = `<div class="land-color-dot" style="background-color:${p.color}"></div> ${p.name}`; listEl.appendChild(div); });
+            Object.values(players).forEach(p => { let div = document.createElement('div'); div.className = 'lobby-player'; div.innerHTML = `<div class="land-color-dot" style="background-color:${p.color}"></div> ${escapeHTML(p.name)}`; listEl.appendChild(div); });
         } else {
             document.getElementById('lobbySoloUI').style.display = 'none'; document.getElementById('lobbyTeamUI').style.display = 'block'; document.getElementById('btnRandomTeam').style.display = (data.host === getUserKey()) ? 'block' : 'none';
             let listA = document.getElementById('lobbyTeamAList'); listA.innerHTML = ''; let listB = document.getElementById('lobbyTeamBList'); listB.innerHTML = '';
-            Object.values(players).forEach(p => { let div = document.createElement('div'); div.className = 'lobby-player'; div.innerHTML = `👤 ${p.name}`; if(p.team === 'A') listA.appendChild(div); else listB.appendChild(div); });
+            Object.values(players).forEach(p => { let div = document.createElement('div'); div.className = 'lobby-player'; div.innerHTML = `👤 ${escapeHTML(p.name)}`; if(p.team === 'A') listA.appendChild(div); else listB.appendChild(div); });
         }
     }
 
@@ -1412,6 +1548,19 @@
             let keys = Object.keys(snap.val() || {}).sort(() => Math.random() - 0.5), updates = {};
             keys.forEach((k, idx) => updates[`${k}/team`] = (idx % 2 === 0) ? 'A' : 'B');
             landRoomRef.child('players').update(updates);
+        });
+    }
+
+    // [버그 수정] 게임 화면의 "방 폭파" 버튼에 연결되어 있었지만 정의되지 않았던 함수
+    // 방장이 진행 중인 게임을 중단하고 대기실로 되돌릴 수 있게 함
+    function resetLandGrabRoom() {
+        if(!landRoomRef) return;
+        if(!confirm("진행 중인 게임을 중단하고 대기실로 되돌리시겠습니까?\n(현재까지의 점령 기록은 사라집니다)")) return;
+        landRoomRef.transaction(data => {
+            if(!data) return data;
+            data.status = 'waiting';
+            data.board = null;
+            return data;
         });
     }
 
@@ -1478,7 +1627,7 @@
             Object.values(players).sort((a,b) => (b.score||0) - (a.score||0)).forEach((p, idx) => {
                 if((p.score||0)>0 || idx<5) {
                     let chip = document.createElement('div'); chip.className = 'land-player-chip';
-                    chip.innerHTML = `<div class="land-color-dot" style="background-color:${p.color}"></div> ${p.name} <b style="color:var(--primary);">${p.score||0}땅</b>`; lbEl.appendChild(chip);
+                    chip.innerHTML = `<div class="land-color-dot" style="background-color:${p.color}"></div> ${escapeHTML(p.name)} <b style="color:var(--primary);">${p.score||0}땅</b>`; lbEl.appendChild(chip);
                 }
             });
         }
@@ -1530,7 +1679,9 @@
     }
 
     function endLandGrabGame(data) {
-        if(!inLandGrabRoom) return; landRoomRef.off('value', handleLandRoomUpdate); inLandGrabRoom = false; if(landPenaltyInterval) clearInterval(landPenaltyInterval);
+        if(!inLandGrabRoom) return;
+        let roomRefLocal = landRoomRef;
+        landRoomRef.off('value', handleLandRoomUpdate); inLandGrabRoom = false; if(landPenaltyInterval) clearInterval(landPenaltyInterval);
         let players = data.players || {}, mode = data.mode || 'solo', myData = players[getUserKey()], myScore = myData ? (myData.score || 0) : 0;
         let comment = "", winStatus = "loss";
 
@@ -1548,7 +1699,7 @@
             let topScore = sortedPlayers.length > 0 ? sortedPlayers[0].score : 0;
             if (myScore === topScore && topScore > 0) winStatus = "win"; 
             let winner = sortedPlayers[0];
-            comment = winner ? `모든 땅이 점령되었습니다!<br>🏆 <b>최종 1위: ${winner.name} (${winner.score || 0}땅)</b>` : `게임이 종료되었습니다!`;
+            comment = winner ? `모든 땅이 점령되었습니다!<br>🏆 <b>최종 1위: ${escapeHTML(winner.name)} (${winner.score || 0}땅)</b>` : `게임이 종료되었습니다!`;
         }
         
         let prevRecord = landRecords[currentLandStage] || {};
@@ -1584,6 +1735,14 @@
         landRecords[currentLandStage] = prevRecord;
         localStorage.setItem('landRecords', JSON.stringify(landRecords));
         syncToFirebase();
+
+        // 방을 '대기중' 상태로 되돌려 같은 방 이름으로 바로 재도전할 수 있게 함
+        // (여러 학생이 동시에 시도해도 status가 'playing'일 때 딱 한 번만 반영되어 안전함)
+        roomRefLocal.transaction(roomData => {
+            if(!roomData || roomData.status !== 'playing') return roomData;
+            roomData.status = 'waiting';
+            return roomData;
+        });
 
         document.getElementById('btnReviewMissed').style.display = 'none';
         document.getElementById('resultTitle').innerText = winStatus === "win" ? "🏆 승리!" : (winStatus === "draw" ? "🤝 무승부" : "💀 패배...");
@@ -1626,6 +1785,276 @@
             leaveLandRoomCleanup();
         }
         document.getElementById('landBoard').innerHTML = ''; goToHome();
+    }
+
+    // =========================================================
+    // 🚀 로켓 레이스 (실시간 경쟁 타이핑 레이스)
+    // - 객관식이 전혀 없음: 뜻을 보고 정확한 낱말을 직접 타이핑해야만 로켓이 전진합니다.
+    // - 같은 방의 모든 학생이 동시에 같은 단어 순서로 경주하며, 트랙이 실시간으로 공유됩니다.
+    // - 가장 먼저 완주한 학생이 1등이며, 각자 자기 속도로 끝까지 완주할 수 있습니다.
+    // =========================================================
+
+    function joinRaceRoom(stage) {
+        if(!isFirebaseActive) { alert("서버 연결이 필요합니다."); return; }
+        let roomCodeRaw = prompt(`${stage}탄 로켓 레이스에 접속합니다.\n[방 이름]을 입력하세요. (예: 1모둠, 자유방)`);
+        if(!roomCodeRaw || roomCodeRaw.trim() === '') return;
+        let roomCode = roomCodeRaw.trim().replace(/[\.\#\$\[\]\/]/g, "");
+        if(roomCode === '') { alert("방 이름에 사용할 수 없는 문자만 입력하셨습니다. 다른 이름으로 다시 시도해주세요."); return; }
+        currentRaceRoomCode = roomCode; currentRaceStage = stage;
+        raceRoomRef = getDB().ref(`raceRooms_vocab/stage_${stage}_${currentRaceRoomCode}`);
+
+        let startDay = (stage - 1) * 2 + 1, endDay = Math.min(stage * 2, TOTAL_DAYS);
+        let titleTxt = `${stage}탄 (${startDay}~${endDay}일차) - [${currentRaceRoomCode}]방`;
+        document.getElementById('raceLobbyStageTitleText').innerText = titleTxt; document.getElementById('raceGameStageTitle').innerText = titleTxt;
+
+        let myKey = getUserKey();
+
+        raceRoomRef.transaction(data => {
+            data = data || {};
+            let players = data.players || {}, validPlayers = {}, hostExists = false;
+            Object.keys(players).forEach(k => {
+                if(players[k] && players[k].name) { validPlayers[k] = players[k]; if(k === data.host) hostExists = true; }
+            });
+            players = validPlayers;
+            let pCount = Object.keys(players).length;
+
+            if (pCount === 0 || (data.host && !hostExists)) {
+                data = { host: myKey, status: 'waiting', players: {} };
+                players = {}; pCount = 0;
+            }
+
+            if (players[myKey]) { data.players = players; return data; }
+            if (data.status === 'playing') return;
+            if (pCount >= 25) return;
+
+            let usedColors = new Set(Object.values(players).map(p => p.color));
+            let colorIdx = 0;
+            while (usedColors.has(getPlayerColor(colorIdx))) colorIdx++;
+            players[myKey] = { name: userProfile.studentName, color: getPlayerColor(colorIdx), position: 0, finished: false, finishRank: null, order: pCount };
+            data.players = players;
+            if (!data.host) data.host = myKey;
+            if (!data.status) data.status = 'waiting';
+            return data;
+        }, (error, committed, snapshot) => {
+            if (error) { alert("입장 중 오류가 발생했습니다. 다시 시도해주세요."); return; }
+            if (!committed) {
+                let d = (snapshot && snapshot.val()) || {};
+                if (d.status === 'playing') alert("진행 중인 게임입니다!");
+                else alert("방이 꽉 찼습니다.");
+                return;
+            }
+
+            raceRoomRef.child('players/' + myKey).onDisconnect().remove();
+            inRaceRoom = true;
+            showScreen('raceLobbyScreen'); raceRoomRef.on('value', handleRaceRoomUpdate);
+        });
+    }
+
+    function handleRaceRoomUpdate(snap) {
+        if(!inRaceRoom) return; let data = snap.val();
+        currentRaceRoomData = data;
+        if(!data || !data.players || !data.players[getUserKey()]) return quitRaceLobby();
+
+        let players = data.players || {}, hostKey = data.host;
+        if (hostKey && !players[hostKey]) { attemptHostMigration(raceRoomRef); }
+        let isHost = (hostKey === getUserKey());
+
+        let hostActions = document.getElementById('raceLobbyHostActions'), guestMsg = document.getElementById('raceLobbyGuestMessage');
+        if(hostActions) hostActions.style.display = isHost ? 'flex' : 'none';
+        if(guestMsg) guestMsg.style.display = isHost ? 'none' : 'block';
+
+        if((data.status || 'waiting') === 'waiting') {
+            if(!document.getElementById('raceLobbyScreen').classList.contains('active')) showScreen('raceLobbyScreen');
+            renderRaceLobby(data);
+        } else if(data.status === 'playing') {
+            if(!document.getElementById('raceGameScreen').classList.contains('active')) { initRaceGameUI(data); showScreen('raceGameScreen'); }
+            renderRaceGame(data);
+        }
+    }
+
+    function renderRaceLobby(data) {
+        let players = data.players || {};
+        let listEl = document.getElementById('raceLobbyPlayerList'); listEl.innerHTML = '';
+        Object.values(players).sort((a,b) => (a.order||0)-(b.order||0)).forEach(p => {
+            let div = document.createElement('div'); div.className = 'lobby-player';
+            div.innerHTML = `<div class="land-color-dot" style="background-color:${p.color}"></div> ${escapeHTML(p.name)}`;
+            listEl.appendChild(div);
+        });
+    }
+
+    function startRaceGame() {
+        raceRoomRef.once('value').then(snap => {
+            let data = snap.val() || {};
+            let startIdx = (currentRaceStage - 1) * MASTER_WORDS_PER_STAGE;
+            let stagePool = rawWords.slice(startIdx, startIdx + MASTER_WORDS_PER_STAGE);
+            // 스테이지 단어 풀(최대 50개) 중 매번 무작위로 15개를 뽑아 레이스를 구성 → 재도전할 때마다 새로운 조합
+            let sequence = shuffleArray(stagePool).slice(0, RACE_WORDS_PER_STAGE).map(w => ({ w: w.w, m: w.m }));
+            if(sequence.length < RACE_WORDS_PER_STAGE) {
+                let usedW = sequence.map(x => x.w);
+                let extra = rawWords.filter(w => !usedW.includes(w.w));
+                sequence = sequence.concat(shuffleArray(extra).slice(0, RACE_WORDS_PER_STAGE - sequence.length).map(w => ({ w: w.w, m: w.m })));
+            }
+            let currentPlayers = data.players || {};
+            Object.keys(currentPlayers).forEach(k => { currentPlayers[k].position = 0; currentPlayers[k].finished = false; currentPlayers[k].finishRank = null; });
+            raceRoomRef.update({ status: 'playing', wordSequence: sequence, finishedCount: 0, players: currentPlayers });
+        });
+    }
+
+    function initRaceGameUI(data) {
+        let players = data.players || {};
+        raceLaneOrder = Object.keys(players).sort((a,b) => (players[a].order||0) - (players[b].order||0));
+        let track = document.getElementById('raceTrackContainer'); track.innerHTML = '';
+        raceLaneOrder.forEach((key, idx) => {
+            let p = players[key];
+            let lane = document.createElement('div'); lane.className = 'race-lane';
+            lane.innerHTML = `<div class="race-track-line"></div><div class="race-finish-flag">🏁</div>
+                <div class="race-runner" id="race_runner_${idx}" style="left:4%;">
+                    <div class="race-runner-name" style="background:${p.color};">${escapeHTML(p.name)}</div>🚀
+                </div>`;
+            track.appendChild(lane);
+        });
+        let inputEl = document.getElementById('raceInput');
+        inputEl.value = ''; inputEl.disabled = false; document.getElementById('raceSubmitBtn').disabled = false;
+        document.getElementById('raceInteractionBox').className = 'race-interaction-box';
+        myRaceFinishShown = false; inputEl.focus();
+    }
+
+    function renderRaceGame(data) {
+        let players = data.players || {}, sequence = data.wordSequence || [];
+        let total = sequence.length;
+        let myKey = getUserKey(), myData = players[myKey];
+
+        let resetBtn = document.getElementById('btnRaceReset');
+        if(resetBtn) resetBtn.style.display = (data.host === myKey) ? 'inline-block' : 'none';
+
+        raceLaneOrder.forEach((key, idx) => {
+            let p = players[key]; if(!p) return;
+            let runner = document.getElementById('race_runner_' + idx); if(!runner) return;
+            let pct = total > 0 ? Math.min(100, (p.position / total) * 90) : 0;
+            runner.style.left = (4 + pct) + '%';
+            if(p.finished) runner.classList.add('finished'); else runner.classList.remove('finished');
+        });
+
+        let standing = Object.values(players).slice().sort((a,b) => {
+            if(a.finished && b.finished) return (a.finishRank||0)-(b.finishRank||0);
+            if(a.finished) return -1; if(b.finished) return 1;
+            return (b.position||0)-(a.position||0);
+        });
+        let myRank = standing.findIndex(p => p === myData) + 1;
+        document.getElementById('raceMyRankDisplay').innerText = myRank > 0 ? `${myRank}위` : '-';
+
+        if(!myData) return;
+
+        if(myData.finished) {
+            if(!myRaceFinishShown) { myRaceFinishShown = true; showRaceFinishResult(myData, total, data); }
+            return;
+        }
+
+        let idx = myData.position || 0;
+        if(idx < total) {
+            document.getElementById('raceProgressLabel').innerText = `${idx+1} / ${total}`;
+            document.getElementById('raceTargetMean').innerText = sequence[idx].m;
+        }
+
+        // 방에 남아있는 모든 선수가 완주하면 자동으로 대기실 상태로 되돌려 같은 방에서 바로 재도전 가능하게 함
+        // (여러 클라이언트가 동시에 감지해도 트랜잭션으로 안전하게 한 번만 반영됨)
+        let allPlayers = Object.values(players);
+        if(allPlayers.length > 0 && allPlayers.every(p => p.finished)) {
+            raceRoomRef.transaction(roomData => {
+                if(!roomData || roomData.status !== 'playing') return roomData;
+                roomData.status = 'waiting';
+                return roomData;
+            });
+        }
+    }
+
+    function showRaceFinishResult(myData, total, data) {
+        inRaceRoom = false; raceRoomRef.off('value', handleRaceRoomUpdate);
+        let rank = myData.finishRank || 1;
+        let prevRecord = raceRecords[currentRaceStage] || { plays: 0, firsts: 0, bestRank: null };
+        prevRecord.plays = (prevRecord.plays || 0) + 1;
+        if(rank === 1) prevRecord.firsts = (prevRecord.firsts || 0) + 1;
+        if(!prevRecord.bestRank || rank < prevRecord.bestRank) prevRecord.bestRank = rank;
+        raceRecords[currentRaceStage] = prevRecord;
+        localStorage.setItem('raceRecords', JSON.stringify(raceRecords)); syncToFirebase();
+
+        if(isFirebaseActive && getUserKey()) {
+            getDB().ref('rankings_vocab_race/stage_' + currentRaceStage + '/' + getUserKey()).set({
+                name: userProfile.studentName, classInfo: userProfile.gradeClass, firsts: prevRecord.firsts, plays: prevRecord.plays
+            });
+        }
+
+        let totalPlayers = Object.keys(data.players || {}).length;
+        document.getElementById('btnReviewMissed').style.display = 'none';
+        document.getElementById('resultTitle').innerText = rank === 1 ? "🥇 1등으로 완주!" : `🚀 ${rank}등으로 완주!`;
+        document.getElementById('resultScore').innerText = `${rank}위 / ${totalPlayers}명 중`;
+        document.getElementById('resultComment').innerHTML = rank === 1 ? "가장 먼저 결승선을 통과했습니다! 최고예요!" : "완주를 축하합니다! 다음엔 1등에 도전해 보세요.";
+        document.getElementById('btnGoHome').onclick = goToHome;
+        showScreen('resultScreen');
+    }
+
+    document.getElementById('raceInput').addEventListener('keydown', (e) => { if(e.key === 'Enter') submitRaceWord(); });
+
+    function submitRaceWord() {
+        let inputEl = document.getElementById('raceInput'), val = normalizeForCompare(inputEl.value); if(!val) return;
+        let data = currentRaceRoomData; if(!data || data.status !== 'playing') return;
+        let sequence = data.wordSequence || []; let myKey = getUserKey();
+        let myData = (data.players || {})[myKey]; if(!myData || myData.finished) return;
+        let idx = myData.position || 0;
+        if(idx >= sequence.length) return;
+
+        if(val === normalizeForCompare(sequence[idx].w)) {
+            inputEl.value = '';
+            raceRoomRef.child(`players/${myKey}/position`).transaction(pos => (pos||0) + 1).then(result => {
+                if(!result.committed) return;
+                let newPos = result.snapshot.val();
+                if(newPos >= sequence.length) {
+                    raceRoomRef.child('finishedCount').transaction(c => (c||0) + 1).then(res => {
+                        let rank = res.snapshot.val();
+                        raceRoomRef.child(`players/${myKey}`).update({ finished: true, finishRank: rank });
+                    });
+                }
+            });
+        } else {
+            inputEl.value = ''; inputEl.classList.add('shake'); inputEl.style.borderColor = '#ef4444';
+            setTimeout(() => { inputEl.classList.remove('shake'); inputEl.style.borderColor = ''; }, 300);
+        }
+    }
+
+    function leaveRaceRoomCleanup(onDone) {
+        if(!raceRoomRef) { if(onDone) onDone(); return; }
+        let myKey = getUserKey();
+        raceRoomRef.child('players').once('value').then(snap => {
+            let players = snap.exists() ? (snap.val() || {}) : {};
+            let otherKeys = Object.keys(players).filter(k => k !== myKey && players[k] && players[k].name);
+            if(otherKeys.length === 0) {
+                raceRoomRef.remove().then(() => { if(onDone) onDone(); }).catch(() => { if(onDone) onDone(); });
+            } else {
+                raceRoomRef.child('players/' + myKey).remove().then(() => { if(onDone) onDone(); }).catch(() => { if(onDone) onDone(); });
+            }
+        }).catch(() => { if(onDone) onDone(); });
+    }
+
+    // 방장이 진행 중인 레이스를 중단하고 대기실로 되돌릴 수 있게 함 (땅따먹기의 resetLandGrabRoom과 동일한 역할)
+    function resetRaceRoom() {
+        if(!raceRoomRef) return;
+        if(!confirm("진행 중인 레이스를 중단하고 대기실로 되돌리시겠습니까?")) return;
+        raceRoomRef.transaction(data => {
+            if(!data) return data;
+            data.status = 'waiting';
+            return data;
+        });
+    }
+
+    function quitRaceLobby() {
+        inRaceRoom = false;
+        if(raceRoomRef) { raceRoomRef.off('value', handleRaceRoomUpdate); leaveRaceRoomCleanup(); }
+        document.getElementById('raceTrackContainer').innerHTML = ''; goToHome();
+    }
+
+    function quitRaceGame() {
+        if(!confirm("레이스를 나가시겠습니까?")) return;
+        quitRaceLobby();
     }
 </script>
 </body>
