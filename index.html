@@ -293,7 +293,7 @@
         .race-crown { position: absolute; bottom: 42px; left: 50%; transform: translateX(-50%); font-size: 1.05rem; display: none; z-index: 6; filter: drop-shadow(0 1px 2px rgba(0,0,0,0.5)); animation: raceCrownBob 1s ease-in-out infinite; }
         @keyframes raceCrownBob { 0%,100% { transform: translateX(-50%) translateY(0); } 50% { transform: translateX(-50%) translateY(-3px); } }
 
-        /* ✨ 정답 파티클 (콤보에 따라 파랑→빨강→보라) */
+        /* ✨ 정답 파티클 */
         .race-particle { position: absolute; left: 50%; top: 50%; width: 5px; height: 5px; border-radius: 50%; pointer-events: none; z-index: 4; animation: raceParticleBurst 0.5s ease-out forwards; }
         @keyframes raceParticleBurst { 0% { transform: translate(-50%,-50%) translate(0,0) scale(1); opacity: 1; } 100% { transform: translate(-50%,-50%) translate(var(--px), var(--py)) scale(0.3); opacity: 0; } }
 
@@ -306,7 +306,7 @@
         .race-sweat { position: absolute; top: -10px; right: -8px; font-size: 0.85rem; pointer-events: none; z-index: 6; animation: raceSweatPop 0.7s ease-out forwards; }
         @keyframes raceSweatPop { 0% { transform: scale(0) translateY(4px); opacity: 0; } 30% { transform: scale(1.3) translateY(-2px); opacity: 1; } 100% { transform: scale(1) translateY(-10px); opacity: 0; } }
 
-        /* 🌫️ 아이템 공격: 3콤보 달성 시 다른 플레이어 시야 방해 */
+        /* 🌫️ 아이템 공격: 시야 방해 */
         .race-fog-overlay { position: absolute; inset: 0; z-index: 40; display: flex; align-items: flex-end; justify-content: center; padding-bottom: 10px; background: radial-gradient(ellipse at center, rgba(30,20,10,0.2), rgba(10,6,3,0.82) 88%); backdrop-filter: blur(2.5px); -webkit-backdrop-filter: blur(2.5px); opacity: 0; pointer-events: none; transition: opacity 0.35s ease; color: #fca5a5; font-weight: bold; font-size: 0.82rem; border-radius: 14px; text-align: center; }
         .race-fog-overlay.show { opacity: 1; }
 
@@ -315,7 +315,7 @@
         .race-stamp.show { animation: raceStampSlam 0.9s cubic-bezier(.2,1.1,.4,1) forwards; }
         @keyframes raceStampSlam { 0% { opacity: 0; transform: scale(2.2) rotate(-10deg); } 15% { opacity: 1; transform: scale(0.92) rotate(2deg); } 25% { transform: scale(1.06) rotate(-2deg); } 35% { transform: scale(1) rotate(0); } 75% { opacity: 1; transform: scale(1) rotate(0); } 100% { opacity: 0; transform: scale(1.08) rotate(0); } }
 
-        /* 🚨 라스트 스퍼트 (결승선 3단어 이하) */
+        /* 🚨 라스트 스퍼트 */
         #raceGameScreen.last-spurt { animation: raceLastSpurtBorder 0.8s ease-in-out infinite; }
         @keyframes raceLastSpurtBorder { 0%,100% { box-shadow: 0 0 0 3px rgba(239,68,68,0.12) inset; } 50% { box-shadow: 0 0 0 3px rgba(239,68,68,0.75) inset; } }
         .race-last-spurt-banner { display: none; text-align: center; font-weight: 900; color: #dc2626; background: #fef2f2; border: 2px solid #fca5a5; border-radius: 10px; padding: 7px; margin-bottom: 12px; font-size: 0.95rem; animation: raceLastSpurtBlink 0.8s ease-in-out infinite; }
@@ -346,6 +346,31 @@
 
         .race-rank-toast { position: fixed; top: 90px; left: 50%; transform: translateX(-50%) translateY(-20px); background: #1e293b; color: white; font-weight: bold; padding: 10px 20px; border-radius: 24px; box-shadow: 0 6px 16px rgba(0,0,0,0.25); z-index: 500; opacity: 0; transition: 0.25s; pointer-events: none; white-space: nowrap; }
         .race-rank-toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+        /* 💣 폭탄 먹물 & 지진 효과 */
+        .shake-screen { animation: raceScreenShake 0.4s infinite; }
+        @keyframes raceScreenShake {
+            0% { transform: translate(2px, 1px) rotate(0deg); }
+            10% { transform: translate(-1px, -2px) rotate(-1deg); }
+            20% { transform: translate(-3px, 0px) rotate(1deg); }
+            30% { transform: translate(0px, 2px) rotate(0deg); }
+            40% { transform: translate(1px, -1px) rotate(1deg); }
+            50% { transform: translate(-1px, 2px) rotate(-1deg); }
+            60% { transform: translate(-3px, 1px) rotate(0deg); }
+            70% { transform: translate(2px, 1px) rotate(-1deg); }
+            80% { transform: translate(-1px, -1px) rotate(1deg); }
+            90% { transform: translate(2px, 2px) rotate(0deg); }
+            100% { transform: translate(1px, -2px) rotate(-1deg); }
+        }
+        .ink-splatter-overlay {
+            position: absolute; inset: 0; z-index: 100;
+            background: rgba(0, 0, 0, 0.9);
+            color: #ef4444; font-size: 1.8rem; font-weight: bold; text-align: center;
+            display: flex; flex-direction: column; justify-content: center; align-items: center;
+            pointer-events: none; opacity: 0; transition: opacity 0.2s; border-radius: 14px;
+        }
+        .ink-splatter-overlay.show { opacity: 1; pointer-events: auto; }
+        .ink-splatter-overlay span { font-size: 5rem; margin-bottom: 10px; }
     </style>
 </head>
 <body>
@@ -428,7 +453,7 @@
                 <span class="dashboard-title" style="color: #fb923c;">🚀 실시간 로켓 레이스 대결</span>
                 <button class="ranking-btn" style="background:#fed7aa; color:#9a3412;" onclick="showRankingMenu(1, 'race')">🏆 순위 보기</button>
             </div>
-            <p style="font-size: 0.95rem; color: #cbd5e1; margin-top: 10px; word-break: keep-all; line-height: 1.4;">같은 방에 모인 친구들과 동시에 출발! 뜻을 보고 정확한 낱말을 <b>직접 타이핑</b>해야 로켓이 앞으로 나갑니다.<br>🥇 객관식 없이, 가장 먼저 결승선을 통과하는 사람이 1등!<br>💡 초성 힌트와 이번 레이스 단어 목록을 함께 보여줘요.</p>
+            <p style="font-size: 0.95rem; color: #cbd5e1; margin-top: 10px; word-break: keep-all; line-height: 1.4;">같은 방에 모인 친구들과 동시에 출발! 뜻을 보고 정확한 낱말을 <b>직접 타이핑</b>해야 로켓이 앞으로 나갑니다.<br>🥇 객관식 없이, 가장 먼저 결승선을 통과하는 사람이 1등!</p>
         </div>
         <div class="day-grid" id="raceGrid"></div>
     </div>
@@ -564,10 +589,12 @@
             </div>
         </div>
         <div class="race-word-bank">
-            <h4>💡 이번 레이스에 나오는 단어 (가나다순) — 뜻을 보고 알맞은 단어를 찾아 타이핑하세요</h4>
+            <h4>💡 이번 단어 보기 (빠르게 찾아보세요!)</h4>
             <div class="race-word-bank-list" id="raceWordBankList"></div>
         </div>
         <div class="race-rank-toast" id="raceRankToast"></div>
+        <!-- 폭탄 효과 오버레이 -->
+        <div class="ink-splatter-overlay" id="raceInkOverlay"></div>
     </div>
 
     <!-- 일반 학습 화면들 -->
@@ -628,9 +655,6 @@
 </div>
 
 <script>
-    // =========================================================
-    // 🔥 파이어베이스 및 단어 데이터 세팅 (200단어 적용)
-    // =========================================================
     const firebaseConfig = {
         apiKey: "AIzaSyDfs4krriQYs41veoY_QemQ63R3Yru1xOs",
         authDomain: "yang2-66131.firebaseapp.com",
@@ -675,16 +699,12 @@
         const hue = (index * 137.508) % 360; return `hsl(${hue.toFixed(0)}, 70%, 45%)`;
     }
 
-    // 💡 마침표/쉼표 등 문장부호 무시 공용 함수
     function normalizeForCompare(str) { return String(str || '').replace(/[\s.,·~!?"'"'()]/g, ''); }
 
-    // 🔒 학생이 이름/학교 등에 입력한 텍스트를 화면(innerHTML)에 안전하게 표시하기 위한 이스케이프 함수
-    // (예: 이름란에 특수문자나 코드 비슷한 문자열을 입력해도 다른 학생/선생님 화면에서 실행되지 않도록 방지)
     function escapeHTML(str) {
         return String(str === undefined || str === null ? '' : str).replace(/[&<>"']/g, ch => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));
     }
 
-    // 🎲 배열을 고르게 섞는 셔플 함수 (피셔-예이츠)
     function shuffleArray(arr) {
         let a = [...arr];
         for(let i = a.length - 1; i > 0; i--) {
@@ -694,13 +714,12 @@
         return a;
     }
 
-    // 🚀 로켓 레이스 힌트용: 한글 낱말의 초성만 뽑아내는 함수 (예: "가치관" → "ㄱㅊㄱ")
     const CHOSEONG_LIST = ['ㄱ','ㄲ','ㄴ','ㄷ','ㄸ','ㄹ','ㅁ','ㅂ','ㅃ','ㅅ','ㅆ','ㅇ','ㅈ','ㅉ','ㅊ','ㅋ','ㅌ','ㅍ','ㅎ'];
     function getChoseongHint(word) {
         return String(word || '').split('').map(ch => {
             const code = ch.charCodeAt(0) - 0xAC00;
             if (code >= 0 && code <= 11171) return CHOSEONG_LIST[Math.floor(code / 588)];
-            return ch === ' ' ? ' ' : ch; // 완성된 한글 음절이 아니면 그대로 둠 (공백, 숫자 등)
+            return ch === ' ' ? ' ' : ch; 
         }).join('');
     }
 
@@ -716,7 +735,6 @@
     let landRecords = safeParseJSON('landRecords', {}); 
     let raceRecords = safeParseJSON('raceRecords', {});
 
-    // 게임 상태 변수들
     let currentDay = 1, studyQueue = [], quizQueue = [], missedWords = [];
     let currentStudyIndex = 0, currentQuizIdx = 0, score = 0, isReviewMode = false, currentSelectedOption = null;
     let masterStage = 1, masterWords = [], masterTargetQueue = [], masterCurrentIdx = 0, masterStartTime = 0, masterTimerReq = null;
@@ -732,8 +750,28 @@
     let raceComboCount = 0, racePrevRank = null, raceMyLaneIdx = -1;
     let raceLastSeenAttackSeq = {}, raceLastSeenMistakeSeq = {}, raceStampTimer = null;
     let raceSoundEnabled = localStorage.getItem('raceSoundEnabled') !== '0';
+    let raceQuestionStartTime = 0;
+    let raceHintTimer = null;
+    let raceCurrentQuestionIdx = -1;
+    let raceLocalBombTriggered = false;
 
-    // 땅따먹기 랭킹 모드 플래그
+    // 먹물 폭탄 효과 실행 함수
+    function triggerInkBombEffect(attackerName) {
+        let overlay = document.getElementById('raceInkOverlay');
+        let screen = document.getElementById('raceGameScreen');
+        if(!overlay || !screen) return;
+        
+        overlay.innerHTML = `<span>💣</span>${attackerName} 님이<br>숨겨진 폭탄을 터뜨렸습니다!`;
+        overlay.classList.add('show');
+        screen.classList.add('shake-screen');
+        
+        // 2.5초 뒤에 먹물 걷히고 지진 멈춤
+        setTimeout(() => {
+            overlay.classList.remove('show');
+            screen.classList.remove('shake-screen');
+        }, 2500);
+    }
+
     let landRankMode = 'solo'; 
 
     const wordInput = document.getElementById('wordInput');
@@ -799,7 +837,6 @@
 
     function logout() {
         if(confirm("로그아웃 하시겠습니까?\n(기기에 저장된 임시 기록은 사라지지만, 서버 기록은 유지됩니다.)")) {
-            // 학생 데이터 키만 삭제, adminPwd는 보존
             ['userProfile','dailyRecords','masterRecords','rainRecords','landRecords','raceRecords'].forEach(k => localStorage.removeItem(k));
             userProfile = null; dailyRecords = {}; masterRecords = {}; rainRecords = {}; landRecords = {}; raceRecords = {};
             document.getElementById('userProfileBar').style.display = 'none'; document.getElementById('mainTabs').style.display = 'none';
@@ -808,7 +845,6 @@
         }
     }
 
-    // 파이어베이스 경로 충돌 방지 문자 제거 (슬래시 / 포함)
     function getUserKey() {
         if(!userProfile) return null;
         return `${userProfile.school}_${userProfile.gradeClass}_${userProfile.studentNum}_${userProfile.studentName}`.replace(/[\.\#\$\[\]\/]/g, ""); 
@@ -828,7 +864,7 @@
     }
 
     function fetchAdminData() {
-        if(!isFirebaseActive) { document.getElementById('adminTableBody').innerHTML = '<tr><td colspan="6">파이어베이스가 연결되지 않았습니다.</td></tr>'; return; }
+        if(!isFirebaseActive) { document.getElementById('adminTableBody').innerHTML = '<tr><td colspan="6">서버가 연결되지 않았습니다.</td></tr>'; return; }
         document.getElementById('adminTableBody').innerHTML = '<tr><td colspan="6">데이터를 불러오는 중...</td></tr>';
         getDB().ref('students_vocab').once('value').then(snapshot => {
             let html = '';
@@ -905,9 +941,7 @@
         if(newPwd) { adminPassword = newPwd.trim(); localStorage.setItem('adminPwd', adminPassword); if(isFirebaseActive) getDB().ref('admin_vocab/password').set(adminPassword); alert("변경 완료"); }
     }
 
-    // =========================================================
-    // 🏆 랭킹 시스템 (땅따먹기 개인전/팀전 분리 반영)
-    // =========================================================
+    // 🏆 랭킹 시스템
     let currentRankingType = 'master'; 
     function showRankingMenu(initialStage = 1, type = 'master') {
         currentRankingType = type; showScreen('rankingScreen');
@@ -1147,7 +1181,6 @@
         else switchMainTab('daily');
     }
 
-    // ====== [매일 학습 로직] ====== 
     function saveAndExit() {
         if (isReviewMode) { if(confirm("오답 복습 중에는 임시 저장되지 않습니다. 나가시겠습니까?")) goToHome(); return; }
         let record = dailyRecords[currentDay] || { score: 0, total: 0, cleared: false, lastStudyIndex: 0 };
@@ -1265,7 +1298,6 @@
         document.getElementById('btnGoHome').onclick = goToHome; showScreen('resultScreen'); 
     }
 
-    // ====== [단어 스피드런(마스터)] ====== 
     let draggedChip = null, draggedWord = null, dragClone = null;
 
     function formatTime(ms) {
@@ -1352,16 +1384,12 @@
         if(!prevRecord || finalTime < prevRecord.bestTime) {
             masterRecords[masterStage] = { bestTime: finalTime, date: new Date().toISOString() };
             localStorage.setItem('masterRecords', JSON.stringify(masterRecords)); isNewBest = true; syncToFirebase();
-            if(isFirebaseActive) getDB().ref('rankings_vocab/stage_' + masterStage + '/' + getUserKey()).set({ name: userProfile.studentName, classInfo: userProfile.gradeClass, time: finalTime });
         }
         document.getElementById('resultTitle').innerText = "👑 스피드런 클리어!"; document.getElementById('resultScore').innerText = formatTime(finalTime); document.getElementById('btnReviewMissed').style.display = 'none';
         document.getElementById('resultComment').innerHTML = `대단합니다! 모든 단어를 찾았습니다.` + (isNewBest ? "<br>🎉 <b>최고 기록을 경신했습니다!</b>" : "");
         document.getElementById('btnGoHome').onclick = goToHome; showScreen('resultScreen');
     }
 
-    // =========================================================
-    // 🏰 디펜스 방어 게임 
-    // =========================================================
     function updateRainWordBank() {
         let bank = document.getElementById('rainWordBank');
         if(activeRainDrops.length === 0) { bank.innerHTML = '<span style="color:#94a3b8;">여기에 힌트 단어가 나타납니다.</span>'; return; }
@@ -1509,7 +1537,6 @@
                 rainRecords[rainStage] = { bestTimeMs: rainTimeMs, cleared: true, date: new Date().toISOString() };
                 localStorage.setItem('rainRecords', JSON.stringify(rainRecords));
                 isNewBest = true; syncToFirebase();
-                if(isFirebaseActive) getDB().ref('rankings_vocab_rain/stage_' + rainStage + '/' + getUserKey()).set({ name: userProfile.studentName, classInfo: userProfile.gradeClass, score: rainTimeMs });
             }
             document.getElementById('btnReviewMissed').style.display = 'none';
             document.getElementById('resultTitle').innerText = "💥 성벽 붕괴!";
@@ -1521,10 +1548,6 @@
         } catch (e) { console.error(e); }
         showScreen('resultScreen');
     }
-
-    // =========================================================
-    // 🏁 땅따먹기 (Land Grab) 
-    // =========================================================
 
     function joinLandGrabRoom(stage) {
         if(!isFirebaseActive) { alert("서버 연결이 필요합니다."); return; }
@@ -1592,15 +1615,13 @@
         });
     }
 
-    // 방장이 접속을 끊어 사라진 경우, 남아있는 학생 중 한 명이 자동으로 방장 권한을 이어받도록 함
-    // (여러 클라이언트가 동시에 시도해도 트랜잭션으로 안전하게 한 번만 반영됨 - 땅따먹기/로켓 레이스 공용)
     function attemptHostMigration(roomRef) {
         roomRef.transaction(data => {
             if(!data) return data;
             let curPlayers = data.players || {};
-            if (data.host && curPlayers[data.host]) return data; // 방장이 이미 정상이면 그대로 둠
+            if (data.host && curPlayers[data.host]) return data;
             let remaining = Object.keys(curPlayers).filter(k => curPlayers[k] && curPlayers[k].name).sort();
-            if (remaining.length === 0) return data; // 아무도 없으면 그대로 둠 (곧 방 자체가 정리됨)
+            if (remaining.length === 0) return data;
             data.host = remaining[0];
             return data;
         });
@@ -1651,8 +1672,6 @@
         });
     }
 
-    // [버그 수정] 게임 화면의 "방 폭파" 버튼에 연결되어 있었지만 정의되지 않았던 함수
-    // 방장이 진행 중인 게임을 중단하고 대기실로 되돌릴 수 있게 함
     function resetLandGrabRoom() {
         if(!landRoomRef) return;
         if(!confirm("진행 중인 게임을 중단하고 대기실로 되돌리시겠습니까?\n(현재까지의 점령 기록은 사라집니다)")) return;
@@ -1791,7 +1810,6 @@
             if (scoreA === scoreB) winStatus = "draw";
             else if (scoreA > scoreB && myTeam === 'A') winStatus = "win";
             else if (scoreB > scoreA && myTeam === 'B') winStatus = "win";
-
             let winTeamStr = scoreA > scoreB ? "A팀 (블루)" : (scoreB > scoreA ? "B팀 (레드)" : "무승부");
             comment = `모든 땅이 점령되었습니다!<br>🏆 <b>결과: ${winTeamStr} 승리!</b><br>(A팀 ${scoreA}땅 vs B팀 ${scoreB}땅)`;
         } else {
@@ -1803,7 +1821,6 @@
         }
         
         let prevRecord = landRecords[currentLandStage] || {};
-        
         prevRecord.soloFirsts = prevRecord.soloFirsts || 0; prevRecord.soloPlays = prevRecord.soloPlays || 0;
         prevRecord.teamWins = prevRecord.teamWins || 0; prevRecord.teamDraws = prevRecord.teamDraws || 0;
         prevRecord.teamLosses = prevRecord.teamLosses || 0; prevRecord.teamPlays = prevRecord.teamPlays || 0;
@@ -1813,31 +1830,15 @@
             if (winStatus === "win") prevRecord.teamWins++;
             else if (winStatus === "draw") prevRecord.teamDraws++;
             else prevRecord.teamLosses++;
-            
-            if(isFirebaseActive && getUserKey()) {
-                getDB().ref('rankings_vocab_land_team/stage_' + currentLandStage + '/' + getUserKey()).set({
-                    name: userProfile.studentName, classInfo: userProfile.gradeClass, 
-                    teamWins: prevRecord.teamWins, teamDraws: prevRecord.teamDraws, teamLosses: prevRecord.teamLosses
-                });
-            }
         } else {
             prevRecord.soloPlays++;
             if (winStatus === "win") prevRecord.soloFirsts++;
-            
-            if(isFirebaseActive && getUserKey()) {
-                getDB().ref('rankings_vocab_land_solo/stage_' + currentLandStage + '/' + getUserKey()).set({
-                    name: userProfile.studentName, classInfo: userProfile.gradeClass, 
-                    soloFirsts: prevRecord.soloFirsts, soloPlays: prevRecord.soloPlays
-                });
-            }
         }
 
         landRecords[currentLandStage] = prevRecord;
         localStorage.setItem('landRecords', JSON.stringify(landRecords));
         syncToFirebase();
 
-        // 방을 '대기중' 상태로 되돌려 같은 방 이름으로 바로 재도전할 수 있게 함
-        // (여러 학생이 동시에 시도해도 status가 'playing'일 때 딱 한 번만 반영되어 안전함)
         roomRefLocal.transaction(roomData => {
             if(!roomData || roomData.status !== 'playing') return roomData;
             roomData.status = 'waiting';
@@ -1847,7 +1848,6 @@
         document.getElementById('btnReviewMissed').style.display = 'none';
         document.getElementById('resultTitle').innerText = winStatus === "win" ? "🏆 승리!" : (winStatus === "draw" ? "🤝 무승부" : "💀 패배...");
         document.getElementById('resultScore').innerText = `내 점령: ${myScore}땅`;
-        
         let resultMsg = mode === 'team' ? "팀전 전적이 기록되었습니다." : "개인전 1등 여부가 기록되었습니다.";
         document.getElementById('resultComment').innerHTML = comment + `<br><br>` + resultMsg;
         
@@ -1871,30 +1871,17 @@
 
     function quitLandGrabGame() {
         if(!confirm("게임을 나가시겠습니까?")) return; inLandGrabRoom = false; if(landPenaltyInterval) clearInterval(landPenaltyInterval);
-        if(landRoomRef) {
-            landRoomRef.off('value', handleLandRoomUpdate);
-            leaveLandRoomCleanup();
-        }
+        if(landRoomRef) { landRoomRef.off('value', handleLandRoomUpdate); leaveLandRoomCleanup(); }
         document.getElementById('landBoard').innerHTML = ''; goToHome();
     }
 
     function quitLandLobby() {
         inLandGrabRoom = false; if(landPenaltyInterval) clearInterval(landPenaltyInterval);
-        if(landRoomRef) {
-            landRoomRef.off('value', handleLandRoomUpdate);
-            leaveLandRoomCleanup();
-        }
+        if(landRoomRef) { landRoomRef.off('value', handleLandRoomUpdate); leaveLandRoomCleanup(); }
         document.getElementById('landBoard').innerHTML = ''; goToHome();
     }
 
-    // =========================================================
-    // 🚀 로켓 레이스 (실시간 경쟁 타이핑 레이스)
-    // - 객관식이 전혀 없음: 뜻 + 초성 힌트 + 이번 레이스 단어 목록을 보고 정확한 낱말을 직접 타이핑해야만 로켓이 전진합니다.
-    // - 같은 방의 모든 학생이 동시에 같은 단어 순서로 경주하며, 트랙이 실시간으로 공유됩니다.
-    // - 가장 먼저 완주한 학생이 1등이며, 각자 자기 속도로 끝까지 완주할 수 있습니다.
-    // =========================================================
-
-    // 🔊 효과음 (Web Audio API로 직접 합성 - 외부 음원 파일 불필요)
+    // 🚀 로켓 레이스
     let raceAudioCtx = null;
     function getRaceAudioCtx() {
         if(!raceSoundEnabled) return null;
@@ -1932,7 +1919,6 @@
         if(raceSoundEnabled) getRaceAudioCtx();
     }
 
-    // 🎬 레이스 시작 전 "3, 2, 1, 출발!" 카운트다운 연출
     function runRaceCountdown(onDone) {
         let overlay = document.getElementById('raceCountdownOverlay'), numEl = document.getElementById('raceCountdownNumber');
         let steps = ['3', '2', '1', '출발! 🚀'];
@@ -1949,7 +1935,6 @@
         step();
     }
 
-    // 🏅 순위가 오를 때마다 잠깐 뜨는 알림 토스트
     let raceToastTimer = null;
     function showRaceRankToast(msg) {
         let toast = document.getElementById('raceRankToast'); if(!toast) return;
@@ -2051,7 +2036,7 @@
             let data = snap.val() || {};
             let startIdx = (currentRaceStage - 1) * MASTER_WORDS_PER_STAGE;
             let stagePool = rawWords.slice(startIdx, startIdx + MASTER_WORDS_PER_STAGE);
-            // 스테이지 단어 풀(최대 50개) 중 매번 무작위로 15개를 뽑아 레이스를 구성 → 재도전할 때마다 새로운 조합
+            
             let sequence = shuffleArray(stagePool).slice(0, RACE_WORDS_PER_STAGE).map(w => ({ w: w.w, m: w.m }));
             if(sequence.length < RACE_WORDS_PER_STAGE) {
                 let usedW = sequence.map(x => x.w);
@@ -2060,18 +2045,28 @@
             }
             let currentPlayers = data.players || {};
             Object.keys(currentPlayers).forEach(k => { currentPlayers[k].position = 0; currentPlayers[k].finished = false; currentPlayers[k].finishRank = null; currentPlayers[k].attackSeq = 0; currentPlayers[k].mistakeSeq = 0; });
-            raceRoomRef.update({ status: 'playing', wordSequence: sequence, finishedCount: 0, players: currentPlayers });
+            
+            // 💣 무작위로 4번째 ~ 13번째 단어 중 하나에 폭탄 심기
+            let hiddenBombIndex = Math.floor(Math.random() * 10) + 3;
+
+            raceRoomRef.update({ 
+                status: 'playing', 
+                wordSequence: sequence, 
+                finishedCount: 0, 
+                players: currentPlayers,
+                bombIndex: hiddenBombIndex,
+                bombTriggeredBy: "" 
+            });
         });
     }
 
-    // ✨ 정답 시 로켓 뒤에서 튀는 파티클 (콤보가 쌓일수록 파랑→빨강→보라로 색이 진해짐)
     function spawnRaceParticles(laneIdx, combo) {
         let runner = document.getElementById('race_runner_' + laneIdx); if(!runner) return;
         let color = combo >= 6 ? '#a855f7' : (combo >= 3 ? '#ef4444' : '#3b82f6');
         let count = Math.min(4 + combo, 10);
         for(let i = 0; i < count; i++) {
             let p = document.createElement('div'); p.className = 'race-particle';
-            let angle = Math.random() * 70 - 35; // 로켓 뒤쪽(왼쪽) 방향으로 퍼짐
+            let angle = Math.random() * 70 - 35;
             let dist = 16 + Math.random() * 24;
             p.style.setProperty('--px', (Math.cos(angle*Math.PI/180) * -dist) + 'px');
             p.style.setProperty('--py', (Math.sin(angle*Math.PI/180) * dist) + 'px');
@@ -2081,7 +2076,6 @@
         }
     }
 
-    // 💥 오답 시 내 로켓에 잠깐 나타나는 엔진 고장(흑백 필터 + 연기) 연출
     function triggerRaceEngineFail(laneIdx) {
         let runner = document.getElementById('race_runner_' + laneIdx); if(!runner) return;
         runner.classList.add('engine-fail');
@@ -2094,7 +2088,6 @@
         setTimeout(() => runner.classList.remove('engine-fail'), 450);
     }
 
-    // 💦 다른 플레이어가 오답을 냈을 때 그 선수 로켓 위에 잠깐 뜨는 땀방울
     function showRaceSweatDrop(laneIdx) {
         let runner = document.getElementById('race_runner_' + laneIdx); if(!runner) return;
         let drop = document.createElement('div'); drop.className = 'race-sweat'; drop.textContent = '💦';
@@ -2102,7 +2095,6 @@
         setTimeout(() => drop.remove(), 700);
     }
 
-    // 🌫️ 3콤보 달성 시 나를 제외한 모두의 화면에 잠깐 시야 방해(안개) 효과
     function triggerRaceFogAttack(attackerName) {
         let fog = document.getElementById('raceFogOverlay'); if(!fog) return;
         fog.textContent = `💨 ${attackerName} 님의 콤보 공격! 시야가 흐려집니다`;
@@ -2111,7 +2103,6 @@
         fog._hideTimer = setTimeout(() => fog.classList.remove('show'), 1500);
     }
 
-    // 🚀 추월 / 🔥 역전 대형 스탬프 연출 (기존의 단순 토스트를 대체)
     function stampRaceMessage(text) {
         let stamp = document.getElementById('raceStamp'); if(!stamp) return;
         stamp.textContent = text;
@@ -2125,6 +2116,7 @@
         raceLaneOrder = Object.keys(players).sort((a,b) => (players[a].order||0) - (players[b].order||0));
         raceMyLaneIdx = raceLaneOrder.indexOf(getUserKey());
         let track = document.getElementById('raceLanesWrap'); track.innerHTML = '';
+        
         raceLaneOrder.forEach((key, idx) => {
             let p = players[key];
             let lane = document.createElement('div'); lane.className = 'race-lane';
@@ -2136,14 +2128,9 @@
             track.appendChild(lane);
         });
 
-        // 이번 레이스에 나올 단어 목록을 가나다순으로 보여주는 단어 은행 (초성 힌트와 함께 사용)
-        let bankList = document.getElementById('raceWordBankList'); bankList.innerHTML = '';
-        (data.wordSequence || []).slice().sort((a,b) => a.w.localeCompare(b.w, 'ko')).forEach(w => {
-            let chip = document.createElement('span'); chip.className = 'race-word-bank-chip'; chip.dataset.word = w.w; chip.textContent = w.w;
-            bankList.appendChild(chip);
-        });
+        window.currentRaceWordBankIdx = -1; 
+        document.getElementById('raceWordBankList').innerHTML = '';
 
-        // 아이템 공격 / 실수 알림은 "이번 레이스 시작 시점" 값을 기준으로만 새로 발생한 것만 감지
         raceLastSeenAttackSeq = {}; raceLastSeenMistakeSeq = {};
         Object.keys(players).forEach(k => { raceLastSeenAttackSeq[k] = players[k].attackSeq || 0; raceLastSeenMistakeSeq[k] = players[k].mistakeSeq || 0; });
 
@@ -2154,9 +2141,17 @@
         document.getElementById('raceFogOverlay').classList.remove('show');
         document.getElementById('raceStamp').classList.remove('show');
         document.getElementById('raceGameScreen').classList.remove('last-spurt');
+        document.getElementById('raceGameScreen').classList.remove('shake-screen');
+        document.getElementById('raceInkOverlay')?.classList.remove('show');
         document.getElementById('raceLastSpurtBanner').style.display = 'none';
+        
         myRaceFinishShown = false; raceComboCount = 0; racePrevRank = null;
         document.getElementById('raceComboBadge').style.display = 'none';
+        
+        raceCurrentQuestionIdx = -1;
+        raceLocalBombTriggered = false;
+        clearTimeout(raceHintTimer);
+        document.getElementById('raceChoseongHint').style.display = 'none';
 
         runRaceCountdown(() => {
             inputEl.disabled = false; document.getElementById('raceSubmitBtn').disabled = false; inputEl.focus();
@@ -2167,11 +2162,17 @@
         let players = data.players || {}, sequence = data.wordSequence || [];
         let total = sequence.length;
         let myKey = getUserKey(), myData = players[myKey];
-
         let resetBtn = document.getElementById('btnRaceReset');
         if(resetBtn) resetBtn.style.display = (data.host === myKey) ? 'inline-block' : 'none';
 
-        // 순위(키 포함) 계산 - 1등 왕관 표시에 필요
+        // 💣 폭탄 터짐 감지 및 효과 실행
+        if (data.bombTriggeredBy && data.bombTriggeredBy !== "" && !raceLocalBombTriggered) {
+            raceLocalBombTriggered = true;
+            if (data.bombTriggeredBy !== myKey) {
+                triggerInkBombEffect(players[data.bombTriggeredBy]?.name || '누군가');
+            }
+        }
+
         let standingEntries = Object.keys(players).map(k => [k, players[k]]).sort((a,b) => {
             let pa = a[1], pb = b[1];
             if(pa.finished && pb.finished) return (pa.finishRank||0)-(pb.finishRank||0);
@@ -2195,13 +2196,10 @@
             let crown = document.getElementById('race_crown_' + idx);
             if(crown) crown.style.display = (key === firstKey && firstHasProgress) ? 'block' : 'none';
 
-            // 다른 선수가 방금 오답을 냈으면 그 선수 로켓 위에 땀방울 표시
             if(key !== myKey) {
                 let mSeq = p.mistakeSeq || 0;
                 if(mSeq > (raceLastSeenMistakeSeq[key] || 0)) { raceLastSeenMistakeSeq[key] = mSeq; showRaceSweatDrop(idx); }
                 else if(raceLastSeenMistakeSeq[key] === undefined) { raceLastSeenMistakeSeq[key] = mSeq; }
-
-                // 다른 선수가 3콤보 공격을 새로 발동했으면 내 화면에 시야 방해(안개) 효과
                 let aSeq = p.attackSeq || 0;
                 if(aSeq > (raceLastSeenAttackSeq[key] || 0)) { raceLastSeenAttackSeq[key] = aSeq; triggerRaceFogAttack(escapeHTML(p.name)); }
                 else if(raceLastSeenAttackSeq[key] === undefined) { raceLastSeenAttackSeq[key] = aSeq; }
@@ -2209,10 +2207,8 @@
         });
 
         document.getElementById('raceMyRankDisplay').innerText = myRank > 0 ? `${myRank}위` : '-';
-
         if(!myData) return;
 
-        // 순위가 오르면(숫자가 작아지면) 화면 중앙에 큼직한 추월/역전 스탬프를 찍음
         if(myRank > 0 && racePrevRank !== null && myRank < racePrevRank) {
             stampRaceMessage(myRank === 1 ? '🔥 역전!' : '🚀 추월!');
         }
@@ -2227,15 +2223,36 @@
         if(idx < total) {
             document.getElementById('raceProgressLabel').innerText = `${idx+1} / ${total}`;
             document.getElementById('raceTargetMean').innerText = sequence[idx].m;
-            document.getElementById('raceChoseongHint').textContent = '힌트: ' + getChoseongHint(sequence[idx].w);
+            
+            // ⏳ 문제가 바뀌면 힌트 타이머 재설정 (3초 대기) 및 단어 10개 섞기
+            if (raceCurrentQuestionIdx !== idx) {
+                raceCurrentQuestionIdx = idx;
+                raceQuestionStartTime = Date.now(); 
+                
+                let hintEl = document.getElementById('raceChoseongHint');
+                hintEl.style.display = 'none'; 
+                hintEl.textContent = '힌트: ' + getChoseongHint(sequence[idx].w);
+                
+                clearTimeout(raceHintTimer);
+                raceHintTimer = setTimeout(() => {
+                    hintEl.style.display = 'inline-block'; 
+                    if(raceSoundEnabled) playRaceBeep(880, 0, 0.05, 'sine');
+                }, 3000);
 
-            // 이미 지나온 단어는 단어 은행에서 취소선으로 표시
-            let answered = new Set(sequence.slice(0, idx).map(w => w.w));
-            document.querySelectorAll('#raceWordBankList .race-word-bank-chip').forEach(chip => {
-                if(answered.has(chip.dataset.word)) chip.classList.add('done'); else chip.classList.remove('done');
-            });
+                // 단어 은행 업데이트 (정답 1 + 오답 9)
+                let bankList = document.getElementById('raceWordBankList');
+                bankList.innerHTML = '';
+                let targetWord = sequence[idx].w;
+                let distractors = rawWords.filter(w => w.w !== targetWord).sort(() => 0.5 - Math.random()).slice(0, 9);
+                let displayWords = [{w: targetWord}, ...distractors].sort(() => 0.5 - Math.random());
+                displayWords.forEach(w => {
+                    let chip = document.createElement('span');
+                    chip.className = 'race-word-bank-chip';
+                    chip.textContent = w.w;
+                    bankList.appendChild(chip);
+                });
+            }
 
-            // 결승선까지 3단어 이하로 남으면 "라스트 스퍼트" 경고 연출
             let remaining = total - idx;
             let screenEl = document.getElementById('raceGameScreen'), bannerEl = document.getElementById('raceLastSpurtBanner');
             if(remaining > 0 && remaining <= 3) { screenEl.classList.add('last-spurt'); bannerEl.style.display = 'block'; }
@@ -2246,8 +2263,6 @@
         if(raceComboCount >= 2) { comboBadge.style.display = 'inline-block'; comboBadge.textContent = `🔥 ${raceComboCount}연속 정답!`; }
         else { comboBadge.style.display = 'none'; }
 
-        // 방에 남아있는 모든 선수가 완주하면 자동으로 대기실 상태로 되돌려 같은 방에서 바로 재도전 가능하게 함
-        // (여러 클라이언트가 동시에 감지해도 트랜잭션으로 안전하게 한 번만 반영됨)
         let allPlayers = Object.values(players);
         if(allPlayers.length > 0 && allPlayers.every(p => p.finished)) {
             raceRoomRef.transaction(roomData => {
@@ -2255,6 +2270,65 @@
                 roomData.status = 'waiting';
                 return roomData;
             });
+        }
+    }
+
+    function submitRaceWord() {
+        let inputEl = document.getElementById('raceInput'), val = normalizeForCompare(inputEl.value); if(!val) return;
+        let data = currentRaceRoomData; if(!data || data.status !== 'playing') return;
+        let sequence = data.wordSequence || []; let myKey = getUserKey();
+        let myData = (data.players || {})[myKey]; if(!myData || myData.finished) return;
+        let idx = myData.position || 0;
+        if(idx >= sequence.length) return;
+
+        if(val === normalizeForCompare(sequence[idx].w)) {
+            inputEl.value = '';
+            
+            // ⚡ 3초 이내 정답 보상 (기억력 보너스)
+            let answeredInTime = (Date.now() - raceQuestionStartTime) <= 3000;
+            if (answeredInTime) {
+                raceComboCount += 2; // 콤보 2배 점프
+                showRaceRankToast('⚡ 3초 컷! (콤보 2배 점프)');
+            } else {
+                raceComboCount++;
+            }
+            
+            if(raceComboCount >= 2) playRaceComboSound(); else playRaceCorrectSound();
+            spawnRaceParticles(raceMyLaneIdx, raceComboCount);
+
+            if(raceComboCount >= 3 && raceComboCount % 3 === 0) {
+                raceRoomRef.child(`players/${myKey}/attackSeq`).transaction(s => (s||0) + 1);
+                showRaceRankToast('💥 안개 공격 발동! (경쟁자 시야 방해)');
+            }
+
+            raceRoomRef.child(`players/${myKey}/position`).transaction(pos => (pos||0) + 1).then(result => {
+                if(!result.committed) return;
+                let newPos = result.snapshot.val();
+                
+                // 💣 폭탄 심어진 구간을 통과했는지 체크
+                if (data.bombIndex !== undefined && (newPos - 1) === data.bombIndex && !data.bombTriggeredBy) {
+                    raceRoomRef.child('bombTriggeredBy').transaction(currentVal => {
+                        if (currentVal === "" || !currentVal) return myKey;
+                        return; // 이미 누군가 터뜨렸으면 중단
+                    }).then(res => {
+                        if(res.committed) showRaceRankToast('💣 내가 폭탄을 터뜨렸습니다!');
+                    });
+                }
+
+                if(newPos >= sequence.length) {
+                    raceRoomRef.child('finishedCount').transaction(c => (c||0) + 1).then(res => {
+                        let rank = res.snapshot.val();
+                        raceRoomRef.child(`players/${myKey}`).update({ finished: true, finishRank: rank });
+                    });
+                }
+            });
+        } else {
+            raceComboCount = 0;
+            playRaceWrongSound();
+            triggerRaceEngineFail(raceMyLaneIdx);
+            raceRoomRef.child(`players/${myKey}/mistakeSeq`).transaction(s => (s||0) + 1);
+            inputEl.value = ''; inputEl.classList.add('shake'); inputEl.style.borderColor = '#ef4444';
+            setTimeout(() => { inputEl.classList.remove('shake'); inputEl.style.borderColor = ''; }, 300);
         }
     }
 
@@ -2283,48 +2357,6 @@
         showScreen('resultScreen');
     }
 
-    document.getElementById('raceInput').addEventListener('keydown', (e) => { if(e.key === 'Enter') submitRaceWord(); });
-
-    function submitRaceWord() {
-        let inputEl = document.getElementById('raceInput'), val = normalizeForCompare(inputEl.value); if(!val) return;
-        let data = currentRaceRoomData; if(!data || data.status !== 'playing') return;
-        let sequence = data.wordSequence || []; let myKey = getUserKey();
-        let myData = (data.players || {})[myKey]; if(!myData || myData.finished) return;
-        let idx = myData.position || 0;
-        if(idx >= sequence.length) return;
-
-        if(val === normalizeForCompare(sequence[idx].w)) {
-            inputEl.value = '';
-            raceComboCount++;
-            if(raceComboCount >= 2) playRaceComboSound(); else playRaceCorrectSound();
-            spawnRaceParticles(raceMyLaneIdx, raceComboCount);
-
-            // 3콤보마다(3,6,9...) 나를 제외한 모두의 화면에 잠깐 시야 방해를 거는 "아이템 공격" 발동
-            if(raceComboCount % 3 === 0) {
-                raceRoomRef.child(`players/${myKey}/attackSeq`).transaction(s => (s||0) + 1);
-                showRaceRankToast('💥 방해 공격 발동! 상대방 화면이 잠깐 흐려집니다');
-            }
-
-            raceRoomRef.child(`players/${myKey}/position`).transaction(pos => (pos||0) + 1).then(result => {
-                if(!result.committed) return;
-                let newPos = result.snapshot.val();
-                if(newPos >= sequence.length) {
-                    raceRoomRef.child('finishedCount').transaction(c => (c||0) + 1).then(res => {
-                        let rank = res.snapshot.val();
-                        raceRoomRef.child(`players/${myKey}`).update({ finished: true, finishRank: rank });
-                    });
-                }
-            });
-        } else {
-            raceComboCount = 0;
-            playRaceWrongSound();
-            triggerRaceEngineFail(raceMyLaneIdx);
-            raceRoomRef.child(`players/${myKey}/mistakeSeq`).transaction(s => (s||0) + 1);
-            inputEl.value = ''; inputEl.classList.add('shake'); inputEl.style.borderColor = '#ef4444';
-            setTimeout(() => { inputEl.classList.remove('shake'); inputEl.style.borderColor = ''; }, 300);
-        }
-    }
-
     function leaveRaceRoomCleanup(onDone) {
         if(!raceRoomRef) { if(onDone) onDone(); return; }
         let myKey = getUserKey();
@@ -2339,7 +2371,6 @@
         }).catch(() => { if(onDone) onDone(); });
     }
 
-    // 방장이 진행 중인 레이스를 중단하고 대기실로 되돌릴 수 있게 함 (땅따먹기의 resetLandGrabRoom과 동일한 역할)
     function resetRaceRoom() {
         if(!raceRoomRef) return;
         if(!confirm("진행 중인 레이스를 중단하고 대기실로 되돌리시겠습니까?")) return;
