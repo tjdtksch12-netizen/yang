@@ -262,7 +262,21 @@
         .shake { animation: shake 0.15s ease-in-out 0s 2; }
 
         /* 🚀 로켓 레이스 (실시간 경쟁 타이핑 레이스) */
-        .race-track-container { background: #0b1220; background-image: radial-gradient(1px 1px at 20% 30%, rgba(255,255,255,0.5) 1px, transparent 0), radial-gradient(1px 1px at 60% 70%, rgba(255,255,255,0.35) 1px, transparent 0), radial-gradient(1px 1px at 85% 20%, rgba(255,255,255,0.4) 1px, transparent 0), radial-gradient(1px 1px at 40% 85%, rgba(255,255,255,0.3) 1px, transparent 0); background-size: 160px 160px; border-radius: 14px; padding: 16px 14px; margin-bottom: 18px; }
+        .race-track-container {
+            background-color: #0b1220;
+            background-image:
+                radial-gradient(1.5px 1.5px at 12% 22%, rgba(255,255,255,0.65) 1.5px, transparent 0),
+                radial-gradient(1px 1px at 38% 68%, rgba(255,255,255,0.4) 1px, transparent 0),
+                radial-gradient(1.5px 1.5px at 66% 30%, rgba(255,255,255,0.55) 1.5px, transparent 0),
+                radial-gradient(1px 1px at 84% 78%, rgba(255,255,255,0.35) 1px, transparent 0),
+                radial-gradient(1.5px 1.5px at 92% 15%, rgba(255,255,255,0.5) 1.5px, transparent 0),
+                radial-gradient(1px 1px at 55% 90%, rgba(255,255,255,0.3) 1px, transparent 0);
+            background-size: 180px 180px;
+            animation: raceStarScroll 9s linear infinite;
+            border-radius: 14px; padding: 16px 14px; margin-bottom: 18px; position: relative; overflow: hidden;
+        }
+        @keyframes raceStarScroll { from { background-position: 0 0; } to { background-position: -180px 0; } }
+
         .race-lane { position: relative; height: 48px; background: rgba(255,255,255,0.06); border-radius: 24px; margin-bottom: 12px; }
         .race-lane:last-child { margin-bottom: 0; }
         .race-track-line { position: absolute; left: 14px; right: 54px; top: 50%; height: 2px; background: repeating-linear-gradient(90deg, rgba(255,255,255,0.25) 0 8px, transparent 8px 18px); }
@@ -270,11 +284,68 @@
         .race-runner { position: absolute; top: 50%; transform: translate(-50%, -50%); font-size: 1.5rem; left: 4%; transition: left 0.45s cubic-bezier(.34,1.56,.64,1); z-index: 5; line-height: 1; }
         .race-runner-name { position: absolute; bottom: 26px; left: 50%; transform: translateX(-50%); font-size: 0.62rem; font-weight: bold; color: white; padding: 2px 7px; border-radius: 8px; white-space: nowrap; box-shadow: 0 1px 3px rgba(0,0,0,0.4); }
         .race-runner.finished { filter: drop-shadow(0 0 6px #fbbf24); }
-        .race-interaction-box { text-align: center; background: #f1f5f9; padding: 18px; border-radius: 12px; border: 2px dashed #94a3b8; }
+        .race-runner.combo-hot { filter: drop-shadow(0 0 8px #fb923c) drop-shadow(0 0 3px #fde047); animation: raceComboPulse 0.5s ease-in-out infinite; }
+        .race-runner::after { content: ''; position: absolute; right: 100%; top: 50%; transform: translateY(-50%); width: 0; height: 3px; background: linear-gradient(90deg, transparent, #fb923c); border-radius: 2px; transition: width 0.3s; }
+        .race-runner.combo-hot::after { width: 22px; }
+        @keyframes raceComboPulse { 0%,100% { transform: translate(-50%,-50%) scale(1); } 50% { transform: translate(-50%,-50%) scale(1.18); } }
+
+        /* 👑 1등 왕관 */
+        .race-crown { position: absolute; bottom: 42px; left: 50%; transform: translateX(-50%); font-size: 1.05rem; display: none; z-index: 6; filter: drop-shadow(0 1px 2px rgba(0,0,0,0.5)); animation: raceCrownBob 1s ease-in-out infinite; }
+        @keyframes raceCrownBob { 0%,100% { transform: translateX(-50%) translateY(0); } 50% { transform: translateX(-50%) translateY(-3px); } }
+
+        /* ✨ 정답 파티클 (콤보에 따라 파랑→빨강→보라) */
+        .race-particle { position: absolute; left: 50%; top: 50%; width: 5px; height: 5px; border-radius: 50%; pointer-events: none; z-index: 4; animation: raceParticleBurst 0.5s ease-out forwards; }
+        @keyframes raceParticleBurst { 0% { transform: translate(-50%,-50%) translate(0,0) scale(1); opacity: 1; } 100% { transform: translate(-50%,-50%) translate(var(--px), var(--py)) scale(0.3); opacity: 0; } }
+
+        /* 💥 오답 연출: 엔진 고장(흑백 필터 + 연기) */
+        .race-runner.engine-fail { filter: grayscale(1) brightness(0.7); transition: filter 0.15s; }
+        .race-smoke { position: absolute; left: 50%; bottom: 55%; font-size: 0.85rem; opacity: 0.9; pointer-events: none; animation: raceSmokeRise 0.6s ease-out forwards; }
+        @keyframes raceSmokeRise { 0% { transform: translate(-50%,0) translateX(var(--sx,0)) scale(0.6); opacity: 0.9; } 100% { transform: translate(-50%,-24px) translateX(var(--sx,0)) scale(1.4); opacity: 0; } }
+
+        /* 💦 다른 플레이어 오답 표시 */
+        .race-sweat { position: absolute; top: -10px; right: -8px; font-size: 0.85rem; pointer-events: none; z-index: 6; animation: raceSweatPop 0.7s ease-out forwards; }
+        @keyframes raceSweatPop { 0% { transform: scale(0) translateY(4px); opacity: 0; } 30% { transform: scale(1.3) translateY(-2px); opacity: 1; } 100% { transform: scale(1) translateY(-10px); opacity: 0; } }
+
+        /* 🌫️ 아이템 공격: 3콤보 달성 시 다른 플레이어 시야 방해 */
+        .race-fog-overlay { position: absolute; inset: 0; z-index: 40; display: flex; align-items: flex-end; justify-content: center; padding-bottom: 10px; background: radial-gradient(ellipse at center, rgba(30,20,10,0.2), rgba(10,6,3,0.82) 88%); backdrop-filter: blur(2.5px); -webkit-backdrop-filter: blur(2.5px); opacity: 0; pointer-events: none; transition: opacity 0.35s ease; color: #fca5a5; font-weight: bold; font-size: 0.82rem; border-radius: 14px; text-align: center; }
+        .race-fog-overlay.show { opacity: 1; }
+
+        /* 🚀 추월 / 🔥 역전 대형 스탬프 */
+        .race-stamp { position: absolute; inset: 0; z-index: 45; display: flex; align-items: center; justify-content: center; pointer-events: none; font-size: 2.5rem; font-weight: 900; color: #fbbf24; text-shadow: 0 0 14px rgba(251,191,36,0.9), 3px 3px 0 rgba(0,0,0,0.45); opacity: 0; transform: scale(2) rotate(-8deg); text-align: center; }
+        .race-stamp.show { animation: raceStampSlam 0.9s cubic-bezier(.2,1.1,.4,1) forwards; }
+        @keyframes raceStampSlam { 0% { opacity: 0; transform: scale(2.2) rotate(-10deg); } 15% { opacity: 1; transform: scale(0.92) rotate(2deg); } 25% { transform: scale(1.06) rotate(-2deg); } 35% { transform: scale(1) rotate(0); } 75% { opacity: 1; transform: scale(1) rotate(0); } 100% { opacity: 0; transform: scale(1.08) rotate(0); } }
+
+        /* 🚨 라스트 스퍼트 (결승선 3단어 이하) */
+        #raceGameScreen.last-spurt { animation: raceLastSpurtBorder 0.8s ease-in-out infinite; }
+        @keyframes raceLastSpurtBorder { 0%,100% { box-shadow: 0 0 0 3px rgba(239,68,68,0.12) inset; } 50% { box-shadow: 0 0 0 3px rgba(239,68,68,0.75) inset; } }
+        .race-last-spurt-banner { display: none; text-align: center; font-weight: 900; color: #dc2626; background: #fef2f2; border: 2px solid #fca5a5; border-radius: 10px; padding: 7px; margin-bottom: 12px; font-size: 0.95rem; animation: raceLastSpurtBlink 0.8s ease-in-out infinite; }
+        @keyframes raceLastSpurtBlink { 0%,100% { opacity: 1; } 50% { opacity: 0.55; } }
+
+        .race-interaction-box { text-align: center; background: #f1f5f9; padding: 18px; border-radius: 12px; border: 2px dashed #94a3b8; position: relative; }
         .race-interaction-box.finished-box { border-color: var(--success); background: #ecfdf5; }
-        .race-progress-label { font-weight: bold; color: #ea580c; margin-bottom: 8px; font-size: 0.95rem; }
-        .race-target-mean { font-size: 1.25rem; font-weight: bold; margin-bottom: 15px; color: var(--text); min-height: 34px; word-break: keep-all; }
+        .race-progress-row { display: flex; justify-content: center; align-items: center; gap: 10px; margin-bottom: 8px; }
+        .race-progress-label { font-weight: bold; color: #ea580c; font-size: 0.95rem; }
+        .race-combo-badge { display: none; background: linear-gradient(90deg,#f97316,#fbbf24); color: white; font-weight: bold; font-size: 0.85rem; padding: 3px 12px; border-radius: 20px; box-shadow: 0 2px 6px rgba(249,115,22,0.4); animation: raceComboPop 0.35s ease-out; }
+        @keyframes raceComboPop { 0% { transform: scale(0.5); opacity: 0; } 70% { transform: scale(1.15); } 100% { transform: scale(1); opacity: 1; } }
+        .race-target-mean { font-size: 1.25rem; font-weight: bold; margin-bottom: 10px; color: var(--text); min-height: 34px; word-break: keep-all; }
+        .race-choseong-hint { display: inline-block; font-size: 0.95rem; font-weight: bold; color: #9333ea; background: #f5f3ff; border: 1.5px dashed #c4b5fd; border-radius: 8px; padding: 5px 14px; margin-bottom: 15px; letter-spacing: 3px; }
         .race-rank-badge { background: #fff7ed; color: #c2410c; padding: 4px 10px; border-radius: 8px; font-weight: bold; font-size: 0.95rem; }
+
+        .race-word-bank { border: 2px solid var(--border); border-radius: 12px; padding: 15px; background: #f8fafc; margin-top: 15px; }
+        .race-word-bank h4 { font-size: 0.95rem; color: var(--text-light); margin-bottom: 10px; text-align: left; }
+        .race-word-bank-list { display: flex; flex-wrap: wrap; gap: 8px; }
+        .race-word-bank-chip { background: white; border: 1px solid #fdba74; color: #c2410c; padding: 5px 10px; border-radius: 6px; font-size: 0.9rem; font-weight: bold; transition: 0.2s; }
+        .race-word-bank-chip.done { color: #cbd5e1; border-color: var(--border); text-decoration: line-through; background: #f8fafc; }
+
+        .race-sound-btn { background: none; border: 2px solid var(--border); border-radius: 8px; padding: 6px 10px; font-size: 1rem; cursor: pointer; margin-right: 8px; transition: 0.2s; }
+        .race-sound-btn:hover { background: #f1f5f9; }
+
+        .race-countdown-overlay { position: absolute; inset: 0; z-index: 50; display: none; justify-content: center; align-items: center; flex-direction: column; background: rgba(11,18,32,0.85); border-radius: 14px; }
+        .race-countdown-number { font-size: 4rem; font-weight: 800; color: #fb923c; text-shadow: 0 0 20px rgba(251,146,60,0.7); animation: raceCountdownPop 0.6s ease-out; }
+        @keyframes raceCountdownPop { 0% { transform: scale(0.3); opacity: 0; } 60% { transform: scale(1.25); opacity: 1; } 100% { transform: scale(1); opacity: 1; } }
+
+        .race-rank-toast { position: fixed; top: 90px; left: 50%; transform: translateX(-50%) translateY(-20px); background: #1e293b; color: white; font-weight: bold; padding: 10px 20px; border-radius: 24px; box-shadow: 0 6px 16px rgba(0,0,0,0.25); z-index: 500; opacity: 0; transition: 0.25s; pointer-events: none; white-space: nowrap; }
+        .race-rank-toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
     </style>
 </head>
 <body>
@@ -357,7 +428,7 @@
                 <span class="dashboard-title" style="color: #fb923c;">🚀 실시간 로켓 레이스 대결</span>
                 <button class="ranking-btn" style="background:#fed7aa; color:#9a3412;" onclick="showRankingMenu(1, 'race')">🏆 순위 보기</button>
             </div>
-            <p style="font-size: 0.95rem; color: #cbd5e1; margin-top: 10px; word-break: keep-all; line-height: 1.4;">같은 방에 모인 친구들과 동시에 출발! 뜻을 보고 정확한 낱말을 <b>직접 타이핑</b>해야 로켓이 앞으로 나갑니다.<br>🥇 객관식 없이, 가장 먼저 결승선을 통과하는 사람이 1등!</p>
+            <p style="font-size: 0.95rem; color: #cbd5e1; margin-top: 10px; word-break: keep-all; line-height: 1.4;">같은 방에 모인 친구들과 동시에 출발! 뜻을 보고 정확한 낱말을 <b>직접 타이핑</b>해야 로켓이 앞으로 나갑니다.<br>🥇 객관식 없이, 가장 먼저 결승선을 통과하는 사람이 1등!<br>💡 초성 힌트와 이번 레이스 단어 목록을 함께 보여줘요.</p>
         </div>
         <div class="day-grid" id="raceGrid"></div>
     </div>
@@ -469,18 +540,34 @@
     <div id="raceGameScreen" class="screen land-screen">
         <div class="land-header">
             <div class="land-status-box"><span id="raceGameStageTitle">1탄</span><span>내 순위 <span class="race-rank-badge" id="raceMyRankDisplay">-</span></span></div>
+            <button id="btnRaceSound" class="race-sound-btn" onclick="toggleRaceSound()" title="효과음 켜기/끄기">🔊</button>
             <button id="btnRaceReset" style="display:none; margin-right:8px; font-size:0.85rem; padding:8px 12px; border-radius:8px; background:var(--error); color:white; border:none; cursor:pointer; font-weight:bold;" onclick="resetRaceRoom()">중단</button>
             <button class="stop-btn" onclick="quitRaceGame()">나가기</button>
         </div>
-        <div class="race-track-container" id="raceTrackContainer"></div>
+        <div class="race-last-spurt-banner" id="raceLastSpurtBanner">🚨 라스트 스퍼트! 결승선이 코앞이에요!</div>
+        <div class="race-track-container" id="raceTrackContainer">
+            <div id="raceLanesWrap"></div>
+            <div class="race-fog-overlay" id="raceFogOverlay"></div>
+            <div class="race-stamp" id="raceStamp"></div>
+            <div class="race-countdown-overlay" id="raceCountdownOverlay"><div class="race-countdown-number" id="raceCountdownNumber">3</div></div>
+        </div>
         <div class="race-interaction-box" id="raceInteractionBox">
-            <div class="race-progress-label" id="raceProgressLabel">1 / 15</div>
+            <div class="race-progress-row">
+                <div class="race-progress-label" id="raceProgressLabel">1 / 15</div>
+                <div class="race-combo-badge" id="raceComboBadge">🔥 2연속!</div>
+            </div>
             <div class="race-target-mean" id="raceTargetMean">뜻이 여기 표시됩니다</div>
+            <div class="race-choseong-hint" id="raceChoseongHint">힌트: ㄱㅊㄱ</div>
             <div class="land-input-group">
                 <input type="text" id="raceInput" class="land-input" autocomplete="off" placeholder="단어 입력 후 엔터">
                 <button id="raceSubmitBtn" class="land-submit" onclick="submitRaceWord()">발사 🚀</button>
             </div>
         </div>
+        <div class="race-word-bank">
+            <h4>💡 이번 레이스에 나오는 단어 (가나다순) — 뜻을 보고 알맞은 단어를 찾아 타이핑하세요</h4>
+            <div class="race-word-bank-list" id="raceWordBankList"></div>
+        </div>
+        <div class="race-rank-toast" id="raceRankToast"></div>
     </div>
 
     <!-- 일반 학습 화면들 -->
@@ -607,6 +694,16 @@
         return a;
     }
 
+    // 🚀 로켓 레이스 힌트용: 한글 낱말의 초성만 뽑아내는 함수 (예: "가치관" → "ㄱㅊㄱ")
+    const CHOSEONG_LIST = ['ㄱ','ㄲ','ㄴ','ㄷ','ㄸ','ㄹ','ㅁ','ㅂ','ㅃ','ㅅ','ㅆ','ㅇ','ㅈ','ㅉ','ㅊ','ㅋ','ㅌ','ㅍ','ㅎ'];
+    function getChoseongHint(word) {
+        return String(word || '').split('').map(ch => {
+            const code = ch.charCodeAt(0) - 0xAC00;
+            if (code >= 0 && code <= 11171) return CHOSEONG_LIST[Math.floor(code / 588)];
+            return ch === ' ' ? ' ' : ch; // 완성된 한글 음절이 아니면 그대로 둠 (공백, 숫자 등)
+        }).join('');
+    }
+
     function safeParseJSON(key, fallback) {
         try { return JSON.parse(localStorage.getItem(key)) || fallback; } 
         catch(e) { try { localStorage.removeItem(key); } catch(e2) {} return fallback; }
@@ -632,6 +729,9 @@
     // 🚀 로켓 레이스 상태 변수
     let inRaceRoom = false, currentRaceStage = 1, currentRaceRoomCode = "", raceRoomRef = null;
     let raceLaneOrder = [], myRaceFinishShown = false, currentRaceRoomData = null;
+    let raceComboCount = 0, racePrevRank = null, raceMyLaneIdx = -1;
+    let raceLastSeenAttackSeq = {}, raceLastSeenMistakeSeq = {}, raceStampTimer = null;
+    let raceSoundEnabled = localStorage.getItem('raceSoundEnabled') !== '0';
 
     // 땅따먹기 랭킹 모드 플래그
     let landRankMode = 'solo'; 
@@ -1789,10 +1889,74 @@
 
     // =========================================================
     // 🚀 로켓 레이스 (실시간 경쟁 타이핑 레이스)
-    // - 객관식이 전혀 없음: 뜻을 보고 정확한 낱말을 직접 타이핑해야만 로켓이 전진합니다.
+    // - 객관식이 전혀 없음: 뜻 + 초성 힌트 + 이번 레이스 단어 목록을 보고 정확한 낱말을 직접 타이핑해야만 로켓이 전진합니다.
     // - 같은 방의 모든 학생이 동시에 같은 단어 순서로 경주하며, 트랙이 실시간으로 공유됩니다.
     // - 가장 먼저 완주한 학생이 1등이며, 각자 자기 속도로 끝까지 완주할 수 있습니다.
     // =========================================================
+
+    // 🔊 효과음 (Web Audio API로 직접 합성 - 외부 음원 파일 불필요)
+    let raceAudioCtx = null;
+    function getRaceAudioCtx() {
+        if(!raceSoundEnabled) return null;
+        if(!raceAudioCtx) {
+            try { raceAudioCtx = new (window.AudioContext || window.webkitAudioContext)(); }
+            catch(e) { return null; }
+        }
+        if(raceAudioCtx.state === 'suspended') raceAudioCtx.resume().catch(()=>{});
+        return raceAudioCtx;
+    }
+    function playRaceBeep(freq, startDelay, duration, waveType) {
+        let ctx = getRaceAudioCtx(); if(!ctx) return;
+        try {
+            let osc = ctx.createOscillator(), gain = ctx.createGain();
+            osc.type = waveType || 'sine'; osc.frequency.value = freq;
+            osc.connect(gain); gain.connect(ctx.destination);
+            let t0 = ctx.currentTime + (startDelay || 0);
+            gain.gain.setValueAtTime(0.0001, t0);
+            gain.gain.exponentialRampToValueAtTime(0.22, t0 + 0.02);
+            gain.gain.exponentialRampToValueAtTime(0.0001, t0 + duration);
+            osc.start(t0); osc.stop(t0 + duration + 0.03);
+        } catch(e) {}
+    }
+    function playRaceCorrectSound() { playRaceBeep(880, 0, 0.1, 'triangle'); playRaceBeep(1318, 0.07, 0.16, 'triangle'); }
+    function playRaceWrongSound() { playRaceBeep(180, 0, 0.2, 'sawtooth'); }
+    function playRaceComboSound(level) { playRaceBeep(1046, 0, 0.08, 'square'); playRaceBeep(1568, 0.06, 0.12, 'square'); }
+    function playRaceTickSound() { playRaceBeep(523, 0, 0.09, 'square'); }
+    function playRaceGoSound() { playRaceBeep(659,0,0.09,'square'); playRaceBeep(880,0.09,0.09,'square'); playRaceBeep(1318,0.18,0.28,'square'); }
+    function playRaceFinishSound() { [659,880,1046,1318].forEach((f,i)=>playRaceBeep(f, i*0.11, 0.2, 'triangle')); }
+
+    function toggleRaceSound() {
+        raceSoundEnabled = !raceSoundEnabled;
+        localStorage.setItem('raceSoundEnabled', raceSoundEnabled ? '1' : '0');
+        let btn = document.getElementById('btnRaceSound'); if(btn) btn.textContent = raceSoundEnabled ? '🔊' : '🔇';
+        if(raceSoundEnabled) getRaceAudioCtx();
+    }
+
+    // 🎬 레이스 시작 전 "3, 2, 1, 출발!" 카운트다운 연출
+    function runRaceCountdown(onDone) {
+        let overlay = document.getElementById('raceCountdownOverlay'), numEl = document.getElementById('raceCountdownNumber');
+        let steps = ['3', '2', '1', '출발! 🚀'];
+        overlay.style.display = 'flex';
+        let i = 0;
+        function step() {
+            numEl.textContent = steps[i];
+            numEl.style.animation = 'none'; void numEl.offsetWidth; numEl.style.animation = '';
+            if(i < 3) playRaceTickSound(); else playRaceGoSound();
+            i++;
+            if(i < steps.length) setTimeout(step, 650);
+            else setTimeout(() => { overlay.style.display = 'none'; if(onDone) onDone(); }, 550);
+        }
+        step();
+    }
+
+    // 🏅 순위가 오를 때마다 잠깐 뜨는 알림 토스트
+    let raceToastTimer = null;
+    function showRaceRankToast(msg) {
+        let toast = document.getElementById('raceRankToast'); if(!toast) return;
+        toast.textContent = msg; toast.classList.add('show');
+        clearTimeout(raceToastTimer);
+        raceToastTimer = setTimeout(() => toast.classList.remove('show'), 1600);
+    }
 
     function joinRaceRoom(stage) {
         if(!isFirebaseActive) { alert("서버 연결이 필요합니다."); return; }
@@ -1895,28 +2059,108 @@
                 sequence = sequence.concat(shuffleArray(extra).slice(0, RACE_WORDS_PER_STAGE - sequence.length).map(w => ({ w: w.w, m: w.m })));
             }
             let currentPlayers = data.players || {};
-            Object.keys(currentPlayers).forEach(k => { currentPlayers[k].position = 0; currentPlayers[k].finished = false; currentPlayers[k].finishRank = null; });
+            Object.keys(currentPlayers).forEach(k => { currentPlayers[k].position = 0; currentPlayers[k].finished = false; currentPlayers[k].finishRank = null; currentPlayers[k].attackSeq = 0; currentPlayers[k].mistakeSeq = 0; });
             raceRoomRef.update({ status: 'playing', wordSequence: sequence, finishedCount: 0, players: currentPlayers });
         });
+    }
+
+    // ✨ 정답 시 로켓 뒤에서 튀는 파티클 (콤보가 쌓일수록 파랑→빨강→보라로 색이 진해짐)
+    function spawnRaceParticles(laneIdx, combo) {
+        let runner = document.getElementById('race_runner_' + laneIdx); if(!runner) return;
+        let color = combo >= 6 ? '#a855f7' : (combo >= 3 ? '#ef4444' : '#3b82f6');
+        let count = Math.min(4 + combo, 10);
+        for(let i = 0; i < count; i++) {
+            let p = document.createElement('div'); p.className = 'race-particle';
+            let angle = Math.random() * 70 - 35; // 로켓 뒤쪽(왼쪽) 방향으로 퍼짐
+            let dist = 16 + Math.random() * 24;
+            p.style.setProperty('--px', (Math.cos(angle*Math.PI/180) * -dist) + 'px');
+            p.style.setProperty('--py', (Math.sin(angle*Math.PI/180) * dist) + 'px');
+            p.style.background = color; p.style.boxShadow = `0 0 6px ${color}`;
+            runner.appendChild(p);
+            setTimeout(() => p.remove(), 520);
+        }
+    }
+
+    // 💥 오답 시 내 로켓에 잠깐 나타나는 엔진 고장(흑백 필터 + 연기) 연출
+    function triggerRaceEngineFail(laneIdx) {
+        let runner = document.getElementById('race_runner_' + laneIdx); if(!runner) return;
+        runner.classList.add('engine-fail');
+        for(let i = 0; i < 3; i++) {
+            let s = document.createElement('div'); s.className = 'race-smoke'; s.textContent = '💨';
+            s.style.setProperty('--sx', (Math.random()*18-9) + 'px');
+            runner.appendChild(s);
+            setTimeout(() => s.remove(), 620);
+        }
+        setTimeout(() => runner.classList.remove('engine-fail'), 450);
+    }
+
+    // 💦 다른 플레이어가 오답을 냈을 때 그 선수 로켓 위에 잠깐 뜨는 땀방울
+    function showRaceSweatDrop(laneIdx) {
+        let runner = document.getElementById('race_runner_' + laneIdx); if(!runner) return;
+        let drop = document.createElement('div'); drop.className = 'race-sweat'; drop.textContent = '💦';
+        runner.appendChild(drop);
+        setTimeout(() => drop.remove(), 700);
+    }
+
+    // 🌫️ 3콤보 달성 시 나를 제외한 모두의 화면에 잠깐 시야 방해(안개) 효과
+    function triggerRaceFogAttack(attackerName) {
+        let fog = document.getElementById('raceFogOverlay'); if(!fog) return;
+        fog.textContent = `💨 ${attackerName} 님의 콤보 공격! 시야가 흐려집니다`;
+        fog.classList.add('show');
+        clearTimeout(fog._hideTimer);
+        fog._hideTimer = setTimeout(() => fog.classList.remove('show'), 1500);
+    }
+
+    // 🚀 추월 / 🔥 역전 대형 스탬프 연출 (기존의 단순 토스트를 대체)
+    function stampRaceMessage(text) {
+        let stamp = document.getElementById('raceStamp'); if(!stamp) return;
+        stamp.textContent = text;
+        stamp.classList.remove('show'); void stamp.offsetWidth; stamp.classList.add('show');
+        clearTimeout(raceStampTimer);
+        raceStampTimer = setTimeout(() => stamp.classList.remove('show'), 900);
     }
 
     function initRaceGameUI(data) {
         let players = data.players || {};
         raceLaneOrder = Object.keys(players).sort((a,b) => (players[a].order||0) - (players[b].order||0));
-        let track = document.getElementById('raceTrackContainer'); track.innerHTML = '';
+        raceMyLaneIdx = raceLaneOrder.indexOf(getUserKey());
+        let track = document.getElementById('raceLanesWrap'); track.innerHTML = '';
         raceLaneOrder.forEach((key, idx) => {
             let p = players[key];
             let lane = document.createElement('div'); lane.className = 'race-lane';
             lane.innerHTML = `<div class="race-track-line"></div><div class="race-finish-flag">🏁</div>
                 <div class="race-runner" id="race_runner_${idx}" style="left:4%;">
+                    <div class="race-crown" id="race_crown_${idx}">👑</div>
                     <div class="race-runner-name" style="background:${p.color};">${escapeHTML(p.name)}</div>🚀
                 </div>`;
             track.appendChild(lane);
         });
+
+        // 이번 레이스에 나올 단어 목록을 가나다순으로 보여주는 단어 은행 (초성 힌트와 함께 사용)
+        let bankList = document.getElementById('raceWordBankList'); bankList.innerHTML = '';
+        (data.wordSequence || []).slice().sort((a,b) => a.w.localeCompare(b.w, 'ko')).forEach(w => {
+            let chip = document.createElement('span'); chip.className = 'race-word-bank-chip'; chip.dataset.word = w.w; chip.textContent = w.w;
+            bankList.appendChild(chip);
+        });
+
+        // 아이템 공격 / 실수 알림은 "이번 레이스 시작 시점" 값을 기준으로만 새로 발생한 것만 감지
+        raceLastSeenAttackSeq = {}; raceLastSeenMistakeSeq = {};
+        Object.keys(players).forEach(k => { raceLastSeenAttackSeq[k] = players[k].attackSeq || 0; raceLastSeenMistakeSeq[k] = players[k].mistakeSeq || 0; });
+
         let inputEl = document.getElementById('raceInput');
-        inputEl.value = ''; inputEl.disabled = false; document.getElementById('raceSubmitBtn').disabled = false;
+        inputEl.value = ''; inputEl.disabled = true; document.getElementById('raceSubmitBtn').disabled = true;
         document.getElementById('raceInteractionBox').className = 'race-interaction-box';
-        myRaceFinishShown = false; inputEl.focus();
+        document.getElementById('btnRaceSound').textContent = raceSoundEnabled ? '🔊' : '🔇';
+        document.getElementById('raceFogOverlay').classList.remove('show');
+        document.getElementById('raceStamp').classList.remove('show');
+        document.getElementById('raceGameScreen').classList.remove('last-spurt');
+        document.getElementById('raceLastSpurtBanner').style.display = 'none';
+        myRaceFinishShown = false; raceComboCount = 0; racePrevRank = null;
+        document.getElementById('raceComboBadge').style.display = 'none';
+
+        runRaceCountdown(() => {
+            inputEl.disabled = false; document.getElementById('raceSubmitBtn').disabled = false; inputEl.focus();
+        });
     }
 
     function renderRaceGame(data) {
@@ -1927,26 +2171,55 @@
         let resetBtn = document.getElementById('btnRaceReset');
         if(resetBtn) resetBtn.style.display = (data.host === myKey) ? 'inline-block' : 'none';
 
+        // 순위(키 포함) 계산 - 1등 왕관 표시에 필요
+        let standingEntries = Object.keys(players).map(k => [k, players[k]]).sort((a,b) => {
+            let pa = a[1], pb = b[1];
+            if(pa.finished && pb.finished) return (pa.finishRank||0)-(pb.finishRank||0);
+            if(pa.finished) return -1; if(pb.finished) return 1;
+            return (pb.position||0)-(pa.position||0);
+        });
+        let myRank = standingEntries.findIndex(([k]) => k === myKey) + 1;
+        let firstEntry = standingEntries[0];
+        let firstKey = firstEntry ? firstEntry[0] : null;
+        let firstHasProgress = firstEntry && ((firstEntry[1].position||0) > 0 || firstEntry[1].finished);
+
         raceLaneOrder.forEach((key, idx) => {
             let p = players[key]; if(!p) return;
             let runner = document.getElementById('race_runner_' + idx); if(!runner) return;
             let pct = total > 0 ? Math.min(100, (p.position / total) * 90) : 0;
             runner.style.left = (4 + pct) + '%';
             if(p.finished) runner.classList.add('finished'); else runner.classList.remove('finished');
+            if(idx === raceMyLaneIdx && raceComboCount >= 3 && !p.finished) runner.classList.add('combo-hot');
+            else runner.classList.remove('combo-hot');
+
+            let crown = document.getElementById('race_crown_' + idx);
+            if(crown) crown.style.display = (key === firstKey && firstHasProgress) ? 'block' : 'none';
+
+            // 다른 선수가 방금 오답을 냈으면 그 선수 로켓 위에 땀방울 표시
+            if(key !== myKey) {
+                let mSeq = p.mistakeSeq || 0;
+                if(mSeq > (raceLastSeenMistakeSeq[key] || 0)) { raceLastSeenMistakeSeq[key] = mSeq; showRaceSweatDrop(idx); }
+                else if(raceLastSeenMistakeSeq[key] === undefined) { raceLastSeenMistakeSeq[key] = mSeq; }
+
+                // 다른 선수가 3콤보 공격을 새로 발동했으면 내 화면에 시야 방해(안개) 효과
+                let aSeq = p.attackSeq || 0;
+                if(aSeq > (raceLastSeenAttackSeq[key] || 0)) { raceLastSeenAttackSeq[key] = aSeq; triggerRaceFogAttack(escapeHTML(p.name)); }
+                else if(raceLastSeenAttackSeq[key] === undefined) { raceLastSeenAttackSeq[key] = aSeq; }
+            }
         });
 
-        let standing = Object.values(players).slice().sort((a,b) => {
-            if(a.finished && b.finished) return (a.finishRank||0)-(b.finishRank||0);
-            if(a.finished) return -1; if(b.finished) return 1;
-            return (b.position||0)-(a.position||0);
-        });
-        let myRank = standing.findIndex(p => p === myData) + 1;
         document.getElementById('raceMyRankDisplay').innerText = myRank > 0 ? `${myRank}위` : '-';
 
         if(!myData) return;
 
+        // 순위가 오르면(숫자가 작아지면) 화면 중앙에 큼직한 추월/역전 스탬프를 찍음
+        if(myRank > 0 && racePrevRank !== null && myRank < racePrevRank) {
+            stampRaceMessage(myRank === 1 ? '🔥 역전!' : '🚀 추월!');
+        }
+        if(myRank > 0) racePrevRank = myRank;
+
         if(myData.finished) {
-            if(!myRaceFinishShown) { myRaceFinishShown = true; showRaceFinishResult(myData, total, data); }
+            if(!myRaceFinishShown) { myRaceFinishShown = true; playRaceFinishSound(); showRaceFinishResult(myData, total, data); }
             return;
         }
 
@@ -1954,7 +2227,24 @@
         if(idx < total) {
             document.getElementById('raceProgressLabel').innerText = `${idx+1} / ${total}`;
             document.getElementById('raceTargetMean').innerText = sequence[idx].m;
+            document.getElementById('raceChoseongHint').textContent = '힌트: ' + getChoseongHint(sequence[idx].w);
+
+            // 이미 지나온 단어는 단어 은행에서 취소선으로 표시
+            let answered = new Set(sequence.slice(0, idx).map(w => w.w));
+            document.querySelectorAll('#raceWordBankList .race-word-bank-chip').forEach(chip => {
+                if(answered.has(chip.dataset.word)) chip.classList.add('done'); else chip.classList.remove('done');
+            });
+
+            // 결승선까지 3단어 이하로 남으면 "라스트 스퍼트" 경고 연출
+            let remaining = total - idx;
+            let screenEl = document.getElementById('raceGameScreen'), bannerEl = document.getElementById('raceLastSpurtBanner');
+            if(remaining > 0 && remaining <= 3) { screenEl.classList.add('last-spurt'); bannerEl.style.display = 'block'; }
+            else { screenEl.classList.remove('last-spurt'); bannerEl.style.display = 'none'; }
         }
+
+        let comboBadge = document.getElementById('raceComboBadge');
+        if(raceComboCount >= 2) { comboBadge.style.display = 'inline-block'; comboBadge.textContent = `🔥 ${raceComboCount}연속 정답!`; }
+        else { comboBadge.style.display = 'none'; }
 
         // 방에 남아있는 모든 선수가 완주하면 자동으로 대기실 상태로 되돌려 같은 방에서 바로 재도전 가능하게 함
         // (여러 클라이언트가 동시에 감지해도 트랜잭션으로 안전하게 한 번만 반영됨)
@@ -2005,6 +2295,16 @@
 
         if(val === normalizeForCompare(sequence[idx].w)) {
             inputEl.value = '';
+            raceComboCount++;
+            if(raceComboCount >= 2) playRaceComboSound(); else playRaceCorrectSound();
+            spawnRaceParticles(raceMyLaneIdx, raceComboCount);
+
+            // 3콤보마다(3,6,9...) 나를 제외한 모두의 화면에 잠깐 시야 방해를 거는 "아이템 공격" 발동
+            if(raceComboCount % 3 === 0) {
+                raceRoomRef.child(`players/${myKey}/attackSeq`).transaction(s => (s||0) + 1);
+                showRaceRankToast('💥 방해 공격 발동! 상대방 화면이 잠깐 흐려집니다');
+            }
+
             raceRoomRef.child(`players/${myKey}/position`).transaction(pos => (pos||0) + 1).then(result => {
                 if(!result.committed) return;
                 let newPos = result.snapshot.val();
@@ -2016,6 +2316,10 @@
                 }
             });
         } else {
+            raceComboCount = 0;
+            playRaceWrongSound();
+            triggerRaceEngineFail(raceMyLaneIdx);
+            raceRoomRef.child(`players/${myKey}/mistakeSeq`).transaction(s => (s||0) + 1);
             inputEl.value = ''; inputEl.classList.add('shake'); inputEl.style.borderColor = '#ef4444';
             setTimeout(() => { inputEl.classList.remove('shake'); inputEl.style.borderColor = ''; }, 300);
         }
