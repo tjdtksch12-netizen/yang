@@ -369,6 +369,31 @@
             .sv-q { font-size: 1.3rem; }
             .sv-opts button { font-size: 1.05rem; padding: 16px 4px; }
         }
+
+        /* 🤖 컴퓨터 연습 모드 */
+        .practice-card { cursor: default !important; padding: 14px 12px 12px !important; }
+        .practice-card:hover { transform: translateY(-3px) !important; }
+        .practice-title { font-size: 1.25rem; font-weight: 950; letter-spacing:-.5px; }
+        .practice-range { font-size:.78rem; color:var(--text-light); margin-top:2px; }
+        .practice-record { font-size:.82rem; line-height:1.35; min-height:38px; margin-top:5px; }
+        .practice-actions { display:grid; grid-template-columns:1fr 1fr; gap:7px; width:100%; margin-top:9px; }
+        .stage-play-btn { border:0; border-radius:10px; padding:9px 6px; font-size:.82rem; font-weight:900; cursor:pointer; transition:.16s; }
+        .stage-play-btn:hover { transform:translateY(-1px); filter:brightness(1.04); }
+        .stage-play-btn.real { background:linear-gradient(135deg,#7c3aed,#4f46e5); color:#fff; box-shadow:0 8px 16px rgba(79,70,229,.18); }
+        .stage-play-btn.practice { background:linear-gradient(135deg,#0f766e,#0891b2); color:#fff; box-shadow:0 8px 16px rgba(8,145,178,.18); }
+        .practice-mode-bar { display:flex; justify-content:space-between; align-items:center; gap:10px; padding:10px 13px; margin-bottom:13px; border-radius:12px; background:linear-gradient(90deg,#e0f2fe,#ecfeff); color:#155e75; border:1px solid #a5f3fc; font-weight:800; }
+        .practice-mode-bar.dark { background:linear-gradient(90deg,rgba(34,211,238,.12),rgba(16,185,129,.10)); color:#bff7ff; border-color:rgba(103,232,249,.28); }
+        .practice-badge { padding:5px 9px; border-radius:999px; background:#fff; border:1px solid rgba(8,145,178,.18); color:#0e7490; font-size:.75rem; white-space:nowrap; }
+        .practice-badge.dark { background:rgba(255,255,255,.07); border-color:rgba(255,255,255,.12); color:#67e8f9; }
+        .bot-thinking { animation:botPulse .9s ease-in-out infinite; }
+        @keyframes botPulse { 50%{opacity:.55; transform:scale(.98);} }
+        .sv-practice-bot { display:inline-flex; align-items:center; gap:4px; }
+        @media (max-width:600px) {
+            .practice-actions { grid-template-columns:1fr; }
+            .practice-card { min-height:190px !important; }
+            .practice-mode-bar { align-items:flex-start; }
+        }
+
         @media (prefers-reduced-motion: reduce) {
             .sv-bn, .sv-crown, .sv-stamp, .sv-float, .sv-hearts, .sv-cfs i { animation: none !important; }
             .sv-float { display: none; }
@@ -1143,7 +1168,231 @@
         @media (prefers-reduced-motion: reduce) {
             *, *::before, *::after { animation-duration:.001ms !important; animation-iteration-count:1 !important; scroll-behavior:auto !important; transition-duration:.001ms !important; }
         }
-    </style>
+    
+
+/* =========================================================
+   ACCESSIBILITY + CLIPPING FIX
+   마지막 스타일 블록에서 전체 화면의 대비/가독성/잘림을 최종 보정합니다.
+   ========================================================= */
+html { background:#060a14 !important; }
+body {
+    background:
+        radial-gradient(circle at 12% 8%, rgba(72,112,255,.16), transparent 25%),
+        radial-gradient(circle at 88% 14%, rgba(0,214,255,.12), transparent 23%),
+        linear-gradient(135deg,#070b15 0%,#0a1020 48%,#060a14 100%) !important;
+    color:#f3f7ff !important;
+}
+
+/* 모든 일반 화면을 한 가지 고대비 게임 패널로 통일 */
+.screen:not(#loginScreen) {
+    background:linear-gradient(145deg,#0e1628 0%,#09111f 100%) !important;
+    color:#f3f7ff !important;
+    border-color:rgba(126,160,220,.18) !important;
+}
+.screen:not(#loginScreen) .screen-title,
+.screen:not(#loginScreen) h1,
+.screen:not(#loginScreen) h2,
+.screen:not(#loginScreen) h3,
+.screen:not(#loginScreen) h4,
+.screen:not(#loginScreen) p,
+.screen:not(#loginScreen) span,
+.screen:not(#loginScreen) label {
+    text-shadow:0 1px 2px rgba(0,0,0,.28);
+}
+
+/* 섹션 제목: 밝은 화면에서 흰 글씨가 사라지던 문제 제거 */
+.section-heading h2 { color:#f5f8ff !important; }
+.section-kicker { color:#8fa8cf !important; }
+.section-count { color:#c3d1e8 !important; background:rgba(255,255,255,.055) !important; border-color:rgba(255,255,255,.12) !important; }
+
+/* 대시보드 대비 */
+.dashboard,
+#homeScreen .dashboard,
+#masterStageScreen .dashboard,
+#rainStageScreen .dashboard,
+#landStageScreen .dashboard,
+#survStageScreen .dashboard {
+    background:linear-gradient(135deg,#131f38,#0c1628) !important;
+    color:#f3f7ff !important;
+    border-color:rgba(126,160,220,.16) !important;
+}
+.dashboard-title { color:#f4f8ff !important; }
+#totalWordsDesc { color:#a9b8d0 !important; }
+
+/* 인라인 스타일로 들어간 어두운 색 글씨도 최종 고대비 보정 */
+#masterStageScreen .dashboard p,
+#rainStageScreen .dashboard p,
+#landStageScreen .dashboard p,
+#survStageScreen .dashboard p {
+    color:#c5d3e8 !important;
+}
+#landStageScreen .dashboard p { color:#d9caff !important; }
+#survStageScreen .dashboard p { color:#c9d4ec !important; }
+
+/* 매일/스테이지 카드: 글씨는 밝고, 보조문구도 충분히 밝게 */
+.day-btn { color:#f0f5ff !important; }
+.day-btn .daily-rate { color:#aebdd4 !important; }
+.day-btn.cleared .daily-rate { color:#79efb6 !important; }
+.day-btn.locked-btn { color:#a8b5c9 !important; opacity:.74 !important; }
+.day-btn.locked-btn .daily-rate { color:#8f9db1 !important; }
+.clear-badge { color:#fff !important; }
+
+/* 로그인 화면도 고대비 유지 */
+#loginScreen .login-box { background:linear-gradient(145deg,#111b31,#0a1120) !important; border-color:rgba(99,164,255,.22) !important; }
+#loginScreen .login-box h2 { color:#f8fbff !important; }
+#loginScreen .input-group label { color:#aebbd0 !important; }
+#loginScreen .input-group input { color:#fff !important; background:#070d19 !important; border-color:rgba(148,163,184,.24) !important; }
+#loginScreen .input-group input::placeholder { color:#75839b !important; }
+
+/* 상단 사용자 정보 */
+.user-profile-bar { color:#e9f2ff !important; background:linear-gradient(90deg,#101a2d,#0a1221) !important; border-color:rgba(126,160,220,.17) !important; }
+.btn-logout { color:#ffb1bc !important; }
+
+/* 탭은 비활성도 확실하게 보이게 */
+.main-tabs { background:rgba(9,15,28,.92) !important; border-color:rgba(126,160,220,.16) !important; }
+.main-tab { color:#9eacc3 !important; }
+.main-tab.active { color:#fff !important; }
+.main-tab:hover:not(.active) { color:#edf4ff !important; }
+
+/* 버튼/입력 컨트롤 */
+.stop-btn { color:#d5e0f2 !important; background:rgba(255,255,255,.07) !important; border-color:rgba(255,255,255,.10) !important; }
+.stop-btn:hover { color:#fff !important; background:rgba(255,255,255,.11) !important; }
+.word-input, .land-input, .rain-input { color:#fff !important; }
+.word-input::placeholder, .land-input::placeholder, .rain-input::placeholder { color:#74839c !important; opacity:1 !important; }
+
+/* 학습/퀴즈 */
+#studyScreen, #quizScreen { background:linear-gradient(145deg,#0e1728,#09111f) !important; }
+.flashcard { background:linear-gradient(145deg,#16243c,#0d182a) !important; border-color:rgba(126,160,220,.18) !important; }
+.flashcard-word { color:#ffffff !important; background:rgba(255,255,255,.045) !important; }
+.flashcard-mean { color:#d4deed !important; }
+.study-progress { color:#8fe9ff !important; }
+.quiz-question { color:#f5f8ff !important; }
+.option-btn { color:#dbe5f4 !important; background:rgba(255,255,255,.035) !important; border-color:rgba(255,255,255,.10) !important; }
+.option-btn.selected { color:#fff !important; }
+
+/* 랭킹 */
+#rankingScreen { background:linear-gradient(145deg,#101827,#0a1220) !important; }
+#rankingTitle { color:#f7faff !important; }
+.rank-toggle-btn { color:#bcc9dd !important; background:rgba(255,255,255,.045) !important; border-color:rgba(255,255,255,.10) !important; }
+.rank-toggle-btn.active { color:#fff !important; background:linear-gradient(135deg,#4258b8,#6046b2) !important; }
+.stage-tab { color:#b2c0d6 !important; background:rgba(255,255,255,.045) !important; border-color:rgba(255,255,255,.10) !important; }
+.stage-tab.active { color:#fff !important; }
+.ranking-item { color:#ecf3ff !important; background:rgba(255,255,255,.045) !important; border-color:rgba(255,255,255,.08) !important; }
+.ranking-item:nth-child(1) { color:#ffe9a7 !important; }
+.ranking-item:nth-child(2) { color:#e2eaf6 !important; }
+.ranking-item:nth-child(3) { color:#ffd8c7 !important; }
+
+/* 관리자 */
+#adminScreen { background:linear-gradient(145deg,#111825,#0a111d) !important; }
+#adminScreen .screen-title { color:#fff !important; }
+.admin-table th { color:#15213a !important; }
+.admin-table td { color:#dbe5f4 !important; }
+
+/* 땅따먹기 대기실: 인라인 밝은 배경 때문에 흰 글씨가 묻히던 문제 */
+#landLobbyScreen { background:linear-gradient(145deg,#111827,#0b1220) !important; }
+#landLobbyScreen .land-lobby-box { background:linear-gradient(145deg,#121d32,#0c1526) !important; border-color:rgba(192,132,252,.22) !important; }
+#landLobbyScreen .land-lobby-header span,
+#landLobbyScreen .team-title,
+#landLobbyScreen h4 { color:#f1f5ff !important; }
+#landLobbyScreen .lobby-player { color:#e4edfb !important; background:rgba(255,255,255,.05) !important; }
+#lobbyGuestMessage, #survLobbyGuestMsg { color:#b9d2ff !important; }
+
+/* 실제 게임 보드의 글씨 대비 */
+#landGameScreen { background:linear-gradient(145deg,#0d1728,#08111e) !important; }
+.land-status-box { color:#fff !important; }
+.land-target-mean { color:#eef4ff !important; }
+.land-word-chip { color:#8fe6ff !important; }
+.land-player-chip { color:#edf4ff !important; background:rgba(255,255,255,.05) !important; }
+
+/* SURVIVAL 로비 */
+#survLobbyScreen { background:linear-gradient(145deg,#0d1430,#080e20) !important; }
+#survLobbyScreen .land-lobby-box { background:linear-gradient(145deg,#111d4a,#0c1532) !important; }
+#survLobbyScreen h4 { color:#fff !important; }
+#survLobbyScreen .lobby-player { color:#f0f5ff !important; }
+
+/* 그림/그래픽 잘림 방지 */
+img, svg, canvas { max-width:100%; height:auto; }
+.hero-emblem { right:clamp(18px,7vw,95px) !important; top:50% !important; }
+.hero-orbit-a { right:-55px !important; }
+.hero-orbit-b { right:-70px !important; }
+.hero-copy { max-width:min(700px,72%) !important; }
+
+/* 모바일에서 엠블럼이 화면 밖으로 밀려 잘리던 문제 */
+@media (max-width: 760px) {
+    .hero-copy { max-width:100% !important; padding-right:24px !important; }
+    .hero-emblem { width:170px !important; height:170px !important; right:12px !important; opacity:.32 !important; }
+    .hero-emblem b { font-size:2rem !important; }
+    .hero-emblem span { font-size:.7rem !important; letter-spacing:4px !important; }
+    .hero-emblem i { font-size:1rem !important; }
+    .hero-orbit-a { right:-90px !important; }
+    .hero-orbit-b { right:-100px !important; }
+    .dashboard-header { flex-wrap:wrap; }
+    .ranking-btn { margin-left:auto; }
+}
+@media (max-width: 480px) {
+    .hero-emblem { width:145px !important; height:145px !important; right:8px !important; opacity:.24 !important; }
+    .hero-emblem b { font-size:1.7rem !important; }
+    .hero-copy { padding:30px 18px !important; }
+    .hero-title { font-size:2rem !important; max-width:70% !important; }
+    .hero-desc { max-width:76%; font-size:.9rem !important; }
+    .hero-tags { max-width:78%; }
+}
+
+/* 애니메이션/오버레이가 컨텐츠를 잘라먹지 않도록 핵심 게임 화면만 예외 처리 */
+.master-screen, .rain-screen, .sv-screen, #landGameScreen, #survGameScreen { overflow:hidden; }
+.master-target-box, .sv-stage, .defense-sky, .land-board-container { overflow:hidden; }
+
+/* 아이콘/이모지 버튼은 line-height를 안정화해 윗부분이 잘리는 현상 방지 */
+button, .day-btn, .stage-tab, .ranking-btn, .stop-btn, .sv-ibtn, .sv-btn { line-height:1.25; }
+
+/* 저대비 상태 텍스트 최종 보정 */
+[style*="color: var(--text-light)"], [style*="color:var(--text-light)"], [style*="color:#64748b"], [style*="color: #64748b"] { color:#aebbd0 !important; }
+
+/* 브라우저의 강제 다크모드/명암 반전으로 인한 색 깨짐 방지 */
+input, select, button { color-scheme:dark; }
+
+/* =========================================================
+   FINAL CLIPPING / VIEWPORT FIX
+   장식 요소가 화면 가장자리에서 잘리지 않도록 안전 영역을 확보합니다.
+   ========================================================= */
+.game-header, .brand-mark { overflow: visible !important; }
+.game-header { padding-left: 72px !important; padding-right: 72px !important; }
+.brand-mark { max-width: 100%; flex-wrap: nowrap; justify-content: center; }
+.brand-flare { flex: 0 0 auto; line-height: 1.2; }
+
+/* 첫 화면 번개 배지: 부모 경계에 걸리지 않도록 안전하게 배치 */
+#loginScreen { overflow: visible !important; padding-top: 58px !important; }
+#loginScreen .login-box { overflow: visible !important; z-index: 3; margin-top: 18px !important; }
+#loginScreen .login-box::before {
+    top: -36px !important;
+    left: 50% !important;
+    z-index: 10 !important;
+    clip-path: none !important;
+}
+
+/* 메인 히어로의 장식 궤도는 화면 밖으로 나가지 않게 보정 */
+.game-hero { overflow: hidden !important; }
+.hero-orbit-a { right: 0 !important; top: 0 !important; }
+.hero-orbit-b { right: 0 !important; bottom: 0 !important; }
+
+/* 우측 엠블럼이 작은 화면에서 잘리지 않도록 */
+.hero-emblem { right: clamp(18px, 7%, 72px) !important; max-width: calc(100% - 36px); }
+
+@media (max-width: 760px) {
+    .game-header { min-height: 66px !important; padding: 8px 48px !important; }
+    .brand-main { font-size: 1.48rem !important; letter-spacing: 2px !important; }
+    .brand-sub { display:none !important; }
+    .admin-btn { right: 4px !important; }
+    #loginScreen { padding-top: 48px !important; }
+    #loginScreen .login-box { margin-top: 12px !important; }
+    #loginScreen .login-box::before { top: -34px !important; width: 68px !important; height: 68px !important; font-size: 2rem !important; }
+    .game-hero { min-height: 500px !important; }
+    .hero-copy { padding: 38px 24px 26px !important; max-width: 100% !important; }
+    .hero-title { font-size: clamp(2rem, 10vw, 3.2rem) !important; }
+    .hero-emblem { width: 180px !important; height: 180px !important; right: 18px !important; top: auto !important; bottom: 20px !important; transform: rotate(-8deg) !important; opacity: .92; }
+    .hero-emblem b { font-size: 2.1rem !important; }
+}
+</style>
 </head>
 <body>
 
@@ -1784,6 +2033,8 @@
     }
 
     function switchMainTab(tab) {
+        if(landPracticeMode && tab !== 'land') { landPracticeMode=false; inLandGrabRoom=false; if(landPracticeTimer){clearTimeout(landPracticeTimer);clearInterval(landPracticeTimer);landPracticeTimer=null;} landPracticeData=null; }
+        if(survPracticeMode && tab !== 'surv') { survPracticeMode=false; if(survPracticeTimer){clearTimeout(survPracticeTimer);cancelAnimationFrame(survPracticeTimer);survPracticeTimer=null;} survPractice=null; }
         document.querySelectorAll('.main-tab').forEach(t => t.classList.remove('active'));
         if (tab === 'daily') { document.getElementById('tabDaily').classList.add('active'); initHome(); showScreen('homeScreen'); } 
         else if (tab === 'master') { document.getElementById('tabMaster').classList.add('active'); initMasterHome(); showScreen('masterStageScreen'); } 
@@ -1862,35 +2113,31 @@
 
     function initLandGrabHome() {
         const grid = document.getElementById('landGrid'); grid.innerHTML = '';
-        for(let s = 1; s <= TOTAL_LAND_STAGES; s++) {
-            const btn = document.createElement('button'); btn.classList.add('day-btn');
-            let startDay = (s - 1) * 4 + 1, endDay = Math.min(s * 4, TOTAL_DAYS);
-            
-            const record = landRecords[s];
-            let rateText = "전적: 없음";
-            
-            if(record && (record.soloPlays > 0 || record.teamPlays > 0)) { 
-                let sFirsts = record.soloFirsts || 0;
-                let tWins = record.teamWins || 0;
-                let tLosses = record.teamLosses || 0;
-                rateText = `<div style="font-size:0.9rem; line-height:1.4;">
-                👤 개인: 1등 <b style="color:#d946ef;">${sFirsts}</b>회<br>
-                ⚔️ 팀전: <b style="color:var(--team-a);">${tWins}승</b> <b style="color:var(--error);">${tLosses}패</b>
+        for(let stage = 1; stage <= TOTAL_LAND_STAGES; stage++) {
+            const card = document.createElement('div'); card.className = 'day-btn practice-card';
+            const startDay = (stage - 1) * 4 + 1, endDay = Math.min(stage * 4, TOTAL_DAYS);
+            const record = landRecords[stage] || {};
+            const rateText = (record.soloPlays || record.teamPlays) ?
+                `👤 개인 ${record.soloFirsts||0}승 · ⚔️ 팀 ${record.teamWins||0}승 ${record.teamLosses||0}패` : '실전 전적 없음';
+            let locked = false;
+            for(let d=startDay; d<=endDay; d++) if(!(dailyRecords[d] && dailyRecords[d].cleared)) locked = true;
+            card.innerHTML = `
+                <div class="practice-title">${stage}탄</div>
+                <div class="practice-range">학습 ${startDay}~${endDay}일차</div>
+                <div class="practice-record">${rateText}</div>
+                <div class="practice-actions">
+                    <button class="stage-play-btn practice" type="button">🤖 연습</button>
+                    <button class="stage-play-btn real" type="button">${locked ? '🔒 실전' : '⚔️ 실전'}</button>
                 </div>`;
-            }
-
-            let isLocked = false;
-            for(let d = startDay; d <= endDay; d++) if (!(dailyRecords[d] && dailyRecords[d].cleared)) isLocked = true;
-
-            if(isLocked) {
-                btn.innerHTML = `<span style="font-size:1.3rem;">${s}탄</span><div style="font-size:0.8rem; color:var(--error); margin-top:5px;">🔒 매일학습 ${startDay}~${endDay}일차 필요</div>`;
-                btn.classList.add('locked-btn'); btn.onclick = () => alert(`🔒 먼저 [매일학습 ${startDay}~${endDay}일차]를 클리어하세요!`);
-            } else {
-                btn.innerHTML = `<span style="font-size:1.3rem;">${s}탄</span><div class="daily-rate" style="margin-top:5px;">${rateText}</div>`;
-                btn.style.borderColor = '#d946ef'; btn.style.color = '#701a75'; btn.style.backgroundColor = '#fdf4ff';
-                btn.onclick = () => joinLandGrabRoom(s); 
-            }
-            grid.appendChild(btn);
+            const practiceBtn = card.querySelector('.practice');
+            const realBtn = card.querySelector('.real');
+            practiceBtn.onclick = (e) => { e.stopPropagation(); startLandPractice(stage); };
+            realBtn.onclick = (e) => {
+                e.stopPropagation();
+                if(locked) alert(`🔒 먼저 [매일학습 ${startDay}~${endDay}일차]를 클리어하세요!`);
+                else joinLandGrabRoom(stage);
+            };
+            grid.appendChild(card);
         }
     }
 
@@ -2467,7 +2714,7 @@
 
     function renderLandGame(data) {
         let players = data.players || {}, board = data.board || []; currentLandBoardData = board; let mode = data.mode || 'solo';
-        let myData = players[getUserKey()];
+        let myData = players[landPracticeMode ? 'practice_me' : getUserKey()];
         if(myData) {
             document.getElementById('landMyColorBox').style.backgroundColor = (mode==='team') ? (myData.team==='A' ? 'var(--team-a)' : 'var(--team-b)') : myData.color;
             document.getElementById('landMyScoreDisplay').innerText = myData.score || 0; myLandPenaltyUntil = myData.penaltyUntil || 0; checkLandPenalty(); 
@@ -2511,10 +2758,11 @@
             });
         }
 
-        if(board.filter(c => c && c.owner && c.owner !== "").length === 100 && board.length === 100) endLandGrabGame(data);
+        if(board.filter(c => c && c.owner && c.owner !== "").length === 100 && board.length === 100) { if(landPracticeMode) checkLandPracticeEnd(); else endLandGrabGame(data); }
     }
 
     function selectLand(index) {
+        if(landPracticeMode && (!landPracticeData || landPracticeRoundOver)) return;
         if(myLandPenaltyUntil > Date.now() || !currentLandBoardData[index] || currentLandBoardData[index].owner) return;
         currentSelectedLandIndex = index; let boardEl = document.getElementById('landBoard');
         for(let i=0; i<100; i++) { if(i === index) boardEl.children[i].classList.add('selected'); else boardEl.children[i].classList.remove('selected'); }
@@ -2527,38 +2775,57 @@
 
     function submitLandGrabWord() {
         if(currentSelectedLandIndex === -1 || myLandPenaltyUntil > Date.now()) return;
-        let inputEl = document.getElementById('landInput'), val = normalizeForCompare(inputEl.value); if(!val) return;
-        if(!currentLandBoardData[currentSelectedLandIndex]) return;
-        const roomRef = landRoomRef;
-        if(!roomRef) return;
-        if(val === normalizeForCompare(currentLandBoardData[currentSelectedLandIndex].w)) {
-            const idx = currentSelectedLandIndex;
-            const myKey = getUserKey();
-            roomRef.transaction(roomData => {
-                if(!roomData || roomData.status !== 'playing' || !roomData.board || !roomData.board[idx]) return;
-                if(roomData.board[idx].owner) return;
-                roomData.board[idx].owner = myKey;
-                if(roomData.players && roomData.players[myKey]) roomData.players[myKey].score = (roomData.players[myKey].score || 0) + 1;
-                return roomData;
+        const inputEl = document.getElementById('landInput'), val = normalizeForCompare(inputEl.value);
+        if(!val || !currentLandBoardData[currentSelectedLandIndex]) return;
+        const idx = currentSelectedLandIndex;
+        const correct = val === normalizeForCompare(currentLandBoardData[idx].w);
+        if(landPracticeMode) {
+            if(correct) {
+                const cell = landPracticeData.board[idx];
+                if(cell && !cell.owner) {
+                    cell.owner='practice_me'; landPracticeData.players.practice_me.score=(landPracticeData.players.practice_me.score||0)+1;
+                    inputEl.value=''; currentSelectedLandIndex=-1; renderLandGame(landPracticeData);
+                    document.getElementById('landTargetMean').innerHTML='<b style="color:#059669;">🎉 점령 성공!</b><br>다음 땅을 선택하세요.';
+                    checkLandPracticeEnd();
+                } else {
+                    inputEl.value=''; document.getElementById('landTargetMean').innerText='❌ 간발의 차이로 빼앗겼습니다!';
+                }
+            } else {
+                inputEl.value=''; inputEl.classList.add('shake'); setTimeout(()=>inputEl.classList.remove('shake'),300);
+                myLandPenaltyUntil=Date.now()+4000; currentSelectedLandIndex=-1;
+                document.getElementById('landInput').disabled=true; document.getElementById('landSubmitBtn').disabled=true;
+                for(let i=0;i<100;i++) document.getElementById('landBoard').children[i]?.classList.remove('selected');
+                document.getElementById('landTargetMean').innerHTML='<b style="color:var(--error);">💥 오답! 4초 동안 쉬어요.</b>';
+                checkLandPenalty();
+            }
+            return;
+        }
+        if(correct) {
+            if(!landRoomRef) return;
+            landRoomRef.child(`board/${idx}`).transaction(currentData => {
+                if(currentData && (!currentData.owner || currentData.owner === "")) { currentData.owner=getUserKey(); return currentData; } return;
             }, (error, committed) => {
-                if(error) { reportFirebaseError(error, '땅 점령'); return; }
                 if(committed) {
-                    inputEl.value = ''; currentSelectedLandIndex = -1; document.getElementById('landTargetMean').innerText = '🎉 점령 성공! 다음 땅을 선택하세요.';
-                    document.getElementById('landInteractionBox').className = 'land-interaction'; inputEl.disabled = true; document.getElementById('landSubmitBtn').disabled = true;
-                } else { inputEl.value = ''; document.getElementById('landTargetMean').innerText = '❌ 간발의 차이로 빼앗겼습니다!'; }
+                    landRoomRef.child(`players/${getUserKey()}/score`).transaction(sc => (sc||0)+1);
+                    inputEl.value=''; currentSelectedLandIndex=-1; document.getElementById('landTargetMean').innerText='🎉 점령 성공! 다음 땅을 선택하세요.'; document.getElementById('landInteractionBox').className='land-interaction'; inputEl.disabled=true; document.getElementById('landSubmitBtn').disabled=true;
+                } else { inputEl.value=''; document.getElementById('landTargetMean').innerText='❌ 간발의 차이로 빼앗겼습니다!'; }
             });
         } else {
-            inputEl.value = ''; inputEl.classList.add('shake'); setTimeout(()=> inputEl.classList.remove('shake'), 300);
-            myLandPenaltyUntil = Date.now() + 10000;
-            roomRef.child(`players/${getUserKey()}/penaltyUntil`).set(myLandPenaltyUntil).catch(err => reportFirebaseError(err, '패널티 저장'));
-            currentSelectedLandIndex = -1;
-            checkLandPenalty();
-            for(let i=0; i<100; i++) document.getElementById('landBoard').children[i].classList.remove('selected');
+            inputEl.value=''; inputEl.classList.add('shake'); setTimeout(()=>inputEl.classList.remove('shake'),300);
+            if(landRoomRef) landRoomRef.child(`players/${getUserKey()}/penaltyUntil`).set(Date.now()+10000);
+            currentSelectedLandIndex=-1;
+            for(let i=0;i<100;i++) document.getElementById('landBoard').children[i]?.classList.remove('selected');
         }
     }
 
     function checkLandPenalty() {
         if(!inLandGrabRoom) return;
+        if(landPracticeMode) {
+            const inputEl=document.getElementById('landInput'), box=document.getElementById('landInteractionBox'), meanBox=document.getElementById('landTargetMean'), btn=document.getElementById('landSubmitBtn'), now=Date.now();
+            if(myLandPenaltyUntil>now) { box.className='land-interaction penalty'; meanBox.innerText=`💥 오답입니다! ${Math.ceil((myLandPenaltyUntil-now)/1000)}초 후 다시 도전하세요.`; inputEl.disabled=true; inputEl.placeholder=`🚨 ${Math.ceil((myLandPenaltyUntil-now)/1000)}초 대기...`; btn.disabled=true; }
+            else { if(box.classList.contains('penalty')) { box.className='land-interaction'; meanBox.innerText='👇 빈 땅을 클릭하여 문제를 확인하세요.'; inputEl.placeholder='단어 입력'; } inputEl.disabled=(currentSelectedLandIndex===-1 || landPracticeRoundOver); btn.disabled=inputEl.disabled; }
+            return;
+        }
         let inputEl = document.getElementById('landInput'), box = document.getElementById('landInteractionBox'), meanBox = document.getElementById('landTargetMean'), btn = document.getElementById('landSubmitBtn');
         let now = Date.now();
         if(myLandPenaltyUntil > now) {
@@ -2646,7 +2913,99 @@
         }).catch(() => { if(onDone) onDone(); });
     }
 
+
+    // 🤖 땅따먹기 컴퓨터 연습 모드
+    let landPracticeMode = false;
+    let landPracticeTimer = null;
+    let landPracticeData = null;
+    let landPracticeRoundOver = false;
+
+    function makeLandPracticeData(stage) {
+        let stageWords = rawWords.slice((stage - 1) * LAND_WORDS_PER_STAGE, stage * LAND_WORDS_PER_STAGE);
+        if(stageWords.length < LAND_WORDS_PER_STAGE) {
+            const coveredPool = rawWords.slice(0, Math.min(rawWords.length, Math.max(stage * 4 * WORDS_PER_DAY, LAND_WORDS_PER_STAGE)));
+            const seen = new Set(stageWords.map(w => w.w));
+            stageWords = stageWords.concat(coveredPool.filter(w => !seen.has(w.w)).slice(0, LAND_WORDS_PER_STAGE-stageWords.length));
+        }
+        stageWords = shuffleArray(stageWords).slice(0, LAND_WORDS_PER_STAGE);
+        const me = 'practice_me';
+        const names = ['번개봇','어휘봇','독해봇'];
+        const players = {
+            [me]: {name:userProfile ? userProfile.studentName : '나', color:'#06b6d4', team:'A', score:0, penaltyUntil:0},
+            bot1: {name:names[0], color:'#f97316', team:'A', score:0, penaltyUntil:0},
+            bot2: {name:names[1], color:'#ef4444', team:'B', score:0, penaltyUntil:0},
+            bot3: {name:names[2], color:'#a855f7', team:'B', score:0, penaltyUntil:0}
+        };
+        return {mode:'team', stage, board:stageWords.map(w=>({w:w.w,m:w.m,owner:''})), players};
+    }
+
+    function startLandPractice(stage) {
+        // 실전 방 정리
+        if (landRoomRef || inLandGrabRoom) {
+            const oldRef = landRoomRef; inLandGrabRoom = false; landRoomRef = null;
+            if(oldRef) oldRef.off('value', handleLandRoomUpdate);
+        }
+        landPracticeMode = true; landPracticeRoundOver = false;
+        if(landPracticeTimer) clearInterval(landPracticeTimer);
+        currentLandStage = stage; currentLandRoomCode = '연습';
+        landPracticeData = makeLandPracticeData(stage);
+        inLandGrabRoom = true; landRoomRef = null;
+        myLandColor = '#06b6d4'; myLandPenaltyUntil = 0;
+        document.getElementById('landGameStageTitle').innerText = `${stage}탄 · 🤖 컴퓨터 연습`;
+        document.getElementById('landMyScoreDisplay').innerText = '0';
+        initLandGameUI(landPracticeData); showScreen('landGameScreen'); renderLandGame(landPracticeData);
+        document.getElementById('landInteractionBox').className = 'land-interaction';
+        document.getElementById('landTargetMean').innerHTML = '<b>🤖 컴퓨터와 팀전 연습</b><br>빈 땅을 누르고 단어를 입력하세요!';
+        startLandPracticeBots();
+    }
+
+    function startLandPracticeBots() {
+        const tick = () => {
+            if(!landPracticeMode || !landPracticeData || landPracticeRoundOver) return;
+            const board = landPracticeData.board || [];
+            const empty = board.map((c,i)=>c && !c.owner ? i : -1).filter(i=>i>=0);
+            if(!empty.length) return;
+            const botKeys = ['bot1','bot2','bot3'];
+            const botKey = botKeys[Math.floor(Math.random()*botKeys.length)];
+            const idx = empty[Math.floor(Math.random()*empty.length)];
+            // 쉬운 연습 → 가끔 실수하도록 확률 적용
+            if(Math.random() < 0.18) { setTimeout(() => { if(landPracticeMode) tick(); }, 900); return; }
+            landPracticeData.board[idx].owner = botKey;
+            landPracticeData.players[botKey].score = (landPracticeData.players[botKey].score||0)+1;
+            renderLandGame(landPracticeData);
+            checkLandPracticeEnd();
+            const next = 650 + Math.random()*350;
+            landPracticeTimer = setTimeout(tick, next);
+        };
+        landPracticeTimer = setTimeout(tick, 1000);
+    }
+
+    function checkLandPracticeEnd() {
+        if(!landPracticeData || landPracticeRoundOver) return;
+        if((landPracticeData.board||[]).filter(c=>c && c.owner).length < 100) return;
+        landPracticeRoundOver = true;
+        if(landPracticeTimer) { clearTimeout(landPracticeTimer); clearInterval(landPracticeTimer); landPracticeTimer=null; }
+        const p = landPracticeData.players, a=(p.practice_me.score||0)+(p.bot1.score||0), b=(p.bot2.score||0)+(p.bot3.score||0);
+        const my = p.practice_me.score||0;
+        document.getElementById('btnReviewMissed').style.display='none';
+        document.getElementById('resultTitle').innerText = a>b ? '🏆 연습 승리!' : (a===b ? '🤝 연습 무승부' : '💻 컴퓨터팀 승리');
+        document.getElementById('resultScore').innerText = `내 점령: ${my}땅`;
+        document.getElementById('resultComment').innerHTML = `A팀 ${a}땅 · B팀 ${b}땅<br><br><b>연습 모드 결과는 기록/랭킹에 저장되지 않습니다.</b>`;
+        document.getElementById('btnGoHome').onclick = () => { landPracticeMode=false; landPracticeData=null; goToHome(); };
+        showScreen('resultScreen');
+        inLandGrabRoom=false;
+    }
+
+    function quitLandPractice() {
+        landPracticeMode=false; inLandGrabRoom=false; landPracticeRoundOver=true;
+        if(landPracticeTimer) { clearTimeout(landPracticeTimer); clearInterval(landPracticeTimer); landPracticeTimer=null; }
+        landPracticeData=null; currentSelectedLandIndex=-1; myLandPenaltyUntil=0;
+        document.getElementById('landInput').value=''; document.getElementById('landBoard').innerHTML='';
+        goToHome();
+    }
+
     function quitLandGrabGame() {
+        if(landPracticeMode) { if(!confirm('연습을 그만두고 나가시겠습니까?')) return; quitLandPractice(); return; }
         if(!confirm('게임을 나가시겠습니까?')) return;
         inLandGrabRoom = false;
         if(landPenaltyInterval) clearInterval(landPenaltyInterval);
@@ -2657,6 +3016,7 @@
     }
 
     function quitLandLobby() {
+        if(landPracticeMode) { quitLandPractice(); return; }
         inLandGrabRoom = false;
         if(landPenaltyInterval) clearInterval(landPenaltyInterval);
         const ref = landRoomRef;
@@ -2711,22 +3071,16 @@
     // 🏠 단계 선택 화면
     function initSurvHome() {
         const grid = svEl('survGrid'); grid.innerHTML = '';
-        for (let s = 1; s <= TOTAL_MASTER_STAGES; s++) {
-            const btn = document.createElement('button'); btn.classList.add('day-btn');
-            const record = survRecords[s]; let rateText = "전적: 없음";
-            if (record && record.plays > 0) rateText = `👑 어휘왕 ${record.kings || 0}회 / 총 ${record.plays}회 참가`;
-            let reqDay1 = (s - 1) * 2 + 1, reqDay2 = s * 2, isLocked = false;
-            if (!(dailyRecords[reqDay1] && dailyRecords[reqDay1].cleared)) isLocked = true;
-            if (reqDay2 <= TOTAL_DAYS && !(dailyRecords[reqDay2] && dailyRecords[reqDay2].cleared)) isLocked = true;
-            if (isLocked) {
-                btn.innerHTML = `${s}탄 <div style="font-size:0.8rem; color:var(--error); margin-top:5px;">🔒 매일학습 ${reqDay1}~${reqDay2 <= TOTAL_DAYS ? reqDay2 : TOTAL_DAYS}일차 필요</div>`;
-                btn.classList.add('locked-btn'); btn.onclick = () => alert(`🔒 먼저 [매일학습 ${reqDay1}~${reqDay2 <= TOTAL_DAYS ? reqDay2 : TOTAL_DAYS}일차]를 클리어하세요!`);
-            } else {
-                btn.innerHTML = `${s}탄 <span class="clear-badge" style="background:#f59e0b;">👑 참가 가능</span><div class="daily-rate">${rateText}</div>`;
-                if (record && record.plays > 0) { btn.classList.add('cleared'); btn.style.borderColor = '#f59e0b'; btn.style.backgroundColor = '#fffbeb'; }
-                btn.onclick = () => joinSurv(s);
-            }
-            grid.appendChild(btn);
+        for (let stage = 1; stage <= TOTAL_MASTER_STAGES; stage++) {
+            const card = document.createElement('div'); card.className='day-btn practice-card';
+            const record = survRecords[stage];
+            const startDay=(stage-1)*2+1, endDay=Math.min(stage*2,TOTAL_DAYS);
+            const rateText = record && record.plays>0 ? `👑 어휘왕 ${record.kings||0}회 · 총 ${record.plays}회 참가` : '실전 전적 없음';
+            let locked=false; if(!(dailyRecords[startDay] && dailyRecords[startDay].cleared)) locked=true; if(endDay<=TOTAL_DAYS && !(dailyRecords[endDay] && dailyRecords[endDay].cleared)) locked=true;
+            card.innerHTML=`<div class="practice-title">${stage}탄</div><div class="practice-range">학습 ${startDay}~${endDay}일차</div><div class="practice-record">${rateText}</div><div class="practice-actions"><button class="stage-play-btn practice" type="button">🤖 연습</button><button class="stage-play-btn real" type="button">${locked?'🔒 실전':'👑 실전'}</button></div>`;
+            card.querySelector('.practice').onclick=(e)=>{e.stopPropagation(); startSurvPractice(stage);};
+            card.querySelector('.real').onclick=(e)=>{e.stopPropagation(); if(locked) alert(`🔒 먼저 [매일학습 ${startDay}~${endDay}일차]를 클리어하세요!`); else joinSurv(stage);};
+            grid.appendChild(card);
         }
     }
 
@@ -2734,6 +3088,114 @@
         let w = rawWords.slice((stage - 1) * MASTER_WORDS_PER_STAGE, stage * MASTER_WORDS_PER_STAGE);
         if (w.length < 12) { const used = new Set(w.map(x => x.w)); w = w.concat(shuffleArray(rawWords.filter(x => !used.has(x.w))).slice(0, 12 - w.length)); }
         return w;
+    }
+
+
+    // 🤖 어휘왕 SURVIVAL 컴퓨터 연습 모드
+    let survPracticeMode=false;
+    let survPractice=null;
+    let survPracticeTimer=null;
+
+    function startSurvPractice(stage) {
+        // 실전 방 정리
+        if(SV.ref || SV.on) { const oldRef=SV.ref; SV.on=0; SV.run=0; clearInterval(SV.tt); SV.ref=null; if(oldRef) { oldRef.off('value',svUpdate); svLeaveRef(oldRef); } }
+        if(survPracticeTimer) clearTimeout(survPracticeTimer);
+        const words=svStageWords(stage);
+        const ids=['me','bot1','bot2','bot3'];
+        const names=[userProfile?userProfile.studentName:'나','스피드봇','단어봇','문해봇'];
+        const players={};
+        ids.forEach((id,i)=>players[id]={name:names[i],color:getPlayerColor(i+3),order:i,h:3,a:1,c:0,t:0,s:0,b:0,m:0,g:0,r:0,k:0});
+        survPracticeMode=true;
+        survPractice={stage,words,q:0,current:null,answered:false,roundId:0,players,started:Date.now(),maxQ:40};
+        svEl('survLobbyHostActions').style.display='none'; svEl('survLobbyGuestMsg').style.display='none';
+        svEl('btnSurvSound').textContent=SV.sound?'🔊':'🔇';
+        svEl('survGameTitle').innerText=`${stage}탄 · 🤖 컴퓨터 연습`;
+        showScreen('survGameScreen'); renderSurvPracticeHud(); nextSurvPracticeQuestion();
+    }
+
+    function aliveSurvPracticeIds(){ return Object.keys(survPractice.players).filter(k=>survPractice.players[k].a); }
+    function renderSurvPracticeHud(){
+        if(!survPractice) return;
+        const p=survPractice.players, me=p.me;
+        svEl('survHearts').textContent=me.a?'❤️'.repeat(me.h):'💀 관전 중';
+        svEl('survCnt').textContent=`생존 ${aliveSurvPracticeIds().length} / ${Object.keys(p).length}`;
+        const ids=Object.keys(p);
+        svEl('survDots').innerHTML=ids.map(i=>`<i class="${p[i].a?'on':''}${i==='me'?' me':''}" title="${escapeHTML(p[i].name)}"></i>`).join('');
+        svEl('survBoard').innerHTML=ids.sort((a,b)=>(p[b].a||0)-(p[a].a||0)||(p[b].h||0)-(p[a].h||0)).map(i=>`<span class="${p[i].a?'':'x'}${i==='me'?' me':''}">${escapeHTML(p[i].name)} ${p[i].a?'❤️'+p[i].h:'💀'}</span>`).join('');
+    }
+
+    function makeSurvPracticeQuestion(){
+        const W=survPractice.words; const target=W[Math.floor(Math.random()*W.length)];
+        const opts=shuffleArray([target.w,...shuffleArray(W.filter(x=>x.w!==target.w)).slice(0,3).map(x=>x.w)]);
+        return {word:target,opts,ai:opts.indexOf(target.w)};
+    }
+
+    function nextSurvPracticeQuestion(){
+        if(!survPracticeMode || !survPractice) return;
+        const alive=aliveSurvPracticeIds();
+        if(alive.length<=1 || survPractice.q>=survPractice.maxQ){ endSurvPractice(); return; }
+        survPractice.q++; survPractice.roundId++; survPractice.answered=false; survPractice.current=makeSurvPracticeQuestion();
+        const q=survPractice.current;
+        sv(`<div class="practice-mode-bar dark"><span>🤖 컴퓨터 연습 · 문제를 풀며 생존하세요</span><span class="practice-badge dark">연습 ${survPractice.q}/${survPractice.maxQ}</span></div><div class="sv-qn">문제 ${survPractice.q}</div><h2 class="sv-q">${escapeHTML(q.word.m)}</h2><div class="sv-hint">뜻에 알맞은 단어를 선택하세요</div><div class="sv-bar"><b id="svTb"></b></div><div class="sv-opts">${q.opts.map((x,i)=>`<button data-i="${i}" onclick="pickSurvPractice(${i})">${escapeHTML(x)}</button>`).join('')}</div><div class="sv-fb" id="svFb">💡 컴퓨터들도 동시에 답을 고르고 있어요.</div>`);
+        renderSurvPracticeHud();
+        let left=2800, started=performance.now();
+        const tick=(now)=>{
+            if(!survPracticeMode || !survPractice || survPractice.roundId<1) return;
+            const pct=Math.max(0,left-(now-started)); const bar=document.getElementById('svTb'); if(bar) bar.style.width=(pct/2800*100)+'%';
+            if(pct>0){ survPracticeTimer=requestAnimationFrame(tick); } else finishSurvPracticeRound();
+        };
+        survPracticeTimer=requestAnimationFrame(tick);
+        // 봇 답변 일정 예약
+        const roundToken=survPractice.roundId;
+        ['bot1','bot2','bot3'].forEach((id,i)=>{
+            const delay=700+i*280+Math.random()*500;
+            setTimeout(()=>survPracticeBotAnswer(id,roundToken),delay);
+        });
+    }
+
+    function pickSurvPractice(i){
+        if(!survPracticeMode || !survPractice || survPractice.answered || !survPractice.current) return;
+        survPractice.answered=true; const btns=svEl('survStage').querySelectorAll('.sv-opts button'); btns.forEach(b=>b.disabled=true);
+        const good=i===survPractice.current.ai; survPractice.userPick=i;
+        if(btns[i]) btns[i].classList.add(good?'sel':'no');
+        svEl('svFb').innerHTML=good?'<b style="color:#7dffb2;">✅ 정답!</b> 잠시 후 결과가 공개됩니다.':'<b style="color:#ff8da1;">❌ 오답!</b> 다른 도전자들의 결과를 기다리세요.';
+    }
+    function survPracticeBotAnswer(id,roundToken){
+        if(!survPracticeMode || !survPractice || roundToken !== survPractice.roundId || !survPractice.players[id]?.a || !survPractice.current) return;
+        const p=survPractice.players[id]; p.t=(p.t||0)+1;
+        if(Math.random()<0.78){ p.c=(p.c||0)+1; p.s=1; } else p.s=0;
+    }
+    function finishSurvPracticeRound(){
+        if(!survPracticeMode || !survPractice || !survPractice.current) return;
+        if(survPracticeTimer) cancelAnimationFrame(survPracticeTimer); survPracticeTimer=null;
+        const q=survPractice.current; const p=survPractice.players;
+        Object.values(p).forEach(x=>{ if(x.a){x.t=(x.t||0)+1;} });
+        const me=p.me;
+        const userGood=survPractice.answered && survPractice.userPick===q.ai;
+        if(me.a && !userGood){ me.h=Math.max(0,(me.h||0)-1); if(me.h===0) me.a=0; }
+        ['bot1','bot2','bot3'].forEach(id=>{ const b=p[id]; if(b.a && !b.s){ b.h=Math.max(0,(b.h||0)-1); if(b.h===0) b.a=0; }});
+        const btns=svEl('survStage').querySelectorAll('.sv-opts button'); btns.forEach((b,i)=>{b.disabled=true; if(i===q.ai)b.classList.add('ok');});
+        svEl('svFb').innerHTML=`정답: <b>${escapeHTML(q.word.w)}</b><br>${userGood?'❤️ 생명 유지!':'💥 생명 -1'} · 컴퓨터들의 답도 공개됐어요.`;
+        renderSurvPracticeHud();
+        survPracticeTimer=setTimeout(nextSurvPracticeQuestion,1500);
+    }
+
+    function endSurvPractice(){
+        if(!survPracticeMode || !survPractice) return;
+        survPracticeMode=false; if(survPracticeTimer){clearTimeout(survPracticeTimer);cancelAnimationFrame(survPracticeTimer);survPracticeTimer=null;}
+        const p=survPractice.players, alive=Object.keys(p).filter(k=>p[k].a), me=p.me;
+        const sorted=Object.keys(p).sort((a,b)=>(p[b].a||0)-(p[a].a||0)||(p[b].h||0)-(p[a].h||0)||(p[b].c||0)-(p[a].c||0));
+        const rank=sorted.indexOf('me')+1;
+        document.getElementById('btnReviewMissed').style.display='none';
+        document.getElementById('resultTitle').innerText=me.a?'🏆 연습 생존 성공!':'💀 연습 종료';
+        document.getElementById('resultScore').innerText=`${rank}위 / ${Object.keys(p).length}명`;
+        document.getElementById('resultComment').innerHTML=`맞힌 문제 ${me.c||0}개 · 생명 ${me.h||0}개 남음<br><br><b>연습 모드 결과는 기록/랭킹에 저장되지 않습니다.</b>`;
+        document.getElementById('btnGoHome').onclick=()=>{survPractice=null;goToHome();};
+        showScreen('resultScreen');
+    }
+
+    function quitSurvPractice(){
+        survPracticeMode=false; if(survPracticeTimer){clearTimeout(survPracticeTimer);cancelAnimationFrame(survPracticeTimer);survPracticeTimer=null;} survPractice=null; svEl('survStage').innerHTML=''; goToHome();
     }
 
     // 🚪 방 입장
@@ -3038,6 +3500,7 @@
         }).catch(() => {});
     }
     function quitSurv(ask) {
+        if(survPracticeMode) { if(ask && !confirm("연습을 나가시겠습니까?")) return; quitSurvPractice(); return; }
         if (ask && !confirm("게임을 나가시겠습니까?")) return;
         SV.on = 0; SV.run = 0; clearInterval(SV.tt);
         const ref = SV.ref; SV.ref = null;
