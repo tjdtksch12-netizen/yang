@@ -261,116 +261,118 @@
         @keyframes shake { 0%, 100% {transform: translateX(0);} 25% {transform: translateX(-5px);} 75% {transform: translateX(5px);} }
         .shake { animation: shake 0.15s ease-in-out 0s 2; }
 
-        /* 🚀 로켓 레이스 (실시간 경쟁 타이핑 레이스) */
-        .race-track-container {
-            background-color: #0b1220;
-            background-image:
-                radial-gradient(1.5px 1.5px at 12% 22%, rgba(255,255,255,0.65) 1.5px, transparent 0),
-                radial-gradient(1px 1px at 38% 68%, rgba(255,255,255,0.4) 1px, transparent 0),
-                radial-gradient(1.5px 1.5px at 66% 30%, rgba(255,255,255,0.55) 1.5px, transparent 0),
-                radial-gradient(1px 1px at 84% 78%, rgba(255,255,255,0.35) 1px, transparent 0),
-                radial-gradient(1.5px 1.5px at 92% 15%, rgba(255,255,255,0.5) 1.5px, transparent 0),
-                radial-gradient(1px 1px at 55% 90%, rgba(255,255,255,0.3) 1px, transparent 0);
-            background-size: 180px 180px;
-            animation: raceStarScroll 9s linear infinite;
-            border-radius: 14px; padding: 16px 14px; margin-bottom: 18px; position: relative; overflow: hidden;
+        /* 👑 어휘왕 SURVIVAL (실시간 어휘 생존 게임) */
+        .btn-lobby-start:disabled { background: #94a3b8; cursor: not-allowed; }
+        .sv-rules { margin-top: 14px; padding: 12px 14px; border-radius: 10px; background: #fffbeb; border: 1px solid #fde68a; color: #92400e; font-size: 0.9rem; line-height: 1.7; word-break: keep-all; }
+
+        .sv-screen { --sv-bg: #101b4a; --sv-panel: #18276b; --sv-line: #2f418f; --sv-ink: #f3f6ff; --sv-mut: #a9b8f5; --sv-gold: #ffd23f; --sv-blue: #6f8bff; background: var(--sv-bg); color: var(--sv-ink); padding: 20px; }
+        .sv-wrap { max-width: 760px; margin: 0 auto; }
+        .sv-top { display: flex; justify-content: space-between; align-items: center; gap: 10px; margin-bottom: 10px; }
+        .sv-title { font-weight: 700; font-size: 0.95rem; color: var(--sv-mut); min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+        .sv-btns { display: flex; gap: 6px; flex: 0 0 auto; }
+        .sv-ibtn { background: var(--sv-panel); color: var(--sv-ink); border: 1px solid var(--sv-line); border-radius: 8px; padding: 7px 12px; font-size: 0.9rem; font-weight: 700; cursor: pointer; }
+        .sv-ibtn:hover { background: #22337f; }
+        .sv-ibtn.sv-warn { background: #7a2336; border-color: #b0415a; }
+        .sv-hud { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+        .sv-hearts { font-size: 1.6rem; letter-spacing: 2px; min-height: 2.1rem; display: inline-block; }
+        .sv-hearts.hit { animation: svShake 0.5s; }
+        .sv-hearts.up { animation: svBounce 0.6s; }
+        .sv-cnt { font-weight: 800; color: var(--sv-gold); }
+        .sv-dots { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 12px; }
+        .sv-dots i { width: 14px; height: 14px; border-radius: 50%; background: var(--sv-line); }
+        .sv-dots i.on { background: var(--sv-gold); box-shadow: 0 0 8px var(--sv-gold); }
+        .sv-dots i.me { outline: 3px solid var(--sv-blue); outline-offset: 2px; }
+        .sv-stage { position: relative; overflow: hidden; background: var(--sv-panel); border: 1px solid var(--sv-line); border-radius: 16px; padding: 22px; min-height: 380px; text-align: center; }
+        .sv-stage h1 { font-size: 2.2rem; font-weight: 900; margin: 0.2em 0; word-break: keep-all; }
+        .sv-stage h2 { font-size: 1.45rem; font-weight: 800; margin: 0.3em 0; word-break: keep-all; }
+        .sv-stage p { margin: 0.5em 0; line-height: 1.6; }
+        .sv-mut { color: var(--sv-mut); }
+        .sv-board { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 14px; }
+        .sv-board span { background: var(--sv-panel); border: 1px solid var(--sv-line); border-radius: 20px; padding: 2px 12px; font-size: 0.88rem; }
+        .sv-board span.x { opacity: 0.45; }
+        .sv-board span.me { border-color: var(--sv-blue); box-shadow: 0 0 0 1px var(--sv-blue); }
+
+        .sv-bn { padding: 70px 6px 50px; animation: svPop 0.5s cubic-bezier(.2,1.2,.4,1); }
+        .sv-bn h1 { color: var(--sv-gold); letter-spacing: 1px; }
+        .sv-bn p { font-size: 1.1rem; word-break: keep-all; }
+        .sv-bn.start h1 { color: #7dffb2; }
+        .sv-bn.rev h1 { color: #ff9a5c; }
+        .sv-bn.final h1, .sv-bn.duel h1 { color: #ff5c7a; text-shadow: 0 0 18px rgba(255,92,122,0.6); }
+        .sv-bn.win h1 { color: #7dffb2; }
+
+        .sv-qn { color: var(--sv-mut); font-weight: 700; }
+        .sv-q { font-size: 1.55rem; line-height: 1.45; margin: 0.45em 0 0.3em; }
+        .sv-hint { min-height: 1.7em; color: var(--sv-gold); font-weight: 700; letter-spacing: 2px; }
+        .sv-bar { height: 10px; background: var(--sv-line); border-radius: 9px; overflow: hidden; margin: 8px 0 16px; }
+        .sv-bar b { display: block; height: 100%; width: 100%; background: var(--sv-blue); }
+        .sv-opts { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+        .sv-opts button { padding: 18px 6px; font-size: 1.2rem; font-weight: 800; border-radius: 14px; border: 2px solid var(--sv-line); background: var(--sv-bg); color: var(--sv-ink); cursor: pointer; word-break: keep-all; }
+        .sv-opts button:hover:not(:disabled) { border-color: var(--sv-blue); }
+        .sv-opts button:disabled { cursor: default; color: var(--sv-ink); }
+        .sv-opts.spec button { opacity: 0.8; }
+        .sv-opts button.sel { background: #3b5bff; border-color: #8fa4ff; }
+        .sv-opts button.ok { background: var(--success); border-color: var(--success); color: #fff; opacity: 1; }
+        .sv-opts button.no { background: var(--error); border-color: var(--error); color: #fff; opacity: 1; }
+        .sv-fb { min-height: 3.6em; margin-top: 14px; font-size: 1.05rem; line-height: 1.6; }
+        .sv-float { position: absolute; left: 0; right: 0; top: 34%; font-size: 3.2rem; font-weight: 900; color: #ff6b81; text-shadow: 0 2px 12px rgba(0,0,0,0.5); pointer-events: none; z-index: 5; animation: svFloat 1.6s ease-out forwards; }
+        .sv-stamp { position: absolute; left: 50%; top: 46%; z-index: 6; padding: 6px 22px; border: 6px solid #ff3b5c; border-radius: 12px; color: #ff3b5c; background: rgba(16,27,74,0.88); font-size: 2.3rem; font-weight: 900; letter-spacing: 3px; transform: translate(-50%, -50%) rotate(-8deg); pointer-events: none; animation: svStamp 0.6s cubic-bezier(.2,1.2,.4,1); }
+
+        .sv-pad { display: block; width: 100%; height: 220px; margin-top: 14px; border: 0; border-radius: 18px; background: var(--error); color: #fff; font-size: 2.6rem; font-weight: 900; letter-spacing: 2px; cursor: pointer; user-select: none; touch-action: manipulation; }
+        .sv-pad.go { background: var(--success); }
+        .sv-pad.bad { background: #6b7280; font-size: 1.8rem; }
+        .sv-colors { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 14px; }
+        .sv-cc { height: 88px; border: 4px solid transparent; border-radius: 14px; cursor: pointer; }
+        .sv-cc.ok { border-color: #fff; }
+        .sv-cc.no { opacity: 0.35; }
+        .sv-mem { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; max-width: 340px; margin: 14px auto 0; }
+        .sv-mc { aspect-ratio: 1; border-radius: 14px; border: 2px solid var(--sv-line); background: var(--sv-bg); font-size: 2.2rem; display: flex; align-items: center; justify-content: center; color: var(--sv-ink); cursor: pointer; }
+        .sv-mc.show { background: #fff; border-color: #fff; cursor: default; }
+        .sv-mc.ok { background: var(--success); border-color: var(--success); }
+        .sv-mc.no { background: var(--error); border-color: var(--error); }
+        .sv-track { position: relative; height: 42px; background: var(--sv-line); border-radius: 21px; margin: 40px 0; }
+        .sv-track u { position: absolute; left: 42%; width: 16%; top: 0; bottom: 0; background: var(--success); opacity: 0.65; border-radius: 8px; }
+        .sv-track s { position: absolute; left: 0; top: -9px; bottom: -9px; width: 8px; margin-left: -4px; background: #fff; border-radius: 4px; text-decoration: none; }
+        .sv-btn { padding: 14px 44px; font-size: 1.3rem; font-weight: 800; border: 0; border-radius: 14px; background: var(--primary); color: #fff; cursor: pointer; }
+        .sv-field { position: relative; height: 290px; background: var(--sv-bg); border-radius: 14px; overflow: hidden; touch-action: manipulation; }
+        .sv-bal { position: absolute; font-size: 2.4rem; line-height: 1; background: none; border: 0; padding: 0; cursor: pointer; user-select: none; touch-action: manipulation; }
+        .sv-bal span { display: block; }
+        .sv-rise { animation: svRise 2.6s linear forwards; }
+        .sv-bal.popped { animation-play-state: paused; pointer-events: none; }
+        .sv-bal.popped span { animation: svPopB 0.2s ease-out forwards; }
+
+        .sv-king { position: relative; padding: 14px 0 6px; }
+        .sv-crown { font-size: 4.4rem; line-height: 1.1; animation: svCrown 0.9s cubic-bezier(.2,1.3,.4,1); }
+        .sv-king h1 { color: var(--sv-gold); text-shadow: 0 0 20px rgba(255,210,63,0.55); }
+        .sv-cfs { position: absolute; inset: 0; overflow: hidden; pointer-events: none; }
+        .sv-cfs i { position: absolute; top: -30px; font-style: normal; font-size: 1.4rem; animation: svFall 2.6s linear infinite; }
+        .sv-stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(105px, 1fr)); gap: 8px; margin-top: 16px; text-align: center; }
+        .sv-stats div { padding: 8px 4px; border-radius: 10px; }
+        .sv-stats small { display: block; font-size: 0.78rem; opacity: 0.8; }
+        .sv-stats b { font-size: 1.1rem; }
+        @media (max-width: 600px) { .sv-stats > div:last-child:nth-child(odd) { grid-column: 1 / -1; } }
+        .sv-stats.dark div { background: var(--sv-bg); border: 1px solid var(--sv-line); }
+        .sv-stats.light div { background: var(--bg); border: 1px solid var(--border); }
+
+        @keyframes svPop { 0% { transform: scale(0.6); opacity: 0; } 100% { transform: scale(1); opacity: 1; } }
+        @keyframes svShake { 0%,100% { transform: translateX(0); } 20% { transform: translateX(-8px); } 40% { transform: translateX(8px); } 60% { transform: translateX(-5px); } 80% { transform: translateX(5px); } }
+        @keyframes svBounce { 0%,100% { transform: scale(1); } 40% { transform: scale(1.35); } }
+        @keyframes svFloat { 0% { transform: translateY(20px) scale(0.6); opacity: 0; } 25% { transform: translateY(0) scale(1.15); opacity: 1; } 100% { transform: translateY(-70px) scale(1); opacity: 0; } }
+        @keyframes svStamp { 0% { transform: translate(-50%, -50%) rotate(-8deg) scale(2.6); opacity: 0; } 100% { transform: translate(-50%, -50%) rotate(-8deg) scale(1); opacity: 1; } }
+        @keyframes svRise { from { transform: translateY(0); } to { transform: translateY(-350px); } }
+        @keyframes svPopB { to { transform: scale(1.8); opacity: 0; } }
+        @keyframes svCrown { 0% { transform: scale(0.2) rotate(-25deg); opacity: 0; } 100% { transform: scale(1) rotate(0); opacity: 1; } }
+        @keyframes svFall { to { transform: translateY(440px) rotate(240deg); opacity: 0.25; } }
+        @media (max-width: 600px) {
+            .sv-screen { padding: 12px; }
+            .sv-stage { padding: 14px; }
+            .sv-stage h1 { font-size: 1.8rem; }
+            .sv-q { font-size: 1.3rem; }
+            .sv-opts button { font-size: 1.05rem; padding: 16px 4px; }
         }
-        @keyframes raceStarScroll { from { background-position: 0 0; } to { background-position: -180px 0; } }
-
-        .race-lane { position: relative; height: 48px; background: rgba(255,255,255,0.06); border-radius: 24px; margin-bottom: 12px; }
-        .race-lane:last-child { margin-bottom: 0; }
-        .race-track-line { position: absolute; left: 14px; right: 54px; top: 50%; height: 2px; background: repeating-linear-gradient(90deg, rgba(255,255,255,0.25) 0 8px, transparent 8px 18px); }
-        .race-finish-flag { position: absolute; right: 12px; top: 50%; transform: translateY(-50%); font-size: 1.3rem; }
-        .race-runner { position: absolute; top: 50%; transform: translate(-50%, -50%); font-size: 1.5rem; left: 4%; transition: left 0.45s cubic-bezier(.34,1.56,.64,1); z-index: 5; line-height: 1; }
-        .race-runner-name { position: absolute; bottom: 26px; left: 50%; transform: translateX(-50%); font-size: 0.62rem; font-weight: bold; color: white; padding: 2px 7px; border-radius: 8px; white-space: nowrap; box-shadow: 0 1px 3px rgba(0,0,0,0.4); }
-        .race-runner.finished { filter: drop-shadow(0 0 6px #fbbf24); }
-        .race-runner.combo-hot { filter: drop-shadow(0 0 8px #fb923c) drop-shadow(0 0 3px #fde047); animation: raceComboPulse 0.5s ease-in-out infinite; }
-        .race-runner::after { content: ''; position: absolute; right: 100%; top: 50%; transform: translateY(-50%); width: 0; height: 3px; background: linear-gradient(90deg, transparent, #fb923c); border-radius: 2px; transition: width 0.3s; }
-        .race-runner.combo-hot::after { width: 22px; }
-        @keyframes raceComboPulse { 0%,100% { transform: translate(-50%,-50%) scale(1); } 50% { transform: translate(-50%,-50%) scale(1.18); } }
-
-        /* 👑 1등 왕관 */
-        .race-crown { position: absolute; bottom: 42px; left: 50%; transform: translateX(-50%); font-size: 1.05rem; display: none; z-index: 6; filter: drop-shadow(0 1px 2px rgba(0,0,0,0.5)); animation: raceCrownBob 1s ease-in-out infinite; }
-        @keyframes raceCrownBob { 0%,100% { transform: translateX(-50%) translateY(0); } 50% { transform: translateX(-50%) translateY(-3px); } }
-
-        /* ✨ 정답 파티클 */
-        .race-particle { position: absolute; left: 50%; top: 50%; width: 5px; height: 5px; border-radius: 50%; pointer-events: none; z-index: 4; animation: raceParticleBurst 0.5s ease-out forwards; }
-        @keyframes raceParticleBurst { 0% { transform: translate(-50%,-50%) translate(0,0) scale(1); opacity: 1; } 100% { transform: translate(-50%,-50%) translate(var(--px), var(--py)) scale(0.3); opacity: 0; } }
-
-        /* 💥 오답 연출: 엔진 고장(흑백 필터 + 연기) */
-        .race-runner.engine-fail { filter: grayscale(1) brightness(0.7); transition: filter 0.15s; }
-        .race-smoke { position: absolute; left: 50%; bottom: 55%; font-size: 0.85rem; opacity: 0.9; pointer-events: none; animation: raceSmokeRise 0.6s ease-out forwards; }
-        @keyframes raceSmokeRise { 0% { transform: translate(-50%,0) translateX(var(--sx,0)) scale(0.6); opacity: 0.9; } 100% { transform: translate(-50%,-24px) translateX(var(--sx,0)) scale(1.4); opacity: 0; } }
-
-        /* 💦 다른 플레이어 오답 표시 */
-        .race-sweat { position: absolute; top: -10px; right: -8px; font-size: 0.85rem; pointer-events: none; z-index: 6; animation: raceSweatPop 0.7s ease-out forwards; }
-        @keyframes raceSweatPop { 0% { transform: scale(0) translateY(4px); opacity: 0; } 30% { transform: scale(1.3) translateY(-2px); opacity: 1; } 100% { transform: scale(1) translateY(-10px); opacity: 0; } }
-
-        /* 🌫️ 아이템 공격: 시야 방해 */
-        .race-fog-overlay { position: absolute; inset: 0; z-index: 40; display: flex; align-items: flex-end; justify-content: center; padding-bottom: 10px; background: radial-gradient(ellipse at center, rgba(30,20,10,0.2), rgba(10,6,3,0.82) 88%); backdrop-filter: blur(2.5px); -webkit-backdrop-filter: blur(2.5px); opacity: 0; pointer-events: none; transition: opacity 0.35s ease; color: #fca5a5; font-weight: bold; font-size: 0.82rem; border-radius: 14px; text-align: center; }
-        .race-fog-overlay.show { opacity: 1; }
-
-        /* 🚀 추월 / 🔥 역전 대형 스탬프 */
-        .race-stamp { position: absolute; inset: 0; z-index: 45; display: flex; align-items: center; justify-content: center; pointer-events: none; font-size: 2.5rem; font-weight: 900; color: #fbbf24; text-shadow: 0 0 14px rgba(251,191,36,0.9), 3px 3px 0 rgba(0,0,0,0.45); opacity: 0; transform: scale(2) rotate(-8deg); text-align: center; }
-        .race-stamp.show { animation: raceStampSlam 0.9s cubic-bezier(.2,1.1,.4,1) forwards; }
-        @keyframes raceStampSlam { 0% { opacity: 0; transform: scale(2.2) rotate(-10deg); } 15% { opacity: 1; transform: scale(0.92) rotate(2deg); } 25% { transform: scale(1.06) rotate(-2deg); } 35% { transform: scale(1) rotate(0); } 75% { opacity: 1; transform: scale(1) rotate(0); } 100% { opacity: 0; transform: scale(1.08) rotate(0); } }
-
-        /* 🚨 라스트 스퍼트 */
-        #raceGameScreen.last-spurt { animation: raceLastSpurtBorder 0.8s ease-in-out infinite; }
-        @keyframes raceLastSpurtBorder { 0%,100% { box-shadow: 0 0 0 3px rgba(239,68,68,0.12) inset; } 50% { box-shadow: 0 0 0 3px rgba(239,68,68,0.75) inset; } }
-        .race-last-spurt-banner { display: none; text-align: center; font-weight: 900; color: #dc2626; background: #fef2f2; border: 2px solid #fca5a5; border-radius: 10px; padding: 7px; margin-bottom: 12px; font-size: 0.95rem; animation: raceLastSpurtBlink 0.8s ease-in-out infinite; }
-        @keyframes raceLastSpurtBlink { 0%,100% { opacity: 1; } 50% { opacity: 0.55; } }
-
-        .race-interaction-box { text-align: center; background: #f1f5f9; padding: 18px; border-radius: 12px; border: 2px dashed #94a3b8; position: relative; }
-        .race-interaction-box.finished-box { border-color: var(--success); background: #ecfdf5; }
-        .race-progress-row { display: flex; justify-content: center; align-items: center; gap: 10px; margin-bottom: 8px; }
-        .race-progress-label { font-weight: bold; color: #ea580c; font-size: 0.95rem; }
-        .race-combo-badge { display: none; background: linear-gradient(90deg,#f97316,#fbbf24); color: white; font-weight: bold; font-size: 0.85rem; padding: 3px 12px; border-radius: 20px; box-shadow: 0 2px 6px rgba(249,115,22,0.4); animation: raceComboPop 0.35s ease-out; }
-        @keyframes raceComboPop { 0% { transform: scale(0.5); opacity: 0; } 70% { transform: scale(1.15); } 100% { transform: scale(1); opacity: 1; } }
-        .race-target-mean { font-size: 1.25rem; font-weight: bold; margin-bottom: 10px; color: var(--text); min-height: 34px; word-break: keep-all; }
-        .race-choseong-hint { display: inline-block; font-size: 0.95rem; font-weight: bold; color: #9333ea; background: #f5f3ff; border: 1.5px dashed #c4b5fd; border-radius: 8px; padding: 5px 14px; margin-bottom: 15px; letter-spacing: 3px; }
-        .race-rank-badge { background: #fff7ed; color: #c2410c; padding: 4px 10px; border-radius: 8px; font-weight: bold; font-size: 0.95rem; }
-
-        .race-word-bank { border: 2px solid var(--border); border-radius: 12px; padding: 15px; background: #f8fafc; margin-top: 15px; }
-        .race-word-bank h4 { font-size: 0.95rem; color: var(--text-light); margin-bottom: 10px; text-align: left; }
-        .race-word-bank-list { display: flex; flex-wrap: wrap; gap: 8px; }
-        .race-word-bank-chip { background: white; border: 1px solid #fdba74; color: #c2410c; padding: 5px 10px; border-radius: 6px; font-size: 0.9rem; font-weight: bold; transition: 0.2s; }
-        .race-word-bank-chip.done { color: #cbd5e1; border-color: var(--border); text-decoration: line-through; background: #f8fafc; }
-
-        .race-sound-btn { background: none; border: 2px solid var(--border); border-radius: 8px; padding: 6px 10px; font-size: 1rem; cursor: pointer; margin-right: 8px; transition: 0.2s; }
-        .race-sound-btn:hover { background: #f1f5f9; }
-
-        .race-countdown-overlay { position: absolute; inset: 0; z-index: 50; display: none; justify-content: center; align-items: center; flex-direction: column; background: rgba(11,18,32,0.85); border-radius: 14px; }
-        .race-countdown-number { font-size: 4rem; font-weight: 800; color: #fb923c; text-shadow: 0 0 20px rgba(251,146,60,0.7); animation: raceCountdownPop 0.6s ease-out; }
-        @keyframes raceCountdownPop { 0% { transform: scale(0.3); opacity: 0; } 60% { transform: scale(1.25); opacity: 1; } 100% { transform: scale(1); opacity: 1; } }
-
-        .race-rank-toast { position: fixed; top: 90px; left: 50%; transform: translateX(-50%) translateY(-20px); background: #1e293b; color: white; font-weight: bold; padding: 10px 20px; border-radius: 24px; box-shadow: 0 6px 16px rgba(0,0,0,0.25); z-index: 500; opacity: 0; transition: 0.25s; pointer-events: none; white-space: nowrap; }
-        .race-rank-toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
-
-        /* 💣 폭탄 먹물 & 지진 효과 */
-        .shake-screen { animation: raceScreenShake 0.4s infinite; }
-        @keyframes raceScreenShake {
-            0% { transform: translate(2px, 1px) rotate(0deg); }
-            10% { transform: translate(-1px, -2px) rotate(-1deg); }
-            20% { transform: translate(-3px, 0px) rotate(1deg); }
-            30% { transform: translate(0px, 2px) rotate(0deg); }
-            40% { transform: translate(1px, -1px) rotate(1deg); }
-            50% { transform: translate(-1px, 2px) rotate(-1deg); }
-            60% { transform: translate(-3px, 1px) rotate(0deg); }
-            70% { transform: translate(2px, 1px) rotate(-1deg); }
-            80% { transform: translate(-1px, -1px) rotate(1deg); }
-            90% { transform: translate(2px, 2px) rotate(0deg); }
-            100% { transform: translate(1px, -2px) rotate(-1deg); }
+        @media (prefers-reduced-motion: reduce) {
+            .sv-bn, .sv-crown, .sv-stamp, .sv-float, .sv-hearts, .sv-cfs i { animation: none !important; }
+            .sv-float { display: none; }
         }
-        .ink-splatter-overlay {
-            position: absolute; inset: 0; z-index: 100;
-            background: rgba(0, 0, 0, 0.9);
-            color: #ef4444; font-size: 1.8rem; font-weight: bold; text-align: center;
-            display: flex; flex-direction: column; justify-content: center; align-items: center;
-            pointer-events: none; opacity: 0; transition: opacity 0.2s; border-radius: 14px;
-        }
-        .ink-splatter-overlay.show { opacity: 1; pointer-events: auto; }
-        .ink-splatter-overlay span { font-size: 5rem; margin-bottom: 10px; }
     </style>
 </head>
 <body>
@@ -402,7 +404,7 @@
         <button id="tabMaster" class="main-tab" onclick="switchMainTab('master')">👑 스피드런</button>
         <button id="tabRain" class="main-tab" onclick="switchMainTab('rain')">🏰 디펜스</button>
         <button id="tabLand" class="main-tab" onclick="switchMainTab('land')">🏁 땅따먹기</button>
-        <button id="tabRace" class="main-tab" onclick="switchMainTab('race')">🚀 로켓 레이스</button>
+        <button id="tabSurv" class="main-tab" onclick="switchMainTab('surv')">👑 어휘왕</button>
     </div>
 
     <div id="homeScreen" class="screen">
@@ -447,15 +449,15 @@
         <div class="day-grid" id="landGrid"></div>
     </div>
 
-    <div id="raceStageScreen" class="screen">
-        <div class="dashboard" style="background: #0b1220; color: white; border: 2px solid #f97316;">
+    <div id="survStageScreen" class="screen">
+        <div class="dashboard" style="background: #101b4a; color: white; border: 2px solid #f59e0b;">
             <div class="dashboard-header">
-                <span class="dashboard-title" style="color: #fb923c;">🚀 실시간 로켓 레이스 대결</span>
-                <button class="ranking-btn" style="background:#fed7aa; color:#9a3412;" onclick="showRankingMenu(1, 'race')">🏆 순위 보기</button>
+                <span class="dashboard-title" style="color: #ffd23f;">👑 어휘왕 SURVIVAL (멀티플레이)</span>
+                <button class="ranking-btn" style="background:#fde68a; color:#92400e;" onclick="showRankingMenu(1, 'surv')">🏆 순위 보기</button>
             </div>
-            <p style="font-size: 0.95rem; color: #cbd5e1; margin-top: 10px; word-break: keep-all; line-height: 1.4;">같은 방에 모인 친구들과 동시에 출발! 뜻을 보고 정확한 낱말을 <b>직접 타이핑</b>해야 로켓이 앞으로 나갑니다.<br>🥇 객관식 없이, 가장 먼저 결승선을 통과하는 사람이 1등!</p>
+            <p style="font-size: 0.95rem; color: #cbd5e1; margin-top: 10px; word-break: keep-all; line-height: 1.4;">같은 방에 모인 친구들과 함께하는 실시간 어휘 생존 게임! ❤️ 3개로 시작해서 오답이면 ❤️ -1, 미니게임에 성공하면 ❤️ +1.<br>🏆 마지막까지 살아남으면 <b>오늘의 어휘왕</b> 👑 (2명 이상 필요)</p>
         </div>
-        <div class="day-grid" id="raceGrid"></div>
+        <div class="day-grid" id="survGrid"></div>
     </div>
 
     <div id="rankingScreen" class="screen">
@@ -483,7 +485,7 @@
             <button class="btn-home" style="background: var(--success); color:white; flex:1; min-width: 120px;" onclick="downloadAdminCSV()">💾 엑셀 다운로드</button>
             <button class="btn-home" style="background: #64748b; color:white; flex:1; min-width: 120px;" onclick="changeAdminPassword()">🔑 암호 변경</button>
             <button class="btn-home" style="background: #f59e0b; color:white; flex:1; min-width: 120px;" onclick="resetAllLandRooms()">💣 땅따먹기 방 폭파</button>
-            <button class="btn-home" style="background: #ea580c; color:white; flex:1; min-width: 120px;" onclick="resetAllRaceRooms()">🚀 레이스 방 폭파</button>
+            <button class="btn-home" style="background: #f59e0b; color:white; flex:1; min-width: 120px;" onclick="resetAllSurvRooms()">👑 어휘왕 방 폭파</button>
             <button class="btn-home" style="background: var(--error); color:white; flex:1; min-width: 120px;" onclick="deleteAllData()">🗑️ 전체 초기화</button>
         </div>
         <div style="overflow-x: auto; max-height: 400px;">
@@ -548,53 +550,34 @@
         </div>
     </div>
 
-    <!-- 🚀 로켓 레이스 대기실 -->
-    <div id="raceLobbyScreen" class="screen">
-        <div class="top-bar"><span class="screen-title" id="raceLobbyStageTitleText">1탄 대기실</span><button class="stop-btn" onclick="quitRaceLobby()">나가기</button></div>
+    <!-- 👑 어휘왕 SURVIVAL 대기실 -->
+    <div id="survLobbyScreen" class="screen">
+        <div class="top-bar"><span class="screen-title" id="survLobbyTitle">1탄 대기실</span><button class="stop-btn" onclick="quitSurv()">나가기</button></div>
         <div class="land-lobby-box">
-            <h4 style="margin-bottom:10px; color:var(--text-light);">🚀 참여중인 선수들</h4>
-            <div class="lobby-player-list" id="raceLobbyPlayerList"></div>
-            <div class="lobby-actions" id="raceLobbyHostActions">
-                <button class="btn-lobby-start" style="background:#ea580c;" onclick="startRaceGame()">🚀 레이스 시작!</button>
-            </div>
-            <div id="raceLobbyGuestMessage" style="display:none; text-align:center; padding:15px; font-weight:bold; color:#ea580c;">방장이 레이스를 시작할 때까지 기다려주세요...</div>
+            <h4 style="margin-bottom:10px; color:var(--text-light);">👑 참여중인 도전자 <span id="survLobbyCount"></span></h4>
+            <div class="lobby-player-list" id="survLobbyList"></div>
+            <div class="sv-rules">❤️ 3개로 시작 · 오답이면 ❤️ -1 · 미니게임에 성공하면 ❤️ +1<br>탈락해도 관전하다가 부활 이벤트로 돌아올 수 있어요. 마지막 1명이 <b>오늘의 어휘왕</b> 👑</div>
+            <div class="lobby-actions" id="survLobbyHostActions"><button class="btn-lobby-start" id="btnSurvStart" onclick="startSurvGame()">🚀 게임 시작!</button></div>
+            <div id="survLobbyGuestMsg" style="display:none; text-align:center; padding:15px; font-weight:bold; color:var(--primary);">방장이 게임을 시작할 때까지 기다려주세요...</div>
         </div>
     </div>
 
-    <!-- 🚀 로켓 레이스 게임 화면 -->
-    <div id="raceGameScreen" class="screen land-screen">
-        <div class="land-header">
-            <div class="land-status-box"><span id="raceGameStageTitle">1탄</span><span>내 순위 <span class="race-rank-badge" id="raceMyRankDisplay">-</span></span></div>
-            <button id="btnRaceSound" class="race-sound-btn" onclick="toggleRaceSound()" title="효과음 켜기/끄기">🔊</button>
-            <button id="btnRaceReset" style="display:none; margin-right:8px; font-size:0.85rem; padding:8px 12px; border-radius:8px; background:var(--error); color:white; border:none; cursor:pointer; font-weight:bold;" onclick="resetRaceRoom()">중단</button>
-            <button class="stop-btn" onclick="quitRaceGame()">나가기</button>
-        </div>
-        <div class="race-last-spurt-banner" id="raceLastSpurtBanner">🚨 라스트 스퍼트! 결승선이 코앞이에요!</div>
-        <div class="race-track-container" id="raceTrackContainer">
-            <div id="raceLanesWrap"></div>
-            <div class="race-fog-overlay" id="raceFogOverlay"></div>
-            <div class="race-stamp" id="raceStamp"></div>
-            <div class="race-countdown-overlay" id="raceCountdownOverlay"><div class="race-countdown-number" id="raceCountdownNumber">3</div></div>
-        </div>
-        <div class="race-interaction-box" id="raceInteractionBox">
-            <div class="race-progress-row">
-                <div class="race-progress-label" id="raceProgressLabel">1 / 15</div>
-                <div class="race-combo-badge" id="raceComboBadge">🔥 2연속!</div>
+    <!-- 👑 어휘왕 SURVIVAL 게임 화면 -->
+    <div id="survGameScreen" class="screen sv-screen">
+        <div class="sv-wrap">
+            <div class="sv-top">
+                <div class="sv-title" id="survGameTitle">어휘왕 SURVIVAL</div>
+                <div class="sv-btns">
+                    <button id="btnSurvSound" class="sv-ibtn" onclick="toggleSurvSound()" title="효과음 켜기/끄기">🔊</button>
+                    <button id="btnSurvReset" class="sv-ibtn sv-warn" style="display:none;" onclick="resetSurv()">중단</button>
+                    <button class="sv-ibtn" onclick="quitSurv(true)">나가기</button>
+                </div>
             </div>
-            <div class="race-target-mean" id="raceTargetMean">뜻이 여기 표시됩니다</div>
-            <div class="race-choseong-hint" id="raceChoseongHint">힌트: ㄱㅊㄱ</div>
-            <div class="land-input-group">
-                <input type="text" id="raceInput" class="land-input" autocomplete="off" placeholder="단어 입력 후 엔터">
-                <button id="raceSubmitBtn" class="land-submit" onclick="submitRaceWord()">발사 🚀</button>
-            </div>
+            <div class="sv-hud"><span class="sv-hearts" id="survHearts"></span><span class="sv-cnt" id="survCnt"></span></div>
+            <div class="sv-dots" id="survDots"></div>
+            <div class="sv-stage" id="survStage"></div>
+            <div class="sv-board" id="survBoard"></div>
         </div>
-        <div class="race-word-bank">
-            <h4>💡 이번 단어 보기 (빠르게 찾아보세요!)</h4>
-            <div class="race-word-bank-list" id="raceWordBankList"></div>
-        </div>
-        <div class="race-rank-toast" id="raceRankToast"></div>
-        <!-- 폭탄 효과 오버레이 -->
-        <div class="ink-splatter-overlay" id="raceInkOverlay"></div>
     </div>
 
     <!-- 일반 학습 화면들 -->
@@ -678,6 +661,18 @@
 
     function getDB() { return firebase.database(); }
 
+    let firebasePermissionWarned = false;
+    function reportFirebaseError(err, action = '서버 작업') {
+        console.error(`Firebase ${action} 오류`, err);
+        const code = String(err && err.code || '');
+        if (code.includes('PERMISSION_DENIED') && !firebasePermissionWarned) {
+            firebasePermissionWarned = true;
+            alert('Firebase 권한 오류입니다. Realtime Database Rules에서 이 앱의 데이터 저장/읽기 권한을 확인해주세요.');
+        } else if (!code.includes('PERMISSION_DENIED')) {
+            alert(`${action} 중 서버 오류가 발생했습니다. 잠시 후 다시 시도해주세요.`);
+        }
+    }
+
     const rawDataString = "낭송|시나 문장 등을 소리 내어 읽음.^가치관|사람이 어떤 것의 가치에 대해 가지는 태도나 판단의 기준.^서평|책의 내용이나 특징을 소개하고 평가한 글.^설득력|남이 자신의 생각이나 주장을 따르도록 납득시키는 힘.^분석|더 잘 이해하거나 다루기 위해 어떤 현상이나 사물을 여러 요소나 성질로 나눔.^주어|문장에서 동작이나 상태, 성질의 주체가 되는 말.^목적어|문장에서 서술어가 나타내는 동작이나 행위의 대상이 되는 말.^호응|문장에서 앞의 말과 뒤의 말이 서로 어울려 자연스럽게 짝을 이룸.^첨부|서류나 편지 등에 다른 서류나 물품을 덧붙임.^표준어|한 나라에서 공용어로 쓰기 위해 규범으로 정한 말.^방언|어느 한 지역이나 사회 계층에서 특유하게 쓰는 말.^반환점|목적지까지 갔다가 되돌아오는 지점.^허위|진실이 아닌 것을 진실인 것처럼 꾸민 것.^출토|땅속에 묻혀 있던 물건이 밖으로 나옴. 또는 그것을 파냄.^발굴|땅속에 묻힌 유적이나 유물 따위를 찾아내기 위해 파냄.^후기|어떤 일이나 행사, 책 등을 끝낸 뒤에 남긴 소감이나 기록.^조작|어떤 일을 사실과 다르게 거짓으로 꾸며 만듦.^과장|사실보다 지나치게 크거나 대단하게 부풀리어 나타냄.^취재|신문이나 방송 등에서 기사나 작품의 재료를 조사하여 얻음.^무단|사전에 허락이나 약속이 없음.^소홀|중요하게 생각하지 않아 주의나 정성이 부족함.^중점적|어떤 일이나 사물에서 가장 중심이 되고 중요한 것.^극단적|가장 치우쳐 있거나 한쪽 끝에 닿아 지나친 것.^조정|어떤 기준이나 실정에 맞게 바로잡거나 정돈함.^제한|일정한 한도나 범위를 정하거나 그 한도를 넘지 못하게 막음.^차단|통하지 못하게 막거나 가로막음.^합의점|서로 다른 의견을 가진 사람들이 의논하여 일치시킨 지점.^제시|어떤 생각이나 의견, 조건 등을 말이나 글 따위로 드러내어 보임.^절차|일을 차례대로 진행해 나가는 데 거쳐야 하는 일정한 순서나 과정.^협의|여러 사람이 모여서 서로 의논함.^순화어|외래어나 비속어, 틀린 말을 알기 쉽고 바른 우리말로 다듬은 말.^고유어|본디부터 쓰던 우리말이나 그에 기초하여 새로 만들어진 말.^추론|이미 알고 있는 사실이나 판단을 바탕으로 다른 판단을 이끌어 냄.^함축|말이나 글이 겉으로 드러난 것 이상의 깊은 뜻을 속에 담고 있음.^선출|여럿 가운데서 투표나 합의 등을 통하여 대표나 임원을 뽑음.^정밀|아주 정교하고 세밀함.^성능|기계나 기구 따위가 지니고 있는 고유한 기능과 성질.^생계|살아가는 데 필요한 돈이나 물건을 마련하여 삶을 유지하는 일.^문맹률|글을 읽고 쓸 줄 모르는 사람의 비율.^연행|죄를 지은 사람이나 피의자를 특정 장소로 데리고 감.^피난|재난이나 위험을 피하여 안전한 곳으로 옮겨 감.^주목|관심을 가지고 주의 깊게 바라봄.^훼방|남의 일을 방해하여 잘되지 못하게 만듦.^극본|연극을 공연하기 위해 대사와 지문 따위로 쓴 글.^해설|극본 등에서 사건의 배경이나 상황, 인물 등을 설명하는 부분.^대사|연극이나 영화 등에서 등장인물이 하는 말.^지문|극본에서 인물의 동작, 표정, 심리나 무대 상태 등을 지시하는 글.^낭독|글이나 책 따위를 소리 내어 읽음.^돌진|앞을 향하여 세차게 곧장 내달림.^유명세|세상에 널리 알려짐으로써 겪게 되는 불편이나 곤욕.^선사 시대|문자로 된 역사 기록이 남아 있지 않은 인류의 초기 시대.^구석기 시대|돌을 깨뜨려 만든 뗀석기를 사용하던 인류 역사의 가장 오래된 시대.^신석기 시대|돌을 갈아서 만든 간석기와 토기를 사용하며 농경을 시작한 시대.^세력|남을 복종시키거나 지배할 수 있는 힘이나 기세.^건국|나라를 새로 세움.^삼국유사|고려 후기 승려 일연이 삼국의 역사와 설화, 불교사 등을 기록한 책.^멸망|나라나 가문 등이 망하여 없어짐.^교류|문화나 물자, 사상 따위를 서로 주고받음.^연맹|둘 이상의 국가나 단체가 공통된 목적을 이루기 위해 맺은 조직.^함락|적의 성이나 진지를 공격하여 무너뜨리고 차지함.^불교|석가모니를 교조로 삼고 자비와 해탈을 가르치는 종교.^고분|옛날의 무덤 가운데 역사적이나 고고학적으로 가치가 높은 것.^벽화|벽이나 천장, 암벽 따위에 그린 그림.^동맹|국가나 단체 사이에 서로 돕기로 약속함. 또는 그런 관계.^침입|남의 영토나 영역에 강제로 쳐들어가거나 불법으로 들어감.^유민|나라가 망하거나 변란으로 삶의 터전을 잃고 떠돌아다니는 백성.^계승|조상의 전통, 문화, 사업, 권리 등을 이어받음.^봉기|벌 떼처럼 떼를 지어 세차게 일어남.^호족|지방에서 많은 토지와 사병을 거느리고 큰 세력을 형성한 세력가.^장려|좋은 일이나 행동을 권장하고 북돋아 줌.^외교|국가 간에 평화적이고 이익을 도모하기 위해 맺는 교섭 및 관계 활동.^담판|서로 맞선 문제의 결말을 짓기 위해 직접 만나서 의논함.^목판 인쇄|나무판에 글자나 그림을 새겨 먹을 칠한 뒤 종이를 덮어 찍어 내는 인쇄술.^금속활자|금속을 부어 만든 낱개의 인쇄용 활자.^신진 사대부|고려 말기에 성리학을 바탕으로 개혁을 추진하며 조선을 건국한 새로운 지배층.^강화|세력이나 힘을 더 강하고 튼튼하게 만듦.^창제|전에 없던 것을 처음으로 만들거나 제정함.^반포|세상에 널리 펴서 알림.^의병|나라가 외적의 침략을 받았을 때 스스로 일어난 민병.^세도 정치|조선 후기 특정 외척 가문이 권력을 독점하여 나라를 다스리던 정치 형태.^통상|나라 사이에 물건을 사고팔고 무역을 함.^조약|국가 사이에 문서로 맺는 법적 구속력을 가진 합의.^개항|외국 선박이 드나들며 무역할 수 있도록 항구를 개방함.^개화|새로운 사상이나 문물을 받아들여 근대적인 사회로 발전함.^개혁|제도나 기구 등을 새롭게 고침.^일제|일본 제국주의를 줄여 이르는 말.^늑약|강제로 억압하여 맺게 한 조약.^체결|계약이나 조약 따위를 공식적으로 맺음.^탄압|권력이나 힘으로 억누르고 핍박함.^항일|일본의 침략이나 지배에 맞서 싸움.^계몽|지식수준이 낮거나 미개한 사람을 깨우쳐 바른 지식을 갖게 함.^편찬|여러 가지 자료를 모아서 체계적으로 책을 만듦.^자주독립|남의 간섭이나 지배를 받지 않고 스스로 나라를 다스리고 지킴.^의거|정의를 위하여 목숨을 바쳐 행한 의로운 일.^폐간|정기 간행물의 발행을 그만둠.^광복|빼앗긴 나라와 주권을 도로 찾음.^제헌 국회|대한민국 헌법을 만들기 위하여 1948년에 구성된 최초의 국회.^피란|전쟁이나 난리를 피하여 안전한 곳으로 옮겨 감.^이산가족|전쟁이나 분단 등으로 흩어져 서로 만나지 못하는 가족.^정전|전쟁 중인 양측이 합의하여 전투를 일시적으로 멈춤.^수|셀 수 있는 사물의 양이나 크기를 나타내는 수학적 개념.^숫자|수를 적는 데 쓰는 글자나 기호.^수직선|수를 대응시켜 일정한 간격의 눈금으로 나타낸 직선.^약|정확하지는 않으나 대략 얼마쯤 됨을 나타내는 말.^이상|기준이 되는 수와 같거나 그보다 큰 범위.^이하|기준이 되는 수와 같거나 그보다 작은 범위.^초과|기준이 되는 수보다 큰 범위(기준 수는 포함하지 않음).^미만|기준이 되는 수보다 작은 범위(기준 수는 포함하지 않음).^범위|수나 공간, 시간 등의 일정한 구역이나 한계.^최소|가장 작거나 적은 것.^최대|가장 크거나 많은 것.^포함|어떤 무리나 범위 안에 함께 들어 있음.^비교|둘 이상의 대상을 견주어 공통점, 차이점, 우열 따위를 살핌.^계산|수를 셈하거나 식을 풀어 값을 구함.^방법|어떤 목적을 이루기 위해 취하는 수단이나 조치.^성질|어떤 사물이나 현상이 본래부터 지니고 있는 특성.^합동|모양과 크기가 완전히 같아서 포개었을 때 꼭 겹쳐지는 두 도형의 관계.^대칭|어떤 선이나 점을 중심으로 마주 보는 양쪽이 똑같은 모양을 이룸.^선대칭도형|한 직선을 접는 선으로 하여 접었을 때 완전히 겹쳐지는 평면도형.^점대칭도형|한 점을 중심으로 180도 돌렸을 때 처음 도형과 완전히 겹쳐지는 도형.^대응각|합동이거나 대칭인 도형에서 서로 꼭 겹쳐지는 각.^대응점|합동이거나 대칭인 도형에서 서로 꼭 겹쳐지는 점.^대응변|합동이거나 대칭인 도형에서 서로 꼭 겹쳐지는 변.^대칭축|선대칭도형에서 접는 선이 되는 직선.^완성|일을 다 끝마쳐 완전하게 이룸.^중심|사물이나 공간의 한가운데가 되는 점이나 부분.^거리|두 점이나 위치 사이에 떨어진 길이.^직선|두 점을 곧게 잇고 양쪽으로 끝없이 늘인 곧은 선.^선분|두 점을 곧게 이은 선.^방향|어떤 곳을 향한 쪽이나 길.^소수|0보다 크고 1보다 작은 십진법의 수, 또는 1보다 큰 자연수 중 1과 자기 자신만을 약수로 가지는 수.^소수점|소수에서 정수 부분과 소수 부분을 구분하기 위해 찍는 점.^위치|어떤 사물이 자리 잡고 있는 장소나 처지.^규칙|일정한 법칙이나 순서, 지켜야 할 약속.^직육면체|직사각형 6개로 둘러싸인 입체도형.^정육면체|모양이 같고 크기가 같은 정사각형 6개로 둘러싸인 입체도형.^전개도|입체도형의 모서리를 잘라서 평면에 펼쳐 놓은 그림.^점선|점을 잇달아 찍어 나타낸 선.^실선|끊어지지 않고 곧게 이어진 선.^면|도형에서 선으로 둘러싸인 평평하거나 굽은 표면.^점|위치는 있으나 크기나 길이가 없는 수학의 기본 요소.^가능성|어떤 일이 일어날 수 있는 정도.^평균|여러 값의 합을 그 개수로 나눈 대푯값.^조사|사물의 실태나 사실을 자세히 살펴봄.^기록|후에 볼 수 있도록 글이나 표 등으로 적어 둠.^기호|어떤 뜻이나 대상을 나타내기 위해 정한 부호나 문자.^대표|전체를 대표할 만한 대상이나 값.^예상|앞으로 닥쳐올 일이나 결과를 미리 짐작함.^표현|생각이나 느낌, 수량 등을 겉으로 나타냄.^횟수|반복하여 일어나는 일의 차례나 셈의 수.^혼합물|두 가지 이상의 물질이 각각의 성질을 잃지 않고 섞여 있는 물질.^증발|액체 표면에서 액체가 기체로 변하여 날아가는 현상.^분리|섞여 있는 것들을 갈라 떼어 냄.^고체|담는 그릇에 관계없이 모양과 부피가 일정한 물질의 상태.^액체|부피는 일정하지만 담는 그릇에 따라 모양이 변하는 물질의 상태.^폐기물|사람의 생활이나 사업 활동에 필요 없게 되어 버리는 쓰레기 따위의 물질.^변색|물건이나 생물의 색깔이 원래와 다르게 변함.^적외선|가시광선의 붉은색 바깥쪽에 위치하며 열작용을 하는 전자기파.^온도|물체의 차갑고 따뜻한 정도를 숫자로 나타낸 물리량.^온도계|온도를 측정하는 기구.^열|온도가 높은 물질에서 온도가 낮은 물질로 이동하는 에너지.^가열|물질에 열을 가하여 온도를 높임.^이동|한 곳에서 다른 곳으로 옮겨 감.^전도|고체에서 열이 직접 닿아 있는 입자들의 진동을 통해 전달되는 현상.^대류|액체나 기체에서 따뜻해진 부분이 위로 올라가고 찬 부분이 내려오며 열이 전달되는 현상.^복사|물질의 매개 없이 열이 전자기파 형태로 직접 전달되는 현상.^단열|열이 전도, 대류, 복사 등을 통해 이동하는 것을 막음.^측정|기구나 장치를 이용하여 길이, 무게, 온도 등의 양을 잼.^접촉|서로 맞닿음.^체온|사람이나 동물의 몸의 온도.^기상|대기 중에서 일어나는 비, 바람, 구름, 눈 등의 날씨 현상.^규칙성|일정한 질서나 규칙을 따르는 성질.^기온|공기의 온도.^습도|공기 속에 수증기가 포함되어 있는 정도.^강수량|일정한 기간 동안 내린 비, 눈, 우박 등의 총량.^응결|수증기가 차가운 물체에 닿아 냉각되어 물방울로 변하는 현상.^수증기|물이 기체 상태로 변한 것.^지표면|지구의 표면인 땅바닥.^기압|공기의 무게로 인해 생기는 대기의 압력.^고기압|주변보다 기압이 높은 공기 덩어리로, 주로 맑은 날씨를 나타냄.^저기압|주변보다 기압이 낮은 공기 덩어리로, 주로 흐리거나 비가 옴.^해풍|낮에 바다에서 육지 쪽으로 부는 바람.^육풍|밤에 육지에서 바다 쪽으로 부는 바람.^분포|어떤 범위나 지역에 흩어져 퍼져 있음.^자원|인간 생활과 생산 활동에 이용되는 천연 물질이나 에너지.^유한|수량이나 범위, 기간 등에 끝이나 한도가 있음.^한계|더 이상 벗어날 수 없는 궁극의 범위나 경계.^재생|한 번 쓰인 물질이나 에너지를 가공하여 다시 쓸 수 있게 함.^지속|어떤 상태나 일이 끊이지 않고 계속 이어짐.^가능|할 수 있거나 이루어질 수 있음.^효율|들인 노력이나 에너지에 비하여 얻어지는 성과나 결과의 비율.^배출|안에서 생긴 물질이나 가스 등을 밖으로 밀어내어 내보냄.^재사용|물건의 형태를 바꾸지 않고 원래의 용도대로 다시 사용하는 일.^재활용|폐기물을 가공하여 새로운 원료나 제품으로 다시 만드는 일.^일회용|한 번만 쓰고 버리도록 만들어진 물건.^다회용|여러 번 반복하여 사용할 수 있도록 만들어진 물건.^이중창|창문을 이중으로 달아 방음과 단열 효과를 높인 창.^단열재|열의 이동을 차단하기 위하여 사용하는 건축 재료.^훼손|체면이나 명예, 사물 등을 헐거나 깨뜨려 상하게 함.^난방|방이나 건물 안을 따뜻하게 덥히는 일.";
 
     const rawWords = rawDataString.split('^').map(item => {
@@ -691,7 +686,6 @@
     const TOTAL_MASTER_STAGES = Math.ceil(rawWords.length / MASTER_WORDS_PER_STAGE);
     const LAND_WORDS_PER_STAGE = 100;
     const TOTAL_LAND_STAGES = Math.ceil(rawWords.length / LAND_WORDS_PER_STAGE);
-    const RACE_WORDS_PER_STAGE = 15;
     const PLAYER_COLORS = ['#ef4444', '#f97316', '#f59e0b', '#84cc16', '#22c55e', '#10b981', '#14b8a6', '#06b6d4', '#0ea5e9', '#38bdf8', '#d946ef', '#ec4899', '#9f1239', '#ea580c', '#4d7c0f', '#047857', '#0f766e', '#1d4ed8', '#6b21a8'];
 
     function getPlayerColor(index) {
@@ -733,7 +727,7 @@
     let masterRecords = safeParseJSON('masterRecords', {});
     let rainRecords = safeParseJSON('rainRecords', {});
     let landRecords = safeParseJSON('landRecords', {}); 
-    let raceRecords = safeParseJSON('raceRecords', {});
+    let survRecords = safeParseJSON('survRecords', {});
 
     let currentDay = 1, studyQueue = [], quizQueue = [], missedWords = [];
     let currentStudyIndex = 0, currentQuizIdx = 0, score = 0, isReviewMode = false, currentSelectedOption = null;
@@ -743,34 +737,6 @@
     
     let inLandGrabRoom = false, currentLandStage = 1, currentLandRoomCode = "", landRoomRef = null;
     let myLandColor = '#fff', myLandPenaltyUntil = 0, currentSelectedLandIndex = -1, landPenaltyInterval = null, currentLandBoardData = [];
-
-    // 🚀 로켓 레이스 상태 변수
-    let inRaceRoom = false, currentRaceStage = 1, currentRaceRoomCode = "", raceRoomRef = null;
-    let raceLaneOrder = [], myRaceFinishShown = false, currentRaceRoomData = null;
-    let raceComboCount = 0, racePrevRank = null, raceMyLaneIdx = -1;
-    let raceLastSeenAttackSeq = {}, raceLastSeenMistakeSeq = {}, raceStampTimer = null;
-    let raceSoundEnabled = localStorage.getItem('raceSoundEnabled') !== '0';
-    let raceQuestionStartTime = 0;
-    let raceHintTimer = null;
-    let raceCurrentQuestionIdx = -1;
-    let raceLocalBombTriggered = false;
-
-    // 먹물 폭탄 효과 실행 함수
-    function triggerInkBombEffect(attackerName) {
-        let overlay = document.getElementById('raceInkOverlay');
-        let screen = document.getElementById('raceGameScreen');
-        if(!overlay || !screen) return;
-        
-        overlay.innerHTML = `<span>💣</span>${attackerName} 님이<br>숨겨진 폭탄을 터뜨렸습니다!`;
-        overlay.classList.add('show');
-        screen.classList.add('shake-screen');
-        
-        // 2.5초 뒤에 먹물 걷히고 지진 멈춤
-        setTimeout(() => {
-            overlay.classList.remove('show');
-            screen.classList.remove('shake-screen');
-        }, 2500);
-    }
 
     let landRankMode = 'solo'; 
 
@@ -786,12 +752,12 @@
                     if(snapshot.exists()) {
                         let data = snapshot.val();
                         dailyRecords = data.daily || {}; masterRecords = data.master || {};
-                        rainRecords = data.rain || {}; landRecords = data.land || {}; raceRecords = data.race || {};
+                        rainRecords = data.rain || {}; landRecords = data.land || {}; survRecords = data.surv || {};
                         localStorage.setItem('dailyRecords', JSON.stringify(dailyRecords));
                         localStorage.setItem('masterRecords', JSON.stringify(masterRecords));
                         localStorage.setItem('rainRecords', JSON.stringify(rainRecords));
                         localStorage.setItem('landRecords', JSON.stringify(landRecords));
-                        localStorage.setItem('raceRecords', JSON.stringify(raceRecords));
+                        localStorage.setItem('survRecords', JSON.stringify(survRecords));
                     }
                     finalizeLogin();
                 }).catch(() => finalizeLogin());
@@ -821,15 +787,15 @@
                 if(snapshot.exists()) {
                     let data = snapshot.val();
                     dailyRecords = data.daily || {}; masterRecords = data.master || {};
-                    rainRecords = data.rain || {}; landRecords = data.land || {}; raceRecords = data.race || {};
+                    rainRecords = data.rain || {}; landRecords = data.land || {}; survRecords = data.surv || {};
                 } else {
-                    dailyRecords = {}; masterRecords = {}; rainRecords = {}; landRecords = {}; raceRecords = {};
+                    dailyRecords = {}; masterRecords = {}; rainRecords = {}; landRecords = {}; survRecords = {};
                 }
                 localStorage.setItem('dailyRecords', JSON.stringify(dailyRecords));
                 localStorage.setItem('masterRecords', JSON.stringify(masterRecords));
                 localStorage.setItem('rainRecords', JSON.stringify(rainRecords));
                 localStorage.setItem('landRecords', JSON.stringify(landRecords));
-                localStorage.setItem('raceRecords', JSON.stringify(raceRecords));
+                localStorage.setItem('survRecords', JSON.stringify(survRecords));
                 finalizeLogin();
             }).catch(() => finalizeLogin());
         } else { finalizeLogin(); }
@@ -837,8 +803,8 @@
 
     function logout() {
         if(confirm("로그아웃 하시겠습니까?\n(기기에 저장된 임시 기록은 사라지지만, 서버 기록은 유지됩니다.)")) {
-            ['userProfile','dailyRecords','masterRecords','rainRecords','landRecords','raceRecords'].forEach(k => localStorage.removeItem(k));
-            userProfile = null; dailyRecords = {}; masterRecords = {}; rainRecords = {}; landRecords = {}; raceRecords = {};
+            ['userProfile','dailyRecords','masterRecords','rainRecords','landRecords','survRecords'].forEach(k => localStorage.removeItem(k));
+            userProfile = null; dailyRecords = {}; masterRecords = {}; rainRecords = {}; landRecords = {}; survRecords = {};
             document.getElementById('userProfileBar').style.display = 'none'; document.getElementById('mainTabs').style.display = 'none';
             document.getElementById('inputClass').value = ''; document.getElementById('inputNum').value = ''; document.getElementById('inputName').value = '';
             showScreen('loginScreen');
@@ -851,9 +817,12 @@
     }
 
     function syncToFirebase() {
-        if(!isFirebaseActive || !getUserKey()) return;
-        getDB().ref('students_vocab/' + getUserKey()).set({
-            profile: userProfile, daily: dailyRecords, master: masterRecords, rain: rainRecords, land: landRecords, race: raceRecords, lastUpdated: new Date().toISOString()
+        if(!isFirebaseActive || !getUserKey()) return Promise.resolve(false);
+        return getDB().ref('students_vocab/' + getUserKey()).set({
+            profile: userProfile, daily: dailyRecords, master: masterRecords, rain: rainRecords, land: landRecords, surv: survRecords, lastUpdated: new Date().toISOString()
+        }).then(() => true).catch(err => {
+            reportFirebaseError(err, '기록 저장');
+            return false;
         });
     }
 
@@ -897,18 +866,12 @@
         }
     }
 
-    function resetAllRaceRooms() {
-        if(confirm("현재 진행 중인 모든 [로켓 레이스 방]을 강제로 종료(폭파)하시겠습니까?")) {
-            if(isFirebaseActive) getDB().ref('raceRooms_vocab').remove().then(() => alert("모든 방이 초기화되었습니다."));
-        }
-    }
-
     function deleteAllData() {
         if(confirm("⚠️ 경고: 서버에 저장된 '모든 학생'의 기록을 완전히 삭제합니다.\n정말 진행하시겠습니까?")) {
             Promise.all([ 
                 getDB().ref('students_vocab').remove(), getDB().ref('rankings_vocab').remove(), 
                 getDB().ref('rankings_vocab_rain').remove(), getDB().ref('rankings_vocab_land_solo').remove(), getDB().ref('rankings_vocab_land_team').remove(), 
-                getDB().ref('rankings_vocab_race').remove(), getDB().ref('landGrabRooms_vocab').remove(), getDB().ref('raceRooms_vocab').remove()
+                getDB().ref('rankings_vocab_surv').remove(), getDB().ref('landGrabRooms_vocab').remove(), getDB().ref('survRooms_vocab').remove()
             ]).then(() => { alert("모든 기록이 초기화되었습니다."); fetchAdminData(); });
         }
     }
@@ -945,7 +908,7 @@
     let currentRankingType = 'master'; 
     function showRankingMenu(initialStage = 1, type = 'master') {
         currentRankingType = type; showScreen('rankingScreen');
-        document.getElementById('rankingTitle').innerText = type === 'master' ? '🏆 스피드런 명예의 전당' : (type === 'rain' ? '🏆 디펜스 명예의 전당' : (type === 'race' ? '🏆 로켓 레이스 명예의 전당' : '🏆 땅따먹기 명예의 전당'));
+        document.getElementById('rankingTitle').innerText = type === 'master' ? '🏆 스피드런 명예의 전당' : (type === 'rain' ? '🏆 디펜스 명예의 전당' : (type === 'surv' ? '🏆 어휘왕 명예의 전당' : '🏆 땅따먹기 명예의 전당'));
         
         let toggleDiv = document.getElementById('landRankingToggle');
         if(type === 'land') {
@@ -990,13 +953,13 @@
         let dbPath;
         if (currentRankingType === 'master') dbPath = `rankings_vocab/stage_${stage}`;
         else if (currentRankingType === 'rain') dbPath = `rankings_vocab_rain/stage_${stage}`;
-        else if (currentRankingType === 'race') dbPath = `rankings_vocab_race/stage_${stage}`;
+        else if (currentRankingType === 'surv') dbPath = `rankings_vocab_surv/stage_${stage}`;
         else dbPath = landRankMode === 'solo' ? `rankings_vocab_land_solo/stage_${stage}` : `rankings_vocab_land_team/stage_${stage}`;
 
         let query;
         if (currentRankingType === 'master') query = getDB().ref(dbPath).orderByChild('time').limitToFirst(10);
         else if (currentRankingType === 'rain') query = getDB().ref(dbPath).orderByChild('score').limitToLast(10);
-        else if (currentRankingType === 'race') query = getDB().ref(dbPath).orderByChild('firsts').limitToLast(10);
+        else if (currentRankingType === 'surv') query = getDB().ref(dbPath).orderByChild('firsts').limitToLast(10);
         else if (currentRankingType === 'land') {
             if (landRankMode === 'solo') query = getDB().ref(dbPath).orderByChild('soloFirsts').limitToLast(10);
             else query = getDB().ref(dbPath).orderByChild('teamWins').limitToLast(10);
@@ -1007,7 +970,7 @@
             snapshot.forEach(child => { results.push(child.val()); });
             
             if(currentRankingType === 'rain') { results.sort((a,b) => b.score - a.score); } 
-            else if(currentRankingType === 'race') { results.sort((a,b) => b.firsts - a.firsts); }
+            else if(currentRankingType === 'surv') { results = results.filter(r => (r.firsts || 0) > 0); results.sort((a,b) => b.firsts - a.firsts); }
             else if (currentRankingType === 'land') {
                 if (landRankMode === 'solo') results.sort((a,b) => b.soloFirsts - a.soloFirsts);
                 else results.sort((a,b) => {
@@ -1023,7 +986,7 @@
                 let displayVal = '';
                 if (currentRankingType === 'master') displayVal = formatTime(data.time);
                 else if (currentRankingType === 'rain') displayVal = formatTime(data.score);
-                else if (currentRankingType === 'race') displayVal = `🥇 1등 ${data.firsts}회`;
+                else if (currentRankingType === 'surv') displayVal = `👑 어휘왕 ${data.firsts}회`;
                 else if (currentRankingType === 'land') {
                     if (landRankMode === 'solo') displayVal = `👑 1등 ${data.soloFirsts}회`;
                     else displayVal = `${data.teamWins}승 ${data.teamDraws||0}무 ${data.teamLosses||0}패`;
@@ -1040,7 +1003,7 @@
         else if (tab === 'master') { document.getElementById('tabMaster').classList.add('active'); initMasterHome(); showScreen('masterStageScreen'); } 
         else if (tab === 'rain') { document.getElementById('tabRain').classList.add('active'); initRainHome(); showScreen('rainStageScreen'); }
         else if (tab === 'land') { document.getElementById('tabLand').classList.add('active'); initLandGrabHome(); showScreen('landStageScreen'); }
-        else if (tab === 'race') { document.getElementById('tabRace').classList.add('active'); initRaceHome(); showScreen('raceStageScreen'); }
+        else if (tab === 'surv') { document.getElementById('tabSurv').classList.add('active'); initSurvHome(); showScreen('survStageScreen'); }
     }
 
     function initHome() {
@@ -1145,29 +1108,6 @@
         }
     }
 
-    function initRaceHome() {
-        const grid = document.getElementById('raceGrid'); grid.innerHTML = '';
-        for(let s = 1; s <= TOTAL_MASTER_STAGES; s++) {
-            const btn = document.createElement('button'); btn.classList.add('day-btn');
-            const record = raceRecords[s]; let rateText = "전적: 없음";
-            if(record && record.plays > 0) { rateText = `🥇 1등 ${record.firsts||0}회 / 총 ${record.plays}회 참가`; }
-
-            let reqDay1 = (s - 1) * 2 + 1, reqDay2 = s * 2, isLocked = false;
-            if (!(dailyRecords[reqDay1] && dailyRecords[reqDay1].cleared)) isLocked = true;
-            if (reqDay2 <= TOTAL_DAYS && !(dailyRecords[reqDay2] && dailyRecords[reqDay2].cleared)) isLocked = true;
-
-            if (isLocked) {
-                btn.innerHTML = `${s}탄 <div style="font-size:0.8rem; color:var(--error); margin-top:5px;">🔒 매일학습 ${reqDay1}~${reqDay2 <= TOTAL_DAYS ? reqDay2 : TOTAL_DAYS}일차 필요</div>`;
-                btn.classList.add('locked-btn'); btn.onclick = () => alert(`🔒 먼저 [매일학습 ${reqDay1}~${reqDay2 <= TOTAL_DAYS ? reqDay2 : TOTAL_DAYS}일차]를 클리어하세요!`);
-            } else {
-                btn.innerHTML = `${s}탄 <span class="clear-badge" style="background:#f97316;">✅ 참가 가능</span><div class="daily-rate">${rateText}</div>`;
-                if(record && record.plays > 0) { btn.classList.add('cleared'); btn.style.borderColor = '#f97316'; btn.style.backgroundColor = '#fff7ed'; }
-                btn.onclick = () => joinRaceRoom(s);
-            }
-            grid.appendChild(btn);
-        }
-    }
-
     function showScreen(screenId) {
         document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
         document.getElementById(screenId).classList.add('active');
@@ -1177,7 +1117,7 @@
         if(document.getElementById('tabMaster').classList.contains('active')) switchMainTab('master');
         else if(document.getElementById('tabRain').classList.contains('active')) switchMainTab('rain');
         else if(document.getElementById('tabLand').classList.contains('active')) switchMainTab('land');
-        else if(document.getElementById('tabRace').classList.contains('active')) switchMainTab('race');
+        else if(document.getElementById('tabSurv').classList.contains('active')) switchMainTab('surv');
         else switchMainTab('daily');
     }
 
@@ -1381,9 +1321,17 @@
     function finishMasterGame() {
         if(masterTimerReq) cancelAnimationFrame(masterTimerReq);
         let finalTime = Date.now() - masterStartTime; let prevRecord = masterRecords[masterStage]; let isNewBest = false;
-        if(!prevRecord || finalTime < prevRecord.bestTime) {
+        if(!prevRecord || !prevRecord.bestTime || finalTime < prevRecord.bestTime) {
             masterRecords[masterStage] = { bestTime: finalTime, date: new Date().toISOString() };
-            localStorage.setItem('masterRecords', JSON.stringify(masterRecords)); isNewBest = true; syncToFirebase();
+            localStorage.setItem('masterRecords', JSON.stringify(masterRecords));
+            isNewBest = true;
+            syncToFirebase();
+        }
+        const masterBest = masterRecords[masterStage] && masterRecords[masterStage].bestTime;
+        if (isFirebaseActive && getUserKey() && masterBest) {
+            getDB().ref(`rankings_vocab/stage_${masterStage}/${getUserKey()}`).set({
+                name: userProfile.studentName, classInfo: userProfile.gradeClass, time: masterBest
+            }).catch(err => reportFirebaseError(err, '스피드런 순위 저장'));
         }
         document.getElementById('resultTitle').innerText = "👑 스피드런 클리어!"; document.getElementById('resultScore').innerText = formatTime(finalTime); document.getElementById('btnReviewMissed').style.display = 'none';
         document.getElementById('resultComment').innerHTML = `대단합니다! 모든 단어를 찾았습니다.` + (isNewBest ? "<br>🎉 <b>최고 기록을 경신했습니다!</b>" : "");
@@ -1533,10 +1481,16 @@
         try {
             let prevRecord = rainRecords[rainStage] || { bestTimeMs: 0 }; 
             let isNewBest = false;
-            if(rainTimeMs > prevRecord.bestTimeMs) {
+            if(rainTimeMs > (prevRecord.bestTimeMs || 0)) {
                 rainRecords[rainStage] = { bestTimeMs: rainTimeMs, cleared: true, date: new Date().toISOString() };
                 localStorage.setItem('rainRecords', JSON.stringify(rainRecords));
                 isNewBest = true; syncToFirebase();
+            }
+            const rainBest = rainRecords[rainStage] && rainRecords[rainStage].bestTimeMs;
+            if (isFirebaseActive && getUserKey() && rainBest) {
+                getDB().ref(`rankings_vocab_rain/stage_${rainStage}/${getUserKey()}`).set({
+                    name: userProfile.studentName, classInfo: userProfile.gradeClass, score: rainBest
+                }).catch(err => reportFirebaseError(err, '디펜스 순위 저장'));
             }
             document.getElementById('btnReviewMissed').style.display = 'none';
             document.getElementById('resultTitle').innerText = "💥 성벽 붕괴!";
@@ -1555,6 +1509,11 @@
         if(!roomCodeRaw || roomCodeRaw.trim() === '') return;
         let roomCode = roomCodeRaw.trim().replace(/[\.\#\$\[\]\/]/g, "");
         if(roomCode === '') { alert("방 이름에 사용할 수 없는 문자만 입력하셨습니다. 다른 이름으로 다시 시도해주세요."); return; }
+        if (landRoomRef || inLandGrabRoom) {
+            const oldRef = landRoomRef;
+            inLandGrabRoom = false; landRoomRef = null;
+            if (oldRef) { oldRef.off('value', handleLandRoomUpdate); leaveLandRoomCleanup(null, oldRef); }
+        }
         currentLandRoomCode = roomCode; currentLandStage = stage;
         landRoomRef = getDB().ref(`landGrabRooms_vocab/stage_${stage}_${currentLandRoomCode}`);
         
@@ -1662,30 +1621,45 @@
         }
     }
 
-    function changeLandMode() { let newMode = document.getElementById('lobbyModeSelect').value; landRoomRef.child('mode').set(newMode); if(newMode === 'team') randomizeLandTeams(); }
-    function joinLandTeam(team) { landRoomRef.child(`players/${getUserKey()}/team`).set(team); }
-    function randomizeLandTeams() {
-        landRoomRef.child('players').once('value').then(snap => {
-            let keys = Object.keys(snap.val() || {}).sort(() => Math.random() - 0.5), updates = {};
-            keys.forEach((k, idx) => updates[`${k}/team`] = (idx % 2 === 0) ? 'A' : 'B');
-            landRoomRef.child('players').update(updates);
-        });
+    function changeLandMode() {
+        if(!landRoomRef) return;
+        const newMode = document.getElementById('lobbyModeSelect').value;
+        landRoomRef.child('host').once('value').then(s => {
+            if(s.val() !== getUserKey()) return;
+            return landRoomRef.child('mode').set(newMode).then(() => newMode === 'team' ? randomizeLandTeams() : null);
+        }).catch(err => reportFirebaseError(err, '게임 방식 변경'));
     }
-
+    function joinLandTeam(team) {
+        if(!landRoomRef || (team !== 'A' && team !== 'B')) return;
+        landRoomRef.child(`players/${getUserKey()}/team`).set(team).catch(err => reportFirebaseError(err, '팀 참여'));
+    }
+    function randomizeLandTeams() {
+        if(!landRoomRef) return;
+        landRoomRef.child('host').once('value').then(hostSnap => {
+            if(hostSnap.val() !== getUserKey()) return;
+            return landRoomRef.child('players').once('value').then(snap => {
+                const keys = Object.keys(snap.val() || {}).sort(() => Math.random() - 0.5);
+                const updates = {};
+                keys.forEach((k, idx) => updates[`${k}/team`] = (idx % 2 === 0) ? 'A' : 'B');
+                return landRoomRef.child('players').update(updates);
+            });
+        }).catch(err => reportFirebaseError(err, '팀 랜덤 배정'));
+    }
     function resetLandGrabRoom() {
         if(!landRoomRef) return;
-        if(!confirm("진행 중인 게임을 중단하고 대기실로 되돌리시겠습니까?\n(현재까지의 점령 기록은 사라집니다)")) return;
+        if(!confirm('진행 중인 게임을 중단하고 대기실로 되돌리시겠습니까?\n(현재까지의 점령 기록은 사라집니다)')) return;
         landRoomRef.transaction(data => {
-            if(!data) return data;
-            data.status = 'waiting';
-            data.board = null;
-            return data;
-        });
+            if(!data || data.host !== getUserKey()) return;
+            data.status = 'waiting'; data.board = null; return data;
+        }).catch(err => reportFirebaseError(err, '게임 중단'));
     }
 
     function startLandGame() {
+        if(!landRoomRef) return;
         landRoomRef.once('value').then(snap => {
-            let data = snap.val() || {}, stageWords = rawWords.slice((currentLandStage - 1) * LAND_WORDS_PER_STAGE, currentLandStage * LAND_WORDS_PER_STAGE);
+            let data = snap.val() || {};
+            if(data.host !== getUserKey() || data.status === 'playing') return;
+            let stageWords = rawWords.slice((currentLandStage - 1) * LAND_WORDS_PER_STAGE, currentLandStage * LAND_WORDS_PER_STAGE);
             if(stageWords.length < LAND_WORDS_PER_STAGE) {
                 let endDay = Math.min(currentLandStage * 4, TOTAL_DAYS);
                 let coveredPool = rawWords.slice(0, endDay * WORDS_PER_DAY);
@@ -1693,8 +1667,8 @@
             }
             let boardData = stageWords.sort(() => 0.5 - Math.random()).map(w => ({ w: w.w, m: w.m, owner: "" }));
             let currentPlayers = data.players || {}; Object.keys(currentPlayers).forEach(k => { currentPlayers[k].score = 0; currentPlayers[k].penaltyUntil = 0; });
-            landRoomRef.update({ status: 'playing', board: boardData, players: currentPlayers });
-        });
+            return landRoomRef.update({ status: 'playing', board: boardData, players: currentPlayers });
+        }).catch(err => reportFirebaseError(err, '땅따먹기 시작'));
     }
 
     function initLandGameUI(data) {
@@ -1768,20 +1742,31 @@
     function submitLandGrabWord() {
         if(currentSelectedLandIndex === -1 || myLandPenaltyUntil > Date.now()) return;
         let inputEl = document.getElementById('landInput'), val = normalizeForCompare(inputEl.value); if(!val) return;
-        if(!currentLandBoardData[currentSelectedLandIndex]) return; 
+        if(!currentLandBoardData[currentSelectedLandIndex]) return;
+        const roomRef = landRoomRef;
+        if(!roomRef) return;
         if(val === normalizeForCompare(currentLandBoardData[currentSelectedLandIndex].w)) {
-            landRoomRef.child(`board/${currentSelectedLandIndex}`).transaction(currentData => {
-                if(currentData && (!currentData.owner || currentData.owner === "")) { currentData.owner = getUserKey(); return currentData; } return;
+            const idx = currentSelectedLandIndex;
+            const myKey = getUserKey();
+            roomRef.transaction(roomData => {
+                if(!roomData || roomData.status !== 'playing' || !roomData.board || !roomData.board[idx]) return;
+                if(roomData.board[idx].owner) return;
+                roomData.board[idx].owner = myKey;
+                if(roomData.players && roomData.players[myKey]) roomData.players[myKey].score = (roomData.players[myKey].score || 0) + 1;
+                return roomData;
             }, (error, committed) => {
+                if(error) { reportFirebaseError(error, '땅 점령'); return; }
                 if(committed) {
-                    landRoomRef.child(`players/${getUserKey()}/score`).transaction(s => (s||0)+1);
-                    inputEl.value = ''; currentSelectedLandIndex = -1; document.getElementById('landTargetMean').innerText = "🎉 점령 성공! 다음 땅을 선택하세요.";
+                    inputEl.value = ''; currentSelectedLandIndex = -1; document.getElementById('landTargetMean').innerText = '🎉 점령 성공! 다음 땅을 선택하세요.';
                     document.getElementById('landInteractionBox').className = 'land-interaction'; inputEl.disabled = true; document.getElementById('landSubmitBtn').disabled = true;
-                } else { inputEl.value = ''; document.getElementById('landTargetMean').innerText = "❌ 간발의 차이로 빼앗겼습니다!"; }
+                } else { inputEl.value = ''; document.getElementById('landTargetMean').innerText = '❌ 간발의 차이로 빼앗겼습니다!'; }
             });
         } else {
             inputEl.value = ''; inputEl.classList.add('shake'); setTimeout(()=> inputEl.classList.remove('shake'), 300);
-            landRoomRef.child(`players/${getUserKey()}/penaltyUntil`).set(Date.now() + 10000); currentSelectedLandIndex = -1;
+            myLandPenaltyUntil = Date.now() + 10000;
+            roomRef.child(`players/${getUserKey()}/penaltyUntil`).set(myLandPenaltyUntil).catch(err => reportFirebaseError(err, '패널티 저장'));
+            currentSelectedLandIndex = -1;
+            checkLandPenalty();
             for(let i=0; i<100; i++) document.getElementById('landBoard').children[i].classList.remove('selected');
         }
     }
@@ -1799,8 +1784,10 @@
 
     function endLandGrabGame(data) {
         if(!inLandGrabRoom) return;
-        let roomRefLocal = landRoomRef;
-        landRoomRef.off('value', handleLandRoomUpdate); inLandGrabRoom = false; if(landPenaltyInterval) clearInterval(landPenaltyInterval);
+        const roomRefLocal = landRoomRef;
+        if (roomRefLocal) roomRefLocal.off('value', handleLandRoomUpdate);
+        landRoomRef = null;
+        inLandGrabRoom = false; if(landPenaltyInterval) clearInterval(landPenaltyInterval);
         let players = data.players || {}, mode = data.mode || 'solo', myData = players[getUserKey()], myScore = myData ? (myData.score || 0) : 0;
         let comment = "", winStatus = "loss";
 
@@ -1838,6 +1825,11 @@
         landRecords[currentLandStage] = prevRecord;
         localStorage.setItem('landRecords', JSON.stringify(landRecords));
         syncToFirebase();
+        if (isFirebaseActive && getUserKey()) {
+            const rankPath = mode === 'team' ? `rankings_vocab_land_team/stage_${currentLandStage}/${getUserKey()}` : `rankings_vocab_land_solo/stage_${currentLandStage}/${getUserKey()}`;
+            const rankData = { name: userProfile.studentName, classInfo: userProfile.gradeClass, soloFirsts: prevRecord.soloFirsts, teamWins: prevRecord.teamWins, teamDraws: prevRecord.teamDraws, teamLosses: prevRecord.teamLosses };
+            getDB().ref(rankPath).set(rankData).catch(err => reportFirebaseError(err, '땅따먹기 순위 저장'));
+        }
 
         roomRefLocal.transaction(roomData => {
             if(!roomData || roomData.status !== 'playing') return roomData;
@@ -1851,545 +1843,530 @@
         let resultMsg = mode === 'team' ? "팀전 전적이 기록되었습니다." : "개인전 1등 여부가 기록되었습니다.";
         document.getElementById('resultComment').innerHTML = comment + `<br><br>` + resultMsg;
         
-        document.getElementById('btnGoHome').onclick = () => { landRoomRef.child('players/' + getUserKey()).remove(); quitLandLobby(); };
+        document.getElementById('btnGoHome').onclick = () => { if (roomRefLocal) roomRefLocal.child('players/' + getUserKey()).remove().catch(() => {}); goToHome(); };
         showScreen('resultScreen');
     }
 
-    function leaveLandRoomCleanup(onDone) {
-        if(!landRoomRef) { if(onDone) onDone(); return; }
-        let myKey = getUserKey();
-        landRoomRef.child('players').once('value').then(snap => {
-            let players = snap.exists() ? (snap.val() || {}) : {};
-            let otherKeys = Object.keys(players).filter(k => k !== myKey && players[k] && players[k].name);
-            if(otherKeys.length === 0) {
-                landRoomRef.remove().then(() => { if(onDone) onDone(); }).catch(() => { if(onDone) onDone(); });
-            } else {
-                landRoomRef.child('players/' + myKey).remove().then(() => { if(onDone) onDone(); }).catch(() => { if(onDone) onDone(); });
-            }
+    function leaveLandRoomCleanup(onDone, roomRefArg = landRoomRef) {
+        const ref = roomRefArg;
+        if(!ref) { if(onDone) onDone(); return; }
+        const myKey = getUserKey();
+        ref.child('players').once('value').then(snap => {
+            const players = snap.exists() ? (snap.val() || {}) : {};
+            const otherKeys = Object.keys(players).filter(k => k !== myKey && players[k] && players[k].name);
+            const done = () => { if(onDone) onDone(); };
+            if(otherKeys.length === 0) ref.remove().then(done).catch(done);
+            else ref.child('players/' + myKey).remove().then(done).catch(done);
         }).catch(() => { if(onDone) onDone(); });
     }
 
     function quitLandGrabGame() {
-        if(!confirm("게임을 나가시겠습니까?")) return; inLandGrabRoom = false; if(landPenaltyInterval) clearInterval(landPenaltyInterval);
-        if(landRoomRef) { landRoomRef.off('value', handleLandRoomUpdate); leaveLandRoomCleanup(); }
+        if(!confirm('게임을 나가시겠습니까?')) return;
+        inLandGrabRoom = false;
+        if(landPenaltyInterval) clearInterval(landPenaltyInterval);
+        const ref = landRoomRef;
+        landRoomRef = null;
+        if(ref) { ref.off('value', handleLandRoomUpdate); leaveLandRoomCleanup(null, ref); }
         document.getElementById('landBoard').innerHTML = ''; goToHome();
     }
 
     function quitLandLobby() {
-        inLandGrabRoom = false; if(landPenaltyInterval) clearInterval(landPenaltyInterval);
-        if(landRoomRef) { landRoomRef.off('value', handleLandRoomUpdate); leaveLandRoomCleanup(); }
+        inLandGrabRoom = false;
+        if(landPenaltyInterval) clearInterval(landPenaltyInterval);
+        const ref = landRoomRef;
+        landRoomRef = null;
+        if(ref) { ref.off('value', handleLandRoomUpdate); leaveLandRoomCleanup(null, ref); }
         document.getElementById('landBoard').innerHTML = ''; goToHome();
     }
 
-    // 🚀 로켓 레이스
-    let raceAudioCtx = null;
-    function getRaceAudioCtx() {
-        if(!raceSoundEnabled) return null;
-        if(!raceAudioCtx) {
-            try { raceAudioCtx = new (window.AudioContext || window.webkitAudioContext)(); }
-            catch(e) { return null; }
-        }
-        if(raceAudioCtx.state === 'suspended') raceAudioCtx.resume().catch(()=>{});
-        return raceAudioCtx;
+    // 👑 어휘왕 SURVIVAL (실시간 어휘 생존 게임)
+    const SV = { on: 0, run: 0, rid: 0, hold: 0, fin: 0, done: 0, played: 0, stage: 1, code: '', ref: null, data: null, off: 0, sig: '', pick: -1, wl: 0, tt: null, lh: null, fail: 0, words: [], ctx: null, sound: localStorage.getItem('survSoundEnabled') !== '0' };
+    const svEl = id => document.getElementById(id);
+    const svSlp = ms => new Promise(r => setTimeout(r, ms));
+    const svNow = () => Date.now() + SV.off;
+    const svP = () => (SV.data && SV.data.players) || {};
+    const svIds = () => Object.keys(svP()).filter(k => svP()[k] && svP()[k].name);
+    const svAlive = () => svIds().filter(k => svP()[k].a);
+    const svOk = my => !!(SV.run === my && SV.on && SV.ref && SV.data && SV.data.status === 'playing' && SV.data.host === getUserKey());
+    const svLive = tok => !!(SV.on && SV.sig === tok);
+    const sv = h => { svEl('survStage').innerHTML = h; };
+    const svNames = (l, P) => { const n = l.map(i => P[i] ? P[i].name : '').filter(Boolean); return n.length > 3 ? n.slice(0, 3).join(', ') + ' 외 ' + (n.length - 3) + '명' : n.join(', '); };
+    const svSet = async o => { const id = svNow() + '_' + Math.random().toString(36).slice(2, 6); await SV.ref.child('st').set(Object.assign({ id }, o)); return id; };
+    const svBan = async (t, s, ms, th) => { await svSet({ ph: 'ban', t, s, th: th || '' }); await svSlp(ms); };
+    function svPatch(p) {
+        const f = {};
+        Object.keys(p).forEach(k => Object.keys(p[k]).forEach(c => { f[k + '/' + c] = p[k][c]; }));
+        return Object.keys(f).length ? SV.ref.child('players').update(f) : Promise.resolve();
     }
-    function playRaceBeep(freq, startDelay, duration, waveType) {
-        let ctx = getRaceAudioCtx(); if(!ctx) return;
+    const svStats = (m, rank) => [['최종 순위', rank + '위'], ['맞힌 문제', (m.c || 0) + '/' + (m.t || 0)], ['정답률', (m.t ? Math.round(m.c / m.t * 100) : 0) + '%'], ['최고 연속 정답', (m.b || 0) + '개'], ['미니게임 1위', (m.m || 0) + '회'], ['획득한 생명', '❤️ +' + (m.g || 0)], ['부활', m.r ? '성공 🔥' : '없음']];
+    const svStatHTML = (cells, cls) => '<div class="sv-stats ' + cls + '">' + cells.map(c => '<div><small>' + c[0] + '</small><b>' + c[1] + '</b></div>').join('') + '</div>';
+
+    // 🔊 효과음
+    const SVS = { start: [[523, 0, .1], [659, .1, .1], [784, .2, .1], [1046, .3, .3]], event: [[784, 0, .1], [1046, .12, .2]], rev: [[392, 0, .15], [523, .15, .15], [784, .3, .3]], final: [[196, 0, .2], [196, .25, .2], [262, .5, .4]], duel: [[330, 0, .12], [330, .16, .12], [494, .32, .35]], ok: [[880, 0, .1], [1318, .08, .16]], no: [[180, 0, .25]], elim: [[330, 0, .15], [262, .16, .15], [196, .32, .4]], king: [[523, 0, .15], [659, .15, .15], [784, .3, .15], [1046, .45, .5]] };
+    function svSnd(k) {
+        if (!SV.sound || !SVS[k]) return;
         try {
-            let osc = ctx.createOscillator(), gain = ctx.createGain();
-            osc.type = waveType || 'sine'; osc.frequency.value = freq;
-            osc.connect(gain); gain.connect(ctx.destination);
-            let t0 = ctx.currentTime + (startDelay || 0);
-            gain.gain.setValueAtTime(0.0001, t0);
-            gain.gain.exponentialRampToValueAtTime(0.22, t0 + 0.02);
-            gain.gain.exponentialRampToValueAtTime(0.0001, t0 + duration);
-            osc.start(t0); osc.stop(t0 + duration + 0.03);
-        } catch(e) {}
-    }
-    function playRaceCorrectSound() { playRaceBeep(880, 0, 0.1, 'triangle'); playRaceBeep(1318, 0.07, 0.16, 'triangle'); }
-    function playRaceWrongSound() { playRaceBeep(180, 0, 0.2, 'sawtooth'); }
-    function playRaceComboSound(level) { playRaceBeep(1046, 0, 0.08, 'square'); playRaceBeep(1568, 0.06, 0.12, 'square'); }
-    function playRaceTickSound() { playRaceBeep(523, 0, 0.09, 'square'); }
-    function playRaceGoSound() { playRaceBeep(659,0,0.09,'square'); playRaceBeep(880,0.09,0.09,'square'); playRaceBeep(1318,0.18,0.28,'square'); }
-    function playRaceFinishSound() { [659,880,1046,1318].forEach((f,i)=>playRaceBeep(f, i*0.11, 0.2, 'triangle')); }
-
-    function toggleRaceSound() {
-        raceSoundEnabled = !raceSoundEnabled;
-        localStorage.setItem('raceSoundEnabled', raceSoundEnabled ? '1' : '0');
-        let btn = document.getElementById('btnRaceSound'); if(btn) btn.textContent = raceSoundEnabled ? '🔊' : '🔇';
-        if(raceSoundEnabled) getRaceAudioCtx();
-    }
-
-    function runRaceCountdown(onDone) {
-        let overlay = document.getElementById('raceCountdownOverlay'), numEl = document.getElementById('raceCountdownNumber');
-        let steps = ['3', '2', '1', '출발! 🚀'];
-        overlay.style.display = 'flex';
-        let i = 0;
-        function step() {
-            numEl.textContent = steps[i];
-            numEl.style.animation = 'none'; void numEl.offsetWidth; numEl.style.animation = '';
-            if(i < 3) playRaceTickSound(); else playRaceGoSound();
-            i++;
-            if(i < steps.length) setTimeout(step, 650);
-            else setTimeout(() => { overlay.style.display = 'none'; if(onDone) onDone(); }, 550);
-        }
-        step();
-    }
-
-    let raceToastTimer = null;
-    function showRaceRankToast(msg) {
-        let toast = document.getElementById('raceRankToast'); if(!toast) return;
-        toast.textContent = msg; toast.classList.add('show');
-        clearTimeout(raceToastTimer);
-        raceToastTimer = setTimeout(() => toast.classList.remove('show'), 1600);
-    }
-
-    function joinRaceRoom(stage) {
-        if(!isFirebaseActive) { alert("서버 연결이 필요합니다."); return; }
-        let roomCodeRaw = prompt(`${stage}탄 로켓 레이스에 접속합니다.\n[방 이름]을 입력하세요. (예: 1모둠, 자유방)`);
-        if(!roomCodeRaw || roomCodeRaw.trim() === '') return;
-        let roomCode = roomCodeRaw.trim().replace(/[\.\#\$\[\]\/]/g, "");
-        if(roomCode === '') { alert("방 이름에 사용할 수 없는 문자만 입력하셨습니다. 다른 이름으로 다시 시도해주세요."); return; }
-        currentRaceRoomCode = roomCode; currentRaceStage = stage;
-        raceRoomRef = getDB().ref(`raceRooms_vocab/stage_${stage}_${currentRaceRoomCode}`);
-
-        let startDay = (stage - 1) * 2 + 1, endDay = Math.min(stage * 2, TOTAL_DAYS);
-        let titleTxt = `${stage}탄 (${startDay}~${endDay}일차) - [${currentRaceRoomCode}]방`;
-        document.getElementById('raceLobbyStageTitleText').innerText = titleTxt; document.getElementById('raceGameStageTitle').innerText = titleTxt;
-
-        let myKey = getUserKey();
-
-        raceRoomRef.transaction(data => {
-            data = data || {};
-            let players = data.players || {}, validPlayers = {}, hostExists = false;
-            Object.keys(players).forEach(k => {
-                if(players[k] && players[k].name) { validPlayers[k] = players[k]; if(k === data.host) hostExists = true; }
+            if (!SV.ctx) SV.ctx = new (window.AudioContext || window.webkitAudioContext)();
+            if (SV.ctx.state === 'suspended') SV.ctx.resume().catch(() => {});
+            const wave = (k === 'no' || k === 'elim') ? 'sawtooth' : 'triangle';
+            SVS[k].forEach(a => {
+                const o = SV.ctx.createOscillator(), g = SV.ctx.createGain(), t0 = SV.ctx.currentTime + a[1];
+                o.type = wave; o.frequency.value = a[0]; o.connect(g); g.connect(SV.ctx.destination);
+                g.gain.setValueAtTime(0.0001, t0); g.gain.exponentialRampToValueAtTime(0.2, t0 + 0.02); g.gain.exponentialRampToValueAtTime(0.0001, t0 + a[2]);
+                o.start(t0); o.stop(t0 + a[2] + 0.03);
             });
-            players = validPlayers;
-            let pCount = Object.keys(players).length;
+        } catch (e) {}
+    }
+    function toggleSurvSound() {
+        SV.sound = !SV.sound; localStorage.setItem('survSoundEnabled', SV.sound ? '1' : '0');
+        svEl('btnSurvSound').textContent = SV.sound ? '🔊' : '🔇';
+    }
 
-            if (pCount === 0 || (data.host && !hostExists)) {
-                data = { host: myKey, status: 'waiting', players: {} };
-                players = {}; pCount = 0;
+    // 🏠 단계 선택 화면
+    function initSurvHome() {
+        const grid = svEl('survGrid'); grid.innerHTML = '';
+        for (let s = 1; s <= TOTAL_MASTER_STAGES; s++) {
+            const btn = document.createElement('button'); btn.classList.add('day-btn');
+            const record = survRecords[s]; let rateText = "전적: 없음";
+            if (record && record.plays > 0) rateText = `👑 어휘왕 ${record.kings || 0}회 / 총 ${record.plays}회 참가`;
+            let reqDay1 = (s - 1) * 2 + 1, reqDay2 = s * 2, isLocked = false;
+            if (!(dailyRecords[reqDay1] && dailyRecords[reqDay1].cleared)) isLocked = true;
+            if (reqDay2 <= TOTAL_DAYS && !(dailyRecords[reqDay2] && dailyRecords[reqDay2].cleared)) isLocked = true;
+            if (isLocked) {
+                btn.innerHTML = `${s}탄 <div style="font-size:0.8rem; color:var(--error); margin-top:5px;">🔒 매일학습 ${reqDay1}~${reqDay2 <= TOTAL_DAYS ? reqDay2 : TOTAL_DAYS}일차 필요</div>`;
+                btn.classList.add('locked-btn'); btn.onclick = () => alert(`🔒 먼저 [매일학습 ${reqDay1}~${reqDay2 <= TOTAL_DAYS ? reqDay2 : TOTAL_DAYS}일차]를 클리어하세요!`);
+            } else {
+                btn.innerHTML = `${s}탄 <span class="clear-badge" style="background:#f59e0b;">👑 참가 가능</span><div class="daily-rate">${rateText}</div>`;
+                if (record && record.plays > 0) { btn.classList.add('cleared'); btn.style.borderColor = '#f59e0b'; btn.style.backgroundColor = '#fffbeb'; }
+                btn.onclick = () => joinSurv(s);
             }
+            grid.appendChild(btn);
+        }
+    }
 
-            if (players[myKey]) { data.players = players; return data; }
+    function svStageWords(stage) {
+        let w = rawWords.slice((stage - 1) * MASTER_WORDS_PER_STAGE, stage * MASTER_WORDS_PER_STAGE);
+        if (w.length < 12) { const used = new Set(w.map(x => x.w)); w = w.concat(shuffleArray(rawWords.filter(x => !used.has(x.w))).slice(0, 12 - w.length)); }
+        return w;
+    }
+
+    // 🚪 방 입장
+    function joinSurv(stage) {
+        if (!isFirebaseActive) { alert("서버 연결이 필요합니다."); return; }
+        const raw = prompt(`${stage}탄 어휘왕 SURVIVAL에 접속합니다.\n[방 이름]을 입력하세요. (예: 1모둠, 자유방)`);
+        if (!raw || raw.trim() === '') return;
+        const code = raw.trim().replace(/[\.\#\$\[\]\/]/g, "");
+        if (code === '') { alert("방 이름에 사용할 수 없는 문자만 입력하셨습니다. 다른 이름으로 다시 시도해주세요."); return; }
+        if (SV.ref || SV.on) {
+            const oldRef = SV.ref;
+            SV.on = 0; SV.run = 0; clearInterval(SV.tt); SV.ref = null;
+            if (oldRef) { oldRef.off('value', svUpdate); svLeaveRef(oldRef); }
+        }
+        const ref = getDB().ref(`survRooms_vocab/stage_${stage}_${code}`), me = getUserKey();
+        const title = `${stage}탄 (${(stage - 1) * 2 + 1}~${Math.min(stage * 2, TOTAL_DAYS)}일차) - [${code}]방`;
+        ref.transaction(data => {
+            data = data || {};
+            let pl = data.players || {}, ok = {}, hostOk = false;
+            Object.keys(pl).forEach(k => { if (pl[k] && pl[k].name) { ok[k] = pl[k]; if (k === data.host) hostOk = true; } });
+            pl = ok; const n = Object.keys(pl).length;
+            if (n === 0) data = { host: me, status: 'waiting', players: {} };
+            else if (!hostOk) data.host = Object.keys(pl).sort()[0];
+            if (pl[me]) { data.players = pl; return data; }
             if (data.status === 'playing') return;
-            if (pCount >= 25) return;
-
-            let usedColors = new Set(Object.values(players).map(p => p.color));
-            let colorIdx = 0;
-            while (usedColors.has(getPlayerColor(colorIdx))) colorIdx++;
-            players[myKey] = { name: userProfile.studentName, color: getPlayerColor(colorIdx), position: 0, finished: false, finishRank: null, order: pCount };
-            data.players = players;
-            if (!data.host) data.host = myKey;
-            if (!data.status) data.status = 'waiting';
+            if (n >= 25) return;
+            const used = new Set(Object.values(pl).map(p => p.color)); let ci = 0;
+            while (used.has(getPlayerColor(ci))) ci++;
+            pl[me] = { name: userProfile.studentName, color: getPlayerColor(ci), order: n, h: 3, a: 1, c: 0, t: 0, s: 0, b: 0, m: 0, g: 0, r: 0, k: 0 };
+            data.players = pl; if (!data.host) data.host = me; if (!data.status) data.status = 'waiting';
             return data;
-        }, (error, committed, snapshot) => {
-            if (error) { alert("입장 중 오류가 발생했습니다. 다시 시도해주세요."); return; }
-            if (!committed) {
-                let d = (snapshot && snapshot.val()) || {};
-                if (d.status === 'playing') alert("진행 중인 게임입니다!");
-                else alert("방이 꽉 찼습니다.");
+        }, (err, committed, snap) => {
+            if (err) { alert("입장 중 오류가 발생했습니다. 다시 시도해주세요."); return; }
+            if (!committed) { const d = (snap && snap.val()) || {}; alert(d.status === 'playing' ? "진행 중인 게임입니다!" : "방이 꽉 찼습니다."); return; }
+            Object.assign(SV, { on: 1, run: 0, hold: 0, fin: 0, done: 0, played: 0, stage, code, ref, data: null, sig: '', pick: -1, wl: 0, lh: null, fail: 0, words: svStageWords(stage) });
+            svEl('survLobbyTitle').innerText = title; svEl('survGameTitle').innerText = title;
+            svEl('btnSurvSound').textContent = SV.sound ? '🔊' : '🔇';
+            ref.child('players/' + me).onDisconnect().remove();
+            getDB().ref('.info/serverTimeOffset').once('value').then(x => { SV.off = x.val() || 0; }).catch(() => {});
+            showScreen('survLobbyScreen'); ref.on('value', svUpdate);
+        });
+    }
+
+    // 🔄 방 데이터가 바뀔 때마다 실행 (모든 참가자 공통)
+    function svUpdate(snap) {
+        if (!SV.on) return;
+        const d = snap.val(); SV.data = d;
+        if (SV.fin) return;
+        const me = getUserKey();
+        if (!d || !d.players || !d.players[me]) return quitSurv();
+        const host = d.host === me;
+        if (d.host && !d.players[d.host]) attemptHostMigration(SV.ref);
+        svEl('survLobbyHostActions').style.display = host ? 'flex' : 'none';
+        svEl('survLobbyGuestMsg').style.display = host ? 'none' : 'block';
+        svEl('btnSurvReset').style.display = host ? 'inline-block' : 'none';
+        if ((d.status || 'waiting') === 'waiting') {
+            SV.hold = 0;
+            if (!svEl('survLobbyScreen').classList.contains('active')) showScreen('survLobbyScreen');
+            SV.sig = ''; svLobby(d); return;
+        }
+        if (!svEl('survGameScreen').classList.contains('active')) { showScreen('survGameScreen'); SV.sig = ''; SV.lh = null; }
+        svHud(d);
+        const st = d.st || {};
+        if (st.id && st.id !== SV.sig) { SV.sig = st.id; svDraw(st, d); }
+        // 방장이 진행을 맡아요. 방장이 바뀌면 새 방장이 이어받아요.
+        if (host && !SV.run && !SV.hold && !SV.fin && !(st.ph === 'end')) survRun(d.loop || null);
+    }
+
+    function svLobby(d) {
+        const pl = d.players || {}, ids = Object.keys(pl).filter(k => pl[k] && pl[k].name).sort((a, b) => (pl[a].order || 0) - (pl[b].order || 0));
+        svEl('survLobbyList').innerHTML = ids.map(k => `<div class="lobby-player"><div class="land-color-dot" style="background-color:${escapeHTML(pl[k].color)}"></div> ${escapeHTML(pl[k].name)}${k === d.host ? ' <span style="color:var(--text-light); font-weight:normal;">(방장)</span>' : ''}</div>`).join('');
+        svEl('survLobbyCount').textContent = `(${ids.length}명)`;
+        const b = svEl('btnSurvStart'); b.disabled = ids.length < 2; b.textContent = ids.length < 2 ? '2명 이상 모여야 시작해요' : '🚀 게임 시작!';
+    }
+
+    // 🚀 방장이 [게임 시작]을 누르면 모두의 생명·기록을 처음 상태로 돌리고 시작
+    function startSurvGame() {
+        const d = SV.data;
+        if (!d || d.status !== 'waiting' || d.host !== getUserKey()) return;
+        const ids = svIds();
+        if (ids.length < 2) { alert("2명 이상 모여야 시작할 수 있어요!"); return; }
+        svEl('btnSurvStart').disabled = true;
+        const up = { status: 'playing', n0: ids.length, st: null, an: null, ms: null, loop: null };
+        ids.forEach(k => {
+            ['c', 't', 's', 'b', 'm', 'g', 'r', 'k'].forEach(f => { up['players/' + k + '/' + f] = 0; });
+            up['players/' + k + '/h'] = 3; up['players/' + k + '/a'] = 1;
+        });
+        SV.ref.update(up).catch(() => { svEl('btnSurvStart').disabled = false; alert("시작하지 못했어요. 다시 눌러 주세요."); });
+    }
+
+    function svHud(d) {
+        const pl = d.players || {}, me = getUserKey(), m = pl[me], el = svEl('survHearts');
+        const ids = Object.keys(pl).filter(k => pl[k] && pl[k].name).sort((a, b) => (pl[a].order || 0) - (pl[b].order || 0));
+        el.textContent = m ? (m.a ? '❤️'.repeat(m.h || 0) : '💀 관전 중') : '';
+        if (m && SV.lh !== null && m.h !== SV.lh) { el.classList.remove('hit', 'up'); void el.offsetWidth; el.classList.add(m.h < SV.lh ? 'hit' : 'up'); }
+        SV.lh = m ? m.h : null;
+        svEl('survCnt').textContent = `생존 ${ids.filter(i => pl[i].a).length} / ${ids.length}`;
+        svEl('survDots').innerHTML = ids.map(i => `<i class="${pl[i].a ? 'on' : ''}${i === me ? ' me' : ''}" title="${escapeHTML(pl[i].name)}"></i>`).join('');
+        svEl('survBoard').innerHTML = ids.slice().sort((a, b) => (pl[b].a || 0) - (pl[a].a || 0) || (pl[b].h || 0) - (pl[a].h || 0)).map(i => `<span class="${pl[i].a ? '' : 'x'}${i === me ? ' me' : ''}">${escapeHTML(pl[i].name)} ${pl[i].a ? '❤️' + pl[i].h : '💀'}</span>`).join('');
+    }
+
+    // 🎬 상태에 맞춰 화면 그리기 (모든 참가자 공통)
+    function svDraw(s, d) {
+        clearInterval(SV.tt);
+        const pl = d.players || {}, me = getUserKey(), m = pl[me];
+        const bn = (t, x, th) => sv(`<div class="sv-bn ${escapeHTML(th || '')}"><h1>${escapeHTML(t)}</h1><p>${String(x || '').split('\n').map(escapeHTML).join('<br>')}</p></div>`);
+        if (s.ph === 'ban') { svSnd(s.th); return bn(s.t, s.s, s.th); }
+        if (s.ph === 'q' || s.ph === 'res') {
+            const res = s.ph === 'res';
+            if (!res) { SV.pick = -1; SV.wl = (m && m.a) ? 1 : 0; }
+            const can = SV.wl && !res, out = res && SV.wl && (s.el || []).includes(me), good = SV.pick === s.ai;
+            let fx = '';
+            if (res && SV.wl && !good && !s.vd) fx += '<div class="sv-float">❤️ -1</div>';
+            if (out) fx += '<div class="sv-stamp">ELIMINATED</div>';
+            sv(`${fx}<div class="sv-qn">문제 ${s.q}</div><h2 class="sv-q">${escapeHTML(s.m)}</h2><div class="sv-hint" id="svHint">${res ? '' : (can ? '뜻에 알맞은 단어는?' : '👀 관전 중 · 친구들이 푸는 중이에요')}</div><div class="sv-bar"><b id="svTb"${res ? ' style="width:0"' : ''}></b></div><div class="sv-opts${can ? '' : ' spec'}">${s.o.map((x, i) => `<button data-i="${i}"${can ? '' : ' disabled'}${res ? ` class="${i === s.ai ? 'ok' : (i === SV.pick ? 'no' : '')}"` : ''}>${escapeHTML(x)}</button>`).join('')}</div><div class="sv-fb" id="svFb"></div>`);
+            if (res) {
+                svEl('svFb').innerHTML = (SV.wl
+                    ? `<b>${good ? '✅ 정답!' : SV.pick < 0 ? '⏰ 시간 초과!' : '❌ 오답!'}${!good && !s.vd ? ' ❤️ -1' : ''}${out ? ' · 탈락! 관전 모드로 바뀌어요' : ''}</b>`
+                    : '<b>👀 관전 중</b>') + `<br><span class="sv-mut">${escapeHTML(s.note || '')}</span>`;
+                if (SV.wl) svSnd(good ? 'ok' : (out ? 'elim' : 'no'));
                 return;
             }
-
-            raceRoomRef.child('players/' + myKey).onDisconnect().remove();
-            inRaceRoom = true;
-            showScreen('raceLobbyScreen'); raceRoomRef.on('value', handleRaceRoomUpdate);
-        });
-    }
-
-    function handleRaceRoomUpdate(snap) {
-        if(!inRaceRoom) return; let data = snap.val();
-        currentRaceRoomData = data;
-        if(!data || !data.players || !data.players[getUserKey()]) return quitRaceLobby();
-
-        let players = data.players || {}, hostKey = data.host;
-        if (hostKey && !players[hostKey]) { attemptHostMigration(raceRoomRef); }
-        let isHost = (hostKey === getUserKey());
-
-        let hostActions = document.getElementById('raceLobbyHostActions'), guestMsg = document.getElementById('raceLobbyGuestMessage');
-        if(hostActions) hostActions.style.display = isHost ? 'flex' : 'none';
-        if(guestMsg) guestMsg.style.display = isHost ? 'none' : 'block';
-
-        if((data.status || 'waiting') === 'waiting') {
-            if(!document.getElementById('raceLobbyScreen').classList.contains('active')) showScreen('raceLobbyScreen');
-            renderRaceLobby(data);
-        } else if(data.status === 'playing') {
-            if(!document.getElementById('raceGameScreen').classList.contains('active')) { initRaceGameUI(data); showScreen('raceGameScreen'); }
-            renderRaceGame(data);
-        }
-    }
-
-    function renderRaceLobby(data) {
-        let players = data.players || {};
-        let listEl = document.getElementById('raceLobbyPlayerList'); listEl.innerHTML = '';
-        Object.values(players).sort((a,b) => (a.order||0)-(b.order||0)).forEach(p => {
-            let div = document.createElement('div'); div.className = 'lobby-player';
-            div.innerHTML = `<div class="land-color-dot" style="background-color:${p.color}"></div> ${escapeHTML(p.name)}`;
-            listEl.appendChild(div);
-        });
-    }
-
-    function startRaceGame() {
-        raceRoomRef.once('value').then(snap => {
-            let data = snap.val() || {};
-            let startIdx = (currentRaceStage - 1) * MASTER_WORDS_PER_STAGE;
-            let stagePool = rawWords.slice(startIdx, startIdx + MASTER_WORDS_PER_STAGE);
-            
-            let sequence = shuffleArray(stagePool).slice(0, RACE_WORDS_PER_STAGE).map(w => ({ w: w.w, m: w.m }));
-            if(sequence.length < RACE_WORDS_PER_STAGE) {
-                let usedW = sequence.map(x => x.w);
-                let extra = rawWords.filter(w => !usedW.includes(w.w));
-                sequence = sequence.concat(shuffleArray(extra).slice(0, RACE_WORDS_PER_STAGE - sequence.length).map(w => ({ w: w.w, m: w.m })));
-            }
-            let currentPlayers = data.players || {};
-            Object.keys(currentPlayers).forEach(k => { currentPlayers[k].position = 0; currentPlayers[k].finished = false; currentPlayers[k].finishRank = null; currentPlayers[k].attackSeq = 0; currentPlayers[k].mistakeSeq = 0; });
-            
-            // 💣 무작위로 4번째 ~ 13번째 단어 중 하나에 폭탄 심기
-            let hiddenBombIndex = Math.floor(Math.random() * 10) + 3;
-
-            raceRoomRef.update({ 
-                status: 'playing', 
-                wordSequence: sequence, 
-                finishedCount: 0, 
-                players: currentPlayers,
-                bombIndex: hiddenBombIndex,
-                bombTriggeredBy: "" 
-            });
-        });
-    }
-
-    function spawnRaceParticles(laneIdx, combo) {
-        let runner = document.getElementById('race_runner_' + laneIdx); if(!runner) return;
-        let color = combo >= 6 ? '#a855f7' : (combo >= 3 ? '#ef4444' : '#3b82f6');
-        let count = Math.min(4 + combo, 10);
-        for(let i = 0; i < count; i++) {
-            let p = document.createElement('div'); p.className = 'race-particle';
-            let angle = Math.random() * 70 - 35;
-            let dist = 16 + Math.random() * 24;
-            p.style.setProperty('--px', (Math.cos(angle*Math.PI/180) * -dist) + 'px');
-            p.style.setProperty('--py', (Math.sin(angle*Math.PI/180) * dist) + 'px');
-            p.style.background = color; p.style.boxShadow = `0 0 6px ${color}`;
-            runner.appendChild(p);
-            setTimeout(() => p.remove(), 520);
-        }
-    }
-
-    function triggerRaceEngineFail(laneIdx) {
-        let runner = document.getElementById('race_runner_' + laneIdx); if(!runner) return;
-        runner.classList.add('engine-fail');
-        for(let i = 0; i < 3; i++) {
-            let s = document.createElement('div'); s.className = 'race-smoke'; s.textContent = '💨';
-            s.style.setProperty('--sx', (Math.random()*18-9) + 'px');
-            runner.appendChild(s);
-            setTimeout(() => s.remove(), 620);
-        }
-        setTimeout(() => runner.classList.remove('engine-fail'), 450);
-    }
-
-    function showRaceSweatDrop(laneIdx) {
-        let runner = document.getElementById('race_runner_' + laneIdx); if(!runner) return;
-        let drop = document.createElement('div'); drop.className = 'race-sweat'; drop.textContent = '💦';
-        runner.appendChild(drop);
-        setTimeout(() => drop.remove(), 700);
-    }
-
-    function triggerRaceFogAttack(attackerName) {
-        let fog = document.getElementById('raceFogOverlay'); if(!fog) return;
-        fog.textContent = `💨 ${attackerName} 님의 콤보 공격! 시야가 흐려집니다`;
-        fog.classList.add('show');
-        clearTimeout(fog._hideTimer);
-        fog._hideTimer = setTimeout(() => fog.classList.remove('show'), 1500);
-    }
-
-    function stampRaceMessage(text) {
-        let stamp = document.getElementById('raceStamp'); if(!stamp) return;
-        stamp.textContent = text;
-        stamp.classList.remove('show'); void stamp.offsetWidth; stamp.classList.add('show');
-        clearTimeout(raceStampTimer);
-        raceStampTimer = setTimeout(() => stamp.classList.remove('show'), 900);
-    }
-
-    function initRaceGameUI(data) {
-        let players = data.players || {};
-        raceLaneOrder = Object.keys(players).sort((a,b) => (players[a].order||0) - (players[b].order||0));
-        raceMyLaneIdx = raceLaneOrder.indexOf(getUserKey());
-        let track = document.getElementById('raceLanesWrap'); track.innerHTML = '';
-        
-        raceLaneOrder.forEach((key, idx) => {
-            let p = players[key];
-            let lane = document.createElement('div'); lane.className = 'race-lane';
-            lane.innerHTML = `<div class="race-track-line"></div><div class="race-finish-flag">🏁</div>
-                <div class="race-runner" id="race_runner_${idx}" style="left:4%;">
-                    <div class="race-crown" id="race_crown_${idx}">👑</div>
-                    <div class="race-runner-name" style="background:${p.color};">${escapeHTML(p.name)}</div>🚀
-                </div>`;
-            track.appendChild(lane);
-        });
-
-        window.currentRaceWordBankIdx = -1; 
-        document.getElementById('raceWordBankList').innerHTML = '';
-
-        raceLastSeenAttackSeq = {}; raceLastSeenMistakeSeq = {};
-        Object.keys(players).forEach(k => { raceLastSeenAttackSeq[k] = players[k].attackSeq || 0; raceLastSeenMistakeSeq[k] = players[k].mistakeSeq || 0; });
-
-        let inputEl = document.getElementById('raceInput');
-        inputEl.value = ''; inputEl.disabled = true; document.getElementById('raceSubmitBtn').disabled = true;
-        document.getElementById('raceInteractionBox').className = 'race-interaction-box';
-        document.getElementById('btnRaceSound').textContent = raceSoundEnabled ? '🔊' : '🔇';
-        document.getElementById('raceFogOverlay').classList.remove('show');
-        document.getElementById('raceStamp').classList.remove('show');
-        document.getElementById('raceGameScreen').classList.remove('last-spurt');
-        document.getElementById('raceGameScreen').classList.remove('shake-screen');
-        document.getElementById('raceInkOverlay')?.classList.remove('show');
-        document.getElementById('raceLastSpurtBanner').style.display = 'none';
-        
-        myRaceFinishShown = false; raceComboCount = 0; racePrevRank = null;
-        document.getElementById('raceComboBadge').style.display = 'none';
-        
-        raceCurrentQuestionIdx = -1;
-        raceLocalBombTriggered = false;
-        clearTimeout(raceHintTimer);
-        document.getElementById('raceChoseongHint').style.display = 'none';
-
-        runRaceCountdown(() => {
-            inputEl.disabled = false; document.getElementById('raceSubmitBtn').disabled = false; inputEl.focus();
-        });
-    }
-
-    function renderRaceGame(data) {
-        let players = data.players || {}, sequence = data.wordSequence || [];
-        let total = sequence.length;
-        let myKey = getUserKey(), myData = players[myKey];
-        let resetBtn = document.getElementById('btnRaceReset');
-        if(resetBtn) resetBtn.style.display = (data.host === myKey) ? 'inline-block' : 'none';
-
-        // 💣 폭탄 터짐 감지 및 효과 실행
-        if (data.bombTriggeredBy && data.bombTriggeredBy !== "" && !raceLocalBombTriggered) {
-            raceLocalBombTriggered = true;
-            if (data.bombTriggeredBy !== myKey) {
-                triggerInkBombEffect(players[data.bombTriggeredBy]?.name || '누군가');
-            }
-        }
-
-        let standingEntries = Object.keys(players).map(k => [k, players[k]]).sort((a,b) => {
-            let pa = a[1], pb = b[1];
-            if(pa.finished && pb.finished) return (pa.finishRank||0)-(pb.finishRank||0);
-            if(pa.finished) return -1; if(pb.finished) return 1;
-            return (pb.position||0)-(pa.position||0);
-        });
-        let myRank = standingEntries.findIndex(([k]) => k === myKey) + 1;
-        let firstEntry = standingEntries[0];
-        let firstKey = firstEntry ? firstEntry[0] : null;
-        let firstHasProgress = firstEntry && ((firstEntry[1].position||0) > 0 || firstEntry[1].finished);
-
-        raceLaneOrder.forEach((key, idx) => {
-            let p = players[key]; if(!p) return;
-            let runner = document.getElementById('race_runner_' + idx); if(!runner) return;
-            let pct = total > 0 ? Math.min(100, (p.position / total) * 90) : 0;
-            runner.style.left = (4 + pct) + '%';
-            if(p.finished) runner.classList.add('finished'); else runner.classList.remove('finished');
-            if(idx === raceMyLaneIdx && raceComboCount >= 3 && !p.finished) runner.classList.add('combo-hot');
-            else runner.classList.remove('combo-hot');
-
-            let crown = document.getElementById('race_crown_' + idx);
-            if(crown) crown.style.display = (key === firstKey && firstHasProgress) ? 'block' : 'none';
-
-            if(key !== myKey) {
-                let mSeq = p.mistakeSeq || 0;
-                if(mSeq > (raceLastSeenMistakeSeq[key] || 0)) { raceLastSeenMistakeSeq[key] = mSeq; showRaceSweatDrop(idx); }
-                else if(raceLastSeenMistakeSeq[key] === undefined) { raceLastSeenMistakeSeq[key] = mSeq; }
-                let aSeq = p.attackSeq || 0;
-                if(aSeq > (raceLastSeenAttackSeq[key] || 0)) { raceLastSeenAttackSeq[key] = aSeq; triggerRaceFogAttack(escapeHTML(p.name)); }
-                else if(raceLastSeenAttackSeq[key] === undefined) { raceLastSeenAttackSeq[key] = aSeq; }
-            }
-        });
-
-        document.getElementById('raceMyRankDisplay').innerText = myRank > 0 ? `${myRank}위` : '-';
-        if(!myData) return;
-
-        if(myRank > 0 && racePrevRank !== null && myRank < racePrevRank) {
-            stampRaceMessage(myRank === 1 ? '🔥 역전!' : '🚀 추월!');
-        }
-        if(myRank > 0) racePrevRank = myRank;
-
-        if(myData.finished) {
-            if(!myRaceFinishShown) { myRaceFinishShown = true; playRaceFinishSound(); showRaceFinishResult(myData, total, data); }
-            return;
-        }
-
-        let idx = myData.position || 0;
-        if(idx < total) {
-            document.getElementById('raceProgressLabel').innerText = `${idx+1} / ${total}`;
-            document.getElementById('raceTargetMean').innerText = sequence[idx].m;
-            
-            // ⏳ 문제가 바뀌면 힌트 타이머 재설정 (3초 대기) 및 단어 10개 섞기
-            if (raceCurrentQuestionIdx !== idx) {
-                raceCurrentQuestionIdx = idx;
-                raceQuestionStartTime = Date.now(); 
-                
-                let hintEl = document.getElementById('raceChoseongHint');
-                hintEl.style.display = 'none'; 
-                hintEl.textContent = '힌트: ' + getChoseongHint(sequence[idx].w);
-                
-                clearTimeout(raceHintTimer);
-                raceHintTimer = setTimeout(() => {
-                    hintEl.style.display = 'inline-block'; 
-                    if(raceSoundEnabled) playRaceBeep(880, 0, 0.05, 'sine');
-                }, 3000);
-
-                // 단어 은행 업데이트 (정답 1 + 오답 9)
-                let bankList = document.getElementById('raceWordBankList');
-                bankList.innerHTML = '';
-                let targetWord = sequence[idx].w;
-                let distractors = rawWords.filter(w => w.w !== targetWord).sort(() => 0.5 - Math.random()).slice(0, 9);
-                let displayWords = [{w: targetWord}, ...distractors].sort(() => 0.5 - Math.random());
-                displayWords.forEach(w => {
-                    let chip = document.createElement('span');
-                    chip.className = 'race-word-bank-chip';
-                    chip.textContent = w.w;
-                    bankList.appendChild(chip);
+            const tb = svEl('svTb'), hn = svEl('svHint');
+            SV.tt = setInterval(() => {
+                const L = s.T - (svNow() - s.t0) / 1000;
+                tb.style.width = Math.max(0, L / s.T * 100) + '%';
+                if (L <= 5 && can) hn.textContent = '💡 초성 힌트: ' + s.hn;
+                if (L <= 0) clearInterval(SV.tt);
+            }, 100);
+            if (can) {
+                const bs = document.querySelectorAll('#survStage .sv-opts button');
+                bs.forEach(b => b.onclick = () => {
+                    SV.pick = +b.dataset.i;
+                    if (SV.ref) SV.ref.child('an/' + me).set({ q: s.q, i: SV.pick });
+                    bs.forEach(x => { x.disabled = true; }); b.classList.add('sel');
                 });
             }
-
-            let remaining = total - idx;
-            let screenEl = document.getElementById('raceGameScreen'), bannerEl = document.getElementById('raceLastSpurtBanner');
-            if(remaining > 0 && remaining <= 3) { screenEl.classList.add('last-spurt'); bannerEl.style.display = 'block'; }
-            else { screenEl.classList.remove('last-spurt'); bannerEl.style.display = 'none'; }
+            return;
         }
-
-        let comboBadge = document.getElementById('raceComboBadge');
-        if(raceComboCount >= 2) { comboBadge.style.display = 'inline-block'; comboBadge.textContent = `🔥 ${raceComboCount}연속 정답!`; }
-        else { comboBadge.style.display = 'none'; }
-
-        let allPlayers = Object.values(players);
-        if(allPlayers.length > 0 && allPlayers.every(p => p.finished)) {
-            raceRoomRef.transaction(roomData => {
-                if(!roomData || roomData.status !== 'playing') return roomData;
-                roomData.status = 'waiting';
-                return roomData;
+        if (s.ph === 'mini') {
+            SV.played = (m && !!m.a !== !!s.rev) ? 1 : 0;
+            if (!SV.played) return bn('👀 관전 중', s.rev ? '탈락한 친구들이 부활에 도전해요' : '친구들이 미니게임에 도전해요');
+            const tok = s.id;
+            SVM[s.g].f(tok).then(sc => {
+                if (SV.ref && SV.on) SV.ref.child('ms/' + me).set({ id: tok, s: sc });
+                if (svLive(tok)) bn('제출 완료!', '다른 친구들을 기다려요…');
             });
+            return;
         }
+        if (s.ph === 'mres') {
+            const w = s.win || [], mine = w.includes(me), full = (s.mx || []).includes(me);
+            let msg = svNames(w, pl);
+            if (mine) { msg += '\n' + (s.rev ? '내가 돌아왔어요!' : full ? '이미 ❤️가 가득이라 그대로예요' : '나도 ❤️ +1!'); svSnd('ok'); }
+            else if (SV.played && w.length) msg += '\n아쉬워요… 다음 기회에!';
+            return bn(w.length ? (s.rev ? '🔥 부활!' : s.kind === 'final' ? '⭐ 특별 미니게임 우승!' : '🏆 성공!') : '😢 성공자 없음', msg, mine ? 'win' : '');
+        }
+        if (s.ph === 'end') return svReveal(s, d);
     }
 
-    function submitRaceWord() {
-        let inputEl = document.getElementById('raceInput'), val = normalizeForCompare(inputEl.value); if(!val) return;
-        let data = currentRaceRoomData; if(!data || data.status !== 'playing') return;
-        let sequence = data.wordSequence || []; let myKey = getUserKey();
-        let myData = (data.players || {})[myKey]; if(!myData || myData.finished) return;
-        let idx = myData.position || 0;
-        if(idx >= sequence.length) return;
-
-        if(val === normalizeForCompare(sequence[idx].w)) {
-            inputEl.value = '';
-            
-            // ⚡ 3초 이내 정답 보상 (기억력 보너스)
-            let answeredInTime = (Date.now() - raceQuestionStartTime) <= 3000;
-            if (answeredInTime) {
-                raceComboCount += 2; // 콤보 2배 점프
-                showRaceRankToast('⚡ 3초 컷! (콤보 2배 점프)');
-            } else {
-                raceComboCount++;
-            }
-            
-            if(raceComboCount >= 2) playRaceComboSound(); else playRaceCorrectSound();
-            spawnRaceParticles(raceMyLaneIdx, raceComboCount);
-
-            if(raceComboCount >= 3 && raceComboCount % 3 === 0) {
-                raceRoomRef.child(`players/${myKey}/attackSeq`).transaction(s => (s||0) + 1);
-                showRaceRankToast('💥 안개 공격 발동! (경쟁자 시야 방해)');
-            }
-
-            raceRoomRef.child(`players/${myKey}/position`).transaction(pos => (pos||0) + 1).then(result => {
-                if(!result.committed) return;
-                let newPos = result.snapshot.val();
-                
-                // 💣 폭탄 심어진 구간을 통과했는지 체크
-                if (data.bombIndex !== undefined && (newPos - 1) === data.bombIndex && !data.bombTriggeredBy) {
-                    raceRoomRef.child('bombTriggeredBy').transaction(currentVal => {
-                        if (currentVal === "" || !currentVal) return myKey;
-                        return; // 이미 누군가 터뜨렸으면 중단
-                    }).then(res => {
-                        if(res.committed) showRaceRankToast('💣 내가 폭탄을 터뜨렸습니다!');
-                    });
-                }
-
-                if(newPos >= sequence.length) {
-                    raceRoomRef.child('finishedCount').transaction(c => (c||0) + 1).then(res => {
-                        let rank = res.snapshot.val();
-                        raceRoomRef.child(`players/${myKey}`).update({ finished: true, finishRank: rank });
-                    });
-                }
-            });
-        } else {
-            raceComboCount = 0;
-            playRaceWrongSound();
-            triggerRaceEngineFail(raceMyLaneIdx);
-            raceRoomRef.child(`players/${myKey}/mistakeSeq`).transaction(s => (s||0) + 1);
-            inputEl.value = ''; inputEl.classList.add('shake'); inputEl.style.borderColor = '#ef4444';
-            setTimeout(() => { inputEl.classList.remove('shake'); inputEl.style.borderColor = ''; }, 300);
-        }
+    // 👑 우승 연출 → 개인 결과 화면
+    function svReveal(s, d) {
+        SV.fin = 1;
+        const pl = d.players || {}, me = getUserKey(), w = pl[s.w];
+        if (!w) { sv('<div class="sv-bn"><h1>게임 종료</h1><p>승부가 나지 않고 끝났어요</p></div>'); setTimeout(() => svFinish(s, d), 2500); return; }
+        svSnd('king');
+        const conf = Array.from({ length: 16 }, (_, i) => `<i style="left:${Math.floor(i * 6.2 + Math.random() * 4)}%; animation-delay:${(Math.random() * 1.8).toFixed(2)}s">${['🎉', '✨', '⭐', '🎊'][i % 4]}</i>`).join('');
+        sv(`<div class="sv-king"><div class="sv-cfs">${conf}</div><div class="sv-crown">👑</div><div class="sv-mut" style="font-weight:800; letter-spacing:2px;">TODAY'S VOCAB KING</div><h1>${s.w === me ? '바로 나!' : escapeHTML(w.name)}</h1><p>오늘의 어휘왕</p>${svStatHTML(svStats(w, 1), 'dark')}</div>`);
+        setTimeout(() => svFinish(s, d), 5600);
     }
 
-    function showRaceFinishResult(myData, total, data) {
-        inRaceRoom = false; raceRoomRef.off('value', handleRaceRoomUpdate);
-        let rank = myData.finishRank || 1;
-        let prevRecord = raceRecords[currentRaceStage] || { plays: 0, firsts: 0, bestRank: null };
-        prevRecord.plays = (prevRecord.plays || 0) + 1;
-        if(rank === 1) prevRecord.firsts = (prevRecord.firsts || 0) + 1;
-        if(!prevRecord.bestRank || rank < prevRecord.bestRank) prevRecord.bestRank = rank;
-        raceRecords[currentRaceStage] = prevRecord;
-        localStorage.setItem('raceRecords', JSON.stringify(raceRecords)); syncToFirebase();
-
-        if(isFirebaseActive && getUserKey()) {
-            getDB().ref('rankings_vocab_race/stage_' + currentRaceStage + '/' + getUserKey()).set({
-                name: userProfile.studentName, classInfo: userProfile.gradeClass, firsts: prevRecord.firsts, plays: prevRecord.plays
-            });
-        }
-
-        let totalPlayers = Object.keys(data.players || {}).length;
+    function svFinish(s, d) {
+        if (SV.done) return; SV.done = 1; SV.on = 0; clearInterval(SV.tt);
+        const ref = SV.ref; SV.ref = null;
+        if (ref) { ref.off('value', svUpdate); svLeaveRef(ref); }
+        const me = getUserKey(), pl = d.players || {}, m = pl[me] || {}, win = !!s.w && s.w === me, total = d.n0 || Object.keys(pl).length, rank = win ? 1 : (m.k || total);
+        const rec = survRecords[SV.stage] || { plays: 0, kings: 0, bestRank: null };
+        rec.plays = (rec.plays || 0) + 1; if (win) rec.kings = (rec.kings || 0) + 1; if (!rec.bestRank || rank < rec.bestRank) rec.bestRank = rank;
+        survRecords[SV.stage] = rec; localStorage.setItem('survRecords', JSON.stringify(survRecords)); syncToFirebase();
+        if (isFirebaseActive && me) getDB().ref('rankings_vocab_surv/stage_' + SV.stage + '/' + me).set({ name: userProfile.studentName, classInfo: userProfile.gradeClass, firsts: rec.kings, plays: rec.plays });
+        const w = pl[s.w];
         document.getElementById('btnReviewMissed').style.display = 'none';
-        document.getElementById('resultTitle').innerText = rank === 1 ? "🥇 1등으로 완주!" : `🚀 ${rank}등으로 완주!`;
-        document.getElementById('resultScore').innerText = `${rank}위 / ${totalPlayers}명 중`;
-        document.getElementById('resultComment').innerHTML = rank === 1 ? "가장 먼저 결승선을 통과했습니다! 최고예요!" : "완주를 축하합니다! 다음엔 1등에 도전해 보세요.";
+        document.getElementById('resultTitle').innerText = win ? "👑 TODAY'S VOCAB KING!" : "🎖️ 게임 종료!";
+        document.getElementById('resultScore').innerText = `${rank}위 / ${total}명`;
+        document.getElementById('resultComment').innerHTML = (win ? '끝까지 살아남았어요! 🎉' : (w ? `오늘의 어휘왕은 <b>${escapeHTML(w.name)}</b> 님!` : '승부가 나지 않고 끝났어요.')) + svStatHTML(svStats(m, rank), 'light');
         document.getElementById('btnGoHome').onclick = goToHome;
         showScreen('resultScreen');
     }
 
-    function leaveRaceRoomCleanup(onDone) {
-        if(!raceRoomRef) { if(onDone) onDone(); return; }
-        let myKey = getUserKey();
-        raceRoomRef.child('players').once('value').then(snap => {
-            let players = snap.exists() ? (snap.val() || {}) : {};
-            let otherKeys = Object.keys(players).filter(k => k !== myKey && players[k] && players[k].name);
-            if(otherKeys.length === 0) {
-                raceRoomRef.remove().then(() => { if(onDone) onDone(); }).catch(() => { if(onDone) onDone(); });
-            } else {
-                raceRoomRef.child('players/' + myKey).remove().then(() => { if(onDone) onDone(); }).catch(() => { if(onDone) onDone(); });
-            }
-        }).catch(() => { if(onDone) onDone(); });
+    // 🎮 방장이 진행하는 게임 루프
+    async function survRun(L) {
+        const my = ++SV.rid; SV.run = my;
+        try { await svLoop(L, my); SV.fail = 0; }
+        catch (e) {
+            console.error('어휘왕 진행 오류', e);
+            if (SV.run === my) SV.run = 0;
+            if (SV.on && ++SV.fail <= 5) {
+                setTimeout(() => { const d = SV.data; if (SV.on && !SV.run && !SV.hold && d && d.status === 'playing' && d.host === getUserKey() && !(d.st && d.st.ph === 'end')) survRun(d.loop || null); }, 2000);
+            } else if (SV.on) alert("게임 진행 중 문제가 생겼어요. 방장이 [중단] 후 다시 시작해 주세요.");
+        }
     }
 
-    function resetRaceRoom() {
-        if(!raceRoomRef) return;
-        if(!confirm("진행 중인 레이스를 중단하고 대기실로 되돌리시겠습니까?")) return;
-        raceRoomRef.transaction(data => {
-            if(!data) return data;
-            data.status = 'waiting';
-            return data;
+    async function svLoop(L, my) {
+        const R = SV.ref, W = SV.words, OK = () => svOk(my);
+        let q = 0, since = 0, re = 0, lr = 0, vs = 0, f3 = 0, f2 = 0, pool = [];
+        if (L) { q = +L.q || 0; since = +L.since || 0; re = +L.re || 0; lr = +L.lr || 0; vs = +L.vs || 0; f3 = +L.f3 || 0; f2 = +L.f2 || 0; pool = (L.pool || []).map(i => W[i]).filter(Boolean); }
+        if (L) await svBan('🔁 방장이 바뀌었어요', '게임을 이어서 진행해요', 1800, 'event');
+        else await svBan('SURVIVAL START!', '마지막까지 살아남아\n오늘의 어휘왕이 되세요', 2600, 'start');
+        while (OK() && svAlive().length > 1 && vs < 3 && q < 60) {
+            if (svAlive().length === 3 && !f3) {
+                f3 = 1; await svBan('FINAL 3', '최후의 3인!', 2400, 'final'); if (!OK()) break;
+                await svMini('final', OK); continue;
+            }
+            if (svAlive().length === 2 && !f2) { f2 = 1; await svBan('⚔️ FINAL DUEL', '마지막 두 명의 대결!', 2400, 'duel'); if (!OK()) break; }
+            q++;
+            if (!pool.length) pool = shuffleArray(W);
+            const w = pool.pop(), opts = shuffleArray([w, ...shuffleArray(W.filter(x => x.w !== w.w)).slice(0, 3)]), ai = opts.indexOf(w), os = opts.map(x => x.w);
+            const T0 = Math.min(16, Math.max(10, 7 + Math.ceil(w.m.length / 10))), T = svAlive().length === 2 ? Math.max(8, T0 - 3) : T0;
+            await R.child('an').remove();
+            await svSet({ ph: 'q', q, m: w.m, o: os, hn: getChoseongHint(w.w), t0: svNow(), T });
+            const t0 = Date.now(), ans = () => (SV.data && SV.data.an) || {}, got = i => { const a = ans()[i]; return a && a.q === q ? a.i : undefined; };
+            while (OK() && Date.now() - t0 < T * 1000 + 700 && !svAlive().every(i => got(i) !== undefined)) await svSlp(250);
+            if (!OK()) break;
+            // 채점: 오답 -1, 0이 되면 탈락 (모두 한꺼번에 탈락할 상황이면 그 문제는 무효)
+            const P = svP(), al = svAlive(), wrong = al.filter(i => got(i) !== ai), wipe = wrong.length === al.length && al.every(i => (P[i].h || 0) <= 1);
+            vs = wipe ? vs + 1 : 0;
+            const patch = {}, gone = [];
+            al.forEach(i => {
+                const p = P[i], u = { t: (p.t || 0) + 1 };
+                if (got(i) === ai) { u.c = (p.c || 0) + 1; u.s = (p.s || 0) + 1; u.b = Math.max(p.b || 0, u.s); }
+                else { u.s = 0; if (!wipe) { u.h = Math.max(0, (p.h || 0) - 1); if (u.h < 1) { u.a = 0; gone.push(i); } } }
+                patch[i] = u;
+            });
+            const left = al.length - gone.length;
+            gone.forEach(i => { patch[i].k = left + 1; });
+            await svPatch(patch);
+            const note = wipe ? '모두 탈락할 상황이라 이번 문제는 무효!' : wrong.length === 0 ? '전원 정답! 🎉' : `오답 ${wrong.length}명` + (gone.length ? ` · 탈락 ${gone.length}명 (${svNames(gone, P)})` : '');
+            await svSet({ ph: 'res', q, m: w.m, o: os, ai, vd: wipe ? 1 : 0, el: gone, note });
+            await svSlp(3300);
+            if (!OK() || svAlive().length < 2) break;
+            // 미니게임 / 부활 이벤트 (예측하기 어렵게 랜덤)
+            since++;
+            const n = svAlive().length, dead = svIds().some(i => !svP()[i].a);
+            if (re < 2 && n >= 4 && dead && q >= 4 && (re === 0 || q - lr >= 6) && Math.random() < (re === 0 && n <= 7 ? 0.85 : 0.4)) { re++; lr = q; since = 0; await svMini('revive', OK); }
+            else if (q >= 3 && since >= 2 && n >= 3 && Math.random() < 0.45) { since = 0; await svMini('event', OK); }
+            if (!OK()) break;
+            await R.child('loop').set({ q, since, re, lr, vs, f3, f2, pool: pool.map(x => W.indexOf(x)) });
+        }
+        if (!OK()) { if (SV.run === my) SV.run = 0; return; }
+        const P = svP(), al = svAlive().sort((a, b) => (P[b].h || 0) - (P[a].h || 0) || (P[b].c || 0) - (P[a].c || 0)), patch = {};
+        al.forEach((i, idx) => { patch[i] = { k: idx + 1 }; });
+        await svPatch(patch);
+        await svSet({ ph: 'end', w: al[0] || '' });
+        await svSlp(9000);
+        if (SV.run === my) SV.run = 0;
+        R.transaction(d => { if (!d || d.status !== 'playing') return d; if (!Object.values(d.players || {}).some(p => p && p.name)) return null; d.status = 'waiting'; d.st = null; d.an = null; d.ms = null; d.loop = null; return d; });
+    }
+
+    // ⭐ 미니게임 이벤트: event(일반) / revive(부활) / final(FINAL 3 특별)
+    async function svMini(kind, OK) {
+        const R = SV.ref, P = svP(), rev = kind === 'revive', el = svIds().filter(i => !!P[i].a !== rev);
+        if (!el.length) return;
+        const n = el.length, K = (rev || kind === 'final') ? 1 : (n >= 10 ? 3 : n >= 5 ? 2 : 1), gi = Math.floor(Math.random() * SVM.length), g = SVM[gi];
+        await R.child('ms').remove();
+        const title = rev ? '🔥 REVIVAL!' : kind === 'final' ? '⭐ FINAL 3 SPECIAL' : '🎉 SPECIAL EVENT!';
+        const tail = rev ? '탈락한 친구 중 1등이 ❤️1개로 돌아와요' : kind === 'final' ? '1등은 ❤️ +1!' : `상위 ${K}명은 ❤️ +1 · 실패해도 생명은 그대로`;
+        await svBan(title, `${g.n}\n${g.r}\n${tail}`, 3400, rev ? 'rev' : kind === 'final' ? 'final' : 'event');
+        if (!OK()) return;
+        const mid = await svSet({ ph: 'mini', g: gi, rev: rev ? 1 : 0, K, n, kind });
+        const t0 = Date.now(), ms = () => (SV.data && SV.data.ms) || {}, has = i => !svP()[i] || (ms()[i] && ms()[i].id === mid);
+        while (OK() && Date.now() - t0 < 15000 && !el.every(has)) await svSlp(250);
+        if (!OK()) return;
+        await svSlp(300);
+        const M = ms(), P2 = svP();
+        const rows = el.filter(i => P2[i]).map(i => ({ i, s: (M[i] && M[i].id === mid ? +M[i].s : 0) || 0, r: Math.random() })).sort((a, b) => b.s - a.s || b.r - a.r).slice(0, K).filter(x => x.s > 0);
+        const patch = {}, mx = [];
+        rows.forEach((x, idx) => {
+            const p = P2[x.i];
+            if (rev) patch[x.i] = { a: 1, h: 1, r: 1, k: 0 };
+            else {
+                const u = {};
+                if ((p.h || 0) < 5) { u.h = (p.h || 0) + 1; u.g = (p.g || 0) + 1; } else mx.push(x.i);
+                if (idx === 0) u.m = (p.m || 0) + 1;
+                patch[x.i] = u;
+            }
+        });
+        await svPatch(patch);
+        await svSet({ ph: 'mres', kind, rev: rev ? 1 : 0, win: rows.map(x => x.i), mx });
+        await svSlp(3600);
+    }
+
+    // ⏹ 방장이 게임 중단 / 나가기 / 방 폭파
+    function resetSurv() {
+        if (!SV.ref || !confirm("진행 중인 게임을 중단하고 대기실로 되돌리시겠습니까?")) return;
+        SV.run = 0; SV.hold = 1;
+        SV.ref.transaction(d => { if (!d) return d; d.status = 'waiting'; d.st = null; d.an = null; d.ms = null; d.loop = null; return d; });
+    }
+    function svLeaveRef(ref) {
+        const me = getUserKey(); if (!ref || !me) return;
+        ref.child('players').once('value').then(snap => {
+            const pl = snap.val() || {}, others = Object.keys(pl).filter(k => k !== me && pl[k] && pl[k].name);
+            return others.length === 0 ? ref.remove() : ref.child('players/' + me).remove();
+        }).catch(() => {});
+    }
+    function quitSurv(ask) {
+        if (ask && !confirm("게임을 나가시겠습니까?")) return;
+        SV.on = 0; SV.run = 0; clearInterval(SV.tt);
+        const ref = SV.ref; SV.ref = null;
+        if (ref) { ref.off('value', svUpdate); svLeaveRef(ref); }
+        goToHome();
+    }
+    function resetAllSurvRooms() {
+        if (confirm("현재 진행 중인 모든 [어휘왕 SURVIVAL 방]을 강제로 종료(폭파)하시겠습니까?")) {
+            if (isFirebaseActive) getDB().ref('survRooms_vocab').remove().then(() => alert("모든 방이 초기화되었습니다."));
+        }
+    }
+
+    // 🎲 미니게임 6종 (점수 0 = 실패, 1 이상 = 성공 · 높을수록 좋은 순위)
+    const SVC = [['빨간색', '#e53935'], ['주황색', '#fb8c00'], ['노란색', '#fdd835'], ['초록색', '#2e9e5b'], ['하늘색', '#29b6f6'], ['파란색', '#1e56d8'], ['보라색', '#8e44ad'], ['분홍색', '#ec6aa1'], ['갈색', '#8d5a3b']];
+    const SVM = [
+        { n: '⚡ 번개 반응', r: 'WAIT가 TAP!으로 바뀌면 바로 누르세요', f: svReflex },
+        { n: '🎨 같은 색 찾기', r: '목표 색깔 카드를 가장 빨리 찾으세요', f: svColor },
+        { n: '🃏 기억 카드', r: '잠깐 보여주는 그림의 위치를 기억하세요', f: svMemory },
+        { n: '🎯 타이밍 맞추기', r: '움직이는 막대를 초록 구간에서 멈추세요', f: svTiming },
+        { n: '🐹 잡아라!', r: '6초 동안 햄스터를 최대한 많이 잡으세요', f: svCatch },
+        { n: '🎈 풍선 터뜨리기', r: '풍선을 터뜨려 점수를 모으세요 (💣은 조심!)', f: svBalloon }
+    ];
+    const svBarRun = sec => { const b = svEl('svMb'); if (!b) return; b.style.transition = `width ${sec}s linear`; requestAnimationFrame(() => requestAnimationFrame(() => { b.style.width = '0%'; })); };
+
+    function svReflex(tok) {
+        return new Promise(res => {
+            sv(`<h2>⚡ 번개 반응</h2><p class="sv-mut">초록색 <b>TAP!</b>이 나오면 바로 누르세요</p><button class="sv-pad" id="svPad">WAIT</button>`);
+            const pad = svEl('svPad'); let go = 0, t0 = 0, done = 0, tm2 = 0;
+            const end = (sc, txt, bad) => { if (done) return; done = 1; clearTimeout(tm1); clearTimeout(tm2); pad.disabled = true; if (txt) pad.textContent = txt; if (bad) pad.classList.add('bad'); res(sc); };
+            const tm1 = setTimeout(() => { go = 1; t0 = Date.now(); pad.classList.add('go'); pad.textContent = 'TAP!'; tm2 = setTimeout(() => end(0, '늦었어요 😅', 1), 3000); }, 1500 + Math.random() * 2500);
+            const tap = () => { if (done) return; if (!go) return end(0, '너무 빨랐어요! ✋', 1); const rt = Date.now() - t0; end(Math.max(1, Math.round(100 - (rt - 180) / 8)), rt + 'ms!'); };
+            pad.addEventListener('pointerdown', e => { e.preventDefault(); tap(); });
+            pad.addEventListener('keydown', e => { if (e.key === ' ' || e.key === 'Enter') { e.preventDefault(); tap(); } });
         });
     }
 
-    function quitRaceLobby() {
-        inRaceRoom = false;
-        if(raceRoomRef) { raceRoomRef.off('value', handleRaceRoomUpdate); leaveRaceRoomCleanup(); }
-        document.getElementById('raceTrackContainer').innerHTML = ''; goToHome();
+    function svColor(tok) {
+        return new Promise(res => {
+            const cs = shuffleArray(SVC), t = cs[Math.floor(Math.random() * cs.length)], t0 = Date.now();
+            sv(`<h2>🎨 같은 색 찾기</h2><p class="sv-mut"><b>${t[0]}</b>을 찾아라!</p><div class="sv-colors">${cs.map(c => `<button class="sv-cc" data-c="${c[0]}" aria-label="색 카드" style="background:${c[1]}"></button>`).join('')}</div>`);
+            const bs = document.querySelectorAll('#survStage .sv-cc'); let done = 0;
+            bs.forEach(b => b.onclick = () => {
+                if (done) return; done = 1; const ok = b.dataset.c === t[0];
+                bs.forEach(x => { x.disabled = true; if (x.dataset.c === t[0]) x.classList.add('ok'); else if (x === b) x.classList.add('no'); });
+                res(ok ? Math.max(10, Math.round(100 - (Date.now() - t0) / 40)) : 0);
+            });
+            setTimeout(() => { if (!done) { done = 1; res(0); } }, 7000);
+        });
     }
 
-    function quitRaceGame() {
-        if(!confirm("레이스를 나가시겠습니까?")) return;
-        quitRaceLobby();
+    function svMemory(tok) {
+        return new Promise(res => {
+            const E = shuffleArray(['🍎', '🐶', '🚗', '⭐', '🎈', '🐱', '⚽', '🌈', '🍕', '🦋']).slice(0, 4), at = {}, idx = Array.from({ length: 9 }, (_, i) => i);
+            shuffleArray(idx).slice(0, 4).forEach((c, k) => { at[E[k]] = c; });
+            const grid = fn => `<div class="sv-mem">${idx.map(fn).join('')}</div>`;
+            const ask = (n, sc) => {
+                if (!svLive(tok)) return res(sc);
+                if (n >= 2) return res(Math.round(sc));
+                const e = E[n], t0 = Date.now(); let over = 0;
+                sv(`<h2>🃏 기억 카드</h2><p class="sv-mut"><b>${e}</b> 는 어디에 있었을까요? (${n + 1}/2)</p>` + grid(i => `<button class="sv-mc" data-i="${i}" aria-label="카드 ${i + 1}">❓</button>`));
+                const cells = document.querySelectorAll('#survStage .sv-mc');
+                const next = (b, ok, got) => { cells.forEach(x => { x.disabled = true; }); if (b) { b.classList.add(ok ? 'ok' : 'no'); b.textContent = ok ? e : '❌'; } setTimeout(() => ask(n + 1, sc + got), 600); };
+                const to = setTimeout(() => { if (!over) { over = 1; next(null, false, 0); } }, 3600);
+                cells.forEach(b => b.onclick = () => { if (over) return; over = 1; clearTimeout(to); const ok = +b.dataset.i === at[e]; next(b, ok, ok ? Math.max(20, Math.round(70 - (Date.now() - t0) / 60)) : 0); });
+            };
+            sv(`<h2>🃏 기억 카드</h2><p class="sv-mut">그림이 어디 있는지 잘 기억하세요!</p>` + grid(i => `<div class="sv-mc show">${E.find(e => at[e] === i) || ''}</div>`));
+            setTimeout(() => ask(0, 0), 2600);
+        });
+    }
+
+    function svTiming(tok) {
+        return new Promise(res => {
+            const sp = 0.075 + Math.random() * 0.04;
+            sv(`<h2>🎯 타이밍 맞추기</h2><p class="sv-mut">막대가 <b>초록 구간</b>에 있을 때 멈추세요!</p><div class="sv-track"><u></u><s id="svCur"></s></div><button class="sv-btn" id="svStop">멈춰!</button>`);
+            const t0 = Date.now(), pos = () => { const p = ((Date.now() - t0) * sp) % 200; return p > 100 ? 200 - p : p; };
+            const cur = svEl('svCur'); let done = 0, tm = 0;
+            const end = sc => { if (done) return; done = 1; clearInterval(iv); clearTimeout(tm); res(sc); };
+            const iv = setInterval(() => { if (!cur.isConnected) return end(0); cur.style.left = pos() + '%'; }, 16);
+            tm = setTimeout(() => end(0), 8000);
+            svEl('svStop').onclick = () => { const x = pos(); cur.style.left = x + '%'; end(Math.max(0, Math.round(100 - Math.abs(x - 50) * 4))); };
+        });
+    }
+
+    function svCatch(tok) {
+        return new Promise(res => {
+            sv(`<h2>🐹 잡아라!</h2><p class="sv-mut">6초 동안 햄스터를 최대한 많이 잡으세요! <b id="svBc">0</b>마리</p><div class="sv-bar"><b id="svMb"></b></div><div class="sv-field" id="svField"></div>`);
+            const f = svEl('svField'), bc = svEl('svBc'), b = document.createElement('button'); let n = 0, done = 0;
+            b.className = 'sv-bal'; b.innerHTML = '<span>🐹</span>'; b.setAttribute('aria-label', '잡기'); f.appendChild(b);
+            const mv = () => { b.style.left = (Math.random() * 84) + '%'; b.style.top = (Math.random() * 78) + '%'; };
+            mv(); const wander = setInterval(mv, 900);
+            b.addEventListener('pointerdown', e => { e.preventDefault(); if (done) return; bc.textContent = ++n; mv(); });
+            svBarRun(6);
+            setTimeout(() => { done = 1; clearInterval(wander); b.remove(); res(n * 10); }, 6000);
+        });
+    }
+
+    function svBalloon(tok) {
+        return new Promise(res => {
+            sv(`<h2>🎈 풍선 터뜨리기</h2><p class="sv-mut">🎈+10 ⭐+25 🎁+50 💣-20 · 점수 <b id="svBp">0</b></p><div class="sv-bar"><b id="svMb"></b></div><div class="sv-field" id="svField"></div>`);
+            const f = svEl('svField'), bp = svEl('svBp'); let pts = 0, done = 0;
+            const T = [['🎈', 10, .66], ['⭐', 25, .16], ['🎁', 50, .06], ['💣', -20, .12]];
+            const pick = () => { let r = Math.random(), a = 0; for (const t of T) { a += t[2]; if (r < a) return t; } return T[0]; };
+            const spawn = () => {
+                if (done) return;
+                const t = pick(), b = document.createElement('button');
+                b.className = 'sv-bal sv-rise'; b.innerHTML = '<span>' + t[0] + '</span>'; b.setAttribute('aria-label', '풍선');
+                b.style.left = (Math.random() * 84) + '%'; b.style.bottom = '-46px'; b.style.animationDuration = (2.2 + Math.random() * 1.2) + 's';
+                b.addEventListener('pointerdown', e => { e.preventDefault(); if (done || b.classList.contains('popped')) return; b.classList.add('popped'); pts += t[1]; bp.textContent = pts; setTimeout(() => b.remove(), 220); });
+                b.addEventListener('animationend', e => { if (e.animationName === 'svRise') b.remove(); });
+                f.appendChild(b);
+            };
+            spawn(); const iv = setInterval(spawn, 340);
+            svBarRun(7);
+            setTimeout(() => { done = 1; clearInterval(iv); f.innerHTML = ''; res(Math.max(0, pts)); }, 7000);
+        });
     }
 </script>
 </body>
