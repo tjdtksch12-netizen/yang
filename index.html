@@ -373,6 +373,478 @@
             .sv-bn, .sv-crown, .sv-stamp, .sv-float, .sv-hearts, .sv-cfs i { animation: none !important; }
             .sv-float { display: none; }
         }
+
+
+        /* =========================================================
+           🎮 GAME UI GRAPHICS UPGRADE — presentation layer only
+           기능/게임 로직은 변경하지 않고 화면 표현만 강화합니다.
+           ========================================================= */
+        :root {
+            --ui-ink: #172033;
+            --ui-muted: #667085;
+            --ui-glass: rgba(255,255,255,.78);
+            --ui-shadow: 0 20px 50px rgba(15,23,42,.12);
+            --ui-shadow-deep: 0 30px 80px rgba(15,23,42,.18);
+            --ui-radius: 20px;
+        }
+
+        html { min-height: 100%; background: #eaf0ff; }
+        body {
+            position: relative;
+            overflow-x: hidden;
+            background:
+                radial-gradient(circle at 12% 8%, rgba(99,102,241,.20), transparent 27%),
+                radial-gradient(circle at 88% 14%, rgba(56,189,248,.17), transparent 24%),
+                radial-gradient(circle at 80% 88%, rgba(244,114,182,.14), transparent 24%),
+                linear-gradient(135deg, #eef2ff 0%, #f8fafc 48%, #ecfeff 100%);
+        }
+        body::before,
+        body::after {
+            content: '';
+            position: fixed;
+            z-index: -1;
+            border-radius: 50%;
+            filter: blur(8px);
+            pointer-events: none;
+        }
+        body::before {
+            width: 380px; height: 380px; left: -180px; top: 22%;
+            background: radial-gradient(circle, rgba(79,70,229,.18), transparent 68%);
+            animation: uiFloatOrb 10s ease-in-out infinite;
+        }
+        body::after {
+            width: 320px; height: 320px; right: -120px; bottom: 8%;
+            background: radial-gradient(circle, rgba(14,165,233,.15), transparent 68%);
+            animation: uiFloatOrb 12s ease-in-out infinite reverse;
+        }
+        @keyframes uiFloatOrb { 0%,100%{transform:translate3d(0,0,0) scale(1)} 50%{transform:translate3d(18px,-20px,0) scale(1.06)} }
+
+        .container { max-width: 1240px; padding-bottom: 64px; }
+        header {
+            padding: 18px 8px 16px;
+            margin-bottom: 12px;
+        }
+        header h1 {
+            position: relative;
+            display: inline-block;
+            font-size: clamp(1.7rem, 3vw, 2.45rem);
+            font-weight: 950;
+            letter-spacing: -1.6px;
+            color: transparent;
+            background: linear-gradient(90deg, #4f46e5 0%, #7c3aed 45%, #0ea5e9 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            text-shadow: 0 8px 28px rgba(79,70,229,.12);
+            animation: titlePulse 4s ease-in-out infinite;
+        }
+        header h1::after {
+            content: 'VOCAB QUEST';
+            display: block;
+            font-size: .58rem;
+            letter-spacing: 4px;
+            margin-top: 6px;
+            color: #64748b;
+            opacity: .75;
+        }
+        @keyframes titlePulse { 0%,100%{filter:brightness(1)} 50%{filter:brightness(1.08)} }
+
+        .admin-btn {
+            width: 40px; height: 40px; border-radius: 12px;
+            background: rgba(255,255,255,.75);
+            border: 1px solid rgba(148,163,184,.35);
+            box-shadow: 0 8px 22px rgba(15,23,42,.08);
+            backdrop-filter: blur(12px);
+        }
+        .admin-btn:hover { background:#fff; box-shadow:0 12px 28px rgba(15,23,42,.14); }
+
+        .screen {
+            border-radius: var(--ui-radius);
+            padding: 30px;
+            border: 1px solid rgba(148,163,184,.22);
+            box-shadow: var(--ui-shadow);
+            position: relative;
+            overflow: hidden;
+            animation: screenIn .28s ease-out both;
+        }
+        .screen::before {
+            content: '';
+            position: absolute; inset: 0;
+            pointer-events: none;
+            background: linear-gradient(115deg, rgba(255,255,255,.32), transparent 35%, transparent 70%, rgba(255,255,255,.12));
+            opacity: .5;
+        }
+        .screen > * { position: relative; z-index: 1; }
+        @keyframes screenIn { from{opacity:.2; transform:translateY(8px) scale(.995)} to{opacity:1; transform:none} }
+
+        #loginScreen {
+            background: transparent;
+            box-shadow: none;
+            border: 0;
+            overflow: visible;
+        }
+        .login-box {
+            position: relative;
+            max-width: 460px;
+            margin: 38px auto 20px;
+            padding: 42px 34px 34px;
+            border-radius: 28px;
+            background: rgba(255,255,255,.78);
+            border: 1px solid rgba(255,255,255,.88);
+            box-shadow: var(--ui-shadow-deep);
+            backdrop-filter: blur(18px);
+        }
+        .login-box::before {
+            content: '⚡';
+            position: absolute;
+            top: -34px; left: 50%;
+            transform: translateX(-50%);
+            width: 76px; height: 76px;
+            display: grid; place-items: center;
+            border-radius: 24px;
+            font-size: 2.2rem;
+            color: white;
+            background: linear-gradient(145deg,#6366f1,#7c3aed 55%,#0ea5e9);
+            box-shadow: 0 18px 38px rgba(79,70,229,.35), inset 0 1px 0 rgba(255,255,255,.35);
+        }
+        .login-box h2 { margin-top: 16px; font-size: 1.6rem; color:#172554; letter-spacing:-.6px; }
+        .input-group label { color:#475569; }
+        .input-group input {
+            border: 2px solid rgba(148,163,184,.35);
+            background: rgba(248,250,252,.82);
+            box-shadow: inset 0 2px 8px rgba(15,23,42,.035);
+        }
+        .input-group input:focus { border-color:#6366f1; box-shadow:0 0 0 5px rgba(99,102,241,.12), inset 0 2px 8px rgba(15,23,42,.035); }
+        .btn-login {
+            border-radius: 14px;
+            background: linear-gradient(135deg,#4f46e5,#7c3aed 55%,#2563eb);
+            box-shadow: 0 12px 26px rgba(79,70,229,.28), inset 0 1px 0 rgba(255,255,255,.2);
+            transform: translateZ(0);
+        }
+        .btn-login:hover { background:linear-gradient(135deg,#4338ca,#6d28d9 55%,#1d4ed8); transform:translateY(-2px); box-shadow:0 18px 34px rgba(79,70,229,.3); }
+        .btn-login:active { transform:translateY(1px) scale(.99); }
+
+        .user-profile-bar {
+            padding: 12px 16px;
+            border-radius: 14px;
+            background: rgba(255,255,255,.75);
+            border: 1px solid rgba(148,163,184,.28);
+            box-shadow: 0 12px 28px rgba(15,23,42,.07);
+            backdrop-filter: blur(12px);
+        }
+        .btn-logout { border-radius:10px; box-shadow:0 3px 12px rgba(239,68,68,.10); }
+
+        .main-tabs {
+            gap: 8px;
+            padding: 8px;
+            border: 1px solid rgba(148,163,184,.25);
+            border-bottom: 1px solid rgba(148,163,184,.25);
+            border-radius: 18px;
+            background: rgba(255,255,255,.58);
+            box-shadow: 0 14px 30px rgba(15,23,42,.07);
+            backdrop-filter: blur(15px);
+        }
+        .main-tab {
+            position: relative;
+            min-height: 52px;
+            border-radius: 13px;
+            border: 1px solid transparent;
+            padding: 13px 14px;
+            color:#64748b;
+        }
+        .main-tab.active {
+            color:#fff;
+            border: 1px solid rgba(255,255,255,.18);
+            background: linear-gradient(135deg,#4f46e5,#6366f1);
+            box-shadow: 0 10px 22px rgba(79,70,229,.28), inset 0 1px 0 rgba(255,255,255,.22);
+        }
+        .main-tab:hover:not(.active) { background:rgba(226,232,240,.65); transform:translateY(-1px); }
+
+        .dashboard {
+            border-radius: 20px;
+            padding: 22px;
+            border: 1px solid rgba(148,163,184,.18);
+            box-shadow: 0 15px 34px rgba(15,23,42,.08);
+            background: linear-gradient(140deg, rgba(255,255,255,.94), rgba(248,250,252,.88));
+        }
+        .dashboard-header { gap:14px; }
+        .dashboard-title { font-size:1.18rem; letter-spacing:-.4px; }
+        .ranking-btn {
+            border-radius: 11px;
+            box-shadow: 0 8px 18px rgba(245,158,11,.18);
+            transition: transform .18s ease, box-shadow .18s ease;
+        }
+        .ranking-btn:hover { transform:translateY(-2px); box-shadow:0 12px 24px rgba(245,158,11,.25); }
+
+        .day-grid { gap: 16px; }
+        .day-btn {
+            min-height: 110px;
+            padding: 18px 12px;
+            border-radius: 18px;
+            border: 2px solid rgba(148,163,184,.28);
+            background: linear-gradient(145deg,#fff,#f8fafc);
+            box-shadow: 0 10px 24px rgba(15,23,42,.07), inset 0 1px 0 rgba(255,255,255,.75);
+            overflow:hidden;
+        }
+        .day-btn::before {
+            content:''; position:absolute; inset:0; border-radius:inherit; pointer-events:none;
+            background: linear-gradient(120deg, rgba(99,102,241,.08), transparent 48%, rgba(14,165,233,.08));
+            opacity:0; transition:opacity .2s ease;
+        }
+        .day-btn:hover { transform:translateY(-5px) scale(1.01); box-shadow:0 16px 30px rgba(79,70,229,.14); }
+        .day-btn:hover::before { opacity:1; }
+        .day-btn.cleared { background:linear-gradient(145deg,#ecfdf5,#dcfce7); box-shadow:0 12px 24px rgba(16,185,129,.13); }
+        .clear-badge { box-shadow:0 3px 10px rgba(16,185,129,.25); }
+
+        #masterStageScreen { background:linear-gradient(145deg,#f8f7ff,#eef2ff); }
+        #masterStageScreen .dashboard { background:linear-gradient(135deg,#17153a,#312e81 58%,#4c1d95) !important; box-shadow:0 22px 40px rgba(49,46,129,.28); }
+        #masterGrid .day-btn { background:linear-gradient(145deg,#fff,#f3f0ff); border-color:#c4b5fd; }
+        #masterGrid .day-btn:hover { box-shadow:0 16px 30px rgba(124,58,237,.18); }
+
+        #rainStageScreen { background:linear-gradient(145deg,#eefcff,#eff6ff); }
+        #rainStageScreen .dashboard { background:linear-gradient(135deg,#082f49,#0c4a6e 55%,#155e75) !important; box-shadow:0 22px 40px rgba(8,47,73,.23); }
+        #rainGrid .day-btn { background:linear-gradient(145deg,#f0fdff,#e0f2fe); border-color:#7dd3fc; }
+        #rainGrid .day-btn:hover { box-shadow:0 16px 30px rgba(14,165,233,.18); }
+
+        #landStageScreen { background:linear-gradient(145deg,#fff7ff,#fdf4ff); }
+        #landStageScreen .dashboard { background:linear-gradient(135deg,#4a044e,#86198f 58%,#c026d3) !important; box-shadow:0 22px 40px rgba(134,25,143,.22); }
+        #landGrid .day-btn { background:linear-gradient(145deg,#fff,#fdf4ff); border-color:#e879f9; }
+        #landGrid .day-btn:hover { box-shadow:0 16px 30px rgba(192,38,211,.18); }
+
+        #survStageScreen { background:linear-gradient(145deg,#111a47,#101b4a); }
+        #survStageScreen .dashboard { background:linear-gradient(135deg,#11183e,#18276b 55%,#2e1065) !important; box-shadow:0 22px 40px rgba(16,24,63,.34); }
+        #survGrid .day-btn { background:linear-gradient(145deg,#18276b,#101b4a); border-color:#4759b8; color:#f8fbff; box-shadow:0 12px 26px rgba(0,0,0,.22); }
+        #survGrid .day-btn:hover { border-color:#ffd23f; box-shadow:0 0 0 1px #ffd23f, 0 18px 34px rgba(255,210,63,.12); color:#fff; }
+        #survGrid .day-btn .daily-rate { color:#a9b8f5; }
+
+        .top-bar {
+            margin-bottom: 22px; padding: 8px 2px 16px;
+            border-bottom: 1px solid rgba(148,163,184,.28);
+        }
+        .screen-title { font-size:1.25rem; letter-spacing:-.4px; }
+        .stop-btn {
+            border-radius: 10px;
+            box-shadow: 0 6px 15px rgba(15,23,42,.07);
+        }
+        .stop-btn:hover { transform:translateY(-1px); }
+
+        /* 학습/퀴즈 */
+        #studyScreen, #quizScreen { background:linear-gradient(145deg,#ffffff,#f6f8ff); }
+        .study-progress { font-size:1.15rem; }
+        .flashcard {
+            position:relative;
+            min-height:350px;
+            border:1px solid #dbeafe;
+            background: radial-gradient(circle at 50% 0%, rgba(99,102,241,.12), transparent 38%), linear-gradient(145deg,#f8faff,#eef2ff);
+            box-shadow:inset 0 1px 0 rgba(255,255,255,.9), 0 16px 30px rgba(30,41,59,.07);
+        }
+        .flashcard-word {
+            padding: 10px 22px;
+            border-radius: 16px;
+            background:rgba(255,255,255,.8);
+            box-shadow:0 10px 24px rgba(79,70,229,.12);
+            text-shadow:0 4px 16px rgba(79,70,229,.12);
+        }
+        .word-input { box-shadow:0 8px 20px rgba(15,23,42,.05); }
+        .nav-btn.active, .action-quiz-btn {
+            background:linear-gradient(135deg,#4f46e5,#7c3aed);
+            box-shadow:0 12px 24px rgba(79,70,229,.24);
+            border-radius:13px;
+        }
+        .option-btn { box-shadow:0 7px 16px rgba(15,23,42,.05); }
+        .option-btn:hover { transform:translateY(-2px); box-shadow:0 12px 22px rgba(79,70,229,.11); border-color:#a5b4fc; }
+
+        /* 랭킹 */
+        #rankingScreen { background:linear-gradient(145deg,#fffdf7,#fff7ed); }
+        .stage-tab { box-shadow:0 7px 14px rgba(15,23,42,.05); }
+        .stage-tab.active { box-shadow:0 10px 20px rgba(79,70,229,.22); }
+        .ranking-list { display:flex; flex-direction:column; gap:8px; }
+        .ranking-item { border:1px solid rgba(148,163,184,.22); border-radius:12px; background:rgba(255,255,255,.78); box-shadow:0 8px 18px rgba(15,23,42,.05); }
+        .ranking-item:nth-child(1) { background:linear-gradient(90deg,#fff7cf,#fef3c7); box-shadow:0 12px 24px rgba(217,119,6,.12); }
+
+        /* 👑 스피드런: 아케이드/네온 */
+        #masterGameScreen {
+            background:
+                radial-gradient(circle at 50% 22%, rgba(99,102,241,.25), transparent 35%),
+                linear-gradient(155deg,#080b24,#111a4a 48%,#1b0f46);
+            box-shadow:0 28px 60px rgba(13,17,50,.36);
+            border:1px solid rgba(129,140,248,.28);
+        }
+        #masterGameScreen::after {
+            content:''; position:absolute; inset:0; pointer-events:none; opacity:.12;
+            background-image:linear-gradient(rgba(255,255,255,.05) 1px, transparent 1px),linear-gradient(90deg, rgba(255,255,255,.05) 1px, transparent 1px);
+            background-size:32px 32px;
+            mask-image:linear-gradient(to bottom,black,transparent 90%);
+        }
+        .master-top { margin-bottom:20px; }
+        .master-timer {
+            padding:8px 16px; border-radius:12px;
+            background:rgba(0,0,0,.25); border:1px solid rgba(255,255,255,.12);
+            box-shadow:inset 0 0 24px rgba(251,191,36,.08),0 10px 24px rgba(0,0,0,.18);
+            text-shadow:0 0 16px rgba(251,191,36,.55);
+        }
+        .master-target-box {
+            min-height:165px;
+            border-radius:18px;
+            border:2px dashed #64748b;
+            background:linear-gradient(145deg,rgba(255,255,255,.08),rgba(99,102,241,.08));
+            box-shadow:inset 0 0 40px rgba(129,140,248,.08), 0 14px 30px rgba(0,0,0,.16);
+        }
+        .master-target-box.drag-over { box-shadow:0 0 0 2px rgba(129,140,248,.35), 0 0 36px rgba(99,102,241,.25); }
+        .master-target-mean { font-size:1.4rem; text-shadow:0 4px 16px rgba(255,255,255,.08); }
+        .chip-grid { gap:10px; }
+        .word-chip {
+            min-height:58px;
+            border-radius:12px;
+            background:linear-gradient(145deg,#fff,#eef2ff);
+            border-color:#c7d2fe;
+            box-shadow:0 8px 16px rgba(0,0,0,.2), inset 0 1px 0 rgba(255,255,255,.9);
+        }
+        .word-chip:hover { transform:translateY(-3px) scale(1.02); box-shadow:0 14px 24px rgba(79,70,229,.24); border-color:#818cf8; }
+        .dragging-clone { box-shadow:0 22px 42px rgba(0,0,0,.38),0 0 24px rgba(99,102,241,.35); }
+
+        /* 🏰 디펜스: 전장 느낌 */
+        #rainGameScreen {
+            border:1px solid rgba(56,189,248,.2);
+            box-shadow:0 30px 70px rgba(2,8,23,.45);
+        }
+        #rainGameScreen .rain-top {
+            background:linear-gradient(90deg,#0b1229,#12304c 55%,#102b43);
+            box-shadow:0 10px 22px rgba(0,0,0,.25);
+        }
+        #rainGameScreen .rain-title { text-shadow:0 0 16px rgba(56,189,248,.35); }
+        .defense-sky {
+            background:
+                radial-gradient(circle at 50% 50%, rgba(56,189,248,.08), transparent 22%),
+                radial-gradient(circle at 25% 25%, rgba(59,130,246,.08), transparent 24%),
+                linear-gradient(180deg,#09132b,#061022 70%,#030712);
+        }
+        .defense-sky::before {
+            content:''; position:absolute; inset:0; pointer-events:none; opacity:.14;
+            background-image:radial-gradient(circle, #fff 1px, transparent 1px);
+            background-size:76px 76px;
+            animation:starDrift 18s linear infinite;
+        }
+        @keyframes starDrift { to { background-position:76px 76px; } }
+        .defense-castle {
+            font-size:5.6rem;
+            filter:drop-shadow(0 10px 18px rgba(0,0,0,.45));
+            animation:castleFloat 2.8s ease-in-out infinite;
+        }
+        @keyframes castleFloat { 0%,100%{transform:translate(-50%,-50%) translateY(0)} 50%{transform:translate(-50%,-50%) translateY(-5px)} }
+        .defense-castle.hit { animation:castleHit .18s ease-out both; }
+        @keyframes castleHit { 0%{transform:translate(-50%,-50%) scale(1)} 45%{transform:translate(-50%,-50%) scale(1.18) rotate(4deg)} 100%{transform:translate(-50%,-50%) scale(1)} }
+        .rain-drop {
+            border-radius:12px;
+            background:linear-gradient(145deg,#fff,#dbeafe);
+            box-shadow:0 8px 20px rgba(0,0,0,.4),0 0 0 1px rgba(255,255,255,.4);
+        }
+        .rain-word-bank { background:linear-gradient(90deg,#08101f,#0b1629,#08101f); }
+        .rain-hint-chip { box-shadow:0 4px 12px rgba(56,189,248,.1); }
+        .rain-input { box-shadow:inset 0 2px 7px rgba(0,0,0,.15),0 0 0 0 rgba(56,189,248,0); transition:.18s; }
+        .rain-input:focus { box-shadow:inset 0 2px 7px rgba(0,0,0,.15),0 0 0 4px rgba(56,189,248,.12),0 0 18px rgba(56,189,248,.10); }
+
+        /* 🏁 땅따먹기: 보드게임/전략 게임 */
+        #landLobbyScreen, #landGameScreen { background:linear-gradient(145deg,#fffaff,#f7f0ff); }
+        .land-lobby-box { background:linear-gradient(145deg,rgba(255,255,255,.96),rgba(250,245,255,.92)); border:1px solid #f0abfc; box-shadow:0 18px 36px rgba(126,34,206,.09), inset 0 1px 0 #fff; }
+        .team-box { box-shadow:0 10px 22px rgba(15,23,42,.06); }
+        .btn-lobby-start { box-shadow:0 12px 24px rgba(16,185,129,.22); background:linear-gradient(135deg,#10b981,#059669); }
+        .btn-lobby-random { box-shadow:0 12px 24px rgba(79,70,229,.22); background:linear-gradient(135deg,#6366f1,#7c3aed); }
+        .land-game-layout { gap:24px; }
+        .land-board-container {
+            padding:8px;
+            border-radius:16px;
+            background:linear-gradient(145deg,#d8b4fe,#c4b5fd);
+            box-shadow:0 20px 38px rgba(109,40,217,.16), inset 0 2px 4px rgba(255,255,255,.65);
+        }
+        .land-board { gap:3px; }
+        .land-cell {
+            border-radius:7px;
+            background:linear-gradient(145deg,#fff,#f8fafc);
+            box-shadow:0 3px 6px rgba(15,23,42,.08),inset 0 1px 0 rgba(255,255,255,.9);
+            transition:transform .12s ease, box-shadow .12s ease, filter .12s ease;
+        }
+        .land-cell:hover { filter:brightness(1.04); }
+        .land-cell.claimed { box-shadow:inset 0 0 0 1px rgba(255,255,255,.22),0 3px 8px rgba(15,23,42,.18); }
+        .land-interaction { box-shadow:inset 0 0 22px rgba(148,163,184,.08),0 12px 24px rgba(15,23,42,.06); }
+        .land-input { box-shadow:inset 0 2px 7px rgba(15,23,42,.06); }
+        .land-submit { box-shadow:0 10px 18px rgba(79,70,229,.18); }
+        .land-leaderboard, .land-word-bank { box-shadow:0 12px 24px rgba(15,23,42,.06); }
+        .land-player-chip { box-shadow:0 5px 13px rgba(15,23,42,.06); }
+
+        /* 👑 SURVIVAL: 실제 게임 HUD 느낌 */
+        #survLobbyScreen { background:linear-gradient(145deg,#11183e,#0e1536); color:#f8fbff; }
+        #survLobbyScreen .top-bar { border-color:rgba(148,163,184,.18); }
+        #survLobbyScreen .screen-title { color:#fff; }
+        #survLobbyScreen .stop-btn { background:rgba(255,255,255,.08); color:#dbeafe; }
+        #survLobbyScreen .land-lobby-box { background:linear-gradient(145deg,#111c4a,#18276b); border-color:#3d4fa6; box-shadow:0 28px 60px rgba(0,0,0,.3); }
+        #survLobbyScreen .lobby-player { background:rgba(255,255,255,.08); color:#f8fbff; border:1px solid rgba(255,255,255,.08); }
+        #survLobbyScreen .sv-rules { background:rgba(255,210,63,.08); border-color:rgba(255,210,63,.32); color:#ffe38a; }
+        #survGameScreen {
+            background:
+                radial-gradient(circle at 50% 18%, rgba(99,102,241,.15), transparent 34%),
+                linear-gradient(155deg,#080d24,#101b4a 56%,#160c39);
+            min-height:720px;
+            box-shadow:0 28px 70px rgba(3,7,18,.45);
+            border-color:rgba(111,139,255,.26);
+        }
+        #survGameScreen::before { opacity:.25; background-image:linear-gradient(rgba(255,255,255,.025) 1px, transparent 1px),linear-gradient(90deg,rgba(255,255,255,.025) 1px, transparent 1px); background-size:40px 40px; }
+        .sv-top { padding:6px 0 8px; }
+        .sv-title { letter-spacing:.5px; }
+        .sv-btns .sv-ibtn { box-shadow:0 7px 16px rgba(0,0,0,.18); }
+        .sv-hud { padding:8px 4px; }
+        .sv-hearts { filter:drop-shadow(0 0 8px rgba(239,68,68,.2)); }
+        .sv-cnt { padding:7px 11px; border:1px solid rgba(255,210,63,.18); border-radius:10px; background:rgba(255,210,63,.06); }
+        .sv-dots i { box-shadow:inset 0 0 7px rgba(0,0,0,.3); }
+        .sv-stage {
+            min-height:440px;
+            border-radius:20px;
+            background:linear-gradient(145deg,rgba(27,39,107,.94),rgba(14,24,67,.96));
+            border-color:rgba(111,139,255,.28);
+            box-shadow:inset 0 0 50px rgba(99,102,241,.08),0 18px 34px rgba(0,0,0,.22);
+        }
+        .sv-opts button { box-shadow:0 9px 18px rgba(0,0,0,.2); }
+        .sv-opts button.sel { box-shadow:0 0 0 2px rgba(143,164,255,.25),0 12px 24px rgba(59,91,255,.24); }
+        .sv-pad { box-shadow:0 18px 35px rgba(0,0,0,.22),inset 0 1px 0 rgba(255,255,255,.18); }
+        .sv-track { box-shadow:inset 0 0 16px rgba(0,0,0,.28); }
+        .sv-field { box-shadow:inset 0 0 40px rgba(0,0,0,.2); }
+        .sv-btn { background:linear-gradient(135deg,#5b5ef7,#7c3aed); box-shadow:0 12px 24px rgba(79,70,229,.3); }
+
+        /* 결과 화면 */
+        #resultScreen {
+            background:radial-gradient(circle at 50% 8%, rgba(99,102,241,.13), transparent 32%), linear-gradient(145deg,#fff,#f7f8ff);
+            box-shadow:var(--ui-shadow-deep);
+        }
+        #resultTitle { font-size:clamp(1.6rem,4vw,2.5rem); font-weight:950; letter-spacing:-1px; }
+        .result-score { font-size:clamp(3.2rem,9vw,5.8rem); text-shadow:0 12px 28px rgba(79,70,229,.12); }
+        .result-comment { max-width:760px; margin-left:auto; margin-right:auto; }
+        .btn-home, .btn-review { border-radius:13px; box-shadow:0 10px 20px rgba(15,23,42,.09); }
+
+        /* 관리자 화면 */
+        #adminScreen { background:linear-gradient(145deg,#fffafa,#f8fafc); }
+        .admin-table { overflow:hidden; border-radius:12px; box-shadow:0 12px 26px rgba(15,23,42,.06); }
+        .admin-table th { background:linear-gradient(135deg,#eef2ff,#e0e7ff); }
+
+        @media (max-width: 760px) {
+            body { padding:12px; }
+            .container { padding-bottom:30px; }
+            header h1 { font-size:1.65rem; }
+            header h1::after { font-size:.48rem; letter-spacing:2.8px; }
+            .screen { padding:18px; border-radius:17px; }
+            .main-tabs { border-radius:15px; }
+            .main-tab { min-width:130px; }
+            .day-grid { grid-template-columns:repeat(2,minmax(0,1fr)); gap:11px; }
+            .day-btn { min-height:96px; }
+            .dashboard { padding:16px; }
+            .dashboard-header { align-items:flex-start; }
+            .dashboard-title { font-size:1rem; }
+            .ranking-btn { white-space:nowrap; }
+            .login-box { padding:38px 20px 24px; }
+            .land-main, .land-side { min-width:100%; max-width:none; }
+            #survGameScreen { min-height:650px; }
+        }
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after { animation-duration:.001ms !important; animation-iteration-count:1 !important; scroll-behavior:auto !important; transition-duration:.001ms !important; }
+        }
     </style>
 </head>
 <body>
