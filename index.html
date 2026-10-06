@@ -1392,6 +1392,109 @@ input, select, button { color-scheme:dark; }
     .hero-emblem { width: 180px !important; height: 180px !important; right: 18px !important; top: auto !important; bottom: 20px !important; transform: rotate(-8deg) !important; opacity: .92; }
     .hero-emblem b { font-size: 2.1rem !important; }
 }
+
+/* =========================================================
+   FINAL TEXT CONTRAST FIX
+   밝은 스테이지 카드 + 흰 글씨 충돌을 제거하고 고대비 게임 카드로 통일
+   ========================================================= */
+#homeScreen .day-btn,
+#masterGrid .day-btn,
+#rainGrid .day-btn,
+#landGrid .day-btn,
+#survGrid .day-btn,
+.practice-card {
+    background:linear-gradient(145deg,#18243e,#0d1729) !important;
+    color:#f7fbff !important;
+    border-color:rgba(126,160,220,.28) !important;
+    text-shadow:0 1px 2px rgba(0,0,0,.35);
+}
+#homeScreen .day-btn:hover,
+#masterGrid .day-btn:hover,
+#rainGrid .day-btn:hover,
+#landGrid .day-btn:hover,
+#survGrid .day-btn:hover,
+.practice-card:hover {
+    background:linear-gradient(145deg,#203150,#101d34) !important;
+    color:#ffffff !important;
+}
+#homeScreen .day-btn.cleared,
+#masterGrid .day-btn.cleared,
+#rainGrid .day-btn.cleared,
+#landGrid .day-btn.cleared,
+#survGrid .day-btn.cleared {
+    background:linear-gradient(145deg,#123b36,#10252b) !important;
+    color:#eafff5 !important;
+    border-color:rgba(94,230,168,.42) !important;
+}
+#homeScreen .day-btn .daily-rate,
+#masterGrid .day-btn .daily-rate,
+#rainGrid .day-btn .daily-rate,
+#landGrid .day-btn .daily-rate,
+#survGrid .day-btn .daily-rate,
+.practice-record,
+.practice-range {
+    color:#b7c7dd !important;
+}
+#homeScreen .day-btn.cleared .daily-rate,
+#masterGrid .day-btn.cleared .daily-rate,
+#rainGrid .day-btn.cleared .daily-rate,
+#landGrid .day-btn.cleared .daily-rate,
+#survGrid .day-btn.cleared .daily-rate {
+    color:#8ff1be !important;
+}
+.practice-title { color:#f7fbff !important; }
+.practice-card .stage-play-btn { color:#ffffff !important; }
+.practice-card .stage-play-btn.real { background:linear-gradient(135deg,#6757e8,#3b4fc4) !important; }
+.practice-card .stage-play-btn.practice { background:linear-gradient(135deg,#0e9f8c,#087f95) !important; }
+
+/* 잠금 카드는 흐리게 보이되 글씨는 여전히 읽히도록 */
+.day-btn.locked-btn { color:#bdc8d9 !important; opacity:.78 !important; }
+.day-btn.locked-btn div,
+.day-btn.locked-btn span { color:#aebbd0 !important; }
+
+/* 스테이지 화면 제목/설명도 확실한 대비 확보 */
+#masterStageScreen .dashboard-title,
+#rainStageScreen .dashboard-title,
+#landStageScreen .dashboard-title,
+#survStageScreen .dashboard-title { color:#f7fbff !important; }
+#masterStageScreen .section-heading h2,
+#rainStageScreen .section-heading h2,
+#landStageScreen .section-heading h2,
+#survStageScreen .section-heading h2 { color:#f7fbff !important; }
+
+/* 연습/실전 카드 내부 버튼이 부모의 색상 규칙에 묻히지 않도록 */
+.practice-actions { position:relative; z-index:2; }
+
+
+/* 추가 최종 대비 보정: 팀 대기실 / 결과 통계 카드 */
+#landLobbyScreen .team-box,
+#landLobbyScreen .team-box.team-a,
+#landLobbyScreen .team-box.team-b {
+    background:linear-gradient(145deg,#17243b,#0e182b) !important;
+    color:#f2f7ff !important;
+    border-color:rgba(126,160,220,.30) !important;
+}
+#landLobbyScreen .team-box.team-a { border-left-color:#3b82f6 !important; }
+#landLobbyScreen .team-box.team-b { border-left-color:#ef4444 !important; }
+#landLobbyScreen .team-box .team-title span { color:#dce8ff !important; }
+#landLobbyScreen .team-box.team-a .team-title span { color:#8fc0ff !important; }
+#landLobbyScreen .team-box.team-b .team-title span { color:#ff9aab !important; }
+#landLobbyScreen .lobby-player-list { color:#e8f1ff !important; }
+
+/* SURVIVAL 결과의 light 통계 카드도 흰 글씨가 흰 배경에 묻히지 않도록 */
+.sv-stats.light div {
+    background:linear-gradient(145deg,#17243d,#101a2d) !important;
+    border-color:rgba(126,160,220,.22) !important;
+    color:#f5f8ff !important;
+}
+.sv-stats.light small { color:#aebbd0 !important; opacity:1 !important; }
+.sv-stats.light b { color:#f7fbff !important; }
+
+/* 결과 화면 텍스트도 항상 카드 배경과 대비 */
+#resultScreen .result-comment { color:#dce7f7 !important; }
+#resultScreen .result-score { color:#8fe5ff !important; }
+#resultScreen .screen-title { color:#f5f8ff !important; }
+
 </style>
 </head>
 <body>
@@ -3138,17 +3241,17 @@ input, select, button { color-scheme:dark; }
         const q=survPractice.current;
         sv(`<div class="practice-mode-bar dark"><span>🤖 컴퓨터 연습 · 문제를 풀며 생존하세요</span><span class="practice-badge dark">연습 ${survPractice.q}/${survPractice.maxQ}</span></div><div class="sv-qn">문제 ${survPractice.q}</div><h2 class="sv-q">${escapeHTML(q.word.m)}</h2><div class="sv-hint">뜻에 알맞은 단어를 선택하세요</div><div class="sv-bar"><b id="svTb"></b></div><div class="sv-opts">${q.opts.map((x,i)=>`<button data-i="${i}" onclick="pickSurvPractice(${i})">${escapeHTML(x)}</button>`).join('')}</div><div class="sv-fb" id="svFb">💡 컴퓨터들도 동시에 답을 고르고 있어요.</div>`);
         renderSurvPracticeHud();
-        let left=2800, started=performance.now();
+        let left=8000, started=performance.now();
         const tick=(now)=>{
             if(!survPracticeMode || !survPractice || survPractice.roundId<1) return;
-            const pct=Math.max(0,left-(now-started)); const bar=document.getElementById('svTb'); if(bar) bar.style.width=(pct/2800*100)+'%';
+            const pct=Math.max(0,left-(now-started)); const bar=document.getElementById('svTb'); if(bar) bar.style.width=(pct/8000*100)+'%';
             if(pct>0){ survPracticeTimer=requestAnimationFrame(tick); } else finishSurvPracticeRound();
         };
         survPracticeTimer=requestAnimationFrame(tick);
         // 봇 답변 일정 예약
         const roundToken=survPractice.roundId;
         ['bot1','bot2','bot3'].forEach((id,i)=>{
-            const delay=700+i*280+Math.random()*500;
+            const delay=1400+i*420+Math.random()*800;
             setTimeout(()=>survPracticeBotAnswer(id,roundToken),delay);
         });
     }
@@ -3177,7 +3280,7 @@ input, select, button { color-scheme:dark; }
         const btns=svEl('survStage').querySelectorAll('.sv-opts button'); btns.forEach((b,i)=>{b.disabled=true; if(i===q.ai)b.classList.add('ok');});
         svEl('svFb').innerHTML=`정답: <b>${escapeHTML(q.word.w)}</b><br>${userGood?'❤️ 생명 유지!':'💥 생명 -1'} · 컴퓨터들의 답도 공개됐어요.`;
         renderSurvPracticeHud();
-        survPracticeTimer=setTimeout(nextSurvPracticeQuestion,1500);
+        survPracticeTimer=setTimeout(nextSurvPracticeQuestion,2000);
     }
 
     function endSurvPractice(){
@@ -3412,7 +3515,7 @@ input, select, button { color-scheme:dark; }
             q++;
             if (!pool.length) pool = shuffleArray(W);
             const w = pool.pop(), opts = shuffleArray([w, ...shuffleArray(W.filter(x => x.w !== w.w)).slice(0, 3)]), ai = opts.indexOf(w), os = opts.map(x => x.w);
-            const T0 = Math.min(16, Math.max(10, 7 + Math.ceil(w.m.length / 10))), T = svAlive().length === 2 ? Math.max(8, T0 - 3) : T0;
+            const T0 = 8, T = 8;
             await R.child('an').remove();
             await svSet({ ph: 'q', q, m: w.m, o: os, hn: getChoseongHint(w.w), t0: svNow(), T });
             const t0 = Date.now(), ans = () => (SV.data && SV.data.an) || {}, got = i => { const a = ans()[i]; return a && a.q === q ? a.i : undefined; };
