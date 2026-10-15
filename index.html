@@ -3,6 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- 🔒 플러그인(object)·<base> 태그를 이용한 공격을 막아요. (Firebase 가 쓰는 스크립트·연결은 건드리지 않아요) -->
+    <meta http-equiv="Content-Security-Policy" content="object-src 'none'; base-uri 'none'">
     <title>⚡ 문해력 낱말 완전 정복</title>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
@@ -1720,7 +1722,59 @@ input, select, button { color-scheme:dark; }
     #landGameScreen .land-submit { height:52px !important; }
 }
 
+/* [점검 수정] 좁은 화면에서 '로그아웃' 글자가 두 줄로 꺾이지 않게 */
+.btn-logout { white-space: nowrap; flex-shrink: 0; }
+/* [점검 수정] 어휘왕 게임 화면에서는 상단 머리글·프로필 줄·탭을 숨김 (휴대폰에서 미니게임 아래쪽이 잘리던 문제) */
+body.sv-playing .game-header, body.sv-playing #userProfileBar, body.sv-playing #mainTabs { display: none !important; }
 </style>
+<!--
+  [점검 수정본] 2026-10-09 — 원본 기능은 그대로 두고 아래 항목만 고쳤습니다.
+  F1  방장이 바뀔 때 낱말 중복/누락 방지 (낱말 목록 순서를 모든 기기에서 동일하게)
+  F2  연습 모드 결과의 '맞힌 문제' 집계
+  F3  랭킹 'FINAL' 탭 활성 표시
+  F5  4.0초 하한 이후 '다음 상승 N번' 문구 정리
+  F6  랭킹/관리자 서버 읽기·쓰기 실패 시 안내 (무한 '불러오는 중' 방지)
+  F7  우승 연출 중 나가기: 결과 화면이 뒤늦게 뜨는 문제, 창을 닫으면 기록이 사라지는 문제
+  F8  FINAL 3 직후 방장 교체 시 FINAL 3 재연출 방지
+  F9  결과 화면의 정답/오답 표시를 방장 채점 결과와 일치 (늦게 도착한 답: '답이 늦게 도착했어요')
+  F10 연결이 끊겨 방에서 빠졌을 때 알림 표시
+  F12 통계 칸 escape / O3 CSV 수식 주입 방지 / O5 랭킹 응답 경합
+  F13 iOS 효과음 잠금 해제(예방)
+  F14 방/연습 중 상단 탭: 같은 탭은 무시, 다른 탭은 확인 후 방 나가기 + 게임 화면에서는 상단 머리글·탭 숨김(휴대폰 미니게임 잘림 해결)
+  F15 연습 재시작 시 옛 타이머가 남아 문제가 일찍 공개되던 문제
+  F16 로그아웃 시 방/연습 정리 (유령 플레이어 방지)
+
+  [v2a] 2026-10-11 — 위 점검 수정본에 아래 두 가지를 더했습니다.
+  V1  무승부: 끝까지 생명·맞힌 문제 수가 똑같으면 어휘왕 없이 '공동 1위' (어휘왕 횟수 랭킹에는 올라가지 않음)
+  V2  연결 끊김 복구 (어휘왕 방 · 땅따먹기 방): 와이파이가 잠깐 끊겨 방에서 빠져도 쫓겨나지 않고 자리를 되찾음
+      - 게임 중에는 생명·기록 그대로 (끊긴 지 90초 안일 때만). 방이 사라졌거나 게임이 끝났으면 안내 후 나감
+      - 최종 대결에서 상대 연결이 끊기면 최대 20초 기다림 (상대가 직접 '나가기'를 누르면 기다리지 않음)
+      - 방장 연결이 끊긴 동안은 채점·진행을 멈춤 (친구들이 억울하게 생명을 잃지 않도록), 돌아오면 이어서 진행
+      - 연결이 끊긴 동안 화면 위쪽에 '연결이 끊겼어요' 안내 줄
+
+  [v3] 2026-10-12 — 보안
+  V3  관리자 암호를 코드에 평문으로 두지 않고(소금+해시), 서버(admin_vocab/password)에도 저장하지 않음 · 기본 암호 1234 안내 삭제 ·
+      틀리면 잠시 대기 · 관리자 화면을 벗어나면 관리 기능이 잠김 · [🔑 암호 변경] 은 새 해시 한 줄을 만들어 줌(그 줄을 HTML 에 붙여넣기)
+      서버에서 읽은 이름·색·숫자·방 데이터는 화면에 그리기 전에 정리하고, 화면에 글자를 넣는 모든 곳을 점검해 escape 보강
+      (땅따먹기 뜻풀이·점수·색, 어휘왕 생명·문제 번호, 랭킹 숫자, 퀴즈 저장분 등) · 로그인/방 이름 입력 길이 제한 ·
+      최소한의 CSP · 관리자 화면의 [🛡️ 보안 규칙] 에서 Firebase 규칙 복사
+
+  [v3b] 2026-10-12 — 낱말 데이터
+  V4  낱말·뜻풀이를 '페이지 소스 보기 / Ctrl+F' 에서 바로 보이지 않게 섞어서 보관(WORD_PACK) · 고치려면 관리자 화면의 [📦 낱말 변환]
+      뜻풀이에 정답 낱말(또는 그 일부)이 그대로 들어 있으면 문제에서는 ○ 로 가려서 보여 줌(공부 화면·오답 복습·정답 공개 때는 원래 뜻 그대로)
+      헷갈리는 낱말(뜻이 거의 같음 · 서로 포함 · 서로의 뜻풀이에 등장 · 사람이 정한 묶음)은 같은 보기에 안 나옴(매일 퀴즈 · 어휘왕 실전/연습)
+      뜻이 같은 낱말은 땅따먹기·스피드런에서 둘 다 정답으로 인정 · 땅따먹기·스피드런·디펜스는 가린 뜻풀이를 사용
+
+  [v3c] 2026-10-14 — 땅따먹기 마무리 점수(원래부터 있던 문제)
+  L1~L4  마지막 땅을 차지한 순간에는 '내 점수 +1' 이 서버에 올라가기 전에 게임이 끝나 최종 점수에서 마지막 1~2땅이 빠졌어요
+         (그래서 팀전은 A+B 가 100 이 안 돼 무승부가 사실상 나올 수 없었음) → 판 위에 차지된 땅 수를 다시 세어서 결과를 내요
+         팀전 무승부는 '🤝 무승부' 문구로, 개인전 동점은 '공동 1위: 이름, 이름' 으로 표시(동점이면 모두 1등 기록)
+
+  [선생님 메모]
+  · 관리자: 첫 화면 오른쪽 위 ⚙️ → 암호 입력. 암호를 바꾸려면 관리자 화면의 [🔑 암호 변경] 에서 나온 한 줄을 복사해, 이 파일에서 'const ADMIN_AUTH' 로 시작하는 줄과 통째로 바꿔 저장해요.
+  · 낱말 바꾸기: 관리자 화면의 [📦 낱말 변환] 에서 낱말|뜻 을 한 줄에 하나씩 적고 [변환하기] → 나온 한 줄을 복사해, 이 파일에서 'const WORD_PACK' 으로 시작하는 아주 긴 줄과 통째로 바꿔 저장해요.
+  · 서버 보안 규칙: 관리자 화면의 [🛡️ 보안 규칙] 안내대로 Firebase 콘솔에 넣어요(기존 규칙은 먼저 통째로 복사해서 보관).
+-->
 </head>
 <body>
 
@@ -1733,10 +1787,10 @@ input, select, button { color-scheme:dark; }
     <div id="loginScreen" class="screen active">
         <div class="login-box">
             <h2>학생 정보 입력</h2>
-            <div class="input-group"><label>학교 이름</label><input type="text" id="inputSchool" value="군산초" onkeydown="if(event.key==='Enter') login()"></div>
-            <div class="input-group"><label>학년 반 (예: 6-1)</label><input type="text" id="inputClass" placeholder="예: 6-1" onkeydown="if(event.key==='Enter') login()"></div>
+            <div class="input-group"><label>학교 이름</label><input type="text" id="inputSchool" value="군산초" maxlength="30" onkeydown="if(event.key==='Enter') login()"></div>
+            <div class="input-group"><label>학년 반 (예: 6-1)</label><input type="text" id="inputClass" placeholder="예: 6-1" maxlength="12" onkeydown="if(event.key==='Enter') login()"></div>
             <div class="input-group"><label>출석 번호</label><input type="number" id="inputNum" placeholder="예: 15" onkeydown="if(event.key==='Enter') login()"></div>
-            <div class="input-group"><label>이름</label><input type="text" id="inputName" placeholder="홍길동" onkeydown="if(event.key==='Enter') login()"></div>
+            <div class="input-group"><label>이름</label><input type="text" id="inputName" placeholder="홍길동" maxlength="20" onkeydown="if(event.key==='Enter') login()"></div>
             <button class="btn-login" id="btnLoginBtn" onclick="login()">학습 시작하기</button>
         </div>
     </div>
@@ -1847,6 +1901,8 @@ input, select, button { color-scheme:dark; }
             <button class="btn-home" style="background: var(--primary); color:white; flex:1; min-width: 120px;" onclick="fetchAdminData()">🔄 새로고침</button>
             <button class="btn-home" style="background: var(--success); color:white; flex:1; min-width: 120px;" onclick="downloadAdminCSV()">💾 엑셀 다운로드</button>
             <button class="btn-home" style="background: #64748b; color:white; flex:1; min-width: 120px;" onclick="changeAdminPassword()">🔑 암호 변경</button>
+            <button class="btn-home" style="background: #0f766e; color:white; flex:1; min-width: 120px;" onclick="openRulesTool()">🛡️ 보안 규칙</button>
+            <button class="btn-home" style="background: #7c3aed; color:white; flex:1; min-width: 120px;" onclick="openWordTool()">📦 낱말 변환</button>
             <button class="btn-home" style="background: #f59e0b; color:white; flex:1; min-width: 120px;" onclick="resetAllLandRooms()">💣 땅따먹기 방 폭파</button>
             <button class="btn-home" style="background: #f59e0b; color:white; flex:1; min-width: 120px;" onclick="resetAllSurvRooms()">👑 어휘왕 방 폭파</button>
             <button class="btn-home" style="background: var(--error); color:white; flex:1; min-width: 120px;" onclick="deleteAllData()">🗑️ 전체 초기화</button>
@@ -1858,6 +1914,284 @@ input, select, button { color-scheme:dark; }
             </table>
         </div>
     </div>
+
+    <!-- 🛠️ 관리자 도구 창 (보안 규칙 복사 · 낱말 데이터 변환) -->
+    <style>
+        .tool-modal { position: fixed; inset: 0; background: rgba(15,23,42,.62); z-index: 100000; display: none; align-items: center; justify-content: center; padding: 14px; }
+        .tool-box { background: #fff; color: #1e293b; width: 100%; max-width: 760px; max-height: 92vh; overflow: auto; border-radius: 14px; padding: 16px; box-shadow: 0 20px 50px rgba(0,0,0,.35); }
+        .tool-head { display: flex; justify-content: space-between; align-items: center; gap: 10px; margin-bottom: 10px; font-size: 1.1rem; }
+        .tool-head button, .tool-actions button { border: 0; border-radius: 8px; padding: 9px 14px; font-weight: 800; cursor: pointer; background: #4f46e5; color: #fff; }
+        .tool-head button { background: #64748b; }
+        .tool-note { font-size: .86rem; line-height: 1.5; color: #475569; margin-bottom: 10px; }
+        .tool-note div { margin-bottom: 4px; }
+        .tool-ta { width: 100%; min-height: 150px; margin-bottom: 8px; padding: 10px; border: 1px solid #cbd5e1; border-radius: 8px; font: 12px/1.45 ui-monospace, Menlo, Consolas, monospace; resize: vertical; }
+        .tool-actions { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+        #toolMsg { font-size: .85rem; color: #0f766e; font-weight: 700; margin-top: 6px; min-height: 1.2em; }
+    </style>
+    <div id="toolModal" class="tool-modal" role="dialog" aria-modal="true" aria-labelledby="toolTitle">
+        <div class="tool-box">
+            <div class="tool-head"><b id="toolTitle"></b><button type="button" onclick="closeTool()">닫기 ✕</button></div>
+            <div id="toolNote" class="tool-note"></div>
+            <textarea id="toolIn" class="tool-ta" style="display:none" spellcheck="false" aria-label="입력"></textarea>
+            <textarea id="toolOut" class="tool-ta" readonly spellcheck="false" aria-label="결과"></textarea>
+            <div class="tool-actions"><button type="button" id="toolRun" style="display:none"></button><button type="button" onclick="toolCopy()">📋 복사</button></div>
+            <div id="toolMsg" role="status"></div>
+        </div>
+    </div>
+    <script type="text/plain" id="dbRulesText">{
+  "rules": {
+    "students_vocab": {
+      ".read": true,
+      ".write": true,
+      "$user": {
+        "profile": {
+          "school": {
+            ".validate": "newData.isString() && newData.val().length <= 30 && !newData.val().matches(/[<>&]/)"
+          },
+          "gradeClass": {
+            ".validate": "newData.isString() && newData.val().length <= 12 && !newData.val().matches(/[<>&]/)"
+          },
+          "studentNum": {
+            ".validate": "(newData.isString() && newData.val().length <= 8) || newData.isNumber()"
+          },
+          "studentName": {
+            ".validate": "newData.isString() && newData.val().length <= 20 && !newData.val().matches(/[<>&]/)"
+          }
+        },
+        "lastUpdated": {
+          ".validate": "newData.isString() && newData.val().length <= 40"
+        }
+      }
+    },
+    "rankings_vocab": {
+      ".read": true,
+      ".write": true,
+      "$stage": {
+        ".indexOn": [
+          "time"
+        ],
+        "$user": {
+          "name": {
+            ".validate": "newData.isString() && newData.val().length <= 20 && !newData.val().matches(/[<>&]/)"
+          },
+          "classInfo": {
+            ".validate": "newData.isString() && newData.val().length <= 12 && !newData.val().matches(/[<>&]/)"
+          },
+          "time": {
+            ".validate": "newData.isNumber()"
+          }
+        }
+      }
+    },
+    "rankings_vocab_rain": {
+      ".read": true,
+      ".write": true,
+      "$stage": {
+        ".indexOn": [
+          "score"
+        ],
+        "$user": {
+          "name": {
+            ".validate": "newData.isString() && newData.val().length <= 20 && !newData.val().matches(/[<>&]/)"
+          },
+          "classInfo": {
+            ".validate": "newData.isString() && newData.val().length <= 12 && !newData.val().matches(/[<>&]/)"
+          },
+          "score": {
+            ".validate": "newData.isNumber()"
+          }
+        }
+      }
+    },
+    "rankings_vocab_surv": {
+      ".read": true,
+      ".write": true,
+      "$stage": {
+        ".indexOn": [
+          "firsts"
+        ],
+        "$user": {
+          "name": {
+            ".validate": "newData.isString() && newData.val().length <= 20 && !newData.val().matches(/[<>&]/)"
+          },
+          "classInfo": {
+            ".validate": "newData.isString() && newData.val().length <= 12 && !newData.val().matches(/[<>&]/)"
+          },
+          "firsts": {
+            ".validate": "newData.isNumber()"
+          },
+          "plays": {
+            ".validate": "newData.isNumber()"
+          }
+        }
+      }
+    },
+    "rankings_vocab_land_solo": {
+      ".read": true,
+      ".write": true,
+      "$stage": {
+        ".indexOn": [
+          "soloFirsts"
+        ],
+        "$user": {
+          "name": {
+            ".validate": "newData.isString() && newData.val().length <= 20 && !newData.val().matches(/[<>&]/)"
+          },
+          "classInfo": {
+            ".validate": "newData.isString() && newData.val().length <= 12 && !newData.val().matches(/[<>&]/)"
+          },
+          "soloFirsts": {
+            ".validate": "newData.isNumber()"
+          },
+          "teamWins": {
+            ".validate": "newData.isNumber()"
+          },
+          "teamDraws": {
+            ".validate": "newData.isNumber()"
+          },
+          "teamLosses": {
+            ".validate": "newData.isNumber()"
+          }
+        }
+      }
+    },
+    "rankings_vocab_land_team": {
+      ".read": true,
+      ".write": true,
+      "$stage": {
+        ".indexOn": [
+          "teamWins"
+        ],
+        "$user": {
+          "name": {
+            ".validate": "newData.isString() && newData.val().length <= 20 && !newData.val().matches(/[<>&]/)"
+          },
+          "classInfo": {
+            ".validate": "newData.isString() && newData.val().length <= 12 && !newData.val().matches(/[<>&]/)"
+          },
+          "soloFirsts": {
+            ".validate": "newData.isNumber()"
+          },
+          "teamWins": {
+            ".validate": "newData.isNumber()"
+          },
+          "teamDraws": {
+            ".validate": "newData.isNumber()"
+          },
+          "teamLosses": {
+            ".validate": "newData.isNumber()"
+          }
+        }
+      }
+    },
+    "survRooms_vocab": {
+      ".read": true,
+      ".write": true,
+      "$room": {
+        "host": {
+          ".validate": "newData.isString() && newData.val().length <= 160"
+        },
+        "status": {
+          ".validate": "newData.isString() && newData.val().length <= 20"
+        },
+        "players": {
+          "$p": {
+            "name": {
+              ".validate": "newData.isString() && newData.val().length <= 20 && !newData.val().matches(/[<>&]/)"
+            },
+            "color": {
+              ".validate": "newData.isString() && newData.val().length <= 30 && newData.val().matches(/^[#a-zA-Z0-9(), %.]+$/)"
+            },
+            "order": {
+              ".validate": "newData.isNumber()"
+            },
+            "h": {
+              ".validate": "newData.isNumber()"
+            },
+            "a": {
+              ".validate": "newData.isNumber()"
+            },
+            "c": {
+              ".validate": "newData.isNumber()"
+            },
+            "t": {
+              ".validate": "newData.isNumber()"
+            },
+            "s": {
+              ".validate": "newData.isNumber()"
+            },
+            "b": {
+              ".validate": "newData.isNumber()"
+            },
+            "m": {
+              ".validate": "newData.isNumber()"
+            },
+            "g": {
+              ".validate": "newData.isNumber()"
+            },
+            "r": {
+              ".validate": "newData.isNumber()"
+            },
+            "k": {
+              ".validate": "newData.isNumber()"
+            }
+          }
+        }
+      }
+    },
+    "landGrabRooms_vocab": {
+      ".read": true,
+      ".write": true,
+      "$room": {
+        "host": {
+          ".validate": "newData.isString() && newData.val().length <= 160"
+        },
+        "status": {
+          ".validate": "newData.isString() && newData.val().length <= 20"
+        },
+        "mode": {
+          ".validate": "newData.isString() && newData.val().length <= 20"
+        },
+        "players": {
+          "$p": {
+            "name": {
+              ".validate": "newData.isString() && newData.val().length <= 20 && !newData.val().matches(/[<>&]/)"
+            },
+            "color": {
+              ".validate": "newData.isString() && newData.val().length <= 30 && newData.val().matches(/^[#a-zA-Z0-9(), %.]+$/)"
+            },
+            "team": {
+              ".validate": "newData.isString() && (newData.val() == 'A' || newData.val() == 'B' || newData.val() == 'none')"
+            },
+            "score": {
+              ".validate": "newData.isNumber() && newData.val() >= 0 && newData.val() <= 1000"
+            },
+            "penaltyUntil": {
+              ".validate": "newData.isNumber()"
+            }
+          }
+        },
+        "board": {
+          "$i": {
+            "w": {
+              ".validate": "newData.isString() && newData.val().length <= 60 && !newData.val().matches(/[<>&]/)"
+            },
+            "m": {
+              ".validate": "newData.isString() && newData.val().length <= 300 && !newData.val().matches(/[<>&]/)"
+            },
+            "owner": {
+              ".validate": "newData.isString() && newData.val().length <= 160"
+            }
+          }
+        }
+      }
+    },
+    "admin_vocab": {
+      ".read": false,
+      ".write": false
+    }
+  }
+}</script>
 
     <!-- 🏁 땅따먹기 대기실 -->
     <div id="landLobbyScreen" class="screen">
@@ -2012,17 +2346,40 @@ input, select, button { color-scheme:dark; }
     };
 
     let isFirebaseActive = false;
-    let adminPassword = localStorage.getItem('adminPwd') || "1234";
 
     try {
         firebase.initializeApp(firebaseConfig);
         isFirebaseActive = true;
-        firebase.database().ref('admin_vocab/password').once('value').then(snap => {
-            if(snap.exists()) adminPassword = snap.val();
-        }).catch(e => console.warn("DB 에러:", e));
     } catch(e) { console.error("Firebase 초기화 에러", e); }
 
     function getDB() { return firebase.database(); }
+
+    // 📶 연결 상태 도우미 ─ Firebase 의 '.info/connected' 를 한 번만 구독해서 "끊김/복구"를 방(어휘왕·땅따먹기)에 알려 줘요.
+    //    · 방 안에서 연결이 1초 넘게 끊기면 화면 위쪽에 안내 줄을 띄우고, 다시 이어지면 각 방이 '내 자리 되찾기'를 시도해요.
+    const NET = { up: true, ref: null, bar: null, tick: 0, okTm: 0 };
+    const netActive = () => !!((SV.on && SV.ref) || (inLandGrabRoom && landRoomRef));
+    function netBarShow(txt, bad) {
+        if (!NET.bar) {
+            const b = document.createElement('div'); b.id = 'netBar'; b.setAttribute('role', 'status');
+            b.style.cssText = 'position:fixed;left:50%;top:8px;transform:translateX(-50%);z-index:99999;padding:8px 16px;border-radius:999px;font-weight:800;font-size:14px;color:#fff;box-shadow:0 4px 14px rgba(0,0,0,.25);max-width:92vw;text-align:center;pointer-events:none;';
+            document.body.appendChild(b); NET.bar = b;
+        }
+        NET.bar.style.background = bad ? '#b3261e' : '#1b7f4b'; NET.bar.textContent = txt; NET.bar.style.display = 'block';
+    }
+    const netBarHide = () => { if (NET.bar) NET.bar.style.display = 'none'; };
+    function netTick() { if (NET.up) return; if (netActive()) netBarShow('📶 연결이 끊겼어요 · 다시 연결하는 중…', true); else netBarHide(); }
+    function netOnValue(snap) {
+        const up = snap.val() === true;
+        if (up === NET.up) return;
+        NET.up = up; clearInterval(NET.tick); clearTimeout(NET.okTm);
+        if (!up) NET.tick = setInterval(netTick, 1000);
+        else if (NET.bar && NET.bar.style.display !== 'none') { netBarShow('✅ 다시 연결됐어요', false); NET.okTm = setTimeout(netBarHide, 2200); }
+        [svNetEvt, landNetEvt].forEach(fn => { try { fn(up); } catch (e) { console.error('연결 상태 처리 오류', e); } });
+    }
+    function netStart() {   // 방에 들어갈 때마다 불러도 구독은 한 번만 해요
+        if (NET.ref || !isFirebaseActive) return;
+        try { NET.ref = getDB().ref('.info/connected'); NET.ref.on('value', netOnValue); } catch (e) { NET.ref = null; console.warn('연결 상태 감시를 시작하지 못했어요', e); }
+    }
 
     let firebasePermissionWarned = false;
     function reportFirebaseError(err, action = '서버 작업') {
@@ -2036,12 +2393,103 @@ input, select, button { color-scheme:dark; }
         }
     }
 
-    const rawDataString = "낭송|시나 문장 등을 소리 내어 읽음.^가치관|사람이 어떤 것의 가치에 대해 가지는 태도나 판단의 기준.^서평|책의 내용이나 특징을 소개하고 평가한 글.^설득력|남이 자신의 생각이나 주장을 따르도록 납득시키는 힘.^분석|더 잘 이해하거나 다루기 위해 어떤 현상이나 사물을 여러 요소나 성질로 나눔.^주어|문장에서 동작이나 상태, 성질의 주체가 되는 말.^목적어|문장에서 서술어가 나타내는 동작이나 행위의 대상이 되는 말.^호응|문장에서 앞의 말과 뒤의 말이 서로 어울려 자연스럽게 짝을 이룸.^첨부|서류나 편지 등에 다른 서류나 물품을 덧붙임.^표준어|한 나라에서 공용어로 쓰기 위해 규범으로 정한 말.^방언|어느 한 지역이나 사회 계층에서 특유하게 쓰는 말.^반환점|목적지까지 갔다가 되돌아오는 지점.^허위|진실이 아닌 것을 진실인 것처럼 꾸민 것.^출토|땅속에 묻혀 있던 물건이 밖으로 나옴. 또는 그것을 파냄.^발굴|땅속에 묻힌 유적이나 유물 따위를 찾아내기 위해 파냄.^후기|어떤 일이나 행사, 책 등을 끝낸 뒤에 남긴 소감이나 기록.^조작|어떤 일을 사실과 다르게 거짓으로 꾸며 만듦.^과장|사실보다 지나치게 크거나 대단하게 부풀리어 나타냄.^취재|신문이나 방송 등에서 기사나 작품의 재료를 조사하여 얻음.^무단|사전에 허락이나 약속이 없음.^소홀|중요하게 생각하지 않아 주의나 정성이 부족함.^중점적|어떤 일이나 사물에서 가장 중심이 되고 중요한 것.^극단적|가장 치우쳐 있거나 한쪽 끝에 닿아 지나친 것.^조정|어떤 기준이나 실정에 맞게 바로잡거나 정돈함.^제한|일정한 한도나 범위를 정하거나 그 한도를 넘지 못하게 막음.^차단|통하지 못하게 막거나 가로막음.^합의점|서로 다른 의견을 가진 사람들이 의논하여 일치시킨 지점.^제시|어떤 생각이나 의견, 조건 등을 말이나 글 따위로 드러내어 보임.^절차|일을 차례대로 진행해 나가는 데 거쳐야 하는 일정한 순서나 과정.^협의|여러 사람이 모여서 서로 의논함.^순화어|외래어나 비속어, 틀린 말을 알기 쉽고 바른 우리말로 다듬은 말.^고유어|본디부터 쓰던 우리말이나 그에 기초하여 새로 만들어진 말.^추론|이미 알고 있는 사실이나 판단을 바탕으로 다른 판단을 이끌어 냄.^함축|말이나 글이 겉으로 드러난 것 이상의 깊은 뜻을 속에 담고 있음.^선출|여럿 가운데서 투표나 합의 등을 통하여 대표나 임원을 뽑음.^정밀|아주 정교하고 세밀함.^성능|기계나 기구 따위가 지니고 있는 고유한 기능과 성질.^생계|살아가는 데 필요한 돈이나 물건을 마련하여 삶을 유지하는 일.^문맹률|글을 읽고 쓸 줄 모르는 사람의 비율.^연행|죄를 지은 사람이나 피의자를 특정 장소로 데리고 감.^피난|재난이나 위험을 피하여 안전한 곳으로 옮겨 감.^주목|관심을 가지고 주의 깊게 바라봄.^훼방|남의 일을 방해하여 잘되지 못하게 만듦.^극본|연극을 공연하기 위해 대사와 지문 따위로 쓴 글.^해설|극본 등에서 사건의 배경이나 상황, 인물 등을 설명하는 부분.^대사|연극이나 영화 등에서 등장인물이 하는 말.^지문|극본에서 인물의 동작, 표정, 심리나 무대 상태 등을 지시하는 글.^낭독|글이나 책 따위를 소리 내어 읽음.^돌진|앞을 향하여 세차게 곧장 내달림.^유명세|세상에 널리 알려짐으로써 겪게 되는 불편이나 곤욕.^선사 시대|문자로 된 역사 기록이 남아 있지 않은 인류의 초기 시대.^구석기 시대|돌을 깨뜨려 만든 뗀석기를 사용하던 인류 역사의 가장 오래된 시대.^신석기 시대|돌을 갈아서 만든 간석기와 토기를 사용하며 농경을 시작한 시대.^세력|남을 복종시키거나 지배할 수 있는 힘이나 기세.^건국|나라를 새로 세움.^삼국유사|고려 후기 승려 일연이 삼국의 역사와 설화, 불교사 등을 기록한 책.^멸망|나라나 가문 등이 망하여 없어짐.^교류|문화나 물자, 사상 따위를 서로 주고받음.^연맹|둘 이상의 국가나 단체가 공통된 목적을 이루기 위해 맺은 조직.^함락|적의 성이나 진지를 공격하여 무너뜨리고 차지함.^불교|석가모니를 교조로 삼고 자비와 해탈을 가르치는 종교.^고분|옛날의 무덤 가운데 역사적이나 고고학적으로 가치가 높은 것.^벽화|벽이나 천장, 암벽 따위에 그린 그림.^동맹|국가나 단체 사이에 서로 돕기로 약속함. 또는 그런 관계.^침입|남의 영토나 영역에 강제로 쳐들어가거나 불법으로 들어감.^유민|나라가 망하거나 변란으로 삶의 터전을 잃고 떠돌아다니는 백성.^계승|조상의 전통, 문화, 사업, 권리 등을 이어받음.^봉기|벌 떼처럼 떼를 지어 세차게 일어남.^호족|지방에서 많은 토지와 사병을 거느리고 큰 세력을 형성한 세력가.^장려|좋은 일이나 행동을 권장하고 북돋아 줌.^외교|국가 간에 평화적이고 이익을 도모하기 위해 맺는 교섭 및 관계 활동.^담판|서로 맞선 문제의 결말을 짓기 위해 직접 만나서 의논함.^목판 인쇄|나무판에 글자나 그림을 새겨 먹을 칠한 뒤 종이를 덮어 찍어 내는 인쇄술.^금속활자|금속을 부어 만든 낱개의 인쇄용 활자.^신진 사대부|고려 말기에 성리학을 바탕으로 개혁을 추진하며 조선을 건국한 새로운 지배층.^강화|세력이나 힘을 더 강하고 튼튼하게 만듦.^창제|전에 없던 것을 처음으로 만들거나 제정함.^반포|세상에 널리 펴서 알림.^의병|나라가 외적의 침략을 받았을 때 스스로 일어난 민병.^세도 정치|조선 후기 특정 외척 가문이 권력을 독점하여 나라를 다스리던 정치 형태.^통상|나라 사이에 물건을 사고팔고 무역을 함.^조약|국가 사이에 문서로 맺는 법적 구속력을 가진 합의.^개항|외국 선박이 드나들며 무역할 수 있도록 항구를 개방함.^개화|새로운 사상이나 문물을 받아들여 근대적인 사회로 발전함.^개혁|제도나 기구 등을 새롭게 고침.^일제|일본 제국주의를 줄여 이르는 말.^늑약|강제로 억압하여 맺게 한 조약.^체결|계약이나 조약 따위를 공식적으로 맺음.^탄압|권력이나 힘으로 억누르고 핍박함.^항일|일본의 침략이나 지배에 맞서 싸움.^계몽|지식수준이 낮거나 미개한 사람을 깨우쳐 바른 지식을 갖게 함.^편찬|여러 가지 자료를 모아서 체계적으로 책을 만듦.^자주독립|남의 간섭이나 지배를 받지 않고 스스로 나라를 다스리고 지킴.^의거|정의를 위하여 목숨을 바쳐 행한 의로운 일.^폐간|정기 간행물의 발행을 그만둠.^광복|빼앗긴 나라와 주권을 도로 찾음.^제헌 국회|대한민국 헌법을 만들기 위하여 1948년에 구성된 최초의 국회.^피란|전쟁이나 난리를 피하여 안전한 곳으로 옮겨 감.^이산가족|전쟁이나 분단 등으로 흩어져 서로 만나지 못하는 가족.^정전|전쟁 중인 양측이 합의하여 전투를 일시적으로 멈춤.^수|셀 수 있는 사물의 양이나 크기를 나타내는 수학적 개념.^숫자|수를 적는 데 쓰는 글자나 기호.^수직선|수를 대응시켜 일정한 간격의 눈금으로 나타낸 직선.^약|정확하지는 않으나 대략 얼마쯤 됨을 나타내는 말.^이상|기준이 되는 수와 같거나 그보다 큰 범위.^이하|기준이 되는 수와 같거나 그보다 작은 범위.^초과|기준이 되는 수보다 큰 범위(기준 수는 포함하지 않음).^미만|기준이 되는 수보다 작은 범위(기준 수는 포함하지 않음).^범위|수나 공간, 시간 등의 일정한 구역이나 한계.^최소|가장 작거나 적은 것.^최대|가장 크거나 많은 것.^포함|어떤 무리나 범위 안에 함께 들어 있음.^비교|둘 이상의 대상을 견주어 공통점, 차이점, 우열 따위를 살핌.^계산|수를 셈하거나 식을 풀어 값을 구함.^방법|어떤 목적을 이루기 위해 취하는 수단이나 조치.^성질|어떤 사물이나 현상이 본래부터 지니고 있는 특성.^합동|모양과 크기가 완전히 같아서 포개었을 때 꼭 겹쳐지는 두 도형의 관계.^대칭|어떤 선이나 점을 중심으로 마주 보는 양쪽이 똑같은 모양을 이룸.^선대칭도형|한 직선을 접는 선으로 하여 접었을 때 완전히 겹쳐지는 평면도형.^점대칭도형|한 점을 중심으로 180도 돌렸을 때 처음 도형과 완전히 겹쳐지는 도형.^대응각|합동이거나 대칭인 도형에서 서로 꼭 겹쳐지는 각.^대응점|합동이거나 대칭인 도형에서 서로 꼭 겹쳐지는 점.^대응변|합동이거나 대칭인 도형에서 서로 꼭 겹쳐지는 변.^대칭축|선대칭도형에서 접는 선이 되는 직선.^완성|일을 다 끝마쳐 완전하게 이룸.^중심|사물이나 공간의 한가운데가 되는 점이나 부분.^거리|두 점이나 위치 사이에 떨어진 길이.^직선|두 점을 곧게 잇고 양쪽으로 끝없이 늘인 곧은 선.^선분|두 점을 곧게 이은 선.^방향|어떤 곳을 향한 쪽이나 길.^소수|0보다 크고 1보다 작은 십진법의 수, 또는 1보다 큰 자연수 중 1과 자기 자신만을 약수로 가지는 수.^소수점|소수에서 정수 부분과 소수 부분을 구분하기 위해 찍는 점.^위치|어떤 사물이 자리 잡고 있는 장소나 처지.^규칙|일정한 법칙이나 순서, 지켜야 할 약속.^직육면체|직사각형 6개로 둘러싸인 입체도형.^정육면체|모양이 같고 크기가 같은 정사각형 6개로 둘러싸인 입체도형.^전개도|입체도형의 모서리를 잘라서 평면에 펼쳐 놓은 그림.^점선|점을 잇달아 찍어 나타낸 선.^실선|끊어지지 않고 곧게 이어진 선.^면|도형에서 선으로 둘러싸인 평평하거나 굽은 표면.^점|위치는 있으나 크기나 길이가 없는 수학의 기본 요소.^가능성|어떤 일이 일어날 수 있는 정도.^평균|여러 값의 합을 그 개수로 나눈 대푯값.^조사|사물의 실태나 사실을 자세히 살펴봄.^기록|후에 볼 수 있도록 글이나 표 등으로 적어 둠.^기호|어떤 뜻이나 대상을 나타내기 위해 정한 부호나 문자.^대표|전체를 대표할 만한 대상이나 값.^예상|앞으로 닥쳐올 일이나 결과를 미리 짐작함.^표현|생각이나 느낌, 수량 등을 겉으로 나타냄.^횟수|반복하여 일어나는 일의 차례나 셈의 수.^혼합물|두 가지 이상의 물질이 각각의 성질을 잃지 않고 섞여 있는 물질.^증발|액체 표면에서 액체가 기체로 변하여 날아가는 현상.^분리|섞여 있는 것들을 갈라 떼어 냄.^고체|담는 그릇에 관계없이 모양과 부피가 일정한 물질의 상태.^액체|부피는 일정하지만 담는 그릇에 따라 모양이 변하는 물질의 상태.^폐기물|사람의 생활이나 사업 활동에 필요 없게 되어 버리는 쓰레기 따위의 물질.^변색|물건이나 생물의 색깔이 원래와 다르게 변함.^적외선|가시광선의 붉은색 바깥쪽에 위치하며 열작용을 하는 전자기파.^온도|물체의 차갑고 따뜻한 정도를 숫자로 나타낸 물리량.^온도계|온도를 측정하는 기구.^열|온도가 높은 물질에서 온도가 낮은 물질로 이동하는 에너지.^가열|물질에 열을 가하여 온도를 높임.^이동|한 곳에서 다른 곳으로 옮겨 감.^전도|고체에서 열이 직접 닿아 있는 입자들의 진동을 통해 전달되는 현상.^대류|액체나 기체에서 따뜻해진 부분이 위로 올라가고 찬 부분이 내려오며 열이 전달되는 현상.^복사|물질의 매개 없이 열이 전자기파 형태로 직접 전달되는 현상.^단열|열이 전도, 대류, 복사 등을 통해 이동하는 것을 막음.^측정|기구나 장치를 이용하여 길이, 무게, 온도 등의 양을 잼.^접촉|서로 맞닿음.^체온|사람이나 동물의 몸의 온도.^기상|대기 중에서 일어나는 비, 바람, 구름, 눈 등의 날씨 현상.^규칙성|일정한 질서나 규칙을 따르는 성질.^기온|공기의 온도.^습도|공기 속에 수증기가 포함되어 있는 정도.^강수량|일정한 기간 동안 내린 비, 눈, 우박 등의 총량.^응결|수증기가 차가운 물체에 닿아 냉각되어 물방울로 변하는 현상.^수증기|물이 기체 상태로 변한 것.^지표면|지구의 표면인 땅바닥.^기압|공기의 무게로 인해 생기는 대기의 압력.^고기압|주변보다 기압이 높은 공기 덩어리로, 주로 맑은 날씨를 나타냄.^저기압|주변보다 기압이 낮은 공기 덩어리로, 주로 흐리거나 비가 옴.^해풍|낮에 바다에서 육지 쪽으로 부는 바람.^육풍|밤에 육지에서 바다 쪽으로 부는 바람.^분포|어떤 범위나 지역에 흩어져 퍼져 있음.^자원|인간 생활과 생산 활동에 이용되는 천연 물질이나 에너지.^유한|수량이나 범위, 기간 등에 끝이나 한도가 있음.^한계|더 이상 벗어날 수 없는 궁극의 범위나 경계.^재생|한 번 쓰인 물질이나 에너지를 가공하여 다시 쓸 수 있게 함.^지속|어떤 상태나 일이 끊이지 않고 계속 이어짐.^가능|할 수 있거나 이루어질 수 있음.^효율|들인 노력이나 에너지에 비하여 얻어지는 성과나 결과의 비율.^배출|안에서 생긴 물질이나 가스 등을 밖으로 밀어내어 내보냄.^재사용|물건의 형태를 바꾸지 않고 원래의 용도대로 다시 사용하는 일.^재활용|폐기물을 가공하여 새로운 원료나 제품으로 다시 만드는 일.^일회용|한 번만 쓰고 버리도록 만들어진 물건.^다회용|여러 번 반복하여 사용할 수 있도록 만들어진 물건.^이중창|창문을 이중으로 달아 방음과 단열 효과를 높인 창.^단열재|열의 이동을 차단하기 위하여 사용하는 건축 재료.^훼손|체면이나 명예, 사물 등을 헐거나 깨뜨려 상하게 함.^난방|방이나 건물 안을 따뜻하게 덥히는 일.";
+    // 📦 낱말 데이터 보관 ─ '낱말|뜻^낱말|뜻^…' 글을 바이트마다 가짜 난수열과 섞어(XOR) 한 줄 글자로 만든 것이에요.
+    //    '페이지 소스 보기'·Ctrl+F 로 낱말이 그대로 보이지 않게 하는 용도예요(강한 암호는 아니라서, 개발자 도구를 쓰는 사람은 여전히 볼 수 있어요).
+    //    낱말을 고치거나 늘리려면 관리자 화면의 [📦 낱말 변환]을 쓰세요(낱말|뜻 을 한 줄에 하나씩 적으면 아래 WORD_PACK 줄을 만들어 줘요).
+    function wordKeyStream(n) {
+        let a = 0x5eed1234 | 0; const out = new Uint8Array(n);
+        for (let i = 0; i < n; i++) {
+            a = (a + 0x6D2B79F5) | 0;
+            let t = Math.imul(a ^ (a >>> 15), 1 | a);
+            t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+            out[i] = ((t ^ (t >>> 14)) >>> 0) & 255;
+        }
+        return out;
+    }
+    function packWords(str) {
+        const u = new TextEncoder().encode(String(str)), k = wordKeyStream(u.length + 1), o = new Uint8Array(u.length + 1);
+        let chk = 0;
+        for (let i = 0; i < u.length; i++) { chk = (chk + u[i]) & 255; o[i + 1] = u[i] ^ k[i + 1]; }
+        o[0] = chk ^ k[0];
+        let s = ''; for (let i = 0; i < o.length; i += 3000) s += String.fromCharCode.apply(null, o.subarray(i, i + 3000));
+        return btoa(s);
+    }
+    function unpackWords(b64) {
+        const bin = atob(String(b64).replace(/\s+/g, '')), o = new Uint8Array(bin.length);
+        for (let i = 0; i < bin.length; i++) o[i] = bin.charCodeAt(i);
+        if (o.length < 2) throw new Error('낱말 데이터가 비어 있어요');
+        const k = wordKeyStream(o.length), u = new Uint8Array(o.length - 1); let chk = 0;
+        for (let i = 1; i < o.length; i++) { u[i - 1] = o[i] ^ k[i]; chk = (chk + u[i - 1]) & 255; }
+        if ((o[0] ^ k[0]) !== chk) throw new Error('낱말 데이터가 올바르지 않아요');
+        return new TextDecoder('utf-8', { fatal: true }).decode(u);
+    }
+    const WORD_PACK = "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";
+    const rawDataString = (() => {
+        try { return unpackWords(WORD_PACK); }
+        catch (e) { console.error('낱말 데이터 오류', e); setTimeout(() => alert('낱말 데이터를 읽지 못했어요. [📦 낱말 변환]으로 만든 줄이 그대로 들어갔는지 확인해 주세요.'), 400); return '오류|낱말 데이터를 읽지 못했어요.'; }
+    })();
 
-    const rawWords = rawDataString.split('^').map(item => {
+    const WORD_ITEMS = rawDataString.split('^').map(s => s.trim()).filter(Boolean);   // 낱말 줄('낱말|뜻') · 헷갈림 묶음('=…') · 뜻이 같은 낱말('~…')
+    const rawWords = WORD_ITEMS.filter(item => item[0] !== '=' && item[0] !== '~').map(item => {
         const parts = item.split('|');
-        return { w: parts[0].trim(), m: parts[1].trim() };
+        return { w: parts[0].trim(), m: (parts[1] || '').trim() };
     });
+    const groupOf = ch => WORD_ITEMS.filter(item => item[0] === ch).map(item => item.slice(1).split(',').map(s => s.trim()).filter(Boolean)).filter(g => g.length >= 2);
+    const WORD_GROUPS = groupOf('='), WORD_SAMES = groupOf('~');
+
+    // 🔎 [v3 낱말 데이터] 문제를 공정하게 내기 위한 도우미
+    //  · mq : 뜻풀이 안에 정답 낱말(또는 그 일부 2글자 이상)이 그대로 들어 있으면 ○ 로 가린 '문제용 뜻풀이'
+    //         (낱말 공부 화면·오답 복습에서는 원래 뜻 m 을 그대로 보여 줘요)
+    //  · WORD_CLASH : 한 문제의 보기로 같이 나오면 헷갈리는 낱말 쌍
+    //         ① 한쪽이 다른 쪽 안에 들어 있음  ② 서로의 뜻풀이에 상대 낱말이 나옴  ③ 뜻풀이가 거의 같음  ④ 사람이 정한 묶음(낱말 데이터의 '=' 줄)
+    //  · WORD_SAME  : 뜻이 같은 낱말(낱말 데이터의 '~' 줄) ─ 같은 보기에 안 나오고, 직접 고르거나 입력하는 게임(땅따먹기·스피드런)에서는 둘 다 정답으로 인정해요
+    function maskMeaning(x) {
+        const h = String(x.w || '').replace(/\s+/g, ''), m = String(x.m || '');
+        if (h.length < 2) return m;                       // 한 글자 낱말은 가리면 뜻풀이가 망가져서 그대로 둬요
+        const flat = m.replace(/\s+/g, '');
+        const pieces = [];                                // 낱말 전체 + 낱말 속 2글자 이상 조각 중, 뜻풀이에 실제로 나오는 것(긴 것부터)
+        for (let L = h.length; L >= 2; L--) for (let i = 0; i + L <= h.length; i++) { const p = h.slice(i, i + L); if (flat.includes(p) && !pieces.includes(p)) pieces.push(p); }
+        let out = m;
+        pieces.forEach(p => {
+            const re = new RegExp(p.split('').map(c => c.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')).join('\\s*'), 'g');
+            out = out.replace(re, '○'.repeat(p.length));
+        });
+        return out;
+    }
+    rawWords.forEach(x => { x.mq = maskMeaning(x); });
+
+    const WORD_CLASH = (() => {
+        const clash = new Map();
+        const add = (a, b) => { if (a === b) return; if (!clash.has(a)) clash.set(a, new Set()); if (!clash.has(b)) clash.set(b, new Set()); clash.get(a).add(b); clash.get(b).add(a); };
+        const flat = s => String(s).replace(/\s+/g, '');
+        const grams = s => { const t = flat(s).replace(/[.,]/g, ''), g = new Set(); for (let i = 0; i < t.length - 1; i++) g.add(t.slice(i, i + 2)); return g; };
+        const G = rawWords.map(x => grams(x.m));
+        for (let i = 0; i < rawWords.length; i++) for (let j = i + 1; j < rawWords.length; j++) {
+            const a = rawWords[i], b = rawWords[j], fa = flat(a.w), fb = flat(b.w);
+            if (fa.length >= 2 && fb.length >= 2 && (fa.includes(fb) || fb.includes(fa))) { add(a.w, b.w); continue; }
+            if (fa.length >= 2 && fb.length >= 2 && flat(a.m).includes(fb) && flat(b.m).includes(fa)) { add(a.w, b.w); continue; }
+            let inter = 0; G[i].forEach(g => { if (G[j].has(g)) inter++; });
+            const uni = G[i].size + G[j].size - inter;
+            if (uni && inter / uni >= 0.45) add(a.w, b.w);
+        }
+        WORD_GROUPS.concat(WORD_SAMES).forEach(g => { for (let i = 0; i < g.length; i++) for (let j = i + 1; j < g.length; j++) add(g[i], g[j]); });
+        return clash;
+    })();
+    function wordsClash(a, b) { return a.w === b.w || !!(WORD_CLASH.get(a.w) && WORD_CLASH.get(a.w).has(b.w)); }
+    const WORD_SAME = (() => {
+        const same = new Map();
+        WORD_SAMES.forEach(g => g.map(normalizeForCompare).forEach(a => g.map(normalizeForCompare).forEach(b => { if (a !== b) { if (!same.has(a)) same.set(a, new Set()); same.get(a).add(b); } })));
+        return same;
+    })();
+    function sameAnswer(a, b) { const x = normalizeForCompare(a), y = normalizeForCompare(b); return x === y || !!(WORD_SAME.get(x) && WORD_SAME.get(x).has(y)); }
+    function pickWrongs(target, pool, n) {   // 오답 보기 n개: 정답과 헷갈리는 낱말 · 정답의 뜻풀이에 이미 나온 낱말은 빼고 골라요
+        const shown = String(target.mq || target.m).replace(/\s+/g, '');
+        const fl = s => String(s).replace(/\s+/g, '');
+        const ok = pool.filter(x => x.w !== target.w && !wordsClash(target, x) && !(fl(x.w).length >= 2 && shown.includes(fl(x.w))));
+        let pick = shuffleArray(ok).slice(0, n);
+        if (pick.length < n) pick = pick.concat(shuffleArray(pool.filter(x => x.w !== target.w && !pick.includes(x))).slice(0, n - pick.length));   // (낱말이 아주 적을 때만) 모자라면 채워요
+        return pick;
+    }
 
     const WORDS_PER_DAY = 25;
     const TOTAL_DAYS = Math.ceil(rawWords.length / WORDS_PER_DAY);
@@ -2060,6 +2508,120 @@ input, select, button { color-scheme:dark; }
 
     function escapeHTML(str) {
         return String(str === undefined || str === null ? '' : str).replace(/[&<>"']/g, ch => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));
+    }
+
+    // ════════════════════════════════════════════════════════════════════
+    // 🔒 [v3 보안] 화면에 글자를 넣기 전에 값을 안전하게 만드는 도우미들
+    //  · 서버(Firebase)에서 온 값은 "누가 어떤 글자를 넣었는지" 믿을 수 없어요. 그래서
+    //    ① 이름·방 이름 같은 글자는 위험한 기호( < > & " ' ` \ 와 눈에 안 보이는 제어 문자 )를 빼고 길이를 제한하고,
+    //    ② 점수·생명 같은 숫자는 숫자로 바꾸고, ③ 색깔은 정해진 모양(#rrggbb · hsl(...))만 받아요.
+    //  · 거기에 더해 화면에 넣는 곳(innerHTML)에서도 escapeHTML 로 한 번 더 막아요(이중 방어).
+    //  · 낱말·뜻풀이에는 위 기호가 하나도 없어서, 정상 데이터는 하나도 바뀌지 않아요.
+    // ════════════════════════════════════════════════════════════════════
+    const CLEAN_BAD = /[<>&"'`\\\x00-\x1f\x7f-\x9f\u200b-\u200f\u2028-\u202e\u2060-\u2069\ufeff]/g;
+    function cleanText(v, max) {
+        if (typeof v === 'number' && isFinite(v)) v = String(v);
+        if (typeof v !== 'string') return '';
+        let s = v.replace(CLEAN_BAD, '').trim();
+        if (max && s.length > max) s = Array.from(s).slice(0, max).join('');
+        return s;
+    }
+    function nz(v, hi, lo) {   // 숫자만 허용(아니면 0). hi/lo 는 상·하한
+        let n = typeof v === 'number' ? v : ((typeof v === 'string' && /^-?\d{1,15}(\.\d{1,6})?$/.test(v)) ? parseFloat(v) : 0);
+        if (!isFinite(n)) n = 0;
+        const L = lo === undefined ? 0 : lo, H = hi === undefined ? 1e15 : hi;
+        return n < L ? L : (n > H ? H : n);
+    }
+    const SAFE_COLOR = /^(#[0-9a-fA-F]{3}|#[0-9a-fA-F]{6}|hsl\(\d{1,3}(\.\d+)?, ?\d{1,3}(\.\d+)?%, ?\d{1,3}(\.\d+)?%\))$/;
+    function safeColor(c, fb) { return (typeof c === 'string' && SAFE_COLOR.test(c)) ? c : (fb || '#64748b'); }
+
+    function cleanProfile(p) {   // 저장소·서버에서 읽은 로그인 정보 정리 (비정상이면 null → 로그인 화면)
+        if (!p || typeof p !== 'object') return null;
+        const q = { school: cleanText(p.school, 30) || '군산초', gradeClass: cleanText(p.gradeClass, 12), studentNum: cleanText(p.studentNum, 8), studentName: cleanText(p.studentName, 20) };
+        return (q.gradeClass && q.studentNum && q.studentName) ? q : null;
+    }
+    function scrubRec(v, d) {   // 기록 한 덩어리(점수·퀴즈 저장분 등)를 안전한 값으로
+        if (v === null || v === undefined) return v;
+        const t = typeof v;
+        if (t === 'number') return isFinite(v) ? v : 0;
+        if (t === 'boolean') return v;
+        if (t === 'string') return cleanText(v, 400);
+        if ((d || 0) > 6) return null;
+        if (Array.isArray(v)) return v.slice(0, 200).map(x => scrubRec(x, (d || 0) + 1));
+        if (t === 'object') {
+            const o = {};
+            Object.keys(v).slice(0, 400).forEach(k => { if (k === '__proto__' || k === 'constructor' || k === 'prototype') return; o[k] = scrubRec(v[k], (d || 0) + 1); });
+            return o;
+        }
+        return null;
+    }
+    function recMap(v) {   // 일/탄별 기록 묶음 → 안전한 일반 객체 (배열로 돌아오거나 null 이 섞여도 괜찮게)
+        const o = {};
+        if (!v || typeof v !== 'object') return o;
+        Object.keys(v).slice(0, 500).forEach(k => {
+            if (k === '__proto__' || k === 'constructor' || k === 'prototype') return;
+            const x = v[k]; if (x === null || x === undefined) return;
+            o[k] = scrubRec(x, 1);
+        });
+        return o;
+    }
+    function applyServerRecords(data) {   // 서버에서 읽은 내 기록(students_vocab/내키)을 정리해서 적용
+        data = (data && typeof data === 'object') ? data : {};
+        dailyRecords = recMap(data.daily); masterRecords = recMap(data.master); rainRecords = recMap(data.rain);
+        landRecords = recMap(data.land); survRecords = recMap(data.surv);
+    }
+    const validQuizQueue = q => Array.isArray(q) && q.length > 0 && q.length <= 100 && q.every(x => x && Array.isArray(x.options) && x.options.length >= 2 && x.options.length <= 6
+        && x.options.every(o => o && typeof o.text === 'string') && x.targetObj && typeof x.targetObj.w === 'string' && typeof x.targetObj.m === 'string');
+
+    // 방(어휘왕·땅따먹기) 데이터 청소 ─ 화면에 그리기 전에 한 번 거쳐요
+    function cleanPlayers(pl) {
+        const out = {};
+        if (!pl || typeof pl !== 'object') return out;
+        Object.keys(pl).slice(0, 60).forEach(k => {
+            const p = pl[k];
+            if (!p || typeof p !== 'object') return;
+            const o = {};
+            Object.keys(p).slice(0, 30).forEach(f => {
+                const v = p[f];
+                if (f === 'name') o.name = cleanText(v, 20);
+                else if (f === 'color') o.color = safeColor(v);
+                else if (f === 'team') o.team = (v === 'A' || v === 'B') ? v : 'none';
+                else if (f === 'h') o.h = nz(v, 20);
+                else if (f === 'penaltyUntil') o.penaltyUntil = nz(v, 1e14);
+                else if (typeof v === 'number') o[f] = nz(v, 1e7);
+                else if (typeof v === 'boolean') o[f] = v;
+                else if (typeof v === 'string') o[f] = cleanText(v, 60);
+                // 그 밖의 값(객체·배열)은 이 화면들에서 쓰지 않아서 버려요
+            });
+            out[k] = o;
+        });
+        return out;
+    }
+    function cleanBoard(b) {
+        const out = [];
+        if (!b || typeof b !== 'object') return out;
+        for (let i = 0; i < 100; i++) {
+            const c = b[i];
+            if (c && typeof c === 'object') out[i] = { w: cleanText(c.w, 40), m: cleanText(c.m, 300), owner: typeof c.owner === 'string' ? c.owner.slice(0, 160) : '' };
+        }
+        return out;
+    }
+    function svClean(d) {
+        if (!d || typeof d !== 'object') return d;
+        const o = Object.assign({}, d);
+        o.players = cleanPlayers(d.players);
+        if (typeof d.host !== 'string') o.host = '';
+        return o;
+    }
+    function landClean(d) {
+        if (!d || typeof d !== 'object') return d;
+        const o = Object.assign({}, d);
+        o.players = cleanPlayers(d.players);
+        if (typeof d.host !== 'string') o.host = '';
+        if (typeof d.status !== 'string') o.status = '';
+        if (typeof d.mode !== 'string') o.mode = '';
+        if (d.board !== undefined && d.board !== null) o.board = cleanBoard(d.board);
+        return o;
     }
 
     function shuffleArray(arr) {
@@ -2085,12 +2647,12 @@ input, select, button { color-scheme:dark; }
         catch(e) { try { localStorage.removeItem(key); } catch(e2) {} return fallback; }
     }
     
-    let userProfile = safeParseJSON('userProfile', null);
-    let dailyRecords = safeParseJSON('dailyRecords', {});
-    let masterRecords = safeParseJSON('masterRecords', {});
-    let rainRecords = safeParseJSON('rainRecords', {});
-    let landRecords = safeParseJSON('landRecords', {}); 
-    let survRecords = safeParseJSON('survRecords', {});
+    let userProfile = cleanProfile(safeParseJSON('userProfile', null));
+    let dailyRecords = recMap(safeParseJSON('dailyRecords', {}));
+    let masterRecords = recMap(safeParseJSON('masterRecords', {}));
+    let rainRecords = recMap(safeParseJSON('rainRecords', {}));
+    let landRecords = recMap(safeParseJSON('landRecords', {})); 
+    let survRecords = recMap(safeParseJSON('survRecords', {}));
 
     let currentDay = 1, studyQueue = [], quizQueue = [], missedWords = [];
     let currentStudyIndex = 0, currentQuizIdx = 0, score = 0, isReviewMode = false, currentSelectedOption = null;
@@ -2099,6 +2661,7 @@ input, select, button { color-scheme:dark; }
     let rainHP = 10, rainTimeMs = 0, rainDropIdCounter = 0, rainTimerReq = null, lastRainTime = 0, rainSpawnTimer = 0;
     
     let inLandGrabRoom = false, currentLandStage = 1, currentLandRoomCode = "", landRoomRef = null;
+    let landMine = null, landRs = 0;   // 내 마지막 기록 / 자리 되찾는 중 표시 (연결 끊김 복구용)
     let myLandColor = '#fff', myLandPenaltyUntil = 0, currentSelectedLandIndex = -1, landPenaltyInterval = null, currentLandBoardData = [];
 
     let landRankMode = 'solo'; 
@@ -2114,8 +2677,7 @@ input, select, button { color-scheme:dark; }
                 getDB().ref('students_vocab/' + getUserKey()).once('value').then(snapshot => {
                     if(snapshot.exists()) {
                         let data = snapshot.val();
-                        dailyRecords = data.daily || {}; masterRecords = data.master || {};
-                        rainRecords = data.rain || {}; landRecords = data.land || {}; survRecords = data.surv || {};
+                        applyServerRecords(data);
                         localStorage.setItem('dailyRecords', JSON.stringify(dailyRecords));
                         localStorage.setItem('masterRecords', JSON.stringify(masterRecords));
                         localStorage.setItem('rainRecords', JSON.stringify(rainRecords));
@@ -2136,10 +2698,10 @@ input, select, button { color-scheme:dark; }
     }
 
     function login() {
-        let school = document.getElementById('inputSchool').value.trim() || '군산초';
-        let gradeClass = document.getElementById('inputClass').value.trim();
-        let studentNum = document.getElementById('inputNum').value.trim();
-        let studentName = document.getElementById('inputName').value.trim();
+        let school = cleanText(document.getElementById('inputSchool').value, 30) || '군산초';
+        let gradeClass = cleanText(document.getElementById('inputClass').value, 12);
+        let studentNum = cleanText(document.getElementById('inputNum').value, 8);
+        let studentName = cleanText(document.getElementById('inputName').value, 20);
 
         if(!gradeClass || !studentNum || !studentName) { alert("정보를 모두 입력해주세요."); return; }
         userProfile = { school, gradeClass, studentNum, studentName };
@@ -2149,8 +2711,7 @@ input, select, button { color-scheme:dark; }
             getDB().ref('students_vocab/' + getUserKey()).once('value').then(snapshot => {
                 if(snapshot.exists()) {
                     let data = snapshot.val();
-                    dailyRecords = data.daily || {}; masterRecords = data.master || {};
-                    rainRecords = data.rain || {}; landRecords = data.land || {}; survRecords = data.surv || {};
+                    applyServerRecords(data);
                 } else {
                     dailyRecords = {}; masterRecords = {}; rainRecords = {}; landRecords = {}; survRecords = {};
                 }
@@ -2164,8 +2725,20 @@ input, select, button { color-scheme:dark; }
         } else { finalizeLogin(); }
     }
 
+    // 로그아웃 전에 들어가 있던 방/연습을 정리합니다. (정리하지 않으면 방에 이름 없는 '유령 플레이어'가 남아 방장이 시작을 못 눌러요)
+    // 반드시 userProfile 을 지우기 전에 호출해야 해요(방에서 내 키를 지우려면 getUserKey() 가 필요).
+    function leaveRoomsBeforeLogout() {
+        try {
+            if (SV.on || SV.ref) { clearTimeout(SV.rt); const oldRef = SV.ref; SV.on = 0; SV.run = 0; clearInterval(SV.tt); SV.ref = null; if (oldRef) { oldRef.off('value', svUpdate); svLeaveRef(oldRef); } }
+            if (survPracticeMode) { survPracticeMode = false; if (survPracticeTimer) { clearTimeout(survPracticeTimer); cancelAnimationFrame(survPracticeTimer); survPracticeTimer = null; } survPractice = null; }
+            if (landPracticeMode) { landPracticeMode = false; landPracticeRoundOver = true; inLandGrabRoom = false; if (landPracticeTimer) { clearTimeout(landPracticeTimer); clearInterval(landPracticeTimer); landPracticeTimer = null; } landPracticeData = null; }
+            if (landRoomRef) { const ref = landRoomRef; landRoomRef = null; inLandGrabRoom = false; if (landPenaltyInterval) clearInterval(landPenaltyInterval); ref.off('value', handleLandRoomUpdate); leaveLandRoomCleanup(null, ref); }
+        } catch (e) { console.error('로그아웃 정리 오류', e); }
+    }
+
     function logout() {
         if(confirm("로그아웃 하시겠습니까?\n(기기에 저장된 임시 기록은 사라지지만, 서버 기록은 유지됩니다.)")) {
+            leaveRoomsBeforeLogout();
             ['userProfile','dailyRecords','masterRecords','rainRecords','landRecords','survRecords'].forEach(k => localStorage.removeItem(k));
             userProfile = null; dailyRecords = {}; masterRecords = {}; rainRecords = {}; landRecords = {}; survRecords = {};
             document.getElementById('userProfileBar').style.display = 'none'; document.getElementById('mainTabs').style.display = 'none';
@@ -2189,13 +2762,82 @@ input, select, button { color-scheme:dark; }
         });
     }
 
-    function openAdmin() {
-        let pwd = prompt("👨‍🏫 선생님 전용 관리자 암호를 입력하세요.\n(초기 암호: 1234)");
-        if(pwd === adminPassword) { showScreen('adminScreen'); fetchAdminData(); } 
-        else if(pwd !== null) { alert("암호가 틀렸습니다."); }
+    // 🔐 관리자 암호 ─ 코드에는 암호 자체가 아니라 '소금(salt) + 해시'만 들어 있어요. (암호를 바꾸려면 [🔑 암호 변경] 으로 새 줄을 만들어 아래 줄과 바꿔 붙이세요)
+    const ADMIN_AUTH = { v: 1, it: 100000, salt: 'cd1fdc79370f4a5b7efa18da9a56a58c', hash: 'b238f4818d48ca3eb8204ab9f33ec24da40eb3801f7c22c1ca2d6e1c26edf841' };
+    let ADMIN_OK = false, ADMIN_TRY = { n: 0, until: 0 };
+    const hexToBytes = hx => new Uint8Array((hx.match(/../g) || []).map(b => parseInt(b, 16)));
+    const bytesToHex = u8 => Array.from(u8).map(b => b.toString(16).padStart(2, '0')).join('');
+    function randomHex(n) { const u = new Uint8Array(n); (window.crypto || window.msCrypto).getRandomValues(u); return bytesToHex(u); }
+
+    // SHA-256 · HMAC · PBKDF2 (WebCrypto 를 쓸 수 없는 환경용 예비 구현 ─ 결과는 WebCrypto 와 똑같아요)
+    function sha256(msg) {
+        const S = sha256.S || (sha256.S = (() => { const k = [], hh = [], p = []; for (let c = 2; k.length < 64; c++) { if (p.every(q => c % q)) { p.push(c); k.push(Math.floor(Math.cbrt(c) % 1 * 4294967296) >>> 0); if (hh.length < 8) hh.push(Math.floor(Math.sqrt(c) % 1 * 4294967296) >>> 0); } } return { k, h: hh }; })());
+        const K = S.k, H = S.h.slice(), W = new Uint32Array(64), l = msg.length, n = ((l + 9 + 63) >> 6) << 6;
+        const buf = new Uint8Array(n); buf.set(msg); buf[l] = 0x80;
+        const dv = new DataView(buf.buffer); dv.setUint32(n - 8, Math.floor(l / 536870912)); dv.setUint32(n - 4, (l << 3) >>> 0);
+        for (let o = 0; o < n; o += 64) {
+            for (let i = 0; i < 16; i++) W[i] = dv.getUint32(o + i * 4);
+            for (let i = 16; i < 64; i++) { const a = W[i - 15], b = W[i - 2]; W[i] = (W[i - 16] + (((a >>> 7) | (a << 25)) ^ ((a >>> 18) | (a << 14)) ^ (a >>> 3)) + W[i - 7] + (((b >>> 17) | (b << 15)) ^ ((b >>> 19) | (b << 13)) ^ (b >>> 10))) >>> 0; }
+            let a = H[0], b = H[1], c = H[2], d = H[3], e = H[4], f = H[5], g = H[6], hh = H[7];
+            for (let i = 0; i < 64; i++) {
+                const t1 = (hh + (((e >>> 6) | (e << 26)) ^ ((e >>> 11) | (e << 21)) ^ ((e >>> 25) | (e << 7))) + ((e & f) ^ (~e & g)) + K[i] + W[i]) >>> 0;
+                const t2 = ((((a >>> 2) | (a << 30)) ^ ((a >>> 13) | (a << 19)) ^ ((a >>> 22) | (a << 10))) + ((a & b) ^ (a & c) ^ (b & c))) >>> 0;
+                hh = g; g = f; f = e; e = (d + t1) >>> 0; d = c; c = b; b = a; a = (t1 + t2) >>> 0;
+            }
+            H[0] = (H[0] + a) >>> 0; H[1] = (H[1] + b) >>> 0; H[2] = (H[2] + c) >>> 0; H[3] = (H[3] + d) >>> 0; H[4] = (H[4] + e) >>> 0; H[5] = (H[5] + f) >>> 0; H[6] = (H[6] + g) >>> 0; H[7] = (H[7] + hh) >>> 0;
+        }
+        const out = new Uint8Array(32), ov = new DataView(out.buffer); H.forEach((x, i) => ov.setUint32(i * 4, x)); return out;
+    }
+    function hmac256(key, msg) {
+        if (key.length > 64) key = sha256(key);
+        const ip = new Uint8Array(64 + msg.length), op = new Uint8Array(96);
+        for (let i = 0; i < 64; i++) { const kb = i < key.length ? key[i] : 0; ip[i] = kb ^ 0x36; op[i] = kb ^ 0x5c; }
+        ip.set(msg, 64); op.set(sha256(ip), 64); return sha256(op);
+    }
+    function pbkdf2Soft(pwd, salt, it) {   // 출력 32바이트(= 해시 길이)이므로 블록은 하나
+        const s1 = new Uint8Array(salt.length + 4); s1.set(salt); s1[salt.length + 3] = 1;
+        let u = hmac256(pwd, s1); const t = u.slice();
+        for (let i = 1; i < it; i++) { u = hmac256(pwd, u); for (let j = 0; j < 32; j++) t[j] ^= u[j]; }
+        return t;
+    }
+    async function adminHash(pwd, saltHex, it) {
+        const enc = new TextEncoder().encode(pwd), salt = hexToBytes(saltHex);
+        if (window.crypto && crypto.subtle) {
+            try {
+                const key = await crypto.subtle.importKey('raw', enc, 'PBKDF2', false, ['deriveBits']);
+                return bytesToHex(new Uint8Array(await crypto.subtle.deriveBits({ name: 'PBKDF2', hash: 'SHA-256', salt, iterations: it }, key, 256)));
+            } catch (e) { /* 아래 예비 구현으로 */ }
+        }
+        await new Promise(r => setTimeout(r, 30));
+        return bytesToHex(pbkdf2Soft(enc, salt, it));
+    }
+    function sameStr(a, b) { if (a.length !== b.length) return false; let d = 0; for (let i = 0; i < a.length; i++) d |= a.charCodeAt(i) ^ b.charCodeAt(i); return d === 0; }
+
+    async function openAdmin() {
+        const now = Date.now();
+        if (ADMIN_TRY.until > now) { alert(`암호를 여러 번 틀렸어요. ${Math.ceil((ADMIN_TRY.until - now) / 1000)}초 뒤에 다시 시도해 주세요.`); return; }
+        const pwd = prompt("👨‍🏫 선생님 전용 관리자 암호를 입력하세요.");
+        if (pwd === null) return;
+        let ok = false;
+        try { ok = sameStr(await adminHash(pwd, ADMIN_AUTH.salt, ADMIN_AUTH.it), ADMIN_AUTH.hash); }
+        catch (e) { console.error('관리자 암호 확인 오류', e); alert('암호를 확인하지 못했어요. 잠시 후 다시 시도해 주세요.'); return; }
+        if (ok) {
+            ADMIN_TRY.n = 0; ADMIN_OK = true; showScreen('adminScreen'); fetchAdminData();
+            // 예전 버전이 서버에 평문으로 남겨 둔 관리자 암호(admin_vocab/password)는 이제 쓰지 않으니 지워 둬요(권한이 없으면 조용히 넘어가요)
+            if (isFirebaseActive) { try { getDB().ref('admin_vocab/password').remove().catch(() => {}); } catch (e) {} }
+        } else {
+            ADMIN_TRY.n++;
+            if (ADMIN_TRY.n >= 3) ADMIN_TRY.until = Date.now() + Math.min(300, 10 * Math.pow(2, ADMIN_TRY.n - 3)) * 1000;
+            alert("암호가 틀렸습니다.");
+        }
+    }
+    function adminGuard() {   // 관리자 화면에서 암호를 통과한 상태일 때만 관리 기능 실행
+        if (ADMIN_OK && document.getElementById('adminScreen').classList.contains('active')) return true;
+        alert('관리자 암호를 먼저 입력해 주세요.'); return false;
     }
 
     function fetchAdminData() {
+        if (!adminGuard()) return;
         if(!isFirebaseActive) { document.getElementById('adminTableBody').innerHTML = '<tr><td colspan="6">서버가 연결되지 않았습니다.</td></tr>'; return; }
         document.getElementById('adminTableBody').innerHTML = '<tr><td colspan="6">데이터를 불러오는 중...</td></tr>';
         getDB().ref('students_vocab').once('value').then(snapshot => {
@@ -2204,7 +2846,7 @@ input, select, button { color-scheme:dark; }
                 snapshot.forEach(child => {
                     let data = child.val();
                     if(!data || !data.profile) return;
-                    let clearedCount = data.daily ? Object.values(data.daily).filter(r => r.cleared).length : 0;
+                    let clearedCount = data.daily ? Object.values(data.daily).filter(r => r && r.cleared).length : 0;
                     html += `<tr><td>${escapeHTML(data.profile.school)}</td><td>${escapeHTML(data.profile.gradeClass)}</td><td>${escapeHTML(data.profile.studentNum)}</td>
                         <td>${escapeHTML(data.profile.studentName)}</td><td><b>${clearedCount} / ${TOTAL_DAYS}</b></td>
                         <td><button class="btn-delete" data-key="${escapeHTML(child.key)}">삭제</button></td></tr>`;
@@ -2218,34 +2860,112 @@ input, select, button { color-scheme:dark; }
     }
 
     function deleteStudentData(key) {
+        if (!adminGuard()) return;
         if(confirm("이 학생의 모든 기록을 완전히 삭제하시겠습니까?\n(복구할 수 없습니다)")) {
-            getDB().ref('students_vocab/' + key).remove().then(() => { alert("삭제되었습니다."); fetchAdminData(); });
+            getDB().ref('students_vocab/' + key).remove().then(() => { alert("삭제되었습니다."); fetchAdminData(); }).catch(err => reportFirebaseError(err, '기록 삭제'));
         }
     }
 
     function resetAllLandRooms() {
+        if (!adminGuard()) return;
         if(confirm("현재 진행 중인 모든 [땅따먹기 게임 방]을 강제로 종료(폭파)하시겠습니까?")) {
-            if(isFirebaseActive) getDB().ref('landGrabRooms_vocab').remove().then(() => alert("모든 방이 초기화되었습니다."));
+            if(isFirebaseActive) getDB().ref('landGrabRooms_vocab').remove().then(() => alert("모든 방이 초기화되었습니다.")).catch(err => reportFirebaseError(err, '방 초기화'));
         }
     }
 
     function deleteAllData() {
+        if (!adminGuard()) return;
         if(confirm("⚠️ 경고: 서버에 저장된 '모든 학생'의 기록을 완전히 삭제합니다.\n정말 진행하시겠습니까?")) {
             Promise.all([ 
                 getDB().ref('students_vocab').remove(), getDB().ref('rankings_vocab').remove(), 
                 getDB().ref('rankings_vocab_rain').remove(), getDB().ref('rankings_vocab_land_solo').remove(), getDB().ref('rankings_vocab_land_team').remove(), 
                 getDB().ref('rankings_vocab_surv').remove(), getDB().ref('landGrabRooms_vocab').remove(), getDB().ref('survRooms_vocab').remove()
-            ]).then(() => { alert("모든 기록이 초기화되었습니다."); fetchAdminData(); });
+            ]).then(() => { alert("모든 기록이 초기화되었습니다."); fetchAdminData(); }).catch(err => reportFirebaseError(err, '전체 초기화'));
         }
+    }
+
+    // 🛠️ 관리자 도구 창 ─ 보안 규칙 복사 (· 낱말 데이터 변환)
+    function toolOpen(title, notes, inVal, outVal, runFn, runLabel) {
+        document.getElementById('toolTitle').textContent = title;
+        const nb = document.getElementById('toolNote'); nb.textContent = '';
+        notes.forEach(t => { const d = document.createElement('div'); d.textContent = t; nb.appendChild(d); });
+        const tin = document.getElementById('toolIn'), tout = document.getElementById('toolOut'), run = document.getElementById('toolRun');
+        tin.style.display = inVal === null ? 'none' : 'block'; tin.value = inVal || '';
+        tout.value = outVal || '';
+        run.style.display = runFn ? 'inline-block' : 'none'; run.textContent = runLabel || '변환하기'; run.onclick = runFn || null;
+        document.getElementById('toolMsg').textContent = '';
+        document.getElementById('toolModal').style.display = 'flex';
+    }
+    function closeTool() { const m = document.getElementById('toolModal'); if (m) m.style.display = 'none'; }
+    function toolCopy() {
+        const ta = document.getElementById('toolOut'), msg = document.getElementById('toolMsg');
+        ta.focus(); ta.select(); ta.setSelectionRange(0, ta.value.length);
+        let ok = false; try { ok = document.execCommand('copy'); } catch (e) {}
+        if (ok) { msg.textContent = '복사했어요! 📋'; return; }
+        if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(ta.value).then(() => { msg.textContent = '복사했어요! 📋'; }, () => { msg.textContent = '자동 복사가 안 돼요. 위 글자를 길게 눌러 직접 복사해 주세요.'; });
+        else msg.textContent = '자동 복사가 안 돼요. 위 글자를 길게 눌러 직접 복사해 주세요.';
+    }
+    function openRulesTool() {
+        if (!adminGuard()) return;
+        const src = document.getElementById('dbRulesText');
+        toolOpen('🛡️ Firebase 보안 규칙',
+            ['① Firebase 콘솔 → Realtime Database → 규칙(Rules) 탭을 열어요. ② 지금 있는 규칙을 먼저 통째로 복사해 메모장에 보관해 두세요(되돌리기용).',
+             '③ 아래 내용 중 students_vocab · rankings_vocab… · survRooms_vocab · landGrabRooms_vocab · admin_vocab 항목을 기존 규칙의 "rules" 안에 넣어요(같은 이름이 있으면 바꾸기). 다른 앱의 항목은 건드리지 마세요.',
+             '④ [게시] 후 로그인 · 랭킹 · 방 입장이 되는지 확인해요. 문제가 생기면 보관해 둔 예전 규칙으로 되돌리면 돼요.',
+             '※ 이 규칙은 이상한 글자(< > &)·숫자가 서버에 저장되는 것을 막는 용도예요. 로그인 없이 쓰는 구조라서, 학생이 개발자 도구로 서버를 직접 조작하는 것까지 막지는 못해요.'],
+            null, src ? src.textContent.trim() : '');
+    }
+
+    function openWordTool() {
+        if (!adminGuard()) return;
+        const groupLines = WORD_GROUPS.map(g => '=' + g.join(',')).concat(WORD_SAMES.map(g => '~' + g.join(',')));
+        toolOpen('📦 낱말 데이터 변환',
+            ['낱말을 고치거나 늘릴 때 쓰는 도구예요. 아래 칸에 "낱말|뜻" 을 한 줄에 하나씩 적고(엑셀·메모장에서 붙여넣기 가능) [변환하기]를 누르세요. 지금 들어 있는 낱말이 미리 채워져 있어요.',
+             '맨 아래의 "=낱말,낱말,…" 줄은 서로 헷갈려서 같은 보기에 같이 나오면 안 되는 낱말 묶음이고, "~낱말,낱말" 줄은 뜻이 같아서 땅따먹기·스피드런에서 둘 다 정답으로 인정할 낱말이에요(없어도 돼요).',
+             '나온 결과(맨 앞이 const WORD_PACK 으로 시작하는 한 줄)를 복사해서, HTML 파일 안에서 같은 글자로 시작하는 아주 긴 줄과 통째로 바꿔 저장하면 끝이에요.',
+             '※ 낱말은 겹치면 안 되고, < > & " \' ` \\ ^ , 같은 기호는 쓸 수 없어요. 낱말 수가 바뀌면 일차·탄 수도 자동으로 바뀌어요.'],
+            rawWords.map(x => x.w + '|' + x.m).concat(groupLines).join('\n'), '', runWordTool, '변환하기');
+    }
+    function runWordTool() {
+        const msg = document.getElementById('toolMsg'), out = document.getElementById('toolOut');
+        const items = document.getElementById('toolIn').value.split(/\r?\n|\^/).map(s => s.trim()).filter(Boolean);
+        const errs = [], seen = new Set(), clean = [], groups = [];
+        items.forEach((s, i) => {
+            if (s[0] === '=' || s[0] === '~') { groups.push({ n: i + 1, kind: s[0], names: s.slice(1).split(',').map(t => t.trim()).filter(Boolean) }); return; }
+            const p = s.split('|');
+            if (p.length !== 2 || !p[0].trim() || !p[1].trim()) { errs.push(`${i + 1}번째 줄: "낱말|뜻" 모양이 아니에요`); return; }
+            const w = p[0].trim(), m = p[1].trim();
+            if (cleanText(w, 999) !== w || cleanText(m, 9999) !== m || w.indexOf(',') >= 0) { errs.push(`${i + 1}번째 줄(${w}): 쓸 수 없는 기호가 있어요`); return; }
+            if (w.length > 40 || m.length > 300) { errs.push(`${i + 1}번째 줄(${w}): 너무 길어요`); return; }
+            if (seen.has(w)) { errs.push(`${i + 1}번째 줄: "${w}" 낱말이 겹쳐요`); return; }
+            seen.add(w); clean.push(w + '|' + m);
+        });
+        const gl = [];
+        groups.forEach(g => {
+            const bad = g.names.filter(t => !seen.has(t));
+            if (g.names.length < 2) errs.push(`${g.n}번째 줄: 묶음에는 낱말이 2개 이상 있어야 해요`);
+            else if (bad.length) errs.push(`${g.n}번째 줄: "${bad[0]}" 낱말이 위 목록에 없어요`);
+            else gl.push(g.kind + g.names.join(','));
+        });
+        if (clean.length < 8) errs.push('낱말이 너무 적어요(8개 이상)');
+        if (clean.length > 3000) errs.push('낱말이 너무 많아요(3000개 이하)');
+        if (errs.length) { out.value = ''; msg.textContent = '⚠ ' + errs.slice(0, 3).join(' / ') + (errs.length > 3 ? ` … 외 ${errs.length - 3}건` : ''); return; }
+        const text = clean.concat(gl).join('^'), pack = packWords(text);
+        let back = ''; try { back = unpackWords(pack); } catch (e) { /* 아래에서 걸러요 */ }
+        if (back !== text) { out.value = ''; msg.textContent = '⚠ 변환 확인에 실패했어요. 다시 시도해 주세요.'; return; }
+        out.value = 'const ' + 'WORD_PACK' + ' = "' + pack + '";';   // (HTML 안에서 검색할 때 진짜 줄 한 곳만 나오도록 일부러 나눠 적었어요)
+        msg.textContent = `낱말 ${clean.length}개 · 묶음 ${gl.length}개를 변환했어요. [📋 복사] 후 HTML 의 WORD_PACK 줄과 바꿔 저장하세요.`;
     }
 
     function csvField(v) {
         let s = String(v === undefined || v === null ? '' : v);
+        if (/^[=+\-@\t\r]/.test(s)) s = "'" + s;   // 엑셀이 '=' '+' '-' '@' 로 시작하는 글자를 수식으로 실행하지 않게
         if (/[",\n]/.test(s)) s = '"' + s.replace(/"/g, '""') + '"';
         return s;
     }
 
     function downloadAdminCSV() {
+        if (!adminGuard()) return;
         if(!isFirebaseActive) return;
         getDB().ref('students_vocab').once('value').then(snapshot => {
             if(!snapshot.exists()) return alert("다운로드할 데이터가 없습니다.");
@@ -2253,7 +2973,7 @@ input, select, button { color-scheme:dark; }
             snapshot.forEach(child => {
                 let d = child.val();
                 if(!d || !d.profile) return;
-                let clearedCount = d.daily ? Object.values(d.daily).filter(r => r.cleared).length : 0;
+                let clearedCount = d.daily ? Object.values(d.daily).filter(r => r && r.cleared).length : 0;
                 csvRows.push([d.profile.school, d.profile.gradeClass, d.profile.studentNum, d.profile.studentName, clearedCount, d.lastUpdated||'기록없음'].map(csvField).join(','));
             });
             let blob = new Blob(['\uFEFF' + csvRows.join('\n')], { type: 'text/csv;charset=utf-8;' });
@@ -2262,9 +2982,17 @@ input, select, button { color-scheme:dark; }
         });
     }
 
-    function changeAdminPassword() {
-        let newPwd = prompt("새롭게 사용할 관리자 암호를 입력하세요:");
-        if(newPwd) { adminPassword = newPwd.trim(); localStorage.setItem('adminPwd', adminPassword); if(isFirebaseActive) getDB().ref('admin_vocab/password').set(adminPassword); alert("변경 완료"); }
+    async function changeAdminPassword() {
+        if (!adminGuard()) return;
+        const np = prompt("새 관리자 암호를 입력하세요. (6자 이상)");
+        if (np === null) return;
+        const p = np.trim();
+        if (p.length < 6) { alert("6자 이상으로 입력해 주세요."); return; }
+        try {
+            const salt = randomHex(16), hash = await adminHash(p, salt, ADMIN_AUTH.it);
+            const line = 'const ' + 'ADMIN_AUTH' + ` = { v: 1, it: ${ADMIN_AUTH.it}, salt: '${salt}', hash: '${hash}' };`;   // (HTML 안에서 검색할 때 진짜 줄 한 곳만 나오도록 일부러 나눠 적었어요)
+            prompt("아래 한 줄을 전체 선택해서 복사한 뒤, HTML 파일 안에서 'const ADMIN_AUTH' 로 시작하는 줄과 통째로 바꿔 저장하세요.\n(바꾸기 전까지는 지금 암호가 그대로 쓰여요. 이 줄에는 암호 자체가 아니라 해시만 들어 있어요.)", line);
+        } catch (e) { console.error(e); alert("암호를 만들지 못했어요. 다시 시도해 주세요."); }
     }
 
     // 🏆 랭킹 시스템
@@ -2304,11 +3032,13 @@ input, select, button { color-scheme:dark; }
     }
 
     function changeRankStage(stage) {
-        document.querySelectorAll('.stage-tab').forEach(b => { b.classList.remove('active'); if(b.innerText === `${stage}탄`) b.classList.add('active'); });
+        document.querySelectorAll('#rankingTabs .stage-tab').forEach((b, i) => b.classList.toggle('active', i + 1 === stage));
         loadRanking(stage);
     }
 
+    let rankReqId = 0;   // 탭을 빠르게 바꿀 때 늦게 도착한 이전 응답이 화면을 덮어쓰지 않게 하는 요청 번호
     function loadRanking(stage) {
+        const my = ++rankReqId;
         const list = document.getElementById('rankingList');
         if(!isFirebaseActive) { list.innerHTML = `<li style="text-align:center; padding:20px;">서버 미연결 상태입니다.</li>`; return; }
         list.innerHTML = '<li style="text-align:center;">데이터를 불러오는 중...</li>';
@@ -2329,8 +3059,9 @@ input, select, button { color-scheme:dark; }
         }
 
         query.once('value').then(snapshot => {
+            if (my !== rankReqId) return;
             list.innerHTML = ''; let results = [];
-            snapshot.forEach(child => { results.push(child.val()); });
+            snapshot.forEach(child => { const v = child.val(); if (v && typeof v === 'object') results.push(v); });
             
             if(currentRankingType === 'rain') { results.sort((a,b) => b.score - a.score); } 
             else if(currentRankingType === 'surv') { results = results.filter(r => (r.firsts || 0) > 0); results.sort((a,b) => b.firsts - a.firsts); }
@@ -2347,20 +3078,26 @@ input, select, button { color-scheme:dark; }
             results.forEach((data, index) => {
                 let item = document.createElement('li'); item.className = 'ranking-item';
                 let displayVal = '';
-                if (currentRankingType === 'master') displayVal = formatTime(data.time);
-                else if (currentRankingType === 'rain') displayVal = formatTime(data.score);
-                else if (currentRankingType === 'surv') displayVal = `👑 어휘왕 ${data.firsts}회`;
+                if (currentRankingType === 'master') displayVal = formatTime(nz(data.time, 1e10));
+                else if (currentRankingType === 'rain') displayVal = formatTime(nz(data.score, 1e10));
+                else if (currentRankingType === 'surv') displayVal = `👑 어휘왕 ${nz(data.firsts)}회`;
                 else if (currentRankingType === 'land') {
-                    if (landRankMode === 'solo') displayVal = `👑 1등 ${data.soloFirsts}회`;
-                    else displayVal = `${data.teamWins}승 ${data.teamDraws||0}무 ${data.teamLosses||0}패`;
+                    if (landRankMode === 'solo') displayVal = `👑 1등 ${nz(data.soloFirsts)}회`;
+                    else displayVal = `${nz(data.teamWins)}승 ${nz(data.teamDraws)}무 ${nz(data.teamLosses)}패`;
                 }
-                item.innerHTML = `<span>${index+1}위: ${escapeHTML(data.name)} (${escapeHTML(data.classInfo)}반)</span><span>${displayVal}</span>`;
+                item.innerHTML = `<span>${index+1}위: ${escapeHTML(cleanText(data.name, 20))} (${escapeHTML(cleanText(data.classInfo, 12))}반)</span><span>${escapeHTML(displayVal)}</span>`;
                 list.appendChild(item);
             });
+        }).catch(err => {
+            console.error('랭킹 불러오기 오류', err);
+            if (my === rankReqId) list.innerHTML = '<li style="text-align:center;">기록을 불러오지 못했어요. 잠시 후 다시 시도해 주세요.</li>';
         });
     }
 
     function switchMainTab(tab) {
+        // 어휘왕 방/연습 중: 같은 탭을 눌러도 화면이 바뀌지 않게 하고, 다른 탭으로 갈 때는 확인한 뒤 방을 나갑니다.
+        if (tab === 'surv' && (survPracticeMode || SV.on)) return;
+        if (SV.on && SV.ref) { if (!confirm('진행 중인 어휘왕 방에서 나가고 이동할까요?')) return; quitSurv(false); }
         if(landPracticeMode && tab !== 'land') { landPracticeMode=false; inLandGrabRoom=false; if(landPracticeTimer){clearTimeout(landPracticeTimer);clearInterval(landPracticeTimer);landPracticeTimer=null;} landPracticeData=null; }
         if(survPracticeMode && tab !== 'surv') { survPracticeMode=false; if(survPracticeTimer){clearTimeout(survPracticeTimer);cancelAnimationFrame(survPracticeTimer);survPracticeTimer=null;} survPractice=null; }
         document.querySelectorAll('.main-tab').forEach(t => t.classList.remove('active'));
@@ -2446,7 +3183,7 @@ input, select, button { color-scheme:dark; }
             const startDay = (stage - 1) * 4 + 1, endDay = Math.min(stage * 4, TOTAL_DAYS);
             const record = landRecords[stage] || {};
             const rateText = (record.soloPlays || record.teamPlays) ?
-                `👤 개인 ${record.soloFirsts||0}승 · ⚔️ 팀 ${record.teamWins||0}승 ${record.teamLosses||0}패` : '실전 전적 없음';
+                `👤 개인 ${nz(record.soloFirsts)}승 · ⚔️ 팀 ${nz(record.teamWins)}승 ${nz(record.teamLosses)}패` : '실전 전적 없음';
             let locked = false;
             for(let d=startDay; d<=endDay; d++) if(!(dailyRecords[d] && dailyRecords[d].cleared)) locked = true;
             card.innerHTML = `
@@ -2470,8 +3207,11 @@ input, select, button { color-scheme:dark; }
     }
 
     function showScreen(screenId) {
+        if (screenId !== 'adminScreen') { ADMIN_OK = false; if (typeof closeTool === 'function') closeTool(); }
         document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
         document.getElementById(screenId).classList.add('active');
+        // 어휘왕 게임 화면에서는 상단 머리글·프로필 줄·탭을 숨겨 화면을 넓게 쓰고(특히 휴대폰), 실수로 다른 탭을 누르는 일을 막습니다.
+        document.body.classList.toggle('sv-playing', screenId === 'survGameScreen');
     }
 
     function goToHome() {
@@ -2502,7 +3242,10 @@ input, select, button { color-scheme:dark; }
         if (!record.cleared && (record.lastStudyIndex > 0 || record.isQuizInProgress)) {
             if (record.isQuizInProgress) {
                 if(confirm(`Day ${currentDay} 퀴즈를 풀던 중이었습니다. 이어서 푸시겠습니까?`)) {
-                    currentStudyIndex = record.lastStudyIndex; currentQuizIdx = record.currentQuizIdx || 0; score = record.currentScore || 0; missedWords = record.savedMissedWords || []; quizQueue = record.savedQuizQueue || [];
+                    currentStudyIndex = record.lastStudyIndex; currentQuizIdx = nz(record.currentQuizIdx, 1000); score = nz(record.currentScore, 1000);
+                    missedWords = (Array.isArray(record.savedMissedWords) ? record.savedMissedWords : []).filter(x => x && typeof x.w === 'string' && typeof x.m === 'string');
+                    quizQueue = validQuizQueue(record.savedQuizQueue) ? record.savedQuizQueue : [];
+                    if (!quizQueue.length || currentQuizIdx >= quizQueue.length) { generateQuiz(); return; }   // 저장된 퀴즈가 이상하면 새로 시작
                     document.getElementById('quizDayLabel').innerText = `Day ${currentDay} 확인 퀴즈 (이어하기)`; showScreen('quizScreen'); renderQuiz(); return;
                 } else { return; }
             } else if (record.lastStudyIndex >= studyQueue.length) {
@@ -2552,18 +3295,27 @@ input, select, button { color-scheme:dark; }
         missedWords = []; currentQuizIdx = 0; score = 0; quizQueue = [];
         let targetWords = [...studyQueue].sort(() => 0.5 - Math.random());
         targetWords.forEach(target => {
-            let wrongs = rawWords.filter(x => x.w !== target.w).sort(() => 0.5 - Math.random()).slice(0, 3);
+            let wrongs = pickWrongs(target, rawWords, 3);
             let options = [ { text: target.w, isCorrect: true }, { text: wrongs[0].w, isCorrect: false }, { text: wrongs[1].w, isCorrect: false }, { text: wrongs[2].w, isCorrect: false } ].sort(() => 0.5 - Math.random());
-            quizQueue.push({ question: `💡 다음 뜻을 가진 올바른 낱말은 무엇일까요?<br><br><span style="color:var(--primary); font-size:1.35rem;">" ${target.m} "</span>`, options: options, targetObj: target });
+            quizQueue.push({ mean: target.mq || target.m, options: options, targetObj: target });
         });
         document.getElementById('quizDayLabel').innerText = isReviewMode ? "복습 퀴즈" : `Day ${currentDay} 퀴즈`;
         showScreen('quizScreen'); renderQuiz();
     }
 
+    function renderQuizQuestion(q) {   // 뜻풀이는 글자로만 넣어요(HTML 로 해석하지 않음)
+        const el = document.getElementById('quizQuestion'); el.textContent = '';
+        el.appendChild(document.createTextNode('💡 다음 뜻을 가진 올바른 낱말은 무엇일까요?'));
+        el.appendChild(document.createElement('br')); el.appendChild(document.createElement('br'));
+        const sp = document.createElement('span'); sp.style.color = 'var(--primary)'; sp.style.fontSize = '1.35rem';
+        sp.textContent = '" ' + String(typeof q.mean === 'string' ? q.mean : ((q.targetObj && q.targetObj.m) || '')) + ' "';
+        el.appendChild(sp);
+    }
+
     function renderQuiz() {
         currentSelectedOption = null; quizActionBtn.style.display = 'none'; let q = quizQueue[currentQuizIdx];
         document.getElementById('quizProgressLabel').innerText = `${currentQuizIdx + 1} / ${quizQueue.length}`;
-        document.getElementById('quizQuestion').innerHTML = q.question; document.getElementById('progressFill').style.width = `${(currentQuizIdx / quizQueue.length) * 100}%`;
+        renderQuizQuestion(q); document.getElementById('progressFill').style.width = `${(currentQuizIdx / quizQueue.length) * 100}%`;
         const optionsDiv = document.getElementById('quizOptions'); optionsDiv.innerHTML = '';
         q.options.forEach(opt => {
             const btn = document.createElement('button'); btn.className = 'option-btn'; btn.innerText = opt.text;
@@ -2624,7 +3376,7 @@ input, select, button { color-scheme:dark; }
 
     function renderMasterTarget() {
         if(masterCurrentIdx >= masterTargetQueue.length) return;
-        document.getElementById('masterTargetMean').innerText = masterTargetQueue[masterCurrentIdx].m;
+        document.getElementById('masterTargetMean').innerText = masterTargetQueue[masterCurrentIdx].mq || masterTargetQueue[masterCurrentIdx].m;
         document.getElementById('masterProgressLabel').innerText = `${masterCurrentIdx + 1} / ${masterTargetQueue.length} 단어 찾는 중`;
     }
 
@@ -2669,7 +3421,7 @@ input, select, button { color-scheme:dark; }
     }
 
     function handleMasterDrop() {
-        if(draggedWord.w === masterTargetQueue[masterCurrentIdx].w) {
+        if(sameAnswer(draggedWord.w, masterTargetQueue[masterCurrentIdx].w)) {
             draggedChip.style.visibility = 'hidden'; showCorrectEffect(); masterCurrentIdx++;
             if(masterCurrentIdx < masterTargetQueue.length) renderMasterTarget(); else finishMasterGame();
         } else { masterStartTime -= 5000; showBombEffect(); }
@@ -2742,7 +3494,7 @@ input, select, button { color-scheme:dark; }
         let sky = document.getElementById('rainSky');
         
         let drop = document.createElement('div');
-        drop.className = 'rain-drop'; drop.id = 'rain_drop_' + rainDropIdCounter; drop.innerText = wordObj.m; 
+        drop.className = 'rain-drop'; drop.id = 'rain_drop_' + rainDropIdCounter; drop.innerText = wordObj.mq || wordObj.m; 
         sky.appendChild(drop);
         
         let skyW = sky.clientWidth, skyH = sky.clientHeight;
@@ -2868,7 +3620,7 @@ input, select, button { color-scheme:dark; }
         if(!isFirebaseActive) { alert("서버 연결이 필요합니다."); return; }
         let roomCodeRaw = prompt(`${stage}탄 땅따먹기에 접속합니다.\n[방 이름]을 입력하세요. (예: 1모둠, 자유방)`);
         if(!roomCodeRaw || roomCodeRaw.trim() === '') return;
-        let roomCode = roomCodeRaw.trim().replace(/[\.\#\$\[\]\/]/g, "");
+        let roomCode = cleanText(roomCodeRaw.replace(/[\.\#\$\[\]\/]/g, ""), 20);
         if(roomCode === '') { alert("방 이름에 사용할 수 없는 문자만 입력하셨습니다. 다른 이름으로 다시 시도해주세요."); return; }
         if (landRoomRef || inLandGrabRoom) {
             const oldRef = landRoomRef;
@@ -2929,9 +3681,58 @@ input, select, button { color-scheme:dark; }
             myLandColor = data.players[myKey] ? data.players[myKey].color : '#999999';
 
             landRoomRef.child('players/' + myKey).onDisconnect().remove();
+            landMine = (data.players && data.players[myKey]) || null; landRs = 0; netStart();
 
             inLandGrabRoom = true; document.getElementById('lobbyModeSelect').value = data.mode || 'solo';
             showScreen('landLobbyScreen'); landRoomRef.on('value', handleLandRoomUpdate);
+        });
+    }
+
+    // 🔌 땅따먹기 연결 끊김 복구 ─ 연결이 끊겨 서버가 내 자리를 비웠어도, 돌아오면 방이 남아 있는 한 내 자리를 되찾아요.
+    //   (게임 중에는 점수를 '내가 차지한 땅 수'로 다시 계산하고, 대기실에서는 처음 들어올 때처럼 자리를 잡아요)
+    function landKicked(msg) { quitLandLobby(); setTimeout(() => alert(msg), 50); }
+    function landNetEvt(up) {
+        if (!up || !inLandGrabRoom || landPracticeMode || !landRoomRef) return;
+        const me = getUserKey(); if (!me) return;
+        try { landRoomRef.child('players/' + me).onDisconnect().remove(); } catch (e) { /* 새 연결에도 다시 걸어 둬요 */ }
+        landRestore();
+    }
+    function landRestore(n) {
+        if (landRs || !inLandGrabRoom || landPracticeMode || !landRoomRef) return;
+        const ref = landRoomRef, me = getUserKey(), mine = landMine, tries = n || 0;
+        if (!me) return;
+        let why = '';
+        landRs = 1;
+        ref.transaction(data => {
+            why = '';
+            if (!inLandGrabRoom || landRoomRef !== ref) { why = 'left'; return; }   // 그 사이 내가 직접 나갔다면 되살리지 않아요
+            if (!data) { why = 'gone'; return data; }                              // 사라진 방은 다시 만들지 않아요
+            const pl = {};
+            Object.keys(data.players || {}).forEach(k => { const p = data.players[k]; if (p && p.name) pl[k] = p; });
+            if (pl[me]) return data;
+            const playing = data.status === 'playing';
+            if (playing && !mine) { why = 'late'; return data; }
+            if (Object.keys(pl).length >= 25) { why = 'full'; return data; }
+            const used = new Set(Object.values(pl).map(p => p.color));
+            let color = mine && mine.color;
+            if (!color || used.has(color)) { let ci = 0; while (used.has(getPlayerColor(ci))) ci++; color = getPlayerColor(ci); }
+            const mode = data.mode || 'solo', cnt = Object.keys(pl).length;
+            const team = mode === 'solo' ? 'none' : ((mine && (mine.team === 'A' || mine.team === 'B')) ? mine.team : (cnt % 2 === 0 ? 'A' : 'B'));
+            const owned = playing ? Object.values(data.board || {}).filter(c => c && c.owner === me).length : 0;
+            pl[me] = { name: userProfile.studentName, color, team, score: owned, penaltyUntil: (playing && mine && mine.penaltyUntil) || 0 };
+            data.players = pl;
+            if (!data.host || !pl[data.host]) data.host = Object.keys(pl).sort()[0];
+            if (!data.status) data.status = 'waiting';
+            if (!data.mode) data.mode = 'solo';
+            return data;
+        }, (err, committed) => {
+            landRs = 0;
+            if (!inLandGrabRoom || landRoomRef !== ref) return;
+            if (err) { if (tries < 3) setTimeout(() => landRestore(tries + 1), 1500); else landKicked('연결이 불안정해서 방에 다시 들어가지 못했어요. 다시 입장해 주세요.'); return; }
+            if (!committed) return;
+            if (why === 'gone') return landKicked('방이 사라져서 나가졌어요. 다시 입장해 주세요.');
+            if (why === 'late') return landKicked('연결이 끊긴 사이에 게임이 이어져서 돌아오지 못했어요. 다시 입장해 주세요.');
+            if (why === 'full') return landKicked('방이 꽉 차서 돌아오지 못했어요. 다시 입장해 주세요.');
         });
     }
 
@@ -2948,8 +3749,11 @@ input, select, button { color-scheme:dark; }
     }
 
     function handleLandRoomUpdate(snap) {
-        if(!inLandGrabRoom) return; let data = snap.val();
-        if(!data || !data.players || !data.players[getUserKey()]) return quitLandLobby();
+        if(!inLandGrabRoom) return; let data = landClean(snap.val());
+        if(!data) { quitLandLobby(); setTimeout(() => alert('방이 사라져서 나가졌어요. 다시 입장해 주세요.'), 50); return; }
+        // 내 자리만 없어졌다면(잠깐 연결이 끊겨 서버가 자리를 비운 경우) 쫓겨나지 않고 자리를 되찾아요.
+        if(!data.players || !data.players[getUserKey()] || !data.players[getUserKey()].name) { landRestore(); return; }
+        landMine = data.players[getUserKey()];
 
         let players = data.players || {}, hostKey = data.host;
         if (hostKey && !players[hostKey]) { attemptHostMigration(landRoomRef); }
@@ -2974,7 +3778,7 @@ input, select, button { color-scheme:dark; }
         if(mode === 'solo') {
             document.getElementById('lobbySoloUI').style.display = 'block'; document.getElementById('lobbyTeamUI').style.display = 'none'; document.getElementById('btnRandomTeam').style.display = 'none';
             let listEl = document.getElementById('lobbySoloList'); listEl.innerHTML = '';
-            Object.values(players).forEach(p => { let div = document.createElement('div'); div.className = 'lobby-player'; div.innerHTML = `<div class="land-color-dot" style="background-color:${p.color}"></div> ${escapeHTML(p.name)}`; listEl.appendChild(div); });
+            Object.values(players).forEach(p => { let div = document.createElement('div'); div.className = 'lobby-player'; div.innerHTML = `<div class="land-color-dot" style="background-color:${safeColor(p.color)}"></div> ${escapeHTML(p.name)}`; listEl.appendChild(div); });
         } else {
             document.getElementById('lobbySoloUI').style.display = 'none'; document.getElementById('lobbyTeamUI').style.display = 'block'; document.getElementById('btnRandomTeam').style.display = (data.host === getUserKey()) ? 'block' : 'none';
             let listA = document.getElementById('lobbyTeamAList'); listA.innerHTML = ''; let listB = document.getElementById('lobbyTeamBList'); listB.innerHTML = '';
@@ -3026,7 +3830,7 @@ input, select, button { color-scheme:dark; }
                 let coveredPool = rawWords.slice(0, endDay * WORDS_PER_DAY);
                 stageWords = stageWords.concat(coveredPool.filter(w => !stageWords.includes(w)).sort(()=>0.5-Math.random()).slice(0, LAND_WORDS_PER_STAGE - stageWords.length));
             }
-            let boardData = stageWords.sort(() => 0.5 - Math.random()).map(w => ({ w: w.w, m: w.m, owner: "" }));
+            let boardData = stageWords.sort(() => 0.5 - Math.random()).map(w => ({ w: w.w, m: w.mq || w.m, owner: "" }));
             let currentPlayers = data.players || {}; Object.keys(currentPlayers).forEach(k => { currentPlayers[k].score = 0; currentPlayers[k].penaltyUntil = 0; });
             return landRoomRef.update({ status: 'playing', board: boardData, players: currentPlayers });
         }).catch(err => reportFirebaseError(err, '땅따먹기 시작'));
@@ -3124,7 +3928,7 @@ input, select, button { color-scheme:dark; }
                 if((p.score||0)>0 || idx<5) {
                     let chip = document.createElement('div');
                     chip.className = 'land-player-chip';
-                    chip.innerHTML = `<div class="land-color-dot" style="background-color:${escapeHTML(p.color || '#64748b')}"></div> ${escapeHTML(p.name)} <b style="color:#8fe5ff;">${p.score||0}땅</b>`;
+                    chip.innerHTML = `<div class="land-color-dot" style="background-color:${safeColor(p.color)}"></div> ${escapeHTML(p.name)} <b style="color:#8fe5ff;">${nz(p.score)}땅</b>`;
                     lbEl.appendChild(chip);
                 }
             });
@@ -3142,7 +3946,7 @@ input, select, button { color-scheme:dark; }
         currentSelectedLandIndex = index; let boardEl = document.getElementById('landBoard');
         for(let i=0; i<100; i++) { if(i === index) boardEl.children[i].classList.add('selected'); else boardEl.children[i].classList.remove('selected'); }
         document.getElementById('landInteractionBox').className = 'land-interaction active';
-        document.getElementById('landTargetMean').innerHTML = `<span style="color:var(--primary);">💡 [${index+1}번 땅]</span><br>${currentLandBoardData[index].m}`;
+        document.getElementById('landTargetMean').innerHTML = `<span style="color:var(--primary);">💡 [${index+1}번 땅]</span><br>${escapeHTML(currentLandBoardData[index].m)}`;
         document.getElementById('landInput').disabled = false; document.getElementById('landInput').value = ''; document.getElementById('landInput').focus(); document.getElementById('landSubmitBtn').disabled = false;
     }
 
@@ -3153,7 +3957,7 @@ input, select, button { color-scheme:dark; }
         const inputEl = document.getElementById('landInput'), val = normalizeForCompare(inputEl.value);
         if(!val || !currentLandBoardData[currentSelectedLandIndex]) return;
         const idx = currentSelectedLandIndex;
-        const correct = val === normalizeForCompare(currentLandBoardData[idx].w);
+        const correct = sameAnswer(val, currentLandBoardData[idx].w);
         if(landPracticeMode) {
             if(correct) {
                 const cell = landPracticeData.board[idx];
@@ -3181,7 +3985,7 @@ input, select, button { color-scheme:dark; }
                 if(currentData && (!currentData.owner || currentData.owner === "")) { currentData.owner=getUserKey(); return currentData; } return;
             }, (error, committed) => {
                 if(committed) {
-                    landRoomRef.child(`players/${getUserKey()}/score`).transaction(sc => (sc||0)+1);
+                    if(landRoomRef) landRoomRef.child(`players/${getUserKey()}/score`).transaction(sc => (sc||0)+1);   // (마지막 땅이면 이미 게임이 끝나 방 연결이 없어요)
                     inputEl.value=''; currentSelectedLandIndex=-1; document.getElementById('landTargetMean').innerText='🎉 점령 성공! 다음 땅을 선택하세요.'; document.getElementById('landInteractionBox').className='land-interaction'; inputEl.disabled=true; document.getElementById('landSubmitBtn').disabled=true;
                 } else { inputEl.value=''; document.getElementById('landTargetMean').innerText='❌ 간발의 차이로 빼앗겼습니다!'; }
             });
@@ -3216,23 +4020,27 @@ input, select, button { color-scheme:dark; }
         if (roomRefLocal) roomRefLocal.off('value', handleLandRoomUpdate);
         landRoomRef = null;
         inLandGrabRoom = false; if(landPenaltyInterval) clearInterval(landPenaltyInterval);
-        let players = data.players || {}, mode = data.mode || 'solo', myData = players[getUserKey()], myScore = myData ? (myData.score || 0) : 0;
+        // 마지막 땅을 차지한 순간에는 그 점수가 아직 서버에 올라가기 전이라, 판 위에 실제로 차지된 땅 수로 다시 세어서 결과를 내요.
+        const tally = {}; (Array.isArray(data.board) ? data.board : Object.values(data.board || {})).forEach(c => { if (c && c.owner) tally[c.owner] = (tally[c.owner] || 0) + 1; });
+        const players = {}; Object.keys(data.players || {}).forEach(k => { const p = data.players[k]; if (p && typeof p === 'object') players[k] = Object.assign({}, p, { score: tally[k] || 0 }); });
+        let mode = data.mode || 'solo', myData = players[getUserKey()], myScore = myData ? (myData.score || 0) : 0;
         let comment = "", winStatus = "loss";
 
         if(mode === 'team') {
-            let scoreA = 0, scoreB = 0; Object.values(players).forEach(p => { if(p.team === 'A') scoreA += (p.score||0); if(p.team === 'B') scoreB += (p.score||0); });
+            let scoreA = 0, scoreB = 0; Object.values(players).forEach(p => { if(p.team === 'A') scoreA += nz(p.score); if(p.team === 'B') scoreB += nz(p.score); });
             let myTeam = myData ? myData.team : null;
             if (scoreA === scoreB) winStatus = "draw";
             else if (scoreA > scoreB && myTeam === 'A') winStatus = "win";
             else if (scoreB > scoreA && myTeam === 'B') winStatus = "win";
             let winTeamStr = scoreA > scoreB ? "A팀 (블루)" : (scoreB > scoreA ? "B팀 (레드)" : "무승부");
-            comment = `모든 땅이 점령되었습니다!<br>🏆 <b>결과: ${winTeamStr} 승리!</b><br>(A팀 ${scoreA}땅 vs B팀 ${scoreB}땅)`;
+            comment = `모든 땅이 점령되었습니다!<br>${scoreA === scoreB ? '🤝 <b>결과: 무승부!</b>' : `🏆 <b>결과: ${winTeamStr} 승리!</b>`}<br>(A팀 ${scoreA}땅 vs B팀 ${scoreB}땅)`;
         } else {
             let sortedPlayers = Object.values(players).sort((a,b) => (b.score||0) - (a.score||0));
             let topScore = sortedPlayers.length > 0 ? sortedPlayers[0].score : 0;
             if (myScore === topScore && topScore > 0) winStatus = "win"; 
             let winner = sortedPlayers[0];
-            comment = winner ? `모든 땅이 점령되었습니다!<br>🏆 <b>최종 1위: ${escapeHTML(winner.name)} (${winner.score || 0}땅)</b>` : `게임이 종료되었습니다!`;
+            const tops = sortedPlayers.filter(p => nz(p.score) === nz(topScore));
+            comment = winner ? `모든 땅이 점령되었습니다!<br>🏆 <b>${tops.length > 1 && nz(topScore) > 0 ? '공동 1위: ' + tops.map(p => escapeHTML(p.name)).join(', ') : '최종 1위: ' + escapeHTML(winner.name)} (${nz(winner.score)}땅)</b>` : `게임이 종료되었습니다!`;
         }
         
         let prevRecord = landRecords[currentLandStage] || {};
@@ -3311,7 +4119,7 @@ input, select, button { color-scheme:dark; }
             bot2: {name:names[1], color:'#ef4444', team:'B', score:0, penaltyUntil:0},
             bot3: {name:names[2], color:'#a855f7', team:'B', score:0, penaltyUntil:0}
         };
-        return {mode:'team', stage, board:stageWords.map(w=>({w:w.w,m:w.m,owner:''})), players};
+        return {mode:'team', stage, board:stageWords.map(w=>({w:w.w,m:w.mq||w.m,owner:''})), players};
     }
 
     function startLandPractice(stage) {
@@ -3401,14 +4209,15 @@ input, select, button { color-scheme:dark; }
     }
 
     // 👑 어휘왕 SURVIVAL (실시간 어휘 생존 게임)
-    const SV = { on: 0, run: 0, rid: 0, hold: 0, fin: 0, done: 0, played: 0, stage: 1, code: '', ref: null, data: null, off: 0, sig: '', pick: -1, wl: 0, tt: null, lh: null, fail: 0, words: [], ctx: null, sound: localStorage.getItem('survSoundEnabled') !== '0' };
+    const SV = { on: 0, run: 0, rid: 0, hold: 0, fin: 0, done: 0, played: 0, stage: 1, code: '', ref: null, data: null, off: 0, sig: '', pick: -1, wl: 0, tt: null, lh: null, fail: 0, words: [], ctx: null, mine: null, seen: 0, rs: 0, pz: 0, sound: localStorage.getItem('survSoundEnabled') !== '0' };
+    const SV_REJOIN_MS = 90000, SV_GRACE_MS = 20000;   // 게임 중 끊겼다가 돌아올 수 있는 시간 / 최종 대결에서 돌아올 친구를 기다려 주는 시간
     const svEl = id => document.getElementById(id);
     const svSlp = ms => new Promise(r => setTimeout(r, ms));
     const svNow = () => Date.now() + SV.off;
     const svP = () => (SV.data && SV.data.players) || {};
     const svIds = () => Object.keys(svP()).filter(k => svP()[k] && svP()[k].name);
     const svAlive = () => svIds().filter(k => svP()[k].a);
-    const svOk = my => !!(SV.run === my && SV.on && SV.ref && SV.data && SV.data.status === 'playing' && SV.data.host === getUserKey());
+    const svOk = my => !!(NET.up && SV.run === my && SV.on && SV.ref && SV.data && SV.data.status === 'playing' && SV.data.host === getUserKey());   // 방장이 오프라인이면 채점·진행을 멈춰요(친구들이 억울하게 생명을 잃지 않도록)
     const svLive = tok => !!(SV.on && SV.sig === tok);
     const sv = h => { svEl('survStage').innerHTML = h; };
     const svNames = (l, P) => { const n = l.map(i => P[i] ? P[i].name : '').filter(Boolean); return n.length > 3 ? n.slice(0, 3).join(', ') + ' 외 ' + (n.length - 3) + '명' : n.join(', '); };
@@ -3420,7 +4229,7 @@ input, select, button { color-scheme:dark; }
         return Object.keys(f).length ? SV.ref.child('players').update(f) : Promise.resolve();
     }
     const svStats = (m, rank) => [['최종 순위', rank + '위'], ['맞힌 문제', (m.c || 0) + '/' + (m.t || 0)], ['정답률', (m.t ? Math.round(m.c / m.t * 100) : 0) + '%'], ['최고 연속 정답', (m.b || 0) + '개'], ['미니게임 1위', (m.m || 0) + '회'], ['획득한 생명', '❤️ +' + (m.g || 0)], ['부활', m.r ? '성공 🔥' : '없음']];
-    const svStatHTML = (cells, cls) => '<div class="sv-stats ' + cls + '">' + cells.map(c => '<div><small>' + c[0] + '</small><b>' + c[1] + '</b></div>').join('') + '</div>';
+    const svStatHTML = (cells, cls) => '<div class="sv-stats ' + cls + '">' + cells.map(c => '<div><small>' + escapeHTML(c[0]) + '</small><b>' + escapeHTML(c[1]) + '</b></div>').join('') + '</div>';
 
     // 🔊 효과음
     const SVS = { start: [[523, 0, .1], [659, .1, .1], [784, .2, .1], [1046, .3, .3]], event: [[784, 0, .1], [1046, .12, .2]], rev: [[392, 0, .15], [523, .15, .15], [784, .3, .3]], final: [[196, 0, .2], [196, .25, .2], [262, .5, .4]], duel: [[330, 0, .12], [330, .16, .12], [494, .32, .35]], ok: [[880, 0, .1], [1318, .08, .16]], no: [[180, 0, .25]], elim: [[330, 0, .15], [262, .16, .15], [196, .32, .4]], king: [[523, 0, .15], [659, .15, .15], [784, .3, .15], [1046, .45, .5]] };
@@ -3443,6 +4252,16 @@ input, select, button { color-scheme:dark; }
         svEl('btnSurvSound').textContent = SV.sound ? '🔊' : '🔇';
     }
 
+    // 📱 iOS/iPad 는 '화면을 터치한 순간'에 소리를 한 번 열어 두어야 이후 타이머에서도 효과음이 재생돼요.
+    function svUnlockAudio() {
+        if (!SV.sound) return;
+        try {
+            if (!SV.ctx) SV.ctx = new (window.AudioContext || window.webkitAudioContext)();
+            if (SV.ctx.state === 'suspended') SV.ctx.resume().catch(() => {});
+        } catch (e) {}
+    }
+    ['click', 'touchend', 'keydown'].forEach(ev => document.addEventListener(ev, svUnlockAudio, true));
+
     // 🏆 최종전: 모든 낱말을 한꺼번에 사용하는 단일 SURVIVAL
     const SURV_FINAL_STAGE = 1;
 
@@ -3451,7 +4270,7 @@ input, select, button { color-scheme:dark; }
         const card = document.createElement('div'); card.className='day-btn practice-card';
         const record = survRecords[SURV_FINAL_STAGE];
         const allCleared = TOTAL_DAYS > 0 && Array.from({length: TOTAL_DAYS}, (_,i) => i+1).every(d => dailyRecords[d] && dailyRecords[d].cleared);
-        const rateText = record && record.plays>0 ? `👑 어휘왕 ${record.kings||0}회 · 총 ${record.plays||0}회 참가` : '최종전 전적 없음';
+        const rateText = record && record.plays>0 ? `👑 어휘왕 ${nz(record.kings)}회 · 총 ${nz(record.plays)}회 참가` : '최종전 전적 없음';
         card.innerHTML=`<div class="practice-title">👑 FINAL SURVIVAL</div><div class="practice-range">전체 ${rawWords.length}개 낱말 · 전 학습 범위</div><div class="practice-record">${rateText}</div><div class="practice-actions"><button class="stage-play-btn practice" type="button">🤖 연습</button><button class="stage-play-btn real" type="button">${allCleared?'👑 최종전 시작':'🔒 매일학습 전체 클리어 필요'}</button></div>`;
         card.querySelector('.practice').onclick=(e)=>{e.stopPropagation(); startSurvPractice(SURV_FINAL_STAGE);};
         card.querySelector('.real').onclick=(e)=>{e.stopPropagation(); if(!allCleared) alert(`🔒 최종전은 매일학습 ${TOTAL_DAYS}일차까지 모두 클리어한 뒤 참가할 수 있어요!`); else joinSurv(SURV_FINAL_STAGE);};
@@ -3460,7 +4279,9 @@ input, select, button { color-scheme:dark; }
 
     function svStageWords(stage) {
         // SURVIVAL은 최종전 하나만 존재하며 전체 낱말을 한 풀(pool)로 사용합니다.
-        return shuffleArray(rawWords);
+        // ⚠ 방장이 바뀌어도 loop.pool 의 번호(index)가 모든 기기에서 같은 낱말을 가리키도록 여기서는 섞지 않습니다.
+        //   (출제 순서는 svLoop 안에서 pool 을 따로 섞고, 연습 모드도 remaining 을 따로 섞습니다.)
+        return rawWords.slice();
     }
 
 
@@ -3495,8 +4316,8 @@ input, select, button { color-scheme:dark; }
 
     function startSurvPractice(stage) {
         // 실전 방 정리
-        if(SV.ref || SV.on) { const oldRef=SV.ref; SV.on=0; SV.run=0; clearInterval(SV.tt); SV.ref=null; if(oldRef) { oldRef.off('value',svUpdate); svLeaveRef(oldRef); } }
-        if(survPracticeTimer) clearTimeout(survPracticeTimer);
+        if(SV.ref || SV.on) { const oldRef=SV.ref; SV.on=0; SV.run=0; clearInterval(SV.tt); clearTimeout(SV.rt); SV.ref=null; if(oldRef) { oldRef.off('value',svUpdate); svLeaveRef(oldRef); } }
+        if(survPracticeTimer){ clearTimeout(survPracticeTimer); cancelAnimationFrame(survPracticeTimer); survPracticeTimer=null; }
         const words=svStageWords(SURV_FINAL_STAGE);
         const ids=['me','bot1','bot2','bot3'];
         const names=[userProfile?userProfile.studentName:'나','스피드봇','단어봇','문해봇'];
@@ -3526,7 +4347,7 @@ input, select, button { color-scheme:dark; }
         const pool=survPractice.remaining || (survPractice.remaining=shuffleArray(W));
         if(!pool.length) survPractice.remaining=shuffleArray(W);
         const target=(survPractice.remaining || pool).pop();
-        const opts=shuffleArray([target.w,...shuffleArray(W.filter(x=>x.w!==target.w)).slice(0,3).map(x=>x.w)]);
+        const opts=shuffleArray([target.w,...pickWrongs(target,W,3).map(x=>x.w)]);
         return {word:target,opts,ai:opts.indexOf(target.w)};
     }
 
@@ -3537,7 +4358,7 @@ input, select, button { color-scheme:dark; }
         survPractice.q++; survPractice.roundId++; survPractice.answered=false; survPractice.current=makeSurvPracticeQuestion();
         const q=survPractice.current;
         const diff=getSurvDifficultyInfo(survPractice.q);
-        sv(`<div class="practice-mode-bar dark"><span>🤖 컴퓨터 연습 · 문제를 풀며 생존하세요</span><span class="practice-badge dark">연습 ${survPractice.q}/${survPractice.maxQ}</span></div><div class="sv-difficulty"><span>🔥 난이도 ${diff.level}</span><b>${diff.stars}</b><strong>${diff.seconds.toFixed(1)}초</strong><small>다음 상승 ${diff.nextQ}번</small></div><div class="sv-qn">문제 ${survPractice.q}</div><h2 class="sv-q">${escapeHTML(q.word.m)}</h2><div class="sv-hint">뜻에 알맞은 단어를 선택하세요</div><div class="sv-bar"><b id="svTb"></b></div><div class="sv-opts">${q.opts.map((x,i)=>`<button data-i="${i}" onclick="pickSurvPractice(${i})">${escapeHTML(x)}</button>`).join('')}</div><div class="sv-fb" id="svFb">💡 컴퓨터들도 동시에 답을 고르고 있어요.</div>`);
+        sv(`<div class="practice-mode-bar dark"><span>🤖 컴퓨터 연습 · 문제를 풀며 생존하세요</span><span class="practice-badge dark">연습 ${survPractice.q}/${survPractice.maxQ}</span></div><div class="sv-difficulty"><span>🔥 난이도 ${diff.level}</span><b>${diff.stars}</b><strong>${diff.seconds.toFixed(1)}초</strong><small>${diff.seconds>4?'다음 상승 '+diff.nextQ+'번':'최고 난이도 · 4.0초 유지'}</small></div><div class="sv-qn">문제 ${survPractice.q}</div><h2 class="sv-q">${escapeHTML(q.word.mq||q.word.m)}</h2><div class="sv-hint">뜻에 알맞은 단어를 선택하세요</div><div class="sv-bar"><b id="svTb"></b></div><div class="sv-opts">${q.opts.map((x,i)=>`<button data-i="${i}" onclick="pickSurvPractice(${i})">${escapeHTML(x)}</button>`).join('')}</div><div class="sv-fb" id="svFb">💡 컴퓨터들도 동시에 답을 고르고 있어요.</div>`);
         renderSurvPracticeHud();
         const practiceT = getSurvTimeLimit(survPractice.q, survPractice.maxQ, aliveSurvPracticeIds().length);
         let left=practiceT*1000, started=performance.now();
@@ -3574,6 +4395,7 @@ input, select, button { color-scheme:dark; }
         Object.values(p).forEach(x=>{ if(x.a){x.t=(x.t||0)+1;} });
         const me=p.me;
         const userGood=survPractice.answered && survPractice.userPick===q.ai;
+        if(me.a && userGood) me.c=(me.c||0)+1;
         if(me.a && !userGood){ me.h=Math.max(0,(me.h||0)-1); if(me.h===0) me.a=0; }
         ['bot1','bot2','bot3'].forEach(id=>{ const b=p[id]; if(b.a && !b.s){ b.h=Math.max(0,(b.h||0)-1); if(b.h===0) b.a=0; }});
         const btns=svEl('survStage').querySelectorAll('.sv-opts button'); btns.forEach((b,i)=>{b.disabled=true; if(i===q.ai)b.classList.add('ok');});
@@ -3605,11 +4427,11 @@ input, select, button { color-scheme:dark; }
         if (!isFirebaseActive) { alert("서버 연결이 필요합니다."); return; }
         const raw = prompt(`👑 FINAL SURVIVAL에 접속합니다.\n전체 낱말로 최종전을 진행합니다.\n[방 이름]을 입력하세요. (예: 1모둠, 자유방)`);
         if (!raw || raw.trim() === '') return;
-        const code = raw.trim().replace(/[\.\#\$\[\]\/]/g, "");
+        const code = cleanText(raw.replace(/[\.\#\$\[\]\/]/g, ""), 20);
         if (code === '') { alert("방 이름에 사용할 수 없는 문자만 입력하셨습니다. 다른 이름으로 다시 시도해주세요."); return; }
         if (SV.ref || SV.on) {
             const oldRef = SV.ref;
-            SV.on = 0; SV.run = 0; clearInterval(SV.tt); SV.ref = null;
+            SV.on = 0; SV.run = 0; clearInterval(SV.tt); clearTimeout(SV.rt); SV.ref = null;
             if (oldRef) { oldRef.off('value', svUpdate); svLeaveRef(oldRef); }
         }
         const ref = getDB().ref(`survRooms_vocab/stage_${stage}_${code}`), me = getUserKey();
@@ -3621,6 +4443,7 @@ input, select, button { color-scheme:dark; }
             pl = ok; const n = Object.keys(pl).length;
             if (n === 0) data = { host: me, status: 'waiting', players: {} };
             else if (!hostOk) data.host = Object.keys(pl).sort()[0];
+            if (data.lv) delete data.lv[me];
             if (pl[me]) { data.players = pl; return data; }
             if (data.status === 'playing') return;
             if (n >= 25) return;
@@ -3632,10 +4455,11 @@ input, select, button { color-scheme:dark; }
         }, (err, committed, snap) => {
             if (err) { alert("입장 중 오류가 발생했습니다. 다시 시도해주세요."); return; }
             if (!committed) { const d = (snap && snap.val()) || {}; alert(d.status === 'playing' ? "진행 중인 게임입니다!" : "방이 꽉 찼습니다."); return; }
-            Object.assign(SV, { on: 1, run: 0, hold: 0, fin: 0, done: 0, played: 0, stage, code, ref, data: null, sig: '', pick: -1, wl: 0, lh: null, fail: 0, words: svStageWords(stage) });
+            Object.assign(SV, { on: 1, run: 0, hold: 0, fin: 0, done: 0, played: 0, stage, code, ref, data: null, sig: '', pick: -1, wl: 0, lh: null, fail: 0, mine: ((snap.val() || {}).players || {})[me] || null, seen: Date.now(), rs: 0, pz: 0, words: svStageWords(stage) });
             svEl('survLobbyTitle').innerText = title; svEl('survGameTitle').innerText = title;
             svEl('btnSurvSound').textContent = SV.sound ? '🔊' : '🔇';
             ref.child('players/' + me).onDisconnect().remove();
+            netStart();
             getDB().ref('.info/serverTimeOffset').once('value').then(x => { SV.off = x.val() || 0; }).catch(() => {});
             showScreen('survLobbyScreen'); ref.on('value', svUpdate);
         });
@@ -3644,10 +4468,13 @@ input, select, button { color-scheme:dark; }
     // 🔄 방 데이터가 바뀔 때마다 실행 (모든 참가자 공통)
     function svUpdate(snap) {
         if (!SV.on) return;
-        const d = snap.val(); SV.data = d;
+        const d = svClean(snap.val()); SV.data = d;
         if (SV.fin) return;
         const me = getUserKey();
-        if (!d || !d.players || !d.players[me]) return quitSurv();
+        if (!d) { svKicked('방이 사라져서 나가졌어요. 다시 입장해 주세요.'); return; }
+        // 내 자리만 없어졌다면(잠깐 연결이 끊겨 서버가 자리를 비운 경우) 쫓겨나지 않고 자리를 되찾아요.
+        if (!d.players || !d.players[me] || !d.players[me].name) { svRestore(); return; }
+        SV.mine = d.players[me]; SV.seen = Date.now();
         const host = d.host === me;
         if (d.host && !d.players[d.host]) attemptHostMigration(SV.ref);
         svEl('survLobbyHostActions').style.display = host ? 'flex' : 'none';
@@ -3663,12 +4490,73 @@ input, select, button { color-scheme:dark; }
         const st = d.st || {};
         if (st.id && st.id !== SV.sig) { SV.sig = st.id; svDraw(st, d); }
         // 방장이 진행을 맡아요. 방장이 바뀌면 새 방장이 이어받아요.
-        if (host && !SV.run && !SV.hold && !SV.fin && !(st.ph === 'end')) survRun(d.loop || null);
+        svMaybeRun(d);
+    }
+
+    // 🔌 연결 끊김 복구 ─────────────────────────────────────────────────────────────
+    //  연결이 끊기면 서버가 내 자리(players/나)를 비워요. 예전에는 돌아오면 "나가졌어요"로 쫓겨났지만, 이제는
+    //   · 방이 아직 있으면 → 내 자리를 되찾고(게임 중이면 생명·기록 그대로, 단 90초 안일 때만) 이어서 해요.
+    //   · 방이 사라졌거나, 끊긴 사이에 게임이 끝났거나, 너무 오래됐으면 → 안내 후 나가요.
+    //  트랜잭션을 써서 '연결 직후의 낡은 화면 데이터'가 아니라 서버의 최신 데이터를 기준으로 판단해요.
+    function svKicked(msg) { quitSurv(); setTimeout(() => alert(msg), 50); }
+
+    // 방장인데 진행(루프)이 멈춰 있으면 이어서 시작해요. (게임 중 데이터가 바뀔 때 · 연결이 돌아왔을 때)
+    function svMaybeRun(d) {
+        if (!d || !SV.on || !SV.ref || SV.fin || SV.run || SV.hold || !NET.up) return;
+        if (d.host !== getUserKey() || d.status !== 'playing' || (d.st && d.st.ph === 'end')) return;
+        survRun(d.loop || null);
+    }
+
+    function svNetEvt(up) {
+        if (!SV.on || !SV.ref || SV.fin) return;
+        if (!up) { if (SV.run) SV.pz = Date.now(); return; }   // 방장이 끊겼던 거라면, 돌아와서 이어갈 때 안내 문구를 다르게 보여줘요
+        const me = getUserKey(); if (!me) return;
+        try { SV.ref.child('players/' + me).onDisconnect().remove(); } catch (e) { /* 새 연결에서도 '나가면 자리 비우기'를 다시 걸어 둬요 */ }
+        svRestore();
+    }
+
+    function svRestore(n) {
+        if (SV.rs || !SV.on || !SV.ref || SV.fin) return;
+        const ref = SV.ref, me = getUserKey(), mine = SV.mine, seen = SV.seen, tries = n || 0;
+        if (!me) return;
+        let why = '';
+        SV.rs = 1;
+        ref.transaction(d => {
+            why = '';
+            if (!SV.on || SV.ref !== ref) { why = 'left'; return; }        // 그 사이 내가 직접 나갔다면 되살리지 않아요
+            if (!d) { why = 'gone'; return d; }                            // 사라진 방은 다시 만들지 않아요
+            const pl = {};
+            Object.keys(d.players || {}).forEach(k => { const p = d.players[k]; if (p && p.name) pl[k] = p; });
+            if (pl[me]) return d;                                          // 내 자리가 그대로 있어요
+            const playing = d.status === 'playing';
+            if (playing && (!mine || (d.st && d.st.ph === 'end') || Date.now() - seen > SV_REJOIN_MS)) { why = 'late'; return d; }
+            if (Object.keys(pl).length >= 25) { why = 'full'; return d; }
+            const used = new Set(Object.values(pl).map(p => p.color));
+            let color = mine && mine.color;
+            if (!color || used.has(color)) { let ci = 0; while (used.has(getPlayerColor(ci))) ci++; color = getPlayerColor(ci); }
+            pl[me] = playing
+                ? Object.assign({}, mine, { name: userProfile.studentName, color })
+                : { name: userProfile.studentName, color, order: (mine && mine.order != null) ? mine.order : Object.keys(pl).length, h: 3, a: 1, c: 0, t: 0, s: 0, b: 0, m: 0, g: 0, r: 0, k: 0 };
+            d.players = pl;
+            if (!d.host || !pl[d.host]) d.host = Object.keys(pl).sort()[0];
+            if (!d.status) d.status = 'waiting';
+            if (d.lv) delete d.lv[me];
+            return d;
+        }, (err, committed, snap) => {
+            SV.rs = 0;
+            if (!SV.on || SV.ref !== ref) return;
+            if (err) { if (tries < 3) setTimeout(() => svRestore(tries + 1), 1500); else svKicked('연결이 불안정해서 방에 다시 들어가지 못했어요. 다시 입장해 주세요.'); return; }
+            if (!committed) return;
+            if (why === 'gone') return svKicked('방이 사라져서 나가졌어요. 다시 입장해 주세요.');
+            if (why === 'late') return svKicked('연결이 끊긴 사이에 게임이 이어져서 돌아오지 못했어요. 다시 입장해 주세요.');
+            if (why === 'full') return svKicked('방이 꽉 차서 돌아오지 못했어요. 다시 입장해 주세요.');
+            svMaybeRun(snap && snap.val());
+        });
     }
 
     function svLobby(d) {
         const pl = d.players || {}, ids = Object.keys(pl).filter(k => pl[k] && pl[k].name).sort((a, b) => (pl[a].order || 0) - (pl[b].order || 0));
-        svEl('survLobbyList').innerHTML = ids.map(k => `<div class="lobby-player"><div class="land-color-dot" style="background-color:${escapeHTML(pl[k].color)}"></div> ${escapeHTML(pl[k].name)}${k === d.host ? ' <span style="color:var(--text-light); font-weight:normal;">(방장)</span>' : ''}</div>`).join('');
+        svEl('survLobbyList').innerHTML = ids.map(k => `<div class="lobby-player"><div class="land-color-dot" style="background-color:${safeColor(pl[k].color)}"></div> ${escapeHTML(pl[k].name)}${k === d.host ? ' <span style="color:var(--text-light); font-weight:normal;">(방장)</span>' : ''}</div>`).join('');
         svEl('survLobbyCount').textContent = `(${ids.length}명)`;
         const b = svEl('btnSurvStart'); b.disabled = ids.length < 2; b.textContent = ids.length < 2 ? '2명 이상 모여야 시작해요' : '🚀 게임 시작!';
     }
@@ -3680,7 +4568,7 @@ input, select, button { color-scheme:dark; }
         const ids = svIds();
         if (ids.length < 2) { alert("2명 이상 모여야 시작할 수 있어요!"); return; }
         svEl('btnSurvStart').disabled = true;
-        const up = { status: 'playing', n0: ids.length, st: null, an: null, ms: null, loop: null };
+        const up = { status: 'playing', n0: ids.length, st: null, an: null, ms: null, loop: null, lv: null };
         ids.forEach(k => {
             ['c', 't', 's', 'b', 'm', 'g', 'r', 'k'].forEach(f => { up['players/' + k + '/' + f] = 0; });
             up['players/' + k + '/h'] = 3; up['players/' + k + '/a'] = 1;
@@ -3691,12 +4579,12 @@ input, select, button { color-scheme:dark; }
     function svHud(d) {
         const pl = d.players || {}, me = getUserKey(), m = pl[me], el = svEl('survHearts');
         const ids = Object.keys(pl).filter(k => pl[k] && pl[k].name).sort((a, b) => (pl[a].order || 0) - (pl[b].order || 0));
-        el.textContent = m ? (m.a ? '❤️'.repeat(m.h || 0) : '💀 관전 중') : '';
+        el.textContent = m ? (m.a ? '❤️'.repeat(nz(m.h, 20)) : '💀 관전 중') : '';
         if (m && SV.lh !== null && m.h !== SV.lh) { el.classList.remove('hit', 'up'); void el.offsetWidth; el.classList.add(m.h < SV.lh ? 'hit' : 'up'); }
         SV.lh = m ? m.h : null;
         svEl('survCnt').textContent = `생존 ${ids.filter(i => pl[i].a).length} / ${ids.length}`;
         svEl('survDots').innerHTML = ids.map(i => `<i class="${pl[i].a ? 'on' : ''}${i === me ? ' me' : ''}" title="${escapeHTML(pl[i].name)}"></i>`).join('');
-        svEl('survBoard').innerHTML = ids.slice().sort((a, b) => (pl[b].a || 0) - (pl[a].a || 0) || (pl[b].h || 0) - (pl[a].h || 0)).map(i => `<span class="${pl[i].a ? '' : 'x'}${i === me ? ' me' : ''}">${escapeHTML(pl[i].name)} ${pl[i].a ? '❤️' + pl[i].h : '💀'}</span>`).join('');
+        svEl('survBoard').innerHTML = ids.slice().sort((a, b) => (pl[b].a || 0) - (pl[a].a || 0) || (pl[b].h || 0) - (pl[a].h || 0)).map(i => `<span class="${pl[i].a ? '' : 'x'}${i === me ? ' me' : ''}">${escapeHTML(pl[i].name)} ${pl[i].a ? '❤️' + nz(pl[i].h, 20) : '💀'}</span>`).join('');
     }
 
     // 🎬 상태에 맞춰 화면 그리기 (모든 참가자 공통)
@@ -3708,15 +4596,15 @@ input, select, button { color-scheme:dark; }
         if (s.ph === 'q' || s.ph === 'res') {
             const res = s.ph === 'res';
             if (!res) { SV.pick = -1; SV.wl = (m && m.a) ? 1 : 0; }
-            const can = SV.wl && !res, out = res && SV.wl && (s.el || []).includes(me), good = SV.pick === s.ai;
+            const can = SV.wl && !res, out = res && SV.wl && (s.el || []).includes(me), good = s.gr ? (s.ok || []).includes(me) : SV.pick === s.ai, late = !!s.gr && !good && SV.pick === s.ai;
             let fx = '';
             if (res && SV.wl && !good && !s.vd) fx += '<div class="sv-float">❤️ -1</div>';
             if (out) fx += '<div class="sv-stamp">ELIMINATED</div>';
             const diff = getSurvDifficultyInfo(s.q);
-            sv(`${fx}<div class="sv-qn">문제 ${s.q}</div><div class="sv-difficulty"><span>🔥 난이도 ${diff.level}</span><b>${diff.stars}</b><strong>${diff.seconds.toFixed(1)}초</strong><small>20문제마다 0.5초 단축 · 다음 ${diff.nextQ}번</small></div><h2 class="sv-q">${escapeHTML(s.m)}</h2><div class="sv-hint" id="svHint">${res ? '' : (can ? '뜻에 알맞은 단어는?' : '👀 관전 중 · 친구들이 푸는 중이에요')}</div><div class="sv-bar"><b id="svTb"${res ? ' style="width:0"' : ''}></b></div><div class="sv-opts${can ? '' : ' spec'}">${s.o.map((x, i) => `<button data-i="${i}"${can ? '' : ' disabled'}${res ? ` class="${i === s.ai ? 'ok' : (i === SV.pick ? 'no' : '')}"` : ''}>${escapeHTML(x)}</button>`).join('')}</div><div class="sv-fb" id="svFb"></div>`);
+            sv(`${fx}<div class="sv-qn">문제 ${nz(s.q, 100000)}</div><div class="sv-difficulty"><span>🔥 난이도 ${diff.level}</span><b>${diff.stars}</b><strong>${diff.seconds.toFixed(1)}초</strong><small>${diff.seconds > 4 ? '20문제마다 0.5초 단축 · 다음 ' + diff.nextQ + '번' : '최고 난이도 · 4.0초 유지'}</small></div><h2 class="sv-q">${escapeHTML(s.m)}</h2><div class="sv-hint" id="svHint">${res ? '' : (can ? '뜻에 알맞은 단어는?' : '👀 관전 중 · 친구들이 푸는 중이에요')}</div><div class="sv-bar"><b id="svTb"${res ? ' style="width:0"' : ''}></b></div><div class="sv-opts${can ? '' : ' spec'}">${(Array.isArray(s.o) ? s.o : []).map((x, i) => `<button data-i="${i}"${can ? '' : ' disabled'}${res ? ` class="${i === s.ai ? 'ok' : (i === SV.pick ? 'no' : '')}"` : ''}>${escapeHTML(x)}</button>`).join('')}</div><div class="sv-fb" id="svFb"></div>`);
             if (res) {
                 svEl('svFb').innerHTML = (SV.wl
-                    ? `<b>${good ? '✅ 정답!' : SV.pick < 0 ? '⏰ 시간 초과!' : '❌ 오답!'}${!good && !s.vd ? ' ❤️ -1' : ''}${out ? ' · 탈락! 관전 모드로 바뀌어요' : ''}</b>`
+                    ? `<b>${good ? '✅ 정답!' : late ? '⏰ 답이 늦게 도착했어요!' : SV.pick < 0 ? '⏰ 시간 초과!' : '❌ 오답!'}${!good && !s.vd ? ' ❤️ -1' : ''}${out ? ' · 탈락! 관전 모드로 바뀌어요' : ''}</b>`
                     : '<b>👀 관전 중</b>') + `<br><span class="sv-mut">${escapeHTML(s.note || '')}</span>`;
                 if (SV.wl) svSnd(good ? 'ok' : (out ? 'elim' : 'no'));
                 return;
@@ -3760,29 +4648,46 @@ input, select, button { color-scheme:dark; }
 
     // 👑 우승 연출 → 개인 결과 화면
     function svReveal(s, d) {
-        SV.fin = 1;
+        SV.fin = 1; svCredit(s, d);
         const pl = d.players || {}, me = getUserKey(), w = pl[s.w];
-        if (!w) { sv('<div class="sv-bn"><h1>게임 종료</h1><p>승부가 나지 않고 끝났어요</p></div>'); setTimeout(() => svFinish(s, d), 2500); return; }
+        if (!w) {
+            const tie = (s.tie ? (Array.isArray(s.tie) ? s.tie : Object.values(s.tie)) : []).filter(i => pl[i]);
+            if (tie.length > 1) {   // 🤝 끝까지 생명도 맞힌 문제 수도 같으면 어휘왕 없이 공동 1위
+                svSnd('king');
+                sv(`<div class="sv-bn win"><h1>🤝 무승부!</h1><p>생명과 맞힌 문제 수가 똑같아요<br>어휘왕은 없고 모두 <b>공동 1위</b>예요<br><br>${escapeHTML(svNames(tie, pl))}</p></div>`);
+                SV.rt = setTimeout(() => svFinish(s, d), 5600); return;
+            }
+            sv('<div class="sv-bn"><h1>게임 종료</h1><p>승부가 나지 않고 끝났어요</p></div>'); SV.rt = setTimeout(() => svFinish(s, d), 2500); return;
+        }
         svSnd('king');
         const conf = Array.from({ length: 16 }, (_, i) => `<i style="left:${Math.floor(i * 6.2 + Math.random() * 4)}%; animation-delay:${(Math.random() * 1.8).toFixed(2)}s">${['🎉', '✨', '⭐', '🎊'][i % 4]}</i>`).join('');
         sv(`<div class="sv-king"><div class="sv-cfs">${conf}</div><div class="sv-crown">👑</div><div class="sv-mut" style="font-weight:800; letter-spacing:2px;">TODAY'S VOCAB KING</div><h1>${s.w === me ? '바로 나!' : escapeHTML(w.name)}</h1><p>오늘의 어휘왕</p>${svStatHTML(svStats(w, 1), 'dark')}</div>`);
-        setTimeout(() => svFinish(s, d), 5600);
+        SV.rt = setTimeout(() => svFinish(s, d), 5600);
+    }
+
+    // 🏅 결과가 확정되는 순간(우승 연출이 시작될 때) 기록·랭킹을 한 번만 저장합니다.
+    //    연출 도중에 나가거나 창을 닫아도 기록이 사라지지 않고, 나간 뒤에 결과 화면이 뜨지도 않도록 화면 전환(svFinish)과 분리했어요.
+    function svCredit(s, d) {
+        try {
+            const me = getUserKey(), pl = d.players || {}, m = pl[me] || {}, win = !!s.w && s.w === me, total = d.n0 || Object.keys(pl).length, rank = win ? 1 : (m.k || total);
+            const rec = survRecords[SV.stage] || { plays: 0, kings: 0, bestRank: null };
+            rec.plays = (rec.plays || 0) + 1; if (win) rec.kings = (rec.kings || 0) + 1; if (!rec.bestRank || rank < rec.bestRank) rec.bestRank = rank;
+            survRecords[SV.stage] = rec; localStorage.setItem('survRecords', JSON.stringify(survRecords)); syncToFirebase();
+            if (isFirebaseActive && me) getDB().ref('rankings_vocab_surv/stage_' + SV.stage + '/' + me).set({ name: userProfile.studentName, classInfo: userProfile.gradeClass, firsts: rec.kings, plays: rec.plays }).catch(() => {});
+        } catch (e) { console.error('어휘왕 기록 저장 오류', e); }
     }
 
     function svFinish(s, d) {
-        if (SV.done) return; SV.done = 1; SV.on = 0; clearInterval(SV.tt);
+        if (SV.done || !SV.on) return; SV.done = 1; SV.on = 0; clearInterval(SV.tt); clearTimeout(SV.rt);
         const ref = SV.ref; SV.ref = null;
         if (ref) { ref.off('value', svUpdate); svLeaveRef(ref); }
         const me = getUserKey(), pl = d.players || {}, m = pl[me] || {}, win = !!s.w && s.w === me, total = d.n0 || Object.keys(pl).length, rank = win ? 1 : (m.k || total);
-        const rec = survRecords[SV.stage] || { plays: 0, kings: 0, bestRank: null };
-        rec.plays = (rec.plays || 0) + 1; if (win) rec.kings = (rec.kings || 0) + 1; if (!rec.bestRank || rank < rec.bestRank) rec.bestRank = rank;
-        survRecords[SV.stage] = rec; localStorage.setItem('survRecords', JSON.stringify(survRecords)); syncToFirebase();
-        if (isFirebaseActive && me) getDB().ref('rankings_vocab_surv/stage_' + SV.stage + '/' + me).set({ name: userProfile.studentName, classInfo: userProfile.gradeClass, firsts: rec.kings, plays: rec.plays });
         const w = pl[s.w];
         document.getElementById('btnReviewMissed').style.display = 'none';
-        document.getElementById('resultTitle').innerText = win ? "👑 TODAY'S VOCAB KING!" : "🎖️ 게임 종료!";
+        const tie = (s.tie ? (Array.isArray(s.tie) ? s.tie : Object.values(s.tie)) : []).filter(i => pl[i]), inTie = tie.length > 1 && tie.includes(me);
+        document.getElementById('resultTitle').innerText = win ? "👑 TODAY'S VOCAB KING!" : (inTie ? "🤝 공동 1위!" : "🎖️ 게임 종료!");
         document.getElementById('resultScore').innerText = `${rank}위 / ${total}명`;
-        document.getElementById('resultComment').innerHTML = (win ? '끝까지 살아남았어요! 🎉' : (w ? `오늘의 어휘왕은 <b>${escapeHTML(w.name)}</b> 님!` : '승부가 나지 않고 끝났어요.')) + svStatHTML(svStats(m, rank), 'light');
+        document.getElementById('resultComment').innerHTML = (win ? '끝까지 살아남았어요! 🎉' : (w ? `오늘의 어휘왕은 <b>${escapeHTML(w.name)}</b> 님!` : (tie.length > 1 ? `생명과 맞힌 문제 수가 같아 <b>무승부</b>예요.<br>어휘왕 없이 공동 1위: <b>${escapeHTML(svNames(tie, pl))}</b>` : '승부가 나지 않고 끝났어요.'))) + svStatHTML(svStats(m, rank), 'light');
         document.getElementById('btnGoHome').onclick = goToHome;
         showScreen('resultScreen');
     }
@@ -3804,20 +4709,42 @@ input, select, button { color-scheme:dark; }
         const R = SV.ref, W = SV.words, OK = () => svOk(my);
         let q = 0, since = 0, re = 0, lr = 0, vs = 0, f3 = 0, f2 = 0, pool = [];
         if (L) { q = +L.q || 0; since = +L.since || 0; re = +L.re || 0; lr = +L.lr || 0; vs = +L.vs || 0; f3 = +L.f3 || 0; f2 = +L.f2 || 0; pool = (L.pool || []).map(i => W[i]).filter(Boolean); }
-        if (L) await svBan('🔁 방장이 바뀌었어요', '게임을 이어서 진행해요', 1800, 'event');
+        // 🛟 연결이 잠깐 끊겨 자리가 비워진 친구를 기다릴 준비 (exp = 지금 살아 있어야 하는 사람들 · 체크포인트 loop.al 에도 저장돼서 새 방장도 알 수 있어요)
+        let exp = Array.from(new Set((L && L.al ? (Array.isArray(L.al) ? L.al : Object.values(L.al)) : []).concat(svAlive())));
+        const gap = {};
+        const track = () => { const P = svP(); exp.forEach(i => { if (!(P[i] && P[i].name)) gap[i] = gap[i] || Date.now(); else delete gap[i]; }); };
+        const sync = gone => { const g = gone || []; exp = Array.from(new Set(exp.filter(i => !g.includes(i)).concat(svAlive().filter(i => !g.includes(i))))); return exp; };
+        // 생존자가 1명 이하로 '보일 때', 연결이 끊겼을 뿐인 친구(스스로 나가지 않은 친구)가 있으면 최대 20초 기다려요.
+        const grace = async () => {
+            const t0 = Date.now(); let shown = 0;
+            while (OK() && svAlive().length < 2 && Date.now() - t0 < SV_GRACE_MS) {
+                track();
+                const P = svP(), lv = (SV.data && SV.data.lv) || {};
+                const wait = exp.filter(i => !(P[i] && P[i].name) && !lv[i] && Date.now() - gap[i] < SV_GRACE_MS);
+                if (svAlive().length + wait.length < 2) break;
+                if (!shown) { shown = 1; await svSet({ ph: 'ban', t: '📶 연결을 기다려요', s: '친구의 연결이 잠깐 끊겼어요\n잠시만 기다려 주세요', th: 'event' }); }
+                await svSlp(500);
+            }
+        };
+        const back = SV.pz && Date.now() - SV.pz < 60000; SV.pz = 0;
+        if (L) await svBan(back ? '📶 연결이 돌아왔어요' : '🔁 방장이 바뀌었어요', '게임을 이어서 진행해요', 1800, 'event');
         else await svBan('SURVIVAL START!', '마지막까지 살아남아\n오늘의 어휘왕이 되세요', 2600, 'start');
-        while (OK() && svAlive().length > 1 && vs < 3 && q < W.length) {
+        while (OK() && vs < 3 && q < W.length) {
+            track();
+            if (svAlive().length < 2) { await grace(); if (!OK() || svAlive().length < 2) break; }
             if (svAlive().length === 3 && !f3) {
                 f3 = 1; await svBan('FINAL 3', '최후의 3인!', 2400, 'final'); if (!OK()) break;
-                await svMini('final', OK); continue;
+                await svMini('final', OK);
+                if (OK()) await R.child('loop').set({ q, since, re, lr, vs, f3, f2, al: sync([]), pool: pool.map(x => W.indexOf(x)) });
+                continue;
             }
             if (svAlive().length === 2 && !f2) { f2 = 1; await svBan('⚔️ FINAL DUEL', '마지막 두 명의 대결!', 2400, 'duel'); if (!OK()) break; }
             q++;
             if (!pool.length) pool = shuffleArray(W);
-            const w = pool.pop(), opts = shuffleArray([w, ...shuffleArray(W.filter(x => x.w !== w.w)).slice(0, 3)]), ai = opts.indexOf(w), os = opts.map(x => x.w);
+            const w = pool.pop(), opts = shuffleArray([w, ...pickWrongs(w, W, 3)]), ai = opts.indexOf(w), os = opts.map(x => x.w);
             const T = getSurvTimeLimit(q, W.length, svAlive().length);
             await R.child('an').remove();
-            await svSet({ ph: 'q', q, m: w.m, o: os, hn: getChoseongHint(w.w), t0: svNow(), T });
+            await svSet({ ph: 'q', q, m: w.mq || w.m, o: os, hn: getChoseongHint(w.w), t0: svNow(), T });
             const t0 = Date.now(), ans = () => (SV.data && SV.data.an) || {}, got = i => { const a = ans()[i]; return a && a.q === q ? a.i : undefined; };
             while (OK() && Date.now() - t0 < T * 1000 + 700 && !svAlive().every(i => got(i) !== undefined)) await svSlp(250);
             if (!OK()) break;
@@ -3834,26 +4761,31 @@ input, select, button { color-scheme:dark; }
             const left = al.length - gone.length;
             gone.forEach(i => { patch[i].k = left + 1; });
             await svPatch(patch);
+            sync(gone);
             const note = wipe ? '모두 탈락할 상황이라 이번 문제는 무효!' : wrong.length === 0 ? '전원 정답! 🎉' : `오답 ${wrong.length}명` + (gone.length ? ` · 탈락 ${gone.length}명 (${svNames(gone, P)})` : '');
-            await svSet({ ph: 'res', q, m: w.m, o: os, ai, vd: wipe ? 1 : 0, el: gone, note });
+            await svSet({ ph: 'res', q, m: w.m, o: os, ai, vd: wipe ? 1 : 0, el: gone, ok: al.filter(i => got(i) === ai), gr: 1, note });
             await svSlp(3300);
-            if (!OK() || svAlive().length < 2) break;
+            if (!OK()) break;
+            if (svAlive().length < 2) { await grace(); if (!OK() || svAlive().length < 2) break; }
             // 미니게임 / 부활 이벤트 (예측하기 어렵게 랜덤)
             since++;
             const n = svAlive().length, dead = svIds().some(i => !svP()[i].a);
             if (re < 2 && n >= 4 && dead && q >= 4 && (re === 0 || q - lr >= 6) && Math.random() < (re === 0 && n <= 7 ? 0.85 : 0.4)) { re++; lr = q; since = 0; await svMini('revive', OK); }
             else if (q >= 3 && since >= 2 && n >= 3 && Math.random() < 0.45) { since = 0; await svMini('event', OK); }
             if (!OK()) break;
-            await R.child('loop').set({ q, since, re, lr, vs, f3, f2, pool: pool.map(x => W.indexOf(x)) });
+            await R.child('loop').set({ q, since, re, lr, vs, f3, f2, al: sync([]), pool: pool.map(x => W.indexOf(x)) });
         }
         if (!OK()) { if (SV.run === my) SV.run = 0; return; }
-        const P = svP(), al = svAlive().sort((a, b) => (P[b].h || 0) - (P[a].h || 0) || (P[b].c || 0) - (P[a].c || 0)), patch = {};
-        al.forEach((i, idx) => { patch[i] = { k: idx + 1 }; });
+        const P = svP(), al = svAlive(), patch = {};
+        // 순위 = 생명 많은 순 → 맞힌 문제 많은 순. 둘 다 같으면 '무승부'(같은 순위)로 두고, 우연(키 순서)으로 어휘왕을 정하지 않아요.
+        const hc = i => [(P[i].h || 0), (P[i].c || 0)], ahead = i => al.filter(j => hc(j)[0] > hc(i)[0] || (hc(j)[0] === hc(i)[0] && hc(j)[1] > hc(i)[1])).length;
+        al.forEach(i => { patch[i] = { k: ahead(i) + 1 }; });
+        const top = al.filter(i => ahead(i) === 0);
         await svPatch(patch);
-        await svSet({ ph: 'end', w: al[0] || '' });
+        await svSet({ ph: 'end', w: top.length === 1 ? top[0] : '', tie: top.length > 1 ? top : null });
         await svSlp(9000);
         if (SV.run === my) SV.run = 0;
-        R.transaction(d => { if (!d || d.status !== 'playing') return d; if (!Object.values(d.players || {}).some(p => p && p.name)) return null; d.status = 'waiting'; d.st = null; d.an = null; d.ms = null; d.loop = null; return d; });
+        R.transaction(d => { if (!d || d.status !== 'playing') return d; if (!Object.values(d.players || {}).some(p => p && p.name)) return null; d.status = 'waiting'; d.st = null; d.an = null; d.ms = null; d.loop = null; d.lv = null; return d; });
     }
 
     // ⭐ 미니게임 이벤트: event(일반) / revive(부활) / final(FINAL 3 특별)
@@ -3893,26 +4825,27 @@ input, select, button { color-scheme:dark; }
     function resetSurv() {
         if (!SV.ref || !confirm("진행 중인 게임을 중단하고 대기실로 되돌리시겠습니까?")) return;
         SV.run = 0; SV.hold = 1;
-        SV.ref.transaction(d => { if (!d) return d; d.status = 'waiting'; d.st = null; d.an = null; d.ms = null; d.loop = null; return d; });
+        SV.ref.transaction(d => { if (!d) return d; d.status = 'waiting'; d.st = null; d.an = null; d.ms = null; d.loop = null; d.lv = null; return d; });
     }
     function svLeaveRef(ref) {
         const me = getUserKey(); if (!ref || !me) return;
         ref.child('players').once('value').then(snap => {
             const pl = snap.val() || {}, others = Object.keys(pl).filter(k => k !== me && pl[k] && pl[k].name);
-            return others.length === 0 ? ref.remove() : ref.child('players/' + me).remove();
+            return others.length === 0 ? ref.remove() : ref.update({ ['players/' + me]: null, ['lv/' + me]: 1 });
         }).catch(() => {});
     }
     function quitSurv(ask) {
         if(survPracticeMode) { if(ask && !confirm("연습을 나가시겠습니까?")) return; quitSurvPractice(); return; }
         if (ask && !confirm("게임을 나가시겠습니까?")) return;
-        SV.on = 0; SV.run = 0; clearInterval(SV.tt);
+        SV.on = 0; SV.run = 0; clearInterval(SV.tt); clearTimeout(SV.rt);
         const ref = SV.ref; SV.ref = null;
         if (ref) { ref.off('value', svUpdate); svLeaveRef(ref); }
         goToHome();
     }
     function resetAllSurvRooms() {
+        if (!adminGuard()) return;
         if (confirm("현재 진행 중인 모든 [어휘왕 SURVIVAL 방]을 강제로 종료(폭파)하시겠습니까?")) {
-            if (isFirebaseActive) getDB().ref('survRooms_vocab').remove().then(() => alert("모든 방이 초기화되었습니다."));
+            if (isFirebaseActive) getDB().ref('survRooms_vocab').remove().then(() => alert("모든 방이 초기화되었습니다.")).catch(err => reportFirebaseError(err, '방 초기화'));
         }
     }
 
