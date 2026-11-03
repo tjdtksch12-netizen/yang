@@ -613,6 +613,249 @@ html[data-size] .sv-opts { grid-template-columns: 1fr; }
 .hdr-btn { font-size: .88rem; }
 .day-btn { font-size: 1.45rem; }
 }
+/* ===== 디펜스: 웨이브 · 콤보 · 필살기 · 특수 낱말 · 보스 · 성 강화 ===== */
+.rain-screen { height: calc(100vh - 36px); height: calc(100dvh - 36px); min-height: 640px; }
+#rainGameScreen { margin-bottom: -60px; }
+.rain-hp .lbl, .rain-score .lbl { white-space: nowrap; }
+.rain-chip { display: inline-flex; align-items: center; gap: 6px; padding: 6px 14px; border-radius: 10px; font-weight: 800; color: var(--ink); background: var(--surface-2); border: 2px solid var(--line-2); }
+.rain-chip b { font-size: 1.15em; font-variant-numeric: tabular-nums; }
+.rain-chip.hot { color: #0A1020; background: #FFD43B; border-color: #0A1020; }
+.defense-castle { width: calc(124px * var(--cs, 1)); height: calc(98px * var(--cs, 1)); }
+.defense-castle[data-lv="1"], .defense-castle[data-lv="2"] { filter: drop-shadow(0 0 6px rgba(245, 179, 1, .8)); }
+.defense-castle[data-lv="3"], .defense-castle[data-lv="4"], .defense-castle[data-lv="5"] { filter: drop-shadow(0 0 9px rgba(245, 179, 1, .95)) drop-shadow(0 0 2px #F5B301); }
+.defense-castle[data-lv="6"], .defense-castle[data-lv="7"], .defense-castle[data-lv="8"] { filter: drop-shadow(0 0 12px rgba(255, 212, 59, 1)) drop-shadow(0 0 3px #FFD43B); }
+.castle-lv { position: absolute; left: 50%; top: 100%; transform: translateX(-50%); margin-top: 4px; padding: 2px 10px; border-radius: 999px; font-size: .95rem; font-weight: 900; white-space: nowrap; color: var(--ink); background: var(--surface); border: 2px solid var(--line-2); }
+.rain-drop { width: max-content; max-width: min(360px, 70%); white-space: normal; text-align: center; word-break: keep-all; overflow-wrap: anywhere; }
+.rain-drop[data-k]:not(.hit)::before { content: attr(data-tag); display: block; margin-bottom: 2px; font-size: .72em; font-weight: 900; letter-spacing: .02em; }
+.rain-drop[data-k="fast"]:not(.hit) { background: #FFE8D4; color: #5A2308; border-color: #C2410C; }
+.rain-drop[data-k="gold"]:not(.hit) { background: #FFF0A8; color: #4A3500; border-color: #B88900; box-shadow: 0 0 0 3px rgba(255, 212, 59, .55); }
+.rain-drop[data-k="ice"]:not(.hit) { background: #D6EDFB; color: #0A3F63; border-color: #0369A1; }
+.rain-drop[data-k="bomb"]:not(.hit) { background: #FDE3E3; color: #7A1519; border-color: #C0262D; border-style: dashed; }
+.rain-drop[data-k="twin"]:not(.hit) { background: #F0E3FD; color: #3A0F6B; border-color: #7E22CE; }
+.rain-drop[data-k="boss"]:not(.hit) { white-space: normal; max-width: min(78%, 420px); text-align: center; padding: 12px 20px; font-size: 1.45rem; background: #FDE3E3; color: #3B0A0D; border: 5px solid #7A1519; box-shadow: 0 0 0 4px rgba(192, 38, 45, .35); }
+.rain-drop[data-k="boss"]:not(.hit)::after { content: "남은 체력 " attr(data-hp) " / 3"; display: block; margin-top: 4px; font-size: .7em; font-weight: 900; }
+.rain-drop.flash { box-shadow: 0 0 0 6px #FFD43B; }
+.rain-pop { position: absolute; z-index: 12; transform: translate(-50%, -50%); font-size: 1.35rem; font-weight: 900; color: var(--ok); text-shadow: 0 0 3px var(--surface), 0 0 3px var(--surface); pointer-events: none; animation: rainFloat .8s ease-out forwards; }
+@keyframes rainFloat { from { opacity: 1; margin-top: 0; } to { opacity: 0; margin-top: -44px; } }
+.defense-sky.boss::after, .defense-sky.frozen::after, .defense-sky.ult::after { content: ""; position: absolute; inset: 0; z-index: 6; pointer-events: none; }
+.defense-sky.boss::after { background: rgba(122, 21, 25, .16); }
+.defense-sky.frozen::after { background: rgba(56, 189, 248, .22); }
+.defense-sky.ult::after { background: rgba(255, 212, 59, .55); }
+.rain-lamp { display: none; z-index: 20; padding: 6px 16px; font-size: 1.1rem; font-weight: 800; text-align: center; color: var(--warn-soft-ink); background: var(--warn-soft); border-top: 2px solid var(--line); }
+.rain-lamp.on { display: block; }
+.rain-ult-row { z-index: 20; display: flex; align-items: center; gap: 10px; padding: 8px 16px; background: var(--surface); border-top: 2px solid var(--line); }
+.rain-gauge { position: relative; flex: 1; min-width: 0; height: 46px; border-radius: 12px; border: 3px solid var(--line-2); background: var(--surface-3); overflow: hidden; }
+.rain-gauge i { position: absolute; left: 0; top: 0; bottom: 0; width: 0; background: #FFD43B; transition: width .2s; }
+.rain-gauge span { position: relative; display: flex; align-items: center; justify-content: center; height: 100%; }
+.rain-gauge span b { max-width: 96%; padding: 2px 12px; border-radius: 999px; font-size: 1.05rem; font-weight: 900; color: var(--ink); background: var(--surface); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.rain-ult { flex: none; min-width: 124px; height: 46px; padding: 0 14px; border-radius: 12px; font-size: 1.15rem; font-weight: 900; color: var(--ink-3); background: var(--surface-3); border: 3px solid var(--line-2); cursor: not-allowed; }
+.rain-ult.ready { color: #0A1020; background: #FFD43B; border-color: #0A1020; cursor: pointer; animation: rainReady .9s ease-in-out infinite alternate; }
+@keyframes rainReady { from { transform: scale(1); } to { transform: scale(1.06); } }
+.rain-banner { position: absolute; left: 50%; top: 34%; z-index: 35; display: none; max-width: 92%; padding: 12px 26px; transform: translate(-50%, -50%); font-size: 2rem; font-weight: 900; text-align: center; color: var(--ink); background: var(--surface); border: 4px solid var(--ink); border-radius: 16px; pointer-events: none; }
+.rain-banner.on { display: block; animation: vqPopIn .25s ease-out; }
+.rain-banner.danger { color: #fff; background: #C0262D; border-color: #3B0A0D; }
+.rain-shop { position: absolute; inset: 0; z-index: 40; display: none; align-items: flex-start; justify-content: center; padding: 10px; overflow: auto; background: rgba(10, 16, 32, .6); }
+.rain-shop.on { display: flex; }
+.rs-card { width: min(760px, 100%); padding: 14px 16px; border-radius: 18px; color: var(--ink); background: var(--surface); border: 3px solid var(--line-2); }
+.rs-head { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px 14px; }
+.rs-head b { font-size: 1.7rem; font-weight: 900; }
+.rs-stat { display: flex; flex-wrap: wrap; gap: 8px; }
+.rs-stat span { padding: 4px 12px; border-radius: 10px; font-size: 1.1rem; font-weight: 800; background: var(--surface-2); border: 2px solid var(--line-2); }
+.rs-quit { padding: 4px 14px; font-size: 1.05rem; font-weight: 800; border-radius: 10px; color: var(--bad-ink); background: var(--bad); border: 2px solid var(--bad); cursor: pointer; }
+.rs-bonus { margin: 6px 0 0; font-size: 1.05rem; font-weight: 700; color: var(--ink-2); }
+.rs-castle { position: relative; width: max-content; margin: 6px auto 10px; display: flex; flex-direction: column; align-items: center; }
+.rs-castle svg { display: block; flex: none; width: calc(88px * var(--cs, 1)); height: calc(70px * var(--cs, 1)); }
+.rs-castle .castle-lv { position: static; left: auto; top: auto; transform: none; margin-top: 6px; }
+.rs-castle[data-lv="1"], .rs-castle[data-lv="2"] { filter: drop-shadow(0 0 6px rgba(245, 179, 1, .8)); }
+.rs-castle[data-lv="3"], .rs-castle[data-lv="4"], .rs-castle[data-lv="5"] { filter: drop-shadow(0 0 9px rgba(245, 179, 1, .95)) drop-shadow(0 0 2px #F5B301); }
+.rs-castle[data-lv="6"], .rs-castle[data-lv="7"], .rs-castle[data-lv="8"] { filter: drop-shadow(0 0 12px rgba(255, 212, 59, 1)) drop-shadow(0 0 3px #FFD43B); }
+.rs-h { margin: 12px 0 8px; font-size: 1.2rem; font-weight: 900; color: var(--ink); }
+.rs-cards, .rs-items { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 10px; }
+.rs-empty { padding: 10px; font-weight: 700; color: var(--ink-2); }
+.rs-btn { display: flex; flex-direction: column; align-items: flex-start; gap: 3px; min-height: 76px; padding: 10px 14px; text-align: left; border-radius: 14px; color: var(--ink); background: var(--surface); border: 3px solid var(--line-2); cursor: pointer; }
+.rs-btn strong { font-size: 1.2rem; font-weight: 900; }
+.rs-btn span { font-size: 1rem; font-weight: 600; color: var(--ink-2); }
+.rs-btn em { margin-top: auto; font-style: normal; font-size: 1.05rem; font-weight: 900; color: var(--brand); }
+.rs-card-btn { background: var(--brand-soft); border-color: var(--brand); }
+.rs-card-btn em { color: var(--brand-soft-ink); }
+.rs-btn:disabled { cursor: not-allowed; opacity: .55; }
+.rs-btn:not(:disabled):hover { filter: brightness(.96); }
+.rs-next { position: sticky; bottom: 6px; box-shadow: 0 0 0 6px var(--surface); width: 100%; margin-top: 14px; min-height: 60px; padding: 12px; font-size: 1.35rem; font-weight: 900; border-radius: 14px; color: var(--brand-ink); background: var(--brand); border: 3px solid var(--brand-d); cursor: pointer; }
+html[data-theme="dark"] .rain-drop[data-k="fast"]:not(.hit), html[data-theme="dark"] .rain-drop[data-k="gold"]:not(.hit), html[data-theme="dark"] .rain-drop[data-k="ice"]:not(.hit), html[data-theme="dark"] .rain-drop[data-k="bomb"]:not(.hit), html[data-theme="dark"] .rain-drop[data-k="twin"]:not(.hit), html[data-theme="dark"] .rain-drop[data-k="boss"]:not(.hit) { color: #0A1020; }
+html.vq-lite .rain-pop, html.vq-lite .rain-ult.ready, html.vq-lite .rain-banner.on { animation: none !important; }
+@media (max-width: 720px) {
+.rain-screen { height: calc(100vh - 20px); height: calc(100dvh - 20px); min-height: 520px; }
+#rainGameScreen { margin-bottom: -40px; }
+.rain-title { display: none; }
+.rain-top { padding: 6px 8px; gap: 4px; }
+.rain-stats { width: 100%; gap: 4px; justify-content: space-between; font-size: .95rem; }
+.rain-hp, .rain-score, .rain-chip { padding: 3px 7px; gap: 4px; border-width: 2px; border-radius: 8px; font-size: .95rem; }
+.rain-hp svg, .rain-score svg { width: 18px; height: 18px; }
+.rain-hp .lbl, .rain-score .lbl { display: none; }
+.defense-castle { width: calc(92px * var(--cs, 1)); height: calc(72px * var(--cs, 1)); }
+.rain-drop { max-width: 66%; }
+.rain-drop[data-k="boss"]:not(.hit) { font-size: 1.15rem; padding: 8px 12px; max-width: 80%; }
+.rain-word-bank { min-height: 0; padding: 6px 8px; gap: 5px; }
+.rain-word-bank > span[style*="facc15"] { display: none; }
+.rain-hint-chip { padding: 2px 9px; border-width: 2px; font-size: 1rem; }
+.rain-lamp { padding: 4px 8px; font-size: .95rem; }
+.rain-ult-row { padding: 5px 8px; gap: 6px; }
+.rain-gauge { height: 40px; border-width: 2px; }
+.rain-gauge span b { font-size: .9rem; padding: 2px 8px; }
+.rain-ult { min-width: 92px; height: 40px; padding: 0 8px; font-size: 1.05rem; border-width: 2px; }
+.rain-bottom { padding: 8px; gap: 8px; }
+.rain-input, .rain-quit-btn { height: 52px; }
+.rain-banner { font-size: 1.35rem; padding: 8px 14px; }
+.rs-card { padding: 12px; }
+.rs-head b { font-size: 1.35rem; }
+.rs-stat span { font-size: 1rem; padding: 3px 10px; }
+.rs-castle { margin: 4px auto 8px; }
+.rs-castle svg { width: calc(84px * var(--cs, 1)); height: calc(66px * var(--cs, 1)); }
+.rs-h { margin: 8px 0 6px; font-size: 1.05rem; }
+.rs-cards, .rs-items { grid-template-columns: 1fr 1fr; gap: 8px; }
+.rs-btn { min-height: 92px; padding: 8px 10px; }
+.rs-btn strong { font-size: 1.05rem; }
+.rs-btn span { font-size: .9rem; }
+.rs-btn em { font-size: .95rem; }
+.rs-next { min-height: 54px; font-size: 1.2rem; }
+}
+
+.rain-input { text-overflow: ellipsis; }
+
+/* ===== 👥 팀전 디펜스 ===== */
+.tw-heading { margin-top: 24px; }
+.tw-desc { margin: 0 0 12px; font-size: 1.1rem; font-weight: 700; line-height: 1.55; color: var(--ink-2); }
+#rainStageScreen .tw-btn { --md-c: var(--c-rain); --md-s: var(--s-rain); }
+.tw-bar { display: none; z-index: 20; align-items: center; gap: 6px; flex-wrap: wrap; padding: 5px 10px; background: var(--surface-2); border-bottom: 2px solid var(--line); }
+body.tw-on .tw-bar { display: flex; }
+.tw-chip { display: inline-flex; align-items: center; gap: 6px; padding: 3px 11px; border-radius: 999px; border: 3px solid var(--line-2); background: var(--surface); font-size: 1rem; font-weight: 800; color: var(--ink); }
+.tw-chip.me { background: var(--brand-soft); box-shadow: 0 0 0 2px var(--ink); }
+.tw-chip.over { opacity: .55; }
+.tw-chip .dot { flex: none; width: 12px; height: 12px; border-radius: 50%; }
+.tw-chip .t { font-variant-numeric: tabular-nums; }
+.tw-mine { margin-left: auto; font-size: 1rem; font-weight: 900; color: var(--ink); }
+.tw-end { padding: 3px 12px; border-radius: 10px; font-size: .95rem; font-weight: 800; color: var(--bad-ink); background: var(--bad); border: 2px solid var(--bad); cursor: pointer; }
+body.tw-on .rain-hp .lbl { display: inline; }
+
+.tw-hint { margin: 0 0 12px; font-size: 1.05rem; font-weight: 700; color: var(--ink-2); }
+.tw-team .lobby-player-list { min-height: 70px; }
+.lobby-player.me { border-color: var(--brand); background: var(--brand-soft); }
+.tw-res-box { padding: 4px 0 28px; }
+.tw-note { margin: 0 0 6px; font-size: 1.15rem; font-weight: 800; color: var(--ink-2); }
+.tw-h { margin: 20px 0 8px; font-size: 1.35rem; font-weight: 900; color: var(--ink); }
+.tw-rrow { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; padding: 10px 14px; margin-bottom: 8px; border: 3px solid var(--line-2); border-radius: 14px; background: var(--surface); color: var(--ink); }
+.tw-rrow.me { background: var(--brand-soft); }
+.tw-rrow.live .tw-rtime { color: var(--brand); }
+.tw-rno { min-width: 2em; font-size: 1.6rem; text-align: center; }
+.tw-rname { font-size: 1.35rem; font-weight: 900; }
+.tw-rmem { flex: 1 1 160px; font-size: 1.05rem; font-weight: 700; color: var(--ink-2); }
+.tw-rwave { font-size: 1.05rem; font-weight: 800; }
+.tw-rtime { font-size: 1.5rem; font-weight: 900; font-variant-numeric: tabular-nums; }
+.tw-total { display: none; margin-top: 6px; padding: 12px 14px; border-radius: 12px; font-size: 1.15rem; font-weight: 900; color: var(--ink); background: var(--surface-2); border: 2px dashed var(--line-2); }
+.tw-crow { padding: 10px 12px; margin-bottom: 8px; border: 2px solid var(--line-2); border-radius: 12px; background: var(--surface); color: var(--ink); }
+.tw-crow.me { border-color: var(--brand); background: var(--brand-soft); }
+.tw-ctop { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
+.tw-cname { font-size: 1.2rem; font-weight: 900; }
+.tw-title { display: inline-block; margin-right: 4px; padding: 2px 10px; border-radius: 999px; font-size: .95rem; font-weight: 900; color: #0A1020; background: #FFD43B; border: 2px solid #0A1020; }
+.tw-cbar { height: 14px; margin: 8px 0 6px; border-radius: 999px; overflow: hidden; background: var(--surface-3); border: 2px solid var(--line-2); }
+.tw-cbar i { display: block; height: 100%; border-radius: 999px; background: var(--brand); }
+.tw-cnum { font-size: 1rem; font-weight: 700; color: var(--ink-2); line-height: 1.5; }
+.tw-miss { display: inline-block; margin: 0 8px 8px 0; padding: 6px 12px; border-radius: 12px; font-size: 1.05rem; color: var(--ink); background: var(--surface-2); border: 2px solid var(--line-2); }
+.tw-other { margin-top: 10px; }
+.tw-other summary { padding: 8px 0; font-size: 1.15rem; font-weight: 900; cursor: pointer; }
+.rain-pop { white-space: nowrap; }
+
+@media (max-width: 720px) {
+.tw-bar { padding: 3px 6px; gap: 4px; }
+.tw-chip { padding: 2px 7px; border-width: 2px; font-size: .85rem; gap: 4px; }
+.tw-chip .dot { width: 9px; height: 9px; }
+.tw-mine { display: none; }
+.tw-rrow { padding: 8px 10px; }
+.tw-rtime { font-size: 1.25rem; }
+.tw-h { font-size: 1.2rem; }
+}
+
+/* ===== 🐲 보스 레이드 ===== */
+#rainStageScreen .rd-btn { --md-c: var(--c-surv); --md-s: var(--s-surv); }
+.rd-screen { padding: 0 0 12px; }
+.rd-top { display: flex; align-items: center; gap: 10px; padding: 8px 12px; background: var(--surface-2); border-bottom: 2px solid var(--line); }
+.rd-title { flex: 1; font-size: 1.2rem; font-weight: 900; color: var(--ink); }
+.rd-time { font-size: 1.25rem; font-weight: 900; font-variant-numeric: tabular-nums; color: var(--ink); }
+.rd-stage { position: relative; padding: 8px 12px 6px; }
+.rd-banner { min-height: 0; height: 0; overflow: hidden; text-align: center; font-size: 1.2rem; font-weight: 900; color: var(--warn-soft-ink); background: var(--warn-soft); border: 3px solid var(--warn); border-radius: 12px; opacity: 0; transition: opacity .2s; }
+.rd-banner.on { height: auto; padding: 8px 10px; margin-bottom: 6px; opacity: 1; }
+.rd-boss-wrap { position: relative; height: 150px; display: flex; align-items: center; justify-content: center; border-radius: 16px; background: linear-gradient(180deg, var(--sky), var(--surface-2)); border: 3px solid var(--line-2); overflow: hidden; }
+.rd-boss { font-size: 96px; line-height: 1; filter: drop-shadow(0 6px 0 rgba(0,0,0,.18)); transition: filter .2s; }
+.rd-boss.hit { animation: rdHit .22s; }
+.rd-boss.shielded { filter: drop-shadow(0 0 14px #38BDF8) drop-shadow(0 0 4px #38BDF8); }
+.rd-boss.rage { filter: drop-shadow(0 0 16px #EF4444) saturate(1.5); animation: rdRage 1s infinite; }
+@keyframes rdHit { 0% { transform: scale(1); } 40% { transform: scale(.9) rotate(-4deg); } 100% { transform: scale(1); } }
+@keyframes rdRage { 50% { transform: scale(1.06); } }
+.rd-pops { position: absolute; inset: 0; pointer-events: none; }
+.rd-pop { position: absolute; font-size: 1.35rem; font-weight: 900; color: #fff; text-shadow: 0 2px 0 #0A1020, 0 0 6px #0A1020; animation: rdPop 1s forwards; white-space: nowrap; }
+.rd-pop.mine { font-size: 1.9rem; color: #FFD43B; }
+.rd-pop.other { opacity: .8; font-size: 1.05rem; }
+.rd-pop.tvp { font-size: 1.5rem; color: #BFE3FF; }
+@keyframes rdPop { 0% { transform: translateY(0) scale(.7); opacity: 0; } 15% { opacity: 1; transform: translateY(-8px) scale(1.1); } 100% { transform: translateY(-48px); opacity: 0; } }
+.rd-bar { position: relative; height: 26px; margin-top: 6px; border-radius: 999px; overflow: hidden; background: var(--surface-3); border: 3px solid var(--line-2); }
+.rd-bar > i { position: absolute; left: 0; top: 0; bottom: 0; display: block; border-radius: 999px; }
+.rd-bar > span { position: relative; z-index: 1; display: block; text-align: center; font-size: .95rem; font-weight: 900; line-height: 20px; color: var(--ink); text-shadow: 0 0 3px var(--surface); }
+#rdHpFill { background: #DC2626; transition: width .25s; }
+.rd-bar.low #rdHpFill { background: #F97316; }
+#rdShFill { background: #38BDF8; transition: width .25s; }
+#rdAtkT { background: #F59E0B; transition: width .2s linear; }
+#rdAtkD { background: #3B82F6; transition: width .25s; }
+.rd-bar.ok #rdAtkD { background: #16A34A; }
+.rd-row { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; margin-top: 6px; }
+.rd-castle { font-size: 1.1rem; font-weight: 900; padding: 2px 8px; border-radius: 10px; background: var(--surface); border: 2px solid var(--line-2); letter-spacing: 1px; }
+.rd-castle.hit { animation: rdShake .4s; border-color: var(--bad); }
+@keyframes rdShake { 20%,60% { transform: translateX(-6px); } 40%,80% { transform: translateX(6px); } }
+.rd-chip { padding: 3px 11px; border-radius: 999px; border: 3px solid var(--line-2); background: var(--surface); font-size: 1rem; font-weight: 800; color: var(--ink); }
+.rd-chip.hot { background: var(--warn-soft); border-color: var(--warn); color: var(--warn-soft-ink); }
+.rd-chip.evt.sh { background: #D6EDFB; border-color: #0369A1; color: #0A3F63; }
+.rd-chip.evt.weak { background: #FFE8D4; border-color: #C2410C; color: #7C2D0A; }
+.rd-chip.evt.rg { background: var(--bad-soft); border-color: var(--bad); color: var(--bad-soft-ink); }
+.rd-atk { margin-top: 6px; }
+.rd-atk-l { font-size: 1rem; font-weight: 800; color: var(--ink-2); }
+.rd-me { padding: 4px 12px 0; }
+.rd-q { padding: 12px 14px; border-radius: 16px; background: var(--surface); border: 3px solid var(--brand); }
+.rd-qm { font-size: 1.45rem; font-weight: 900; line-height: 1.5; color: var(--ink); word-break: keep-all; }
+.rd-qh { margin-top: 6px; font-size: 1.1rem; font-weight: 800; color: var(--brand); }
+.rd-minfo { margin: 8px 0 6px; font-size: 1rem; font-weight: 800; color: var(--ink-2); }
+.rd-in { display: flex; gap: 8px; }
+.rd-in input { flex: 1; min-width: 0; padding: 12px 14px; font-size: 1.4rem; font-weight: 800; border-radius: 14px; border: 3px solid var(--line-2); background: var(--surface); color: var(--ink); }
+.rd-in input:focus { outline: none; border-color: var(--brand); box-shadow: 0 0 0 3px var(--brand-soft); }
+.rd-in input.shake { animation: rdShake .3s; border-color: #ef4444; }
+.rd-in button { padding: 0 16px; border-radius: 14px; font-size: 1.05rem; font-weight: 900; color: var(--ink); background: var(--surface-2); border: 3px solid var(--line-2); cursor: pointer; }
+.rd-board { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 8px; padding: 6px 12px; }
+.rd-tile { padding: 8px 10px; border-radius: 12px; background: var(--surface); border: 3px solid var(--line-2); color: var(--ink); }
+.rd-tile.flash { background: var(--warn-soft); }
+.rd-tn { display: block; font-size: 1.05rem; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.rd-td { font-size: 1.25rem; font-weight: 900; font-variant-numeric: tabular-nums; }
+.rd-tb { height: 8px; margin-top: 4px; border-radius: 999px; background: var(--surface-3); overflow: hidden; }
+.rd-tb i { display: block; height: 100%; }
+body.rd-tv .rd-boss-wrap { height: 230px; }
+body.rd-tv .rd-boss { font-size: 150px; }
+body.rd-tv .rd-title, body.rd-tv .rd-time { font-size: 1.7rem; }
+body.rd-tv .rd-bar { height: 40px; }
+body.rd-tv .rd-bar > span { font-size: 1.3rem; line-height: 34px; }
+body.rd-tv .rd-banner.on, body.rd-tv .rd-chip, body.rd-tv .rd-atk-l, body.rd-tv .rd-castle { font-size: 1.5rem; }
+body.rd-tv .rd-tn { font-size: 1.3rem; } body.rd-tv .rd-td { font-size: 1.6rem; }
+.rd-lobby-boss { display: flex; align-items: center; gap: 14px; padding: 10px 14px; margin-bottom: 10px; border-radius: 14px; border: 3px solid var(--line-2); background: var(--surface-2); }
+.rd-lobby-boss .ic { font-size: 64px; line-height: 1; }
+.rd-lobby-boss .nm { font-size: 1.4rem; font-weight: 900; color: var(--ink); }
+.rd-lobby-info { font-size: 1.05rem; font-weight: 700; color: var(--ink-2); }
+.rd-lobby-tv { width: 100%; margin: 10px 0; padding: 10px; border-radius: 12px; font-size: 1.05rem; font-weight: 800; color: var(--ink); background: var(--surface-2); border: 3px dashed var(--line-2); cursor: pointer; }
+.rd-resnote { font-size: 1.3rem; padding: 10px 12px; border-radius: 12px; }
+.rd-resnote.win { background: var(--ok-soft); color: var(--ok-soft-ink); }
+.rd-resnote.lose { background: var(--bad-soft); color: var(--bad-soft-ink); }
+.rd-big { margin: 4px 0; font-size: 1.35rem; font-weight: 900; color: var(--ink); }
+.rd-mine { border-width: 3px; }
+@media (max-width: 720px) {
+  .rd-boss-wrap { height: 110px; } .rd-boss { font-size: 70px; }
+  .rd-qm { font-size: 1.25rem; } .rd-board { grid-template-columns: repeat(2, 1fr); }
+  .rd-title { font-size: 1.05rem; }
+}
 </style>
 <!--
   [점검 수정본] 2026-10-09 — 원본 기능은 그대로 두고 아래 항목만 고쳤습니다.
@@ -824,10 +1067,16 @@ html[data-size] .sv-opts { grid-template-columns: 1fr; }
                 <span class="dashboard-title"><span class="dash-ic"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-castle"/></svg></span>낱말 디펜스: 성벽 방어</span>
                 <button class="ranking-btn" onclick="showRankingMenu(1, 'rain')"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-trophy"/></svg>순위 보기</button>
             </div>
-            <p>사방에서 낱말의 '뜻'이 성벽을 공격해옵니다.<br>알맞은 <b>'단어'</b>를 입력하여 막아내세요! (시간이 지날수록 빨라집니다)</p>
+            <p>사방에서 낱말의 '뜻'이 성벽을 공격해옵니다. 알맞은 <b>'단어'</b>를 입력하여 막아내세요!<br>웨이브마다 코인으로 성을 강화하고, 콤보를 모아 <b>필살기</b>로 한 번에 쓸어버리세요. (5웨이브마다 보스!)</p>
         </div>
         <div class="section-heading"><h2>성벽 방어 작전</h2></div>
         <div class="day-grid" id="rainGrid"></div>
+        <div class="section-heading tw-heading"><h2>👥 팀전 디펜스 (친구들과 함께)</h2></div>
+        <p class="tw-desc">같은 방에 들어와 팀을 나누면, 팀이 <b>같은 하늘 · 같은 성</b>을 함께 지켜요. 팀이 성을 지킨 시간으로 순위가 정해지고, 개인 기여도도 볼 수 있어요.</p>
+        <div class="day-grid" id="rainTeamGrid"></div>
+        <div class="section-heading tw-heading"><h2>🐲 보스 레이드 (반 전체 협동)</h2></div>
+        <p class="tw-desc">반 친구 모두(최대 30명)가 한 편이 되어 <b>거대한 보스</b>를 함께 쓰러뜨려요. 친구마다 다른 낱말 문제가 나오고, 정답이 쌓일수록 보스 체력이 줄어요. 끝나면 <b>개인 기여도</b>와 칭호가 나와요.</p>
+        <div class="day-grid" id="rainRaidGrid"></div>
     </div>
 
     <div id="landStageScreen" class="screen">
@@ -1287,17 +1536,113 @@ html[data-size] .sv-opts { grid-template-columns: 1fr; }
         <div class="rain-top">
             <span class="rain-title" id="rainTitle">1탄 디펜스 방어</span>
             <span class="rain-stats">
-                <span class="rain-hp"><svg viewBox="0 0 32 30" aria-hidden="true"><use href="#vq-heart"/></svg>성벽 내구도: <span id="rainHPDisplay">10</span></span>
-                <span class="rain-score"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-timer"/></svg>생존: <span id="rainScoreDisplay">00:00</span></span>
+                <span class="rain-hp"><svg viewBox="0 0 32 30" aria-hidden="true"><use href="#vq-heart"/></svg><span class="lbl">성벽 내구도:</span><span class="rain-num"><span id="rainHPDisplay">10</span>/<span id="rainHPMax">10</span></span></span>
+                <span class="rain-score"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-timer"/></svg><span class="lbl">생존:</span><span class="rain-num" id="rainScoreWrap"><span id="rainScoreDisplay">00:00</span></span></span>
+                <span class="rain-chip">웨이브 <b id="rainWaveDisplay">1</b></span>
+                <span class="rain-chip">코인 <b id="rainCoinDisplay">0</b></span>
+                <span class="rain-chip" id="rainComboChip">콤보 <b id="rainComboDisplay">0</b></span>
             </span>
         </div>
+        <div class="tw-bar" id="twBar"></div>
         <div class="defense-sky" id="rainSky">
-            <div class="defense-castle" id="defenseCastle"><svg viewBox="0 0 160 126" aria-hidden="true"><use href="#vq-castle"/></svg></div>
+            <div class="defense-castle" id="defenseCastle"><svg viewBox="0 0 160 126" aria-hidden="true"><use href="#vq-castle"/></svg><span class="castle-lv" id="castleLv">성 Lv.0</span></div>
         </div>
         <div class="rain-word-bank" id="rainWordBank"><span style="color:#94a3b8;">여기에 힌트 단어가 나타납니다.</span></div>
+        <div class="rain-lamp" id="rainLamp"></div>
+        <div class="rain-ult-row"><div class="rain-gauge"><i id="rainGaugeFill"></i><span><b id="rainGaugeText">필살기 0%</b></span></div><button type="button" class="rain-ult" id="rainUltBtn" onclick="rainUlt()" disabled>필살기!</button></div>
         <div class="rain-bottom">
             <input type="text" id="rainInput" class="rain-input" autocomplete="off" placeholder="단어 입력 후 엔터 (가장 가까운 적 파괴)">
             <button class="rain-quit-btn" onclick="quitRainGame()">나가기</button>
+        </div>
+        <div class="rain-banner" id="rainBanner" role="status"></div>
+        <div class="rain-shop" id="rainShop">
+            <div class="rs-card">
+                <div class="rs-head"><b id="rsTitle">웨이브 1 클리어!</b><div class="rs-stat"><span id="rsCoins">코인 0</span><span id="rsHp">성벽 10/10</span><button type="button" class="rs-quit" onclick="quitRainGame()">나가기</button></div></div>
+                <p class="rs-bonus" id="rsBonus"></p>
+                <div class="rs-castle" id="rsCastle"><svg viewBox="0 0 160 126" aria-hidden="true"><use href="#vq-castle"/></svg><span class="castle-lv" id="rsCastleLv">성 Lv.0</span></div>
+                <div class="rs-h">보상 카드 · 하나를 무료로 골라요</div>
+                <div class="rs-cards" id="rsCards"></div>
+                <div class="rs-h">성 강화 · 코인으로 사요</div>
+                <div class="rs-items" id="rsItems"></div>
+                <button type="button" class="rs-next" id="rsNext" onclick="rainNextWave()">다음 웨이브 시작</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 👥 팀전 디펜스 대기실 -->
+    <div id="twLobbyScreen" class="screen">
+        <div class="top-bar"><span class="screen-title" id="twLobbyTitle">팀전 대기실</span><button class="stop-btn" onclick="twLeave(false)">나가기</button></div>
+        <div class="land-lobby-box">
+            <div class="land-lobby-header"><span>팀 나누기</span><div class="land-lobby-controls"><label for="twTeamN">팀 수 </label><select id="twTeamN" class="lobby-select" onchange="twSetN()"></select></div></div>
+            <p class="tw-hint" id="twLobbyHint"></p>
+            <div class="lobby-teams" id="twLobbyTeams"></div>
+            <div id="twLobbyFreeBox" style="display:none;"><h4>아직 팀을 고르지 않았어요</h4><div class="lobby-player-list" id="twLobbyFree"></div></div>
+            <div class="sv-rules">같은 팀 친구들이 <b>같은 하늘</b>을 보며 낱말을 쳐요. 누가 먼저 맞히든 팀의 처치가 되고, 팀이 성을 지킨 시간으로 순위를 정해요.<br>팀을 고르지 않으면 인원이 적은 팀으로 자동 배정돼요.</div>
+            <div class="lobby-actions" id="twLobbyHost"><button class="btn-lobby-random" id="twBtnRandom" onclick="twRandomTeams()">🎲 랜덤 팀 배정</button><button class="btn-lobby-start" id="twBtnStart" onclick="twStart()">🚀 게임 시작!</button></div>
+            <div class="lobby-actions"><button class="btn-lobby-start" id="twBtnLobbyAgain" style="display:none;" onclick="twAgain()">🔁 다시 하기</button></div>
+            <div id="twLobbyGuest" style="display:none; text-align:center; padding:15px; font-weight:bold; color:var(--primary);">방장이 게임을 시작할 때까지 기다려주세요...</div>
+        </div>
+    </div>
+
+    <!-- 👥 팀전 디펜스 결과 -->
+    <div id="twResultScreen" class="screen">
+        <div class="top-bar"><span class="screen-title" id="twResTitle">팀 결과</span><button class="stop-btn" onclick="twLeave(false)">나가기</button></div>
+        <div class="tw-res-box">
+            <p class="tw-note" id="twResNote"></p>
+            <h3 class="tw-h">🏆 팀별 지킨 시간</h3>
+            <div id="twResRank"></div><div class="tw-total" id="twResTotal"></div>
+            <h3 class="tw-h" id="twResMineH">🙌 우리 팀 기여도</h3><div id="twResMine"></div>
+            <h3 class="tw-h">📝 우리 팀이 놓친 낱말 (복습!)</h3><div id="twResMiss"></div>
+            <div id="twResOthers"></div>
+            <div class="lobby-actions"><button class="btn-lobby-random" id="twResEnd" style="display:none;" onclick="twForceEnd()">⏹ 게임 끝내기 (방장)</button><button class="btn-lobby-start" id="twResAgain" style="display:none;" onclick="twAgain()">🔁 같은 팀으로 다시 하기</button></div>
+        </div>
+    </div>
+
+    <!-- 🐲 보스 레이드 대기실 -->
+    <div id="rdLobbyScreen" class="screen">
+        <div class="top-bar"><span class="screen-title" id="rdLobbyTitle">보스 레이드 대기실</span><button class="stop-btn" onclick="rdLeave(false)">나가기</button></div>
+        <div class="land-lobby-box">
+            <div class="rd-lobby-boss"><span class="ic" id="rdLobbyBoss">🐸</span><div><div class="nm" id="rdLobbyBossNm"></div><div class="rd-lobby-info" id="rdLobbyInfo"></div></div></div>
+            <div class="land-lobby-header"><span>보스 단계</span><div class="land-lobby-controls"><select id="rdLv" class="lobby-select" onchange="rdSetLv()"></select></div></div>
+            <h4>참여한 친구들</h4><div class="lobby-player-list" id="rdLobbyList"></div>
+            <button type="button" class="rd-lobby-tv" id="rdBtnTv" onclick="rdToggleTv()"></button>
+            <div class="sv-rules">반 전체가 <b>같은 보스</b>를 공격해요. 뜻을 보고 낱말을 정확히 치면 피해! 틀리면 1.5초 쉬어요. 보스가 공격하기 전에 반 전체가 정답을 모으면 <b>방어</b>해요.<br>체력 70% 방어막 · 40% 약점 노출(피해 2배) · 15% 격노! 선생님은 📺 TV 화면으로 보면서 응원할 수 있어요.</div>
+            <div class="lobby-actions" id="rdLobbyHost"><button class="btn-lobby-start" id="rdBtnStart" onclick="rdStart()">⚔️ 레이드 시작!</button></div>
+            <div class="lobby-actions"><button class="btn-lobby-start" id="rdBtnLobbyAgain" style="display:none;" onclick="rdAgain()">🔁 다시 하기</button></div>
+            <div id="rdLobbyGuest" style="display:none; text-align:center; padding:15px; font-weight:bold; color:var(--primary);">방장이 레이드를 시작할 때까지 기다려주세요...</div>
+        </div>
+    </div>
+
+    <!-- 🐲 보스 레이드 전투 -->
+    <div id="rdGameScreen" class="screen rd-screen">
+        <div class="rd-top"><span class="rd-title" id="rdTitle">보스 레이드</span><span class="rd-time" id="rdTime">⏱ 0:00</span><button class="stop-btn" onclick="rdLeave(true)">나가기</button></div>
+        <div class="rd-stage">
+            <div class="rd-banner" id="rdBanner" role="status"></div>
+            <div class="rd-boss-wrap"><div class="rd-boss" id="rdBoss"><span id="rdBossIc">🐸</span></div><div class="rd-pops" id="rdPops"></div></div>
+            <div class="rd-bar" id="rdHpBar"><i id="rdHpFill"></i><span id="rdHpText"></span></div>
+            <div class="rd-bar" id="rdShBar" style="display:none;"><i id="rdShFill"></i><span id="rdShText"></span></div>
+            <div class="rd-row"><span class="rd-castle" id="rdCastle"></span><span class="rd-chip" id="rdHeat">🔥 열기 ×1</span><span class="rd-chip evt" id="rdEvt"></span></div>
+            <div class="rd-atk"><div class="rd-atk-l" id="rdAtkL"></div><div class="rd-bar atk"><i id="rdAtkT"></i></div><div class="rd-bar def" id="rdDefBar"><i id="rdAtkD"></i><span id="rdDefText"></span></div></div>
+        </div>
+        <div class="rd-board" id="rdBoard" style="display:none;"></div>
+        <div class="rd-me" id="rdMe">
+            <div class="rd-q"><div class="rd-qm" id="rdQM"></div><div class="rd-qh" id="rdQH"></div></div>
+            <div class="rd-minfo" id="rdMInfo"></div>
+            <div class="rd-in"><input type="text" id="rdInput" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="뜻에 맞는 낱말을 입력하고 엔터" onkeydown="rdKey(event)"><button type="button" onclick="rdPass()">넘기기</button></div>
+        </div>
+    </div>
+
+    <!-- 🐲 보스 레이드 결과 -->
+    <div id="rdResultScreen" class="screen">
+        <div class="top-bar"><span class="screen-title" id="rdResTitle">결과</span><button class="stop-btn" onclick="rdLeave(false)">나가기</button></div>
+        <div class="tw-res-box">
+            <p class="tw-note" id="rdResNote"></p>
+            <div class="tw-total" id="rdResClass" style="display:block;"></div>
+            <h3 class="tw-h" id="rdResMineH">🙌 나의 기여도</h3><div id="rdResMine"></div>
+            <h3 class="tw-h">🏆 우리 반 기여도 순위</h3><div id="rdResRank"></div>
+            <h3 class="tw-h">📝 내가 놓친 낱말 (복습!)</h3><div id="rdResMiss"></div>
+            <h3 class="tw-h">📚 우리 반이 많이 놓친 낱말</h3><div id="rdResMissAll"></div>
+            <div class="lobby-actions"><button class="btn-lobby-start" id="rdResAgain" style="display:none;" onclick="rdAgain()">🔁 다시 도전하기</button></div>
         </div>
     </div>
 
@@ -1335,7 +1680,7 @@ html[data-size] .sv-opts { grid-template-columns: 1fr; }
     // 📶 연결 상태 도우미 ─ Firebase 의 '.info/connected' 를 한 번만 구독해서 "끊김/복구"를 방(어휘왕·땅따먹기)에 알려 줘요.
     //    · 방 안에서 연결이 1초 넘게 끊기면 화면 위쪽에 안내 줄을 띄우고, 다시 이어지면 각 방이 '내 자리 되찾기'를 시도해요.
     const NET = { up: true, ref: null, bar: null, tick: 0, okTm: 0 };
-    const netActive = () => !!((SV.on && SV.ref) || (inLandGrabRoom && landRoomRef));
+    const netActive = () => !!((SV.on && SV.ref) || (inLandGrabRoom && landRoomRef) || TW.on || RD.on);
     function netBarShow(txt, bad) {
         if (!NET.bar) {
             const b = document.createElement('div'); b.id = 'netBar'; b.setAttribute('role', 'status');
@@ -1352,7 +1697,7 @@ html[data-size] .sv-opts { grid-template-columns: 1fr; }
         NET.up = up; clearInterval(NET.tick); clearTimeout(NET.okTm);
         if (!up) NET.tick = setInterval(netTick, 1000);
         else if (NET.bar && NET.bar.style.display !== 'none') { netBarShow('✅ 다시 연결됐어요', false); NET.okTm = setTimeout(netBarHide, 2200); }
-        [svNetEvt, landNetEvt].forEach(fn => { try { fn(up); } catch (e) { console.error('연결 상태 처리 오류', e); } });
+        [svNetEvt, landNetEvt, twNetEvt, rdNetEvt].forEach(fn => { try { fn(up); } catch (e) { console.error('연결 상태 처리 오류', e); } });
     }
     function netStart() {   // 방에 들어갈 때마다 불러도 구독은 한 번만 해요
         if (NET.ref || !isFirebaseActive) return;
@@ -2076,6 +2421,8 @@ html[data-size] .sv-opts { grid-template-columns: 1fr; }
         // 어휘왕 방/연습 중: 같은 탭을 눌러도 화면이 바뀌지 않게 하고, 다른 탭으로 갈 때는 확인한 뒤 방을 나갑니다.
         if (tab === 'surv' && (survPracticeMode || SV.on)) return;
         if (SV.on && SV.ref) { if (!confirm('진행 중인 어휘왕 방에서 나가고 이동할까요?')) return; quitSurv(false); }
+        if (TW.on) { if (!confirm('진행 중인 팀전 방에서 나가고 이동할까요?')) return; twLeave(false); }
+        if (RD.on) { if (!confirm('진행 중인 보스 레이드 방에서 나가고 이동할까요?')) return; rdLeave(false); }
         if(landPracticeMode && tab !== 'land') { landPracticeMode=false; inLandGrabRoom=false; if(landPracticeTimer){clearTimeout(landPracticeTimer);clearInterval(landPracticeTimer);landPracticeTimer=null;} landPracticeData=null; }
         if(survPracticeMode && tab !== 'surv') { survPracticeMode=false; if(survPracticeTimer){clearTimeout(survPracticeTimer);cancelAnimationFrame(survPracticeTimer);survPracticeTimer=null;} survPractice=null; }
         document.querySelectorAll('.main-tab').forEach(t => t.classList.remove('active'));
@@ -2132,6 +2479,7 @@ html[data-size] .sv-opts { grid-template-columns: 1fr; }
     }
 
     function initRainHome() {
+        try { twInitHome(); rdInitHome(); } catch (e) { console.error(e); }
         const grid = document.getElementById('rainGrid'); grid.innerHTML = '';
         for(let s = 1; s <= TOTAL_MASTER_STAGES; s++) {
             const btn = document.createElement('button'); btn.classList.add('day-btn');
@@ -2429,16 +2777,70 @@ html[data-size] .sv-opts { grid-template-columns: 1fr; }
         document.getElementById('btnGoHome').onclick = goToHome; showScreen('resultScreen');
     }
 
+    /* =====================================================================
+       디펜스: 웨이브 · 콤보 · 필살기 · 특수 낱말 · 보스 · 성 강화
+       (순위는 그대로 '생존 시간'이에요 — 서버에 새로 저장하는 값은 없어요)
+       ===================================================================== */
+    const RAIN_UPG = [
+        { id: 'wall',   name: '성벽 보강',   desc: '최대 체력 +2 (바로 +2 회복)',      base: 6, max: 5 },
+        { id: 'repair', name: '긴급 수리',   desc: '체력 +4 회복',                     base: 5, max: 99 },
+        { id: 'slow',   name: '감속 탑',     desc: '낱말이 8% 더 느리게 내려와요',      base: 6, max: 5 },
+        { id: 'lamp',   name: '힌트 등불',   desc: '가장 가까운 적의 초성을 알려줘요',  base: 7, max: 2 },
+        { id: 'mine',   name: '코인 광산',   desc: '코인을 25% 더 얻어요',             base: 6, max: 5 },
+        { id: 'charge', name: '필살기 충전', desc: '필살기 게이지가 15% 더 빨리 차요',  base: 6, max: 4 }
+    ];
+    const RAIN_TAG = { fast: '빠름 ×2', gold: '금빛 ×3', ice: '얼음', bomb: '폭탄 -3', twin: '쌍둥이', boss: '보스' };
+    let rainWave = 1, rainCoins = 0, rainCoinsTotal = 0, rainCombo = 0, rainBestCombo = 0, rainGauge = 0, rainKills = 0, rainMaxHP = 10;
+    let rainUpg = {}, rainPhase = 'play', rainWaveSpawned = 0, rainWaveTarget = 7, rainBossPending = false, rainFreezeMs = 0;
+    let rainLeaked = [], rainPicked = false, rainLampT = 0, rainCs = 1, rainCardIds = [], rainBannerT = 0, rainLastBonus = 0;
+
+    function rainFocus() { const i = document.getElementById('rainInput'); if (!i || i.disabled) return; try { i.focus({ preventScroll: true }); } catch (e) { i.focus(); } }
+    function rainSfx(k) { try { if (window.vqFx && window.vqFx.sound) window.vqFx.sound(k); } catch (e) {} }
+    function rainEl(id) { return document.getElementById(id); }
+    function rainText(id, v) { const e = rainEl(id); if (e) e.textContent = String(v); }
+    function rainLv(id) { return rainUpg[id] || 0; }
+    function rainCastleLv() { return rainLv('wall') + rainLv('slow') + rainLv('lamp') + rainLv('mine') + rainLv('charge'); }
+
+    function rainPaintCastle() {
+        const lv = rainCastleLv(), vis = Math.min(lv, 8);
+        rainCs = 1 + vis * 0.05;
+        ['defenseCastle', 'rsCastle'].forEach(id => {
+            const c = rainEl(id); if (!c) return;
+            c.setAttribute('data-lv', String(vis)); c.style.setProperty('--cs', rainCs.toFixed(2));
+        });
+        rainText('castleLv', '성 Lv.' + lv); rainText('rsCastleLv', '성 Lv.' + lv);
+    }
+    function rainPaintStats() {
+        rainText('rainHPDisplay', Math.max(0, rainHP)); rainText('rainHPMax', rainMaxHP);
+        rainText('rainWaveDisplay', rainWave); rainText('rainCoinDisplay', rainCoins); rainText('rainComboDisplay', rainCombo);
+        const chip = rainEl('rainComboChip'); if (chip) chip.classList.toggle('hot', rainCombo >= 5);
+        const pct = Math.max(0, Math.min(100, Math.floor(rainGauge)));
+        const f = rainEl('rainGaugeFill'); if (f) f.style.width = pct + '%';
+        rainText('rainGaugeText', pct >= 100 ? '필살기 준비 완료! (입력칸이 비었을 때 엔터)' : '필살기 ' + pct + '%');
+        const b = rainEl('rainUltBtn'); if (b) { b.disabled = pct < 100 || rainPhase !== 'play'; b.classList.toggle('ready', pct >= 100); }
+    }
+    function rainBanner(msg, danger) {
+        const b = rainEl('rainBanner'); if (!b) return;
+        clearTimeout(rainBannerT);
+        if (!msg) { b.classList.remove('on', 'danger'); return; }
+        b.textContent = msg; b.classList.toggle('danger', !!danger); b.classList.add('on');
+        rainBannerT = setTimeout(() => b.classList.remove('on'), 1700);
+    }
+    function rainHideShop() { const s = rainEl('rainShop'); if (s) s.classList.remove('on'); }
+    function rainWaveInfo(w) { const boss = (w % 5 === 0); return { boss: boss, target: boss ? 4 : Math.min(30, 5 + 2 * w) }; }
+    function rainSpawnInterval() { return Math.max(650, 3000 - 170 * (rainWave - 1)); }
+    function rainSpeedMul() { return Math.min(3.0, 1 + 0.13 * (rainWave - 1)) * Math.max(0.5, 1 - 0.08 * rainLv('slow')); }
+
     function updateRainWordBank() {
         let bank = document.getElementById('rainWordBank');
         if(activeRainDrops.length === 0) { bank.innerHTML = '<span style="color:#94a3b8;">여기에 힌트 단어가 나타납니다.</span>'; return; }
-        
+
         let activeWords = activeRainDrops.map(d => d.word);
         let hints = [...activeWords];
         let availableDistractors = rainWordsPool.map(w => w.w).filter(w => !activeWords.includes(w)).sort(()=>Math.random()-0.5);
         while(hints.length < Math.max(5, activeWords.length + 3) && availableDistractors.length > 0) hints.push(availableDistractors.pop());
-        hints.sort(() => Math.random() - 0.5); 
-        
+        hints.sort(() => Math.random() - 0.5);
+
         bank.innerHTML = '<span style="color:#facc15; font-weight:bold; margin-right:10px;">💡 보기:</span>';
         hints.forEach(w => { let span = document.createElement('span'); span.className = 'rain-hint-chip'; span.innerText = w; bank.appendChild(span); });
     }
@@ -2447,103 +2849,244 @@ html[data-size] .sv-opts { grid-template-columns: 1fr; }
         rainStage = stage;
         rainWordsPool = rawWords.slice((stage - 1) * MASTER_WORDS_PER_STAGE, stage * MASTER_WORDS_PER_STAGE);
         rainWordsQueue = [...rainWordsPool].sort(() => 0.5 - Math.random());
-        activeRainDrops = []; rainHP = 10; rainTimeMs = 0; rainDropIdCounter = 0;
-        
-        document.getElementById('rainTitle').innerText = `${stage}탄 성벽 방어`;
-        document.getElementById('rainHPDisplay').innerText = rainHP;
-        document.getElementById('rainScoreDisplay').innerText = "00:00.0";
-        
-        let sky = document.getElementById('rainSky');
-        Array.from(sky.children).forEach(c => { if(c.id !== 'defenseCastle') c.remove(); }); 
-        
-        document.getElementById('rainInput').value = '';
-        showScreen('rainGameScreen'); updateRainWordBank(); document.getElementById('rainInput').focus();
+        activeRainDrops = []; rainHP = 10; rainMaxHP = 10; rainTimeMs = 0; rainDropIdCounter = 0;
+        rainWave = 1; rainCoins = 0; rainCoinsTotal = 0; rainCombo = 0; rainBestCombo = 0; rainGauge = 0; rainKills = 0;
+        rainUpg = {}; rainLeaked = []; rainFreezeMs = 0; rainPhase = 'play'; rainPicked = false;
 
-        lastRainTime = performance.now(); rainSpawnTimer = 3000;  
-        if(rainTimerReq) cancelAnimationFrame(rainTimerReq);
+        document.getElementById('rainTitle').innerText = `${stage}탄 성벽 방어`;
+        document.getElementById('rainScoreDisplay').innerText = "00:00.0";
+
+        let sky = document.getElementById('rainSky');
+        Array.from(sky.querySelectorAll('.rain-drop, .rain-pop')).forEach(c => c.remove());
+        sky.classList.remove('frozen', 'boss', 'ult');
+        rainHideShop(); rainBanner('');
+
+        let inp = document.getElementById('rainInput'); inp.value = ''; inp.disabled = false;
+        rainPaintCastle(); rainPaintStats(); rainPaintLamp();
+        showScreen('rainGameScreen');
+        rainBeginWave();
+    }
+
+    function rainBeginWave() {
+        const info = rainWaveInfo(rainWave);
+        rainPhase = 'play'; rainWaveSpawned = 0; rainWaveTarget = info.target; rainBossPending = info.boss;
+        rainEl('rainSky').classList.toggle('boss', info.boss);
+        rainHideShop();
+        rainBanner(info.boss ? '경고! 보스 등장 · 웨이브 ' + rainWave : '웨이브 ' + rainWave, info.boss);
+        if (info.boss) rainSfx('no');
+        rainPaintStats(); updateRainWordBank();
+        rainEl('rainInput').disabled = false; rainFocus();
+        lastRainTime = performance.now(); rainSpawnTimer = Math.max(0, rainSpawnInterval() - 1000);
+        if (rainTimerReq) cancelAnimationFrame(rainTimerReq);
         rainTimerReq = requestAnimationFrame(updateRainLoop);
     }
 
-    function spawnRainDrop() {
-        if(rainHP <= 0) return;
-        if(rainWordsQueue.length === 0) rainWordsQueue = [...rainWordsPool].sort(() => 0.5 - Math.random());
+    function rainTakeWord() {
+        if (rainWordsQueue.length === 0) rainWordsQueue = [...rainWordsPool].sort(() => 0.5 - Math.random());
+        const act = new Set(activeRainDrops.map(d => normalizeForCompare(d.word)));
+        for (let i = rainWordsQueue.length - 1; i >= 0; i--) {
+            if (!act.has(normalizeForCompare(rainWordsQueue[i].w))) return rainWordsQueue.splice(i, 1)[0];
+        }
+        return rainWordsQueue.pop();
+    }
 
-        let wordObj = rainWordsQueue.pop(); 
-        let sky = document.getElementById('rainSky');
-        
-        let drop = document.createElement('div');
-        drop.className = 'rain-drop'; drop.id = 'rain_drop_' + rainDropIdCounter; drop.innerText = wordObj.mq || wordObj.m; 
+    function rainPlaceDrop(wordObj, kind, side) {
+        const sky = rainEl('rainSky');
+        const drop = document.createElement('div');
+        drop.className = 'rain-drop'; drop.id = 'rain_drop_' + rainDropIdCounter; drop.innerText = wordObj.mq || wordObj.m;
+        if (kind !== 'normal') { drop.setAttribute('data-k', kind); drop.setAttribute('data-tag', RAIN_TAG[kind] || ''); }
         sky.appendChild(drop);
-        
-        let skyW = sky.clientWidth, skyH = sky.clientHeight;
-        let side = Math.floor(Math.random() * 4);
+
+        const skyW = sky.clientWidth, skyH = sky.clientHeight;
+        if (side === undefined) side = Math.floor(Math.random() * 4);
         let startX, startY;
-        
-        if (side === 0) { startX = Math.random() * skyW; startY = -50; } 
-        else if (side === 1) { startX = skyW + 50; startY = Math.random() * skyH; } 
-        else if (side === 2) { startX = Math.random() * skyW; startY = skyH + 50; } 
-        else { startX = -50; startY = Math.random() * skyH; } 
-
+        if (side === 0) { startX = Math.random() * skyW; startY = -50; }
+        else if (side === 1) { startX = skyW + 50; startY = Math.random() * skyH; }
+        else if (side === 2) { startX = Math.random() * skyW; startY = skyH + 50; }
+        else { startX = -50; startY = Math.random() * skyH; }
         drop.style.left = startX + 'px'; drop.style.top = startY + 'px';
-        
-        let cx = skyW / 2, cy = skyH / 2;
-        let dx = cx - startX, dy = cy - startY;
-        let dist = Math.sqrt(dx*dx + dy*dy);
-        let vx = dx / dist, vy = dy / dist;
 
-        let speedMultiplier = 1.0 + Math.floor(rainTimeMs / 30000) * 0.5;
+        const cx = skyW / 2, cy = skyH / 2, dx = cx - startX, dy = cy - startY, dist = Math.sqrt(dx * dx + dy * dy) || 1;
         let baseSpeed = 0.5 + Math.random() * 0.5;
+        if (kind === 'fast') baseSpeed *= 1.8; else if (kind === 'gold') baseSpeed *= 0.9; else if (kind === 'boss') baseSpeed = 0.3;
+        const d = { id: drop.id, word: wordObj.w, x: startX, y: startY, vx: dx / dist, vy: dy / dist, speed: baseSpeed, kind: kind };
+        activeRainDrops.push(d); rainDropIdCounter++;
+        return d;
+    }
 
-        activeRainDrops.push({ id: drop.id, word: wordObj.w, x: startX, y: startY, vx: vx, vy: vy, speed: baseSpeed * speedMultiplier });
-        rainDropIdCounter++; updateRainWordBank(); 
+    function rainPickKind() {
+        const w = rainWave, r = Math.random();
+        if (w >= 2 && r < 0.12) return 'fast';
+        if (w >= 2 && r < 0.20) return 'gold';
+        if (w >= 3 && r < 0.28) return 'ice';
+        if (w >= 3 && r < 0.38) return 'bomb';
+        if (w >= 4 && r < 0.48) return 'twin';
+        return 'normal';
+    }
+
+    function rainSpawnBoss() {
+        const words = [rainTakeWord(), rainTakeWord(), rainTakeWord()];
+        const d = rainPlaceDrop(words[0], 'boss');
+        d.boss = true; d.hp = 3; d.words = words; d.idx = 0;
+        const el = rainEl(d.id); if (el) el.setAttribute('data-hp', '3');
+        updateRainWordBank();
+        return 1;
+    }
+
+    /* 낱말 하나를 내보내요. 몇 개를 만들었는지(쌍둥이면 2) 돌려줘요 */
+    function spawnRainDrop(forceKind) {
+        if(rainHP <= 0) return 0;
+        let kind = forceKind || rainPickKind();
+        if (kind === 'boss') return rainSpawnBoss();
+        const wordObj = rainTakeWord();
+        if (kind === 'twin') {
+            const cands = rainWordsPool.filter(x => x.w !== wordObj.w && wordsClash(wordObj, x) && !activeRainDrops.some(d => d.word === x.w));
+            if (cands.length) {
+                const mate = cands[Math.floor(Math.random() * cands.length)];
+                rainWordsQueue = rainWordsQueue.filter(x => x.w !== mate.w);
+                const side = Math.floor(Math.random() * 4);
+                rainPlaceDrop(wordObj, 'twin', side); rainPlaceDrop(mate, 'twin', side);
+                updateRainWordBank();
+                return 2;
+            }
+            kind = 'normal';
+        }
+        rainPlaceDrop(wordObj, kind);
+        updateRainWordBank();
+        return 1;
+    }
+
+    function rainPaintLamp() {
+        const el = rainEl('rainLamp'); if (!el) return;
+        const lv = rainLv('lamp');
+        if (!lv || activeRainDrops.length === 0 || rainPhase !== 'play') { el.textContent = ''; el.classList.remove('on'); return; }
+        const sky = rainEl('rainSky'), cx = sky.clientWidth / 2, cy = sky.clientHeight / 2;
+        let near = null, best = Infinity;
+        activeRainDrops.forEach(d => { const k = Math.pow(cx - d.x, 2) + Math.pow(cy - d.y, 2); if (k < best) { best = k; near = d; } });
+        if (!near) { el.classList.remove('on'); return; }
+        let t = '가장 가까운 적의 초성: ' + getChoseongHint(near.word);
+        if (lv >= 2) t += ' (' + String(near.word).replace(/\s+/g, '').length + '글자)';
+        el.textContent = t; el.classList.add('on');
+    }
+
+    function rainPop(d, text) {
+        const sky = rainEl('rainSky'); if (!sky) return;
+        const p = document.createElement('div');
+        p.className = 'rain-pop'; p.textContent = text; p.style.left = d.x + 'px'; p.style.top = d.y + 'px';
+        sky.appendChild(p); setTimeout(() => { if (p.parentNode) p.parentNode.removeChild(p); }, 800);
+    }
+
+    function rainHurtCastle() {
+        let castle = document.getElementById('defenseCastle');
+        castle.classList.add('hit');
+        setTimeout(() => castle.classList.remove('hit'), 150);
     }
 
     function updateRainLoop(time) {
-        if(rainHP <= 0) return; 
+        if(rainHP <= 0 || rainPhase !== 'play') return;
 
         let deltaTime = time - lastRainTime;
-        if (deltaTime > 50) deltaTime = 16; 
+        if (deltaTime > 50) deltaTime = 16;
         lastRainTime = time;
         rainTimeMs += deltaTime;
         document.getElementById('rainScoreDisplay').innerText = formatTime(rainTimeMs);
 
-        let sky = document.getElementById('rainSky'); 
+        let sky = document.getElementById('rainSky');
         let cx = sky.clientWidth / 2, cy = sky.clientHeight / 2;
 
-        let spawnInterval = Math.max(1000, 4000 - Math.floor(rainTimeMs / 20000) * 500);
-        rainSpawnTimer += deltaTime;
-        if (rainSpawnTimer >= spawnInterval) { rainSpawnTimer = 0; spawnRainDrop(); }
+        if (rainFreezeMs > 0) { rainFreezeMs -= deltaTime; if (rainFreezeMs <= 0) { rainFreezeMs = 0; sky.classList.remove('frozen'); } }
 
-        for (let i = activeRainDrops.length - 1; i >= 0; i--) {
-            let d = activeRainDrops[i]; let el = document.getElementById(d.id);
-            if (el) {
-                d.x += d.vx * d.speed * (deltaTime / 16);
-                d.y += d.vy * d.speed * (deltaTime / 16);
-                el.style.left = d.x + 'px'; el.style.top = d.y + 'px';
-
-                let distToCenter = Math.sqrt(Math.pow(cx - d.x, 2) + Math.pow(cy - d.y, 2));
-                if (distToCenter < 60) {
-                    el.remove(); activeRainDrops.splice(i, 1); rainHP--;
-                    document.getElementById('rainHPDisplay').innerText = rainHP;
-                    updateRainWordBank(); 
-                    
-                    let castle = document.getElementById('defenseCastle');
-                    castle.classList.add('hit');
-                    setTimeout(() => castle.classList.remove('hit'), 150);
-
-                    if (rainHP <= 0) { endRainGame(); return; }
-                }
+        if (rainWaveSpawned < rainWaveTarget) {
+            rainSpawnTimer += deltaTime;
+            if (rainSpawnTimer >= rainSpawnInterval()) {
+                rainSpawnTimer = 0;
+                if (rainBossPending) { rainBossPending = false; rainWaveSpawned += spawnRainDrop('boss'); }
+                else rainWaveSpawned += spawnRainDrop();
             }
         }
+
+        const mul = rainSpeedMul() * (rainFreezeMs > 0 ? 0.25 : 1);
+        const reach = 60 * rainCs;
+        for (let i = activeRainDrops.length - 1; i >= 0; i--) {
+            let d = activeRainDrops[i]; let el = document.getElementById(d.id);
+            if (!el) { activeRainDrops.splice(i, 1); continue; }
+            d.x += d.vx * d.speed * mul * (deltaTime / 16);
+            d.y += d.vy * d.speed * mul * (deltaTime / 16);
+            el.style.left = d.x + 'px'; el.style.top = d.y + 'px';
+
+            let distToCenter = Math.sqrt(Math.pow(cx - d.x, 2) + Math.pow(cy - d.y, 2));
+            if (distToCenter < reach) {
+                el.remove(); activeRainDrops.splice(i, 1);
+                rainHP -= d.boss ? 5 : (d.kind === 'bomb' ? 3 : 1);
+                rainCombo = 0;
+                const info = rawWords.find(x => x.w === d.word); if (info && !rainLeaked.some(x => x.w === info.w)) rainLeaked.push({ w: info.w, m: info.m });
+                rainPaintStats(); updateRainWordBank(); rainHurtCastle();
+                if (rainHP <= 0) { endRainGame(); return; }
+            }
+        }
+
+        rainLampT += deltaTime; if (rainLampT > 300) { rainLampT = 0; rainPaintLamp(); }
+
+        if (rainWaveSpawned >= rainWaveTarget && activeRainDrops.length === 0) { rainWaveClear(); return; }
         rainTimerReq = requestAnimationFrame(updateRainLoop);
     }
 
+    /* ----- 맞혔을 때 ----- */
+    function rainGain() {
+        rainCombo++; if (rainCombo > rainBestCombo) rainBestCombo = rainCombo;
+        rainGauge = Math.min(100, rainGauge + (5 + Math.min(rainCombo, 10) * 0.5) * (1 + 0.15 * rainLv('charge')));
+    }
+    function rainReward(d) {
+        let c = d.boss ? 10 : 1;
+        if (d.kind === 'gold') c *= 3; else if (d.kind === 'fast') c *= 2;
+        c = Math.round(c * (1 + 0.25 * rainLv('mine'))) + Math.floor(rainCombo / 5);
+        rainCoins += c; rainCoinsTotal += c;
+        return c;
+    }
+    function rainBossStep(d, el) {
+        d.hp--; d.idx++; const nx = d.words[d.idx]; d.word = nx.w;
+        if (el) { el.innerText = nx.mq || nx.m; el.setAttribute('data-hp', String(d.hp)); el.classList.add('flash'); setTimeout(() => el.classList.remove('flash'), 260); }
+        rainCoins += 2; rainCoinsTotal += 2; rainPop(d, '+2');
+    }
+    function rainFinishDrop(idx) {
+        const d = activeRainDrops[idx]; if (!d) return;
+        const el = document.getElementById(d.id);
+        const gain = rainReward(d);
+        if (el) { el.classList.add('hit'); setTimeout(() => el.remove(), 200); }
+        rainPop(d, '+' + gain);
+        activeRainDrops.splice(idx, 1); rainKills++;
+        if (d.kind === 'ice') { rainFreezeMs = 3000; rainEl('rainSky').classList.add('frozen'); }
+    }
+    function rainHitDrop(idx) {
+        const d = activeRainDrops[idx]; if (!d) return;
+        rainGain();
+        if (d.boss && d.hp > 1) { rainBossStep(d, document.getElementById(d.id)); rainSfx('ok'); }
+        else rainFinishDrop(idx);
+        rainPaintStats(); updateRainWordBank();
+    }
+    function rainUlt() {
+        if (TW.on) { twUlt(); return; }
+        if (rainPhase !== 'play' || rainGauge < 100) return;
+        rainGauge = 0; rainSfx('win');
+        const sky = rainEl('rainSky'); sky.classList.add('ult'); setTimeout(() => sky.classList.remove('ult'), 450);
+        for (let i = activeRainDrops.length - 1; i >= 0; i--) {
+            const d = activeRainDrops[i];
+            if (d.boss && d.hp > 1) rainBossStep(d, document.getElementById(d.id));
+            else rainFinishDrop(i);
+        }
+        rainPaintStats(); updateRainWordBank();
+        rainFocus();
+    }
+
     document.getElementById('rainInput').addEventListener('keydown', (e) => {
+        if (TW.on) { twKey(e); return; }
         if(e.key === 'Enter') {
-            let val = normalizeForCompare(e.target.value); if(!val) return;
-            let sky = document.getElementById('rainSky'); 
+            if (rainPhase !== 'play') return;
+            let val = normalizeForCompare(e.target.value);
+            if(!val) { if (rainGauge >= 100) rainUlt(); return; }
+            let sky = document.getElementById('rainSky');
             let cx = sky.clientWidth / 2, cy = sky.clientHeight / 2;
-            
+
             let hitIdx = -1; let minDist = Infinity;
             for(let i=0; i<activeRainDrops.length; i++) {
                 if(normalizeForCompare(activeRainDrops[i].word) === val) {
@@ -2554,23 +3097,94 @@ html[data-size] .sv-opts { grid-template-columns: 1fr; }
             }
 
             if(hitIdx !== -1) {
-                let dropEl = document.getElementById(activeRainDrops[hitIdx].id);
-                if(dropEl) { dropEl.classList.add('hit'); setTimeout(() => dropEl.remove(), 200); }
-                activeRainDrops.splice(hitIdx, 1); updateRainWordBank();
-                e.target.value = ''; 
+                rainHitDrop(hitIdx);
+                e.target.value = '';
             } else {
+                rainCombo = 0; rainGauge = Math.floor(rainGauge / 2); rainPaintStats();
                 e.target.value = ''; e.target.style.borderColor = '#ef4444'; e.target.classList.add('shake');
                 setTimeout(() => { e.target.classList.remove('shake'); e.target.style.borderColor = ''; }, 300);
             }
         }
     });
 
-    function quitRainGame() { if(rainTimerReq) cancelAnimationFrame(rainTimerReq); goToHome(); }
+    /* ----- 웨이브 클리어 → 보상 카드 + 성 강화 ----- */
+    function rainWaveClear() {
+        if (rainTimerReq) { cancelAnimationFrame(rainTimerReq); rainTimerReq = null; }
+        rainPhase = 'shop';
+        rainLastBonus = 3 + rainWave; rainCoins += rainLastBonus; rainCoinsTotal += rainLastBonus;
+        rainHP = Math.min(rainMaxHP, rainHP + 1);
+        rainFreezeMs = 0; const sky = rainEl('rainSky'); sky.classList.remove('boss', 'frozen', 'ult');
+        rainSfx('ok'); try { if (window.vqFx && window.vqFx.confetti) window.vqFx.confetti(rainWave % 5 === 0 ? 36 : 18); } catch (e) {}
+        rainEl('rainInput').disabled = true;
+        rainPicked = false;
+        const pool = RAIN_UPG.filter(u => rainLv(u.id) < u.max && !(u.id === 'repair' && rainHP >= rainMaxHP));
+        rainCardIds = pool.sort(() => Math.random() - 0.5).slice(0, 3).map(u => u.id);
+        rainPaintStats(); rainPaintLamp(); rainRenderShop();
+        const shop = rainEl('rainShop'); shop.classList.add('on'); shop.scrollTop = 0;
+        const nb = rainEl('rsNext'); if (nb) { try { nb.focus({ preventScroll: true }); } catch (e) { nb.focus(); } }
+    }
+
+    function rainApplyUpg(id) {
+        if (id === 'wall') { rainMaxHP += 2; rainHP = Math.min(rainMaxHP, rainHP + 2); rainUpg.wall = rainLv('wall') + 1; }
+        else if (id === 'repair') { rainHP = Math.min(rainMaxHP, rainHP + 4); }
+        else rainUpg[id] = rainLv(id) + 1;
+        rainPaintCastle(); rainPaintStats();
+    }
+
+    function rainMakeBtn(cls, name, desc, price) {
+        const b = document.createElement('button'); b.type = 'button'; b.className = 'rs-btn ' + cls;
+        const n = document.createElement('strong'); n.textContent = name;
+        const s = document.createElement('span'); s.textContent = desc;
+        b.appendChild(n); b.appendChild(s);
+        if (price !== undefined) { const p = document.createElement('em'); p.textContent = price; b.appendChild(p); }
+        return b;
+    }
+
+    function rainRenderShop() {
+        rainText('rsTitle', '웨이브 ' + rainWave + ' 클리어!');
+        rainText('rsBonus', '클리어 보너스 코인 +' + rainLastBonus + ' · 체력 +1');
+        rainText('rsCoins', '코인 ' + rainCoins);
+        rainText('rsHp', '성벽 ' + rainHP + '/' + rainMaxHP);
+        const cw = rainEl('rsCards'); cw.textContent = '';
+        if (rainCardIds.length === 0) { const t = document.createElement('div'); t.className = 'rs-empty'; t.textContent = '받을 수 있는 카드가 없어요. 아래에서 코인으로 강화하세요.'; cw.appendChild(t); }
+        rainCardIds.forEach(id => {
+            const u = RAIN_UPG.find(x => x.id === id);
+            const b = rainMakeBtn('rs-card-btn', u.name, u.desc, rainPicked ? '받았어요' : '무료 선택');
+            b.disabled = rainPicked;
+            b.addEventListener('click', () => { if (rainPicked) return; rainPicked = true; rainApplyUpg(id); rainSfx('ok'); rainRenderShop(); });
+            cw.appendChild(b);
+        });
+        const iw = rainEl('rsItems'); iw.textContent = '';
+        RAIN_UPG.forEach(u => {
+            const lv = rainLv(u.id), isRepair = u.id === 'repair';
+            const maxed = !isRepair && lv >= u.max, full = isRepair && rainHP >= rainMaxHP;
+            const cost = isRepair ? u.base : u.base + 3 * lv;
+            const price = maxed ? '최대 단계' : (full ? '체력이 가득해요' : cost + ' 코인');
+            const b = rainMakeBtn('rs-item-btn', u.name + (isRepair ? '' : '  Lv.' + lv), u.desc, price);
+            b.disabled = maxed || full || rainCoins < cost;
+            b.addEventListener('click', () => {
+                if (rainCoins < cost) return;
+                rainCoins -= cost; rainApplyUpg(u.id); rainSfx('ok'); rainRenderShop();
+            });
+            iw.appendChild(b);
+        });
+        const nextW = rainWave + 1;
+        rainText('rsNext', '다음 웨이브 시작 (웨이브 ' + nextW + (nextW % 5 === 0 ? ' · 보스!' : '') + ')');
+    }
+
+    function rainNextWave() {
+        if (TW.on) { twReady(); return; }
+        if (rainPhase !== 'shop') return;
+        rainWave++; rainBeginWave();
+    }
+
+    function quitRainGame() { if (TW.on) { twLeave(true); return; } if(rainTimerReq) cancelAnimationFrame(rainTimerReq); rainPhase = 'over'; rainHideShop(); rainBanner(''); goToHome(); }
 
     function endRainGame() {
         if(rainTimerReq) cancelAnimationFrame(rainTimerReq);
+        rainPhase = 'over'; rainHideShop();
         try {
-            let prevRecord = rainRecords[rainStage] || { bestTimeMs: 0 }; 
+            let prevRecord = rainRecords[rainStage] || { bestTimeMs: 0 };
             let isNewBest = false;
             if(rainTimeMs > (prevRecord.bestTimeMs || 0)) {
                 rainRecords[rainStage] = { bestTimeMs: rainTimeMs, cleared: true, date: new Date().toISOString() };
@@ -2586,12 +3200,1284 @@ html[data-size] .sv-opts { grid-template-columns: 1fr; }
             document.getElementById('btnReviewMissed').style.display = 'none';
             document.getElementById('resultTitle').innerText = "💥 성벽 붕괴!";
             document.getElementById('resultScore').innerText = `생존 시간: ${formatTime(rainTimeMs)}`;
-            let msg = `치열한 방어였습니다!`;
+            let msg = `웨이브 ${rainWave} · 처치 ${rainKills}마리 · 최고 콤보 ${rainBestCombo} · 모은 코인 ${rainCoinsTotal}`;
             if(isNewBest) msg += "<br>🎉 <b>최고 생존 기록을 갱신했습니다!</b>";
+            if (rainLeaked.length) {
+                msg += '<br>놓친 낱말: ' + rainLeaked.slice(0, 6).map(x => `<b>${escapeHTML(x.w)}</b>(${escapeHTML(x.m)})`).join(' · ');
+            }
             document.getElementById('resultComment').innerHTML = msg;
             document.getElementById('btnGoHome').onclick = goToHome;
         } catch (e) { console.error(e); }
         showScreen('resultScreen');
+    }
+
+
+    /* =====================================================================
+       👥 팀전 디펜스 — 같은 하늘 · 같은 성을 팀이 함께 지켜요
+       · 방(어휘왕과 같은 방 저장소)에 들어와 팀을 정하고, 모든 팀이 같은 순서의 낱말로 동시에 시작해요.
+       · 팀의 첫 번째 접속자(팀장)가 웨이브·체력·코인을 맡고, 팀원은 같은 화면을 보며 낱말을 쳐요.
+         낱말의 위치는 서버에 계속 보내지 않고 '나온 시각 + 내려오는 시간'으로 각자 화면에서 똑같이 계산해요.
+       · 순위 = 팀이 성을 지킨 시간(상점에 머문 시간은 빼요). 개인 기여도는 처치·정확도·구출 등으로 보여줘요.
+       · 방 안에서만 쓰는 값이라 Firebase 규칙을 바꿀 필요가 없고, 방이 지워지면 기록도 사라져요.
+       ===================================================================== */
+    const TW_COLORS = ['#1D4ED8', '#BE123C', '#15803D', '#B45309', '#7E22CE', '#0E7490', '#C2410C', '#4D7C0F'];
+    const TW_MAX_PLAYERS = 40, TW_SHOP_MS = 25000, TW_GRACE_MS = 300, TW_FREEZE_MS = 3000;
+    const TW = {};
+    function twGameFresh() {
+        return { inGame: 0, sig: '', team: -1, seed: 0, perm: [], pool: [], tref: null, tl: null, T: {}, s: null, tLoaded: 0,
+            drops: new Map(), alive: [], fz: [], proc: new Set(), procUl: new Set(), procBu: new Set(), open: new Map(), leaked: new Set(),
+            L: null, Lw: {}, Bw: '', lead: false, initSent: 0, st: { k: 0, sv: 0, w: 0, bs: 0, cur: 0, ul: 0, bh: 0 }, stMerged: 0, psT: 0,
+            phKey: '', hudSig: '', shopSig: '', lgN: -1, lampT: 0, bankSig: '', cdN: -1, lockUlt: 0, pend: new Set(), resT: 0, lastPrune: 0,
+            raf: 0, tick: 0, prevGa: 0, allT: null, resShown: 0, orphan: new Set(), barN: -1, barT: 0, lastBu: 0, resI: 0 };
+    }
+    function twFresh() {
+        return { on: 0, ref: null, stage: 1, code: '', me: '', off: TW.off || 0, lis: [], d: {}, loaded: 0, got: {}, syncT: 0, leaving: 0, rs: 0, mineP: null, g: twGameFresh() };
+    }
+    Object.assign(TW, twFresh());
+
+    const twNow = () => Date.now() + (TW.off || 0);
+    const twObj = v => { if (!v || typeof v !== 'object') return {}; if (Array.isArray(v)) { const o = {}; v.forEach((x, i) => { if (x != null) o[i] = x; }); return o; } return v; };
+    const twClone = x => JSON.parse(JSON.stringify(x));
+    const twTeamName = i => (i + 1) + '팀';
+    const twColor = i => TW_COLORS[((i % TW_COLORS.length) + TW_COLORS.length) % TW_COLORS.length];
+    const twLv = (o, id) => ((o && o.up && o.up[id]) || 0);
+    const twShort = s => Array.from(String(s || '')).slice(0, 4).join('');
+    function twRng(a) { return function () { a = (a + 0x6D2B79F5) | 0; let t = Math.imul(a ^ (a >>> 15), 1 | a); t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t; return ((t ^ (t >>> 14)) >>> 0) / 4294967296; }; }
+    function twEl(tag, cls, text) { const e = document.createElement(tag); if (cls) e.className = cls; if (text !== undefined) e.textContent = text; return e; }
+    function twPlayers() { const o = {}, pl = twObj(TW.d.players); Object.keys(pl).forEach(k => { const p = pl[k]; if (p && p.name) o[k] = p; }); return o; }
+    function twMembers(team) { const pl = twPlayers(); return Object.keys(pl).filter(k => pl[k].tm === team).sort(); }
+    function twIsLeader() { const m = twMembers(TW.g.team); return m.length > 0 && m[0] === TW.me; }
+    function twNameOf(u) { const pl = twPlayers(); if (pl[u]) return pl[u].name; const ps = twObj(TW.g.T && TW.g.T.ps); return (ps[u] && ps[u].n) || '친구'; }
+    function twWords(e) { return [e.i].concat(e.b || []); }
+    function twHits(key, kl) { let h = 0; for (let i = 0; i < 3; i++) if (kl[key + '_' + i]) h++; return h; }
+    function twDeadKind(key, e, kl, lk) { if (lk[key]) return 'leak'; if (e.k === 'boss') return twHits(key, kl) >= 3 ? 'kill' : ''; return kl[key] ? 'kill' : ''; }
+    function twCurWord(e, hits) { const w = twWords(e); return w[Math.min(hits || 0, w.length - 1)]; }
+    function twMeaning(idx) { const x = TW.g.pool[idx]; return x ? (x.mq || x.m) : ''; }
+    function twWave(w, n) { const base = rainWaveInfo(w); return { boss: base.boss, target: Math.min(70, Math.round(base.target * (1 + 0.4 * (n - 1)))) }; }
+    function twInterval(w, n) { return Math.max(420, Math.round((3000 - 170 * (w - 1)) / (1 + 0.5 * (n - 1)))); }
+    function twPickKind(w, r) {
+        if (w >= 2 && r < 0.12) return 'fast'; if (w >= 2 && r < 0.20) return 'gold';
+        if (w >= 3 && r < 0.28) return 'ice'; if (w >= 3 && r < 0.38) return 'bomb'; if (w >= 4 && r < 0.48) return 'twin';
+        return 'normal';
+    }
+    // 얼음 구간(속도 1/4)을 빼고 계산한 '실제로 내려온 시간'
+    function twEff(t0, now) {
+        let e = now - t0; if (e <= 0) return 0;
+        for (const f of TW.g.fz) { const a = Math.max(t0, f.a), b = Math.min(now, f.b); if (b > a) e -= 0.75 * (b - a); }
+        return e;
+    }
+    function twDropXY(e, W, H, eff) {
+        const side = Math.floor(e.a), f = e.a - side; let sx, sy;
+        if (side === 0) { sx = f * W; sy = -50; } else if (side === 1) { sx = W + 50; sy = f * H; } else if (side === 2) { sx = f * W; sy = H + 50; } else { sx = -50; sy = f * H; }
+        const cx = W / 2, cy = H / 2, dx = sx - cx, dy = sy - cy, dist = Math.hypot(dx, dy) || 1, r = Math.min(60 * rainCs, dist * 0.5);
+        const ex = cx + dx / dist * r, ey = cy + dy / dist * r, p = Math.max(0, Math.min(1, eff / e.d));
+        return [sx + (ex - sx) * p, sy + (ey - sy) * p];
+    }
+
+    /* ---------- 홈: 팀전 단추 ---------- */
+    function twStageLock(s) {
+        const d1 = (s - 1) * 2 + 1, d2 = s * 2; let locked = false;
+        if (!(dailyRecords[d1] && dailyRecords[d1].cleared)) locked = true;
+        if (d2 <= TOTAL_DAYS && !(dailyRecords[d2] && dailyRecords[d2].cleared)) locked = true;
+        return locked ? '매일학습 ' + d1 + '~' + (d2 <= TOTAL_DAYS ? d2 : TOTAL_DAYS) + '일차' : '';
+    }
+    function twInitHome() {
+        const box = document.getElementById('rainTeamGrid'); if (!box) return;
+        box.textContent = '';
+        for (let s = 1; s <= TOTAL_MASTER_STAGES; s++) {
+            const lk = twStageLock(s);
+            const btn = twEl('button', 'day-btn tw-btn'); btn.type = 'button';
+            btn.appendChild(document.createTextNode(s + '탄 팀전'));
+            btn.appendChild(twEl('div', 'daily-rate', lk ? '🔒 ' + lk : '친구들과 함께'));
+            if (lk) { btn.classList.add('locked-btn'); btn.addEventListener('click', () => alert('🔒 먼저 [' + lk + ']를 클리어하세요!')); }
+            else btn.addEventListener('click', () => twJoin(s));
+            box.appendChild(btn);
+        }
+    }
+
+    /* ---------- 방 입장 · 나가기 ---------- */
+    function twJoin(stage) {
+        if (!isFirebaseActive) { alert('서버 연결이 필요합니다.'); return; }
+        const raw = prompt('👥 팀전 디펜스에 접속합니다.\n친구들과 같은 [방 이름]을 입력하세요. (예: 6-1반, 자유방)');
+        if (!raw || raw.trim() === '') return;
+        const code = cleanText(raw.replace(/[\.\#\$\[\]\/]/g, ''), 20);
+        if (code === '') { alert('방 이름에 사용할 수 없는 문자만 입력하셨습니다. 다른 이름으로 다시 시도해주세요.'); return; }
+        const me = getUserKey(); if (!me) return;
+        if (TW.on) twLeave(false);
+        if (RD.on) rdLeave(false);
+        const ref = getDB().ref('survRooms_vocab/tw_' + stage + '_' + code);
+        ref.transaction(data => {
+            data = data || {};
+            const pl = {}; Object.keys(data.players || {}).forEach(k => { const p = data.players[k]; if (p && p.name) pl[k] = p; });
+            const n = Object.keys(pl).length;
+            if (n === 0) data = { host: me, status: 'waiting', cfg: { n: 2 } };
+            else if (!(data.host && pl[data.host])) data.host = Object.keys(pl).sort()[0];
+            if (pl[me]) { data.players = pl; return data; }
+            // 게임 중에는 원래 이 방의 팀원이었던 친구만 (새로고침·끊김 뒤) 자기 팀으로 돌아올 수 있어요
+            const back = data.status === 'playing' && data.mem && Number.isInteger(data.mem[me]) ? data.mem[me] : -1;
+            if (data.status === 'playing' && back < 0) return;
+            if (n >= TW_MAX_PLAYERS) return;
+            const used = new Set(Object.values(pl).map(p => p.color)); let ci = 0;
+            while (used.has(getPlayerColor(ci))) ci++;
+            pl[me] = { name: userProfile.studentName, color: getPlayerColor(ci), order: n, tm: back };
+            data.players = pl; if (!data.status) data.status = 'waiting'; if (!data.host) data.host = me;
+            return data;
+        }, (err, committed, snap) => {
+            if (err) { alert('입장 중 오류가 발생했습니다. 다시 시도해주세요.'); return; }
+            if (!committed) { const d = (snap && snap.val()) || {}; alert(d.status === 'playing' ? '진행 중인 게임입니다!' : '방이 꽉 찼습니다.'); return; }
+            Object.assign(TW, twFresh(), { on: 1, ref, stage, code, me });
+            TW.mineP = ((snap.val() || {}).players || {})[me] || null;
+            twAttach();
+        });
+    }
+    function twAttach() {
+        const ref = TW.ref, me = TW.me;
+        try { ref.child('players/' + me).onDisconnect().remove(); } catch (e) {}
+        netStart();
+        getDB().ref('.info/serverTimeOffset').once('value').then(x => { TW.off = x.val() || 0; }).catch(() => {});
+        const listen = (key, path) => { const r = ref.child(path), fn = s => { if (!TW.on || TW.ref !== ref) return; TW.d[key] = s.val(); TW.got[key] = 1; if (Object.keys(TW.got).length >= 6) TW.loaded = 1; twSync(); }; r.on('value', fn); TW.lis.push([r, fn]); };
+        ['status', 'host', 'players', 'cfg', 't0', 'B'].forEach(k => listen(k, k));
+        document.getElementById('twLobbyTitle').textContent = '👥 팀전 디펜스 · ' + TW.stage + '탄 · [' + TW.code + ']방';
+        showScreen('twLobbyScreen');
+    }
+    function twStopLoops() { const g = TW.g; cancelAnimationFrame(g.raf); clearInterval(g.tick); clearTimeout(g.psT); clearTimeout(g.resT); clearInterval(g.resI); clearTimeout(g.barT); g.raf = 0; g.tick = 0; }
+    function twClearSky() {
+        const sky = document.getElementById('rainSky'); if (sky) { Array.from(sky.querySelectorAll('.rain-drop, .rain-pop')).forEach(c => c.remove()); sky.classList.remove('frozen', 'boss', 'ult'); }
+        activeRainDrops = [];
+    }
+    function twDetach() {
+        twStopLoops(); clearTimeout(TW.syncT);
+        TW.lis.forEach(p => { try { p[0].off('value', p[1]); } catch (e) {} });
+        if (TW.g.tl) { try { TW.g.tl[0].off('value', TW.g.tl[1]); } catch (e) {} }
+        document.body.classList.remove('tw-on');
+        Object.assign(TW, twFresh());
+        twClearSky(); rainHideShop(); rainBanner('');
+        const i = document.getElementById('rainInput'); if (i) { i.disabled = false; i.value = ''; }
+    }
+    function twLeaveRef(ref, me) {
+        ref.child('players').once('value').then(snap => {
+            const pl = snap.val() || {}, others = Object.keys(pl).filter(k => k !== me && pl[k] && pl[k].name);
+            return others.length === 0 ? ref.remove() : ref.child('players/' + me).remove();
+        }).catch(() => {});
+    }
+    function twLeave(ask) {
+        if (!TW.on) return;
+        if (ask && TW.g.inGame && TW.d.status === 'playing' && !confirm('팀전을 나갈까요? (팀원들은 계속 해요)')) return;
+        twFlushStats();
+        const ref = TW.ref, me = TW.me; TW.leaving = 1; twDetach();
+        if (ref) twLeaveRef(ref, me);
+        goToHome();
+    }
+    function twKicked(msg) { const ref = null; twFlushStats(); twDetach(); goToHome(); setTimeout(() => alert(msg), 50); }
+    function twNetEvt(up) {
+        if (!TW.on || !TW.ref || TW.leaving) return;
+        if (!up) return;
+        try { TW.ref.child('players/' + TW.me).onDisconnect().remove(); } catch (e) {}
+        twRestore();
+    }
+    // 연결이 잠깐 끊겨 서버가 내 자리를 비웠다면 되찾아요 (방이 없어졌거나 이미 시작된 게임에 새로 끼는 것은 아니에요)
+    function twRestore(n) {
+        if (TW.rs || !TW.on || !TW.ref || TW.leaving) return;
+        const ref = TW.ref, me = TW.me, mine = TW.mineP, tries = n || 0; let why = '';
+        TW.rs = 1;
+        ref.transaction(d => {
+            why = '';
+            if (!TW.on || TW.ref !== ref) { why = 'left'; return; }
+            if (!d) { why = 'gone'; return d; }
+            const pl = {}; Object.keys(d.players || {}).forEach(k => { const p = d.players[k]; if (p && p.name) pl[k] = p; });
+            if (pl[me]) { d.players = pl; return d; }
+            if (Object.keys(pl).length === 0) { why = 'gone'; return; }
+            if (!mine) { why = 'gone'; return; }
+            if (d.status === 'playing' && !(Number.isInteger(mine.tm) && mine.tm >= 0)) { why = 'late'; return; }
+            pl[me] = { name: mine.name, color: mine.color, order: mine.order || 0, tm: Number.isInteger(mine.tm) ? mine.tm : -1 };
+            d.players = pl; return d;
+        }, (err, ok) => {
+            TW.rs = 0;
+            if (!TW.on || TW.ref !== ref) return;
+            if (err) { if (tries < 2) setTimeout(() => twRestore(tries + 1), 1500); return; }
+            if (!ok) { if (why === 'gone') twKicked('방이 사라져서 나가졌어요. 다시 입장해 주세요.'); else if (why === 'late') twKicked('끊긴 사이에 게임이 시작돼서 나가졌어요.'); return; }
+            try { ref.child('players/' + me).onDisconnect().remove(); } catch (e) {}
+        });
+    }
+
+    /* ---------- 방 데이터가 바뀔 때마다 ---------- */
+    function twSync() { if (!TW.on) return; clearTimeout(TW.syncT); TW.syncT = setTimeout(twSync0, 0); }
+    function twSync0() {
+        if (!TW.on || TW.leaving) return;
+        const d = TW.d, me = TW.me, g = TW.g;
+        if (!TW.loaded) return;
+        if (d.status == null) { twKicked('방이 사라져서 나가졌어요. 다시 입장해 주세요.'); return; }
+        const pl = twPlayers();
+        if (!pl[me]) { twRestore(); return; }
+        TW.mineP = pl[me];
+        if (d.host && !pl[d.host]) attemptHostMigration(TW.ref);
+        if (d.status === 'waiting') {
+            if (g.inGame) twBackToLobby();
+            if (!document.getElementById('twLobbyScreen').classList.contains('active')) showScreen('twLobbyScreen');
+            twRenderLobby(); return;
+        }
+        if (d.status === 'playing') {
+            if (d.t0 == null || !d.cfg || !Number.isInteger(pl[me].tm) || pl[me].tm < 0) return;
+            if (!g.inGame || g.sig !== String(d.t0)) twEnterGame();
+            return;
+        }
+        if (d.status === 'ended') {
+            if (!g.inGame) { twRenderLobby(); if (!document.getElementById('twLobbyScreen').classList.contains('active')) showScreen('twLobbyScreen'); return; }
+            if (!g.resShown) { clearTimeout(g.resT); g.resT = setTimeout(twShowResult, 300); } else { twLoadAll(); twRenderResult(); }
+        }
+    }
+
+    /* ---------- 대기실 ---------- */
+    function twRenderLobby() {
+        const d = TW.d, pl = twPlayers(), me = TW.me, host = d.host === me, n = Math.max(2, Math.min(8, +((d.cfg || {}).n) || 2));
+        const keys = Object.keys(pl), total = keys.length;
+        const sel = document.getElementById('twTeamN');
+        if (sel.options.length === 0) for (let i = 2; i <= 8; i++) { const o = document.createElement('option'); o.value = String(i); o.textContent = i + '팀'; sel.appendChild(o); }
+        sel.value = String(n); sel.disabled = !host;
+        document.getElementById('twLobbyHint').textContent = '참여 ' + total + '명 · 한 팀에 3~5명을 추천해요 (지금 인원이면 ' + Math.max(2, Math.min(8, Math.round(total / 4))) + '팀쯤)';
+        const box = document.getElementById('twLobbyTeams'); box.textContent = '';
+        const chip = k => {
+            const c = twEl('span', 'lobby-player' + (k === me ? ' me' : '')); const dot = twEl('span', 'land-color-dot'); dot.style.background = pl[k].color || '#888';
+            c.appendChild(dot); c.appendChild(document.createTextNode(pl[k].name + (k === d.host ? ' 👑' : '') + (k === me ? ' (나)' : ''))); return c;
+        };
+        for (let i = 0; i < n; i++) {
+            const tb = twEl('div', 'team-box tw-team'); tb.style.borderColor = twColor(i);
+            const ti = twEl('div', 'team-title'); const nm = twEl('span', '', twTeamName(i)); nm.style.color = twColor(i); ti.appendChild(nm);
+            const btn = twEl('button', 'team-join-btn', pl[me] && pl[me].tm === i ? '✔ 내 팀' : '참여하기'); btn.type = 'button'; btn.disabled = d.status !== 'waiting';
+            btn.addEventListener('click', () => twSetTeam(i)); ti.appendChild(btn); tb.appendChild(ti);
+            const lst = twEl('div', 'lobby-player-list'); keys.filter(k => pl[k].tm === i).sort((a, b) => (pl[a].order || 0) - (pl[b].order || 0)).forEach(k => lst.appendChild(chip(k)));
+            tb.appendChild(lst); box.appendChild(tb);
+        }
+        const free = document.getElementById('twLobbyFree'); free.textContent = '';
+        keys.filter(k => !(Number.isInteger(pl[k].tm) && pl[k].tm >= 0 && pl[k].tm < n)).sort((a, b) => (pl[a].order || 0) - (pl[b].order || 0)).forEach(k => free.appendChild(chip(k)));
+        document.getElementById('twLobbyFreeBox').style.display = free.childNodes.length ? 'block' : 'none';
+        const ended = d.status === 'ended';
+        document.getElementById('twLobbyHost').style.display = host ? 'flex' : 'none';
+        const gm = document.getElementById('twLobbyGuest'); gm.style.display = host ? 'none' : 'block';
+        gm.textContent = ended ? '지난 게임이 끝났어요. 방장이 다시 시작할 때까지 기다려주세요…' : '방장이 게임을 시작할 때까지 기다려주세요…';
+        document.getElementById('twBtnStart').disabled = ended;
+        document.getElementById('twBtnRandom').disabled = ended;
+        const ag = document.getElementById('twBtnLobbyAgain'); ag.style.display = (host && ended) ? 'block' : 'none';
+    }
+    function twSetTeam(i) {
+        if (!TW.on || TW.d.status !== 'waiting') return;
+        TW.ref.child('players/' + TW.me + '/tm').set(i).catch(() => {});
+    }
+    function twSetN() {
+        if (!TW.on || TW.d.host !== TW.me) return;
+        const n = Math.max(2, Math.min(8, +document.getElementById('twTeamN').value || 2));
+        TW.ref.transaction(d => {
+            if (!d) return d; if (d.status !== 'waiting') return;
+            d.cfg = Object.assign({}, d.cfg || {}, { n: n });
+            Object.keys(d.players || {}).forEach(k => { const p = d.players[k]; if (p && p.tm >= n) p.tm = -1; });
+            return d;
+        });
+    }
+    function twRandomTeams() {
+        if (!TW.on || TW.d.host !== TW.me) return;
+        TW.ref.transaction(d => {
+            if (!d) return d; if (d.status !== 'waiting') return;
+            const n = Math.max(2, Math.min(8, +((d.cfg || {}).n) || 2));
+            const keys = Object.keys(d.players || {}).filter(k => d.players[k] && d.players[k].name);
+            for (let i = keys.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); const t = keys[i]; keys[i] = keys[j]; keys[j] = t; }
+            keys.forEach((k, i) => { d.players[k].tm = i % n; });
+            return d;
+        });
+    }
+    function twStart() {
+        if (!TW.on || TW.d.host !== TW.me) return;
+        const t0 = twNow() + 4000, seed = Math.floor(Math.random() * 2147483647);
+        TW.ref.transaction(d => {
+            if (!d) return d; if (d.status !== 'waiting') return;
+            const pl = {}; Object.keys(d.players || {}).forEach(k => { const p = d.players[k]; if (p && p.name) pl[k] = p; });
+            const keys = Object.keys(pl); if (keys.length === 0) return;
+            const n = Math.max(2, Math.min(8, +((d.cfg || {}).n) || 2)), cnt = new Array(n).fill(0);
+            keys.forEach(k => { const t = pl[k].tm; if (Number.isInteger(t) && t >= 0 && t < n) cnt[t]++; else pl[k].tm = -1; });
+            keys.filter(k => pl[k].tm < 0).sort().forEach(k => { let b = 0; for (let i = 1; i < n; i++) if (cnt[i] < cnt[b]) b = i; pl[k].tm = b; cnt[b]++; });
+            const map = {}; let m = 0; for (let i = 0; i < n; i++) if (cnt[i] > 0) map[i] = m++;
+            const sz = []; keys.forEach(k => { pl[k].tm = map[pl[k].tm]; sz[pl[k].tm] = (sz[pl[k].tm] || 0) + 1; });
+            const mem = {}; keys.forEach(k => { mem[k] = pl[k].tm; });
+            d.players = pl; d.mem = mem; d.cfg = { n: n, m: m, sz: sz, seed: seed }; d.t0 = t0; d.status = 'playing'; delete d.T; delete d.B;
+            return d;
+        }, (err, ok) => { if (err || !ok) { if (TW.on) alert('시작하지 못했어요. 잠시 뒤 다시 눌러 주세요.'); } });
+    }
+    function twAgain() {
+        if (!TW.on || TW.d.host !== TW.me) return;
+        TW.ref.transaction(d => { if (!d) return d; if (d.status !== 'ended') return; d.status = 'waiting'; delete d.T; delete d.B; delete d.t0; delete d.mem; return d; });
+    }
+    function twForceEnd() {
+        if (!TW.on || TW.d.host !== TW.me || TW.d.status !== 'playing') return;
+        if (!confirm('지금 게임을 끝낼까요? 아직 지키는 중인 팀은 지금까지의 시간으로 순위가 정해져요.')) return;
+        const now = twNow(), B = twObj(TW.d.B), m = (TW.d.cfg || {}).m || 0;
+        for (let i = 0; i < m; i++) twMarkOver(i, B[i], now);
+        TW.ref.child('status').set('ended');
+    }
+    function twMarkOver(i, b, now) {
+        if (b && b.ph === 'over') return;
+        const nb = b ? { tm: (b.tm || 0) + (b.ph === 'play' ? Math.max(0, now - b.ts) : 0), ts: now, ph: 'over', wv: b.wv, hp: 0, mx: b.mx, n: b.n } : { tm: 0, ts: now, ph: 'over', wv: 1, hp: 0, mx: 10, n: 0 };
+        TW.ref.child('B/' + i).update(nb);
+        TW.ref.child('T/' + i + '/s').update({ ph: 'over', tm: nb.tm, ts: now, hp: 0 });
+    }
+
+    /* ---------- 게임 시작 ---------- */
+    function twBackToLobby() {
+        const g = TW.g; twStopLoops();
+        if (g.tl) { try { g.tl[0].off('value', g.tl[1]); } catch (e) {} }
+        TW.g = twGameFresh(); document.body.classList.remove('tw-on');
+        twClearSky(); rainHideShop(); rainBanner('');
+        const i = document.getElementById('rainInput'); if (i) { i.disabled = false; i.value = ''; }
+        showScreen('twLobbyScreen'); twRenderLobby();
+    }
+    function twEnterGame() {
+        const d = TW.d, pl = twPlayers(), me = TW.me;
+        if (TW.g.inGame) { twBackToLobby(); }
+        const g = TW.g, team = pl[me].tm;
+        g.inGame = 1; g.sig = String(d.t0); g.team = team; g.seed = (d.cfg.seed >>> 0);
+        g.pool = rawWords.slice((TW.stage - 1) * MASTER_WORDS_PER_STAGE, TW.stage * MASTER_WORDS_PER_STAGE);
+        rainWordsPool = g.pool; rainStage = TW.stage;
+        const N = g.pool.length, idx = []; for (let i = 0; i < N; i++) idx.push(i);
+        const r = twRng(g.seed); for (let i = N - 1; i > 0; i--) { const j = Math.floor(r() * (i + 1)); const t = idx[i]; idx[i] = idx[j]; idx[j] = t; }
+        g.perm = idx;
+        g.tref = TW.ref.child('T/' + team);
+        const fn = snap => { if (!TW.on || TW.g !== g) return; g.T = snap.val() || {}; g.s = g.T.s || null; g.tLoaded = 1; twOnTeam(); };
+        g.tref.on('value', fn); g.tl = [g.tref, fn];
+        rainHP = 10; rainMaxHP = 10; rainWave = 1; rainCoins = 0; rainCombo = 0; rainGauge = 0; rainUpg = {}; rainPhase = 'play'; rainLeaked = [];
+        document.getElementById('rainTitle').textContent = '👥 ' + twTeamName(team) + ' · ' + TW.stage + '탄 성벽 방어';
+        document.getElementById('rainScoreDisplay').textContent = '00:00.0';
+        twClearSky(); rainHideShop(); rainBanner('');
+        const inp = document.getElementById('rainInput'); inp.value = ''; inp.disabled = true;
+        rainPaintCastle(); rainPaintStats(); rainPaintLamp(); updateRainWordBank();
+        document.body.classList.add('tw-on');
+        document.getElementById('twBar').textContent = ''; g.barN = -1;
+        showScreen('rainGameScreen');
+        g.raf = requestAnimationFrame(twFrame);
+        g.tick = setInterval(twLeaderTick, 100);
+    }
+    function twOnTeam() {
+        const g = TW.g, T = g.T;
+        const fz = Object.values(twObj(T.fz)).filter(f => f && typeof f.t === 'number').map(f => ({ a: f.t, b: f.t + (f.ms || TW_FREEZE_MS) })).sort((x, y) => x.a - y.a), out = [];
+        fz.forEach(f => { const l = out[out.length - 1]; if (l && f.a <= l.b) l.b = Math.max(l.b, f.b); else out.push({ a: f.a, b: f.b }); });
+        g.fz = out;
+        const ps = twObj(T.ps)[TW.me];
+        if (!g.stMerged && ps) { g.stMerged = 1; const s = g.st; s.k = Math.max(s.k, ps.k || 0); s.sv = Math.max(s.sv, ps.sv || 0); s.w = Math.max(s.w, ps.w || 0); s.bs = Math.max(s.bs, ps.bs || 0); s.ul = Math.max(s.ul, ps.ul || 0); s.bh = Math.max(s.bh, ps.bh || 0); }
+    }
+
+    /* ---------- 내 기록(기여도) ---------- */
+    function twSavePs(now) {
+        const g = TW.g; if (!g.tref) return;
+        if (now) { clearTimeout(g.psT); g.psT = 0; twFlushStats(); return; }
+        if (g.psT) return; g.psT = setTimeout(() => { g.psT = 0; twFlushStats(); }, 500);
+    }
+    function twFlushStats() {
+        const g = TW.g; if (!g.tref || !TW.me) return;
+        const s = g.st; try { g.tref.child('ps/' + TW.me).set({ n: (TW.mineP && TW.mineP.name) || '', k: s.k, sv: s.sv, w: s.w, bs: s.bs, ul: s.ul, bh: s.bh }); } catch (e) {}
+    }
+
+    /* ---------- 화면 그리기 (모든 팀원 공통) ---------- */
+    function twSurvive(s, now) { if (!s) return 0; return Math.max(0, (s.tm || 0) + (s.ph === 'play' ? Math.max(0, now - s.ts) : 0)); }
+    function twFrame() {
+        const g = TW.g; if (!TW.on || TW.g !== g || !g.inGame) return;
+        g.raf = requestAnimationFrame(twFrame);
+        const now = twNow(), d = TW.d, T = g.T || {}, s = g.s, sky = document.getElementById('rainSky'); if (!sky) return;
+        const W = sky.clientWidth, H = sky.clientHeight;
+        twPaintBar(now);
+        if (now < d.t0) {
+            const c = Math.ceil((d.t0 - now) / 1000);
+            if (c !== g.cdN) { g.cdN = c; rainBanner('시작까지 ' + c, false); }
+            return;
+        }
+        if (g.cdN !== 0) { g.cdN = 0; rainBanner(''); }
+        if (!s) return;
+        twPhaseChange(s, now); twPaintHud(s, now);
+        const sp = twObj(T.sp), kl = twObj(T.kl), lk = twObj(T.lk), alive = [], seen = {};
+        Object.keys(sp).forEach(key => {
+            const e = sp[key]; if (!e || typeof e.d !== 'number' || typeof e.a !== 'number') return;
+            seen[key] = 1;
+            const dead = twDeadKind(key, e, kl, lk), hits = e.k === 'boss' ? twHits(key, kl) : 0;
+            let rec = g.drops.get(key);
+            if (dead) { if (rec) { twDropEnd(rec, dead, key, e, kl); g.drops.delete(key); } return; }
+            if (!rec) {
+                const el = twEl('div', 'rain-drop'); el.id = 'tw_' + key; sky.appendChild(el);
+                if (e.k !== 'normal') { el.setAttribute('data-k', e.k); el.setAttribute('data-tag', RAIN_TAG[e.k] || ''); }
+                rec = { key: key, el: el, hits: -1 }; g.drops.set(key, rec);
+            }
+            const el = rec.el;
+            if (rec.hits !== hits) {
+                const first = rec.hits < 0; rec.hits = hits; el.innerText = twMeaning(twCurWord(e, hits));
+                if (e.k === 'boss') { el.setAttribute('data-hp', String(3 - hits)); if (!first) { el.classList.add('flash'); setTimeout(() => el.classList.remove('flash'), 260); twPopAt(el, '+2'); } }
+            }
+            const eff = twEff(e.t, now), xy = twDropXY(e, W, H, eff);
+            el.style.left = xy[0] + 'px'; el.style.top = xy[1] + 'px';
+            const wi = twCurWord(e, hits), x = g.pool[wi];
+            alive.push({ key: key, e: e, el: el, hits: hits, rem: (e.d - eff) / e.d, word: x ? x.w : '', x: xy[0], y: xy[1], claimKey: e.k === 'boss' ? key + '_' + hits : key, boss: e.k === 'boss', kind: e.k, id: el.id });
+        });
+        g.drops.forEach((rec, key) => { if (!seen[key]) { if (rec.el.parentNode) rec.el.parentNode.removeChild(rec.el); g.drops.delete(key); } });
+        g.alive = alive;
+        activeRainDrops = alive.map(a => ({ id: a.id, word: a.word, x: a.x, y: a.y, kind: a.kind, boss: a.boss }));
+        const sig = alive.map(a => a.key + ':' + a.hits).join(',');
+        if (sig !== g.bankSig) { g.bankSig = sig; updateRainWordBank(); }
+        g.lampT += 16; if (g.lampT > 300) { g.lampT = 0; rainPaintLamp(); }
+        const frozen = g.fz.some(f => now >= f.a && now <= f.b); sky.classList.toggle('frozen', frozen && s.ph === 'play');
+        if (s.ph === 'shop') twShopTick(now);
+    }
+    function twPopAt(el, text) { const x = parseFloat(el.style.left) || 0, y = parseFloat(el.style.top) || 0; rainPop({ x: x, y: y }, text); }
+    function twDropEnd(rec, dead, key, e, kl) {
+        const el = rec.el;
+        if (dead === 'kill') {
+            const k = kl[e.k === 'boss' ? key + '_2' : key]; el.classList.add('hit'); setTimeout(() => { if (el.parentNode) el.parentNode.removeChild(el); }, 200);
+            if (k && k.u && !k.ul) twPopAt(el, '🎯' + twShort(twNameOf(k.u))); else if (k && k.ul) twPopAt(el, '필살기!');
+        } else { if (el.parentNode) el.parentNode.removeChild(el); rainHurtCastle(); }
+    }
+    function twPaintHud(s, now) {
+        const g = TW.g, sig = [s.hp, s.mx, s.wv, s.co, s.cb, Math.floor(s.ga || 0), s.ph, JSON.stringify(s.up || {})].join('|');
+        if (sig !== g.hudSig) {
+            g.hudSig = sig;
+            if (g.prevGa >= 100 && (s.ga || 0) < 60 && s.ph === 'play') { rainSfx('win'); const sk = document.getElementById('rainSky'); sk.classList.add('ult'); setTimeout(() => sk.classList.remove('ult'), 450); }
+            g.prevGa = s.ga || 0;
+            rainHP = s.hp; rainMaxHP = s.mx; rainWave = s.wv; rainCoins = s.co; rainCombo = s.cb; rainGauge = s.ga || 0; rainUpg = twObj(s.up); rainPhase = s.ph;
+            rainPaintStats(); rainPaintCastle();
+        }
+        rainText('rainScoreDisplay', formatTime(twSurvive(s, now)));
+        const lg = s.lg; if (lg && lg.n !== g.lgN) { if (g.lgN >= 0 && lg.m) rainBanner(lg.m); g.lgN = lg.n; }
+    }
+    function twPhaseChange(s, now) {
+        const g = TW.g, key = s.ph + ':' + s.wv; if (key === g.phKey) return; g.phKey = key;
+        const sky = document.getElementById('rainSky'), inp = document.getElementById('rainInput');
+        if (s.ph === 'play') {
+            rainHideShop(); const boss = s.wv % 5 === 0; sky.classList.toggle('boss', boss);
+            rainBanner(boss ? '경고! 보스 등장 · 웨이브 ' + s.wv : '웨이브 ' + s.wv, boss); if (boss) rainSfx('no');
+            inp.disabled = false; rainFocus();
+        } else if (s.ph === 'shop') {
+            sky.classList.remove('boss', 'frozen', 'ult'); rainSfx('ok'); try { if (window.vqFx && window.vqFx.confetti) window.vqFx.confetti(s.wv % 5 === 0 ? 36 : 18); } catch (e) {}
+            inp.disabled = true; g.shopSig = ''; twRenderShop();
+            const shop = document.getElementById('rainShop'); shop.classList.add('on'); shop.scrollTop = 0;
+        } else {
+            sky.classList.remove('boss', 'frozen', 'ult'); inp.disabled = true; rainHideShop(); rainBanner('성이 무너졌어요!', true); rainSfx('no');
+            clearTimeout(g.resT); g.resT = setTimeout(twShowResult, 1700);
+        }
+    }
+
+    /* ---------- 상점 (팀이 함께) ---------- */
+    function twShopAct(kind, id) {
+        const g = TW.g, now = Date.now(); if (!g.tref || now - g.lastBu < 250) return; g.lastBu = now;
+        g.tref.child('bu/' + TW.me + '_' + now + '_' + Math.floor(Math.random() * 1000)).set({ u: TW.me, k: kind, id: id || '', t: twNow() });
+    }
+    function twReady() { twShopAct('rd'); }
+    function twRenderShop() {
+        const g = TW.g, s = g.s; if (!s || s.ph !== 'shop') return;
+        const sh = s.sh || {}, up = twObj(s.up), lv = id => up[id] || 0, cards = twObj(sh.cd), picked = !!sh.pk;
+        rainText('rsTitle', '웨이브 ' + s.wv + ' 클리어!');
+        rainText('rsBonus', '클리어 보너스 코인 +' + (s.bn || 0) + ' · 체력 +1 · 코인은 우리 팀이 함께 써요');
+        rainText('rsCoins', '코인 ' + s.co); rainText('rsHp', '성벽 ' + s.hp + '/' + s.mx);
+        const cw = rainEl('rsCards'); cw.textContent = '';
+        const ids = Object.keys(cards).sort((a, b) => a - b).map(k => cards[k]);
+        if (ids.length === 0) cw.appendChild(twEl('div', 'rs-empty', '받을 수 있는 카드가 없어요. 아래에서 코인으로 강화하세요.'));
+        ids.forEach(id => {
+            const u = RAIN_UPG.find(x => x.id === id); if (!u) return;
+            const b = rainMakeBtn('rs-card-btn', u.name, u.desc, picked ? (sh.by ? sh.by + ' 선택' : '받았어요') : '무료 선택'); b.disabled = picked;
+            b.addEventListener('click', () => { if (!picked) twShopAct('card', id); }); cw.appendChild(b);
+        });
+        const iw = rainEl('rsItems'); iw.textContent = '';
+        RAIN_UPG.forEach(u => {
+            const l = lv(u.id), isR = u.id === 'repair', maxed = !isR && l >= u.max, full = isR && s.hp >= s.mx, cost = isR ? u.base : u.base + 3 * l;
+            const b = rainMakeBtn('rs-item-btn', u.name + (isR ? '' : '  Lv.' + l), u.desc, maxed ? '최대 단계' : (full ? '체력이 가득해요' : cost + ' 코인'));
+            b.disabled = maxed || full || s.co < cost; b.addEventListener('click', () => { if (s.co >= cost) twShopAct('buy', u.id); }); iw.appendChild(b);
+        });
+        twShopTick(twNow());
+    }
+    function twShopTick(now) {
+        const g = TW.g, s = g.s; if (!s || s.ph !== 'shop') return;
+        const sig = JSON.stringify([s.co, s.hp, s.mx, s.up || {}, s.sh || {}, s.wv]);
+        if (sig !== g.shopSig) { g.shopSig = sig; twRenderShop(); return; }
+        const sh = s.sh || {}, mem = twMembers(g.team), rd = twObj(sh.rd), r = mem.filter(k => rd[k]).length, sec = Math.max(0, Math.ceil(((sh.end || now) - now) / 1000)), nw = s.wv + 1;
+        rainText('rsNext', (rd[TW.me] ? '준비 완료 ✔ ' : '다음 웨이브 준비! ') + '(' + r + '/' + mem.length + ') · ' + sec + '초 뒤 시작 · 웨이브 ' + nw + (nw % 5 === 0 ? ' 보스!' : ''));
+    }
+    function twPaintBar(now) {
+        const g = TW.g, bar = document.getElementById('twBar'); if (!bar) return;
+        const d = TW.d, cfg = d.cfg || {}, m = cfg.m || 0, B = twObj(d.B);
+        if (g.barN !== m) {
+            g.barN = m; bar.textContent = '';
+            for (let i = 0; i < m; i++) {
+                const c = twEl('span', 'tw-chip' + (i === g.team ? ' me' : '')); c.setAttribute('data-i', String(i)); c.style.borderColor = twColor(i);
+                const dot = twEl('i', 'dot'); dot.style.background = twColor(i); c.appendChild(dot);
+                c.appendChild(twEl('b', '', twTeamName(i))); c.appendChild(twEl('span', 't', '00:00')); c.appendChild(twEl('span', 'h', ''));
+                bar.appendChild(c);
+            }
+            const mine = twEl('span', 'tw-mine'); mine.id = 'twMine'; bar.appendChild(mine);
+            if (d.host === TW.me) { const b = twEl('button', 'tw-end', '끝내기'); b.type = 'button'; b.addEventListener('click', twForceEnd); bar.appendChild(b); }
+        }
+        const t = Date.now(); if (t - (g.barT || 0) < 250) return; g.barT = t;
+        const chips = bar.querySelectorAll('.tw-chip');
+        chips.forEach(c => {
+            const i = +c.getAttribute('data-i'), b = B[i], ms = b ? (b.tm || 0) + (b.ph === 'play' ? Math.max(0, now - b.ts) : 0) : 0;
+            c.querySelector('.t').textContent = formatTime(Math.max(0, ms)).slice(0, 5);
+            c.querySelector('.h').textContent = b ? (b.ph === 'over' ? '💥' : '♥' + b.hp) : '';
+            c.classList.toggle('over', !!(b && b.ph === 'over'));
+        });
+        const mn = document.getElementById('twMine'); if (mn) mn.textContent = '내 처치 ' + g.st.k + ' · 팀 ' + ((g.s && g.s.kt) || 0);
+    }
+
+    /* ---------- 입력: 낱말 치기 · 필살기 ---------- */
+    function twKey(e) {
+        if (e.key !== 'Enter') return;
+        const g = TW.g, s = g.s, inp = e.target;
+        if (!s || s.ph !== 'play' || twNow() < TW.d.t0) return;
+        const val = normalizeForCompare(inp.value);
+        if (!val) { if ((s.ga || 0) >= 100) twUlt(); return; }
+        let best = null;
+        for (const a of g.alive) { if (g.pend.has(a.claimKey)) continue; if (normalizeForCompare(a.word) === val && (!best || a.rem < best.rem)) best = a; }
+        inp.value = '';
+        if (best) twClaim(best);
+        else {
+            g.st.w++; g.st.cur = 0; twSavePs();
+            inp.style.borderColor = '#ef4444'; inp.classList.add('shake'); setTimeout(() => { inp.classList.remove('shake'); inp.style.borderColor = ''; }, 300);
+        }
+    }
+    function twClaim(a) {
+        const g = TW.g, key = a.claimKey, me = TW.me, save = a.rem < 0.25 ? 1 : 0; g.pend.add(key);
+        g.tref.child('kl/' + key).transaction(cur => cur ? undefined : { u: me, t: twNow(), sv: save }, (err, ok) => {
+            g.pend.delete(key); if (!TW.on || TW.g !== g) return;
+            if (err) return;
+            if (ok) { const st = g.st; st.k++; st.cur++; if (st.cur > st.bs) st.bs = st.cur; if (save) st.sv++; if (a.boss) st.bh++; twSavePs(); }
+            else { const sk = document.getElementById('rainSky'); if (sk) rainPop({ x: sk.clientWidth / 2, y: sk.clientHeight * 0.8 }, '친구가 먼저 맞혔어요!'); }
+        });
+    }
+    function twUlt() {
+        const g = TW.g, s = g.s; if (!s || s.ph !== 'play' || (s.ga || 0) < 100 || twNow() - g.lockUlt < 1500) return;
+        g.lockUlt = twNow(); g.st.ul++; twSavePs();
+        g.tref.child('ul/' + TW.me + '_' + Date.now()).set({ u: TW.me, t: twNow() });
+        const b = rainEl('rainUltBtn'); if (b) b.disabled = true; rainFocus();
+    }
+
+    /* ---------- 팀장: 낱말 내보내기 · 체력 · 웨이브 ---------- */
+    function twSnap(L) { const o = {}; Object.keys(L).forEach(k => { if (L[k] !== undefined) o[k] = JSON.stringify(L[k]); }); return o; }
+    function twTakeover() {
+        const g = TW.g, T = g.T || {}, sp = twObj(T.sp), kl = twObj(T.kl), lk = twObj(T.lk);
+        g.proc = new Set(Object.keys(kl)); g.procUl = new Set(Object.keys(twObj(T.ul))); g.procBu = new Set(Object.keys(twObj(T.bu))); g.leaked = new Set(Object.keys(lk));
+        g.L = T.s ? twClone(T.s) : null; g.Lw = g.L ? twSnap(g.L) : {};
+        g.open = new Map(); Object.keys(sp).forEach(key => { if (sp[key] && !twDeadKind(key, sp[key], kl, lk)) g.open.set(key, twWords(sp[key])); });
+    }
+    function twLeaderTick() {
+        const g = TW.g; if (!TW.on || TW.g !== g || !g.inGame || TW.leaving) return;
+        const d = TW.d, now = twNow();
+        if (d.host === TW.me) twHostTick(now);
+        if (g.team < 0 || !g.tref || !g.tLoaded) return;
+        const lead = twIsLeader();
+        if (lead !== g.lead) { g.lead = lead; if (lead) twTakeover(); }
+        if (!lead || now < d.t0 || d.status !== 'playing') return;
+        const T = g.T || {};
+        if (!g.L) {
+            if (T.s && T.s.ph) { g.L = twClone(T.s); g.Lw = twSnap(g.L); }
+            else if (!g.initSent) {
+                g.initSent = 1; const n = ((d.cfg || {}).sz || [])[g.team] || twMembers(g.team).length || 1, mx = 10 + 2 * (n - 1);
+                g.L = { hp: mx, mx: mx, wv: 1, co: 0, ct: 0, ga: 0, cb: 0, bc: 0, kt: 0, ph: 'play', ts: d.t0, tm: 0, ws: 0, nx: d.t0 + 1000, n: n };
+                g.Lw = {}; twFlushL(g.L, {}); return;
+            } else return;
+        }
+        const L = g.L, upd = {}, sp = twObj(T.sp), kl = twObj(T.kl), lk = twObj(T.lk);
+        if (L.ph === 'play') twLeaderPlay(L, now, T, sp, kl, lk, upd);
+        else if (L.ph === 'shop') twLeaderShop(L, now, twObj(T.bu), upd);
+        if (now - g.lastPrune > 1000) { g.lastPrune = now; twPrune(now, T, sp, kl, lk, upd); }
+        twFlushL(L, upd);
+    }
+    function twFlushL(L, upd) {
+        const g = TW.g, snap = twSnap(L);
+        Object.keys(snap).forEach(k => { if (snap[k] !== g.Lw[k]) upd['s/' + k] = L[k]; });
+        Object.keys(g.Lw).forEach(k => { if (!(k in snap)) upd['s/' + k] = null; });
+        g.Lw = snap;
+        const B = { tm: L.tm, ts: L.ts, ph: L.ph, wv: L.wv, hp: L.hp, mx: L.mx, n: L.n }, bs = JSON.stringify(B);
+        if (bs !== g.Bw) { g.Bw = bs; TW.ref.child('B/' + g.team).update(B).catch(() => {}); }
+        if (Object.keys(upd).length) g.tref.update(upd).catch(() => {});
+    }
+    function twGain(L) { L.cb++; if (L.cb > (L.bc || 0)) L.bc = L.cb; L.ga = Math.min(100, (L.ga || 0) + (5 + Math.min(L.cb, 10) * 0.5) * (1 + 0.15 * twLv(L, 'charge'))); }
+    function twReward(L, kind, boss) {
+        let c = boss ? 10 : 1; if (kind === 'gold') c *= 3; else if (kind === 'fast') c *= 2;
+        c = Math.round(c * (1 + 0.25 * twLv(L, 'mine'))) + Math.floor(L.cb / 5); L.co += c; L.ct = (L.ct || 0) + c; return c;
+    }
+    function twMissed(L, wi) { L.ms = L.ms || []; if (!L.ms.includes(wi)) { L.ms.push(wi); if (L.ms.length > 40) L.ms.shift(); } }
+    function twApply(L, id) {
+        L.up = L.up || {};
+        if (id === 'wall') { L.mx += 2; L.hp = Math.min(L.mx, L.hp + 2); L.up.wall = (L.up.wall || 0) + 1; }
+        else if (id === 'repair') { L.hp = Math.min(L.mx, L.hp + 4); }
+        else L.up[id] = (L.up[id] || 0) + 1;
+    }
+    function twLog(L, msg) { L.lg = { n: ((L.lg && L.lg.n) || 0) + 1, m: msg }; }
+    function twLeaderPlay(L, now, T, sp, kl, lk, upd) {
+        const g = TW.g, n = L.n || 1;
+        // 1) 맞힌 것 처리
+        Object.keys(kl).filter(k => !g.proc.has(k)).sort((a, b) => (kl[a].t || 0) - (kl[b].t || 0)).forEach(key => {
+            g.proc.add(key);
+            const k = kl[key], bm = /^(.*)_(\d)$/.exec(key), base = bm ? bm[1] : key, e = sp[base];
+            if (!e || lk[base] || g.leaked.has(base)) return;
+            const boss = e.k === 'boss', last = !boss || (bm && +bm[2] >= 2);
+            if (!k.ul) twGain(L);
+            if (boss && !last) { L.co += 2; L.ct = (L.ct || 0) + 2; return; }
+            twReward(L, e.k, boss); L.kt = (L.kt || 0) + 1; g.open.delete(base);
+            if (e.k === 'ice') upd['fz/f' + Math.floor(now) + '_' + base] = { t: now, ms: TW_FREEZE_MS };
+        });
+        // 2) 필살기
+        const ultKill = {};
+        Object.keys(twObj(T.ul)).filter(k => !g.procUl.has(k)).sort((a, b) => (T.ul[a].t || 0) - (T.ul[b].t || 0)).forEach(key => {
+            g.procUl.add(key); if ((L.ga || 0) < 100) return;
+            L.ga = 0; L.uc = (L.uc || 0) + 1;
+            Object.keys(sp).forEach(bk => {
+                const e = sp[bk]; if (!e || twDeadKind(bk, e, kl, lk) || g.leaked.has(bk)) return;
+                const kk = e.k === 'boss' ? bk + '_' + twHits(bk, kl) : bk; if (kl[kk] || ultKill[kk]) return;
+                ultKill[kk] = 1; upd['kl/' + kk] = { u: T.ul[key].u, t: now, ul: 1 };
+            });
+        });
+        // 3) 성에 닿은 것
+        Object.keys(sp).forEach(key => {
+            const e = sp[key]; if (!e || twDeadKind(key, e, kl, lk) || g.leaked.has(key)) return;
+            const hits = e.k === 'boss' ? twHits(key, kl) : 0, kk = e.k === 'boss' ? key + '_' + hits : key; if (ultKill[kk]) return;
+            if (twEff(e.t, now) < e.d + TW_GRACE_MS) return;
+            g.leaked.add(key); g.open.delete(key); upd['lk/' + key] = { t: now };
+            L.hp -= e.k === 'boss' ? 5 : (e.k === 'bomb' ? 3 : 1); L.cb = 0; twMissed(L, twCurWord(e, hits));
+        });
+        if (L.hp <= 0) { L.hp = 0; L.tm += Math.max(0, now - L.ts); L.ts = now; L.ph = 'over'; return; }
+        // 4) 새 낱말
+        const wv = twWave(L.wv, n), interval = twInterval(L.wv, n); let guard = 0;
+        while (L.ws < wv.target && now >= L.nx && guard++ < 3) { twSpawn(L, now, upd, sp); L.nx = now + interval; }
+        // 5) 웨이브 끝 → 상점
+        if (L.ws >= wv.target && g.open.size === 0) {
+            L.tm += Math.max(0, now - L.ts); L.ts = now; L.ph = 'shop'; L.bn = 3 + L.wv; L.co += L.bn; L.ct = (L.ct || 0) + L.bn; L.hp = Math.min(L.mx, L.hp + 1);
+            const pool = RAIN_UPG.filter(u => twLv(L, u.id) < u.max && !(u.id === 'repair' && L.hp >= L.mx));
+            L.sh = { cd: pool.sort(() => Math.random() - 0.5).slice(0, 3).map(u => u.id), pk: 0, by: '', end: now + TW_SHOP_MS };
+            g.open.clear();
+        }
+    }
+    function twSpawn(L, now, upd, sp) {
+        const g = TW.g, w = L.wv, k = L.ws, info = rainWaveInfo(w), N = g.pool.length;
+        const rng = twRng((g.seed ^ Math.imul(w, 0x9E3779B1) ^ Math.imul(k + 1, 0x85EBCA6B)) >>> 0);
+        let kind = (info.boss && k === 0) ? 'boss' : twPickKind(w, rng());
+        const side = Math.floor(rng() * 4), a = side + Math.min(0.999, rng()), v0 = 0.5 + rng() * 0.5, pick = rng();
+        const avoid = new Set(); g.open.forEach(ws => ws.forEach(i => avoid.add(i)));
+        const take = pos => { for (let j = 0; j < N; j++) { const idx = g.perm[(pos + j) % N]; if (!avoid.has(idx)) { avoid.add(idx); return idx; } } return g.perm[pos % N]; };
+        const base = (w - 1) * 17 + k + (info.boss && k > 0 ? 2 : 0);
+        const mul = Math.min(3.0, 1 + 0.13 * (w - 1)) * Math.max(0.5, 1 - 0.08 * twLv(L, 'slow'));
+        const mk = (idx, kd, extra) => { let v = v0; if (kd === 'fast') v *= 1.8; else if (kd === 'gold') v *= 0.9; else if (kd === 'boss') v = 0.3; return Object.assign({ i: idx, k: kd, a: a, d: Math.round(340 * 16 / (v * mul)), t: now, w: w }, extra || {}); };
+        const put = (key, rec) => { upd['sp/' + key] = rec; g.open.set(key, twWords(rec)); };
+        if (kind === 'boss') {
+            const i0 = take(base), i1 = take(base + 1), i2 = take(base + 2);
+            put('w' + w + 'k' + k, mk(i0, 'boss', { b: [i1, i2] })); L.ws += 1; return;
+        }
+        let idx;
+        if (w >= 2 && L.ms && L.ms.length && rng() < 0.3) { const m = L.ms[Math.floor(pick * L.ms.length)]; if (!avoid.has(m)) { idx = m; avoid.add(m); } }
+        if (idx === undefined) idx = take(base);
+        if (kind === 'twin') {
+            const me = g.pool[idx], cands = []; g.pool.forEach((x, j) => { if (j !== idx && !avoid.has(j) && wordsClash(me, x)) cands.push(j); });
+            if (cands.length) { const mate = cands[Math.floor(rng() * cands.length)]; avoid.add(mate); put('w' + w + 'k' + k, mk(idx, 'twin')); put('w' + w + 'k' + (k + 1), mk(mate, 'twin')); L.ws += 2; return; }
+            kind = 'normal';
+        }
+        put('w' + w + 'k' + k, mk(idx, kind)); L.ws += 1;
+    }
+    function twLeaderShop(L, now, bu, upd) {
+        const g = TW.g, sh = L.sh || (L.sh = { cd: [], pk: 0, by: '', end: now });
+        Object.keys(bu).filter(k => !g.procBu.has(k)).sort((a, b) => (bu[a].t || 0) - (bu[b].t || 0)).forEach(key => {
+            g.procBu.add(key); const ev = bu[key], nm = twShort(twNameOf(ev.u));
+            if (ev.k === 'rd') { sh.rd = sh.rd || {}; sh.rd[ev.u] = 1; return; }
+            if (ev.k === 'card') {
+                const ids = Object.values(twObj(sh.cd)); if (sh.pk || !ids.includes(ev.id)) return;
+                const u = RAIN_UPG.find(x => x.id === ev.id); if (!u) return; twApply(L, ev.id); sh.pk = 1; sh.by = nm; twLog(L, nm + ' · ' + u.name + ' 카드!'); return;
+            }
+            if (ev.k === 'buy') {
+                const u = RAIN_UPG.find(x => x.id === ev.id); if (!u) return;
+                const l = twLv(L, u.id), isR = u.id === 'repair'; if (!isR && l >= u.max) return; if (isR && L.hp >= L.mx) return;
+                const cost = isR ? u.base : u.base + 3 * l; if (L.co < cost) return;
+                L.co -= cost; twApply(L, u.id); twLog(L, nm + ' · ' + u.name + ' 구매!');
+            }
+        });
+        const mem = twMembers(g.team), rd = twObj(sh.rd);
+        if (now >= (sh.end || 0) || (mem.length > 0 && mem.every(k => rd[k]))) {
+            L.wv++; L.ph = 'play'; L.ts = now; L.ws = 0; L.nx = now + 1000; L.sh = null; g.open.clear();
+        }
+    }
+    function twPrune(now, T, sp, kl, lk, upd) {
+        Object.keys(sp).forEach(key => {
+            const e = sp[key]; if (!e) return; const dk = twDeadKind(key, e, kl, lk); if (!dk) return;
+            let t = lk[key] ? (lk[key].t || 0) : 0; for (let h = 0; h < 3; h++) if (kl[key + '_' + h]) t = Math.max(t, kl[key + '_' + h].t || 0); if (kl[key]) t = Math.max(t, kl[key].t || 0);
+            if (now - t > 3500) { upd['sp/' + key] = null; upd['lk/' + key] = null; upd['kl/' + key] = null; for (let h = 0; h < 3; h++) upd['kl/' + key + '_' + h] = null; }
+        });
+        Object.keys(twObj(T.ul)).forEach(k => { if (now - (T.ul[k].t || 0) > 8000) upd['ul/' + k] = null; });
+        Object.keys(twObj(T.bu)).forEach(k => { if (now - (T.bu[k].t || 0) > 8000) upd['bu/' + k] = null; });
+        Object.keys(twObj(T.fz)).forEach(k => { if (now - (T.fz[k].t || 0) > 70000) upd['fz/' + k] = null; });
+    }
+    // 방장: 아무도 없는 팀을 끝내고, 모든 팀이 끝나면 게임을 마쳐요
+    function twHostTick(now) {
+        const g = TW.g, d = TW.d; if (d.status !== 'playing' || d.t0 == null || now < d.t0 + 3000) return;
+        const m = (d.cfg || {}).m || 0, B = twObj(d.B), pl = twPlayers(); let all = m > 0;
+        for (let i = 0; i < m; i++) {
+            const b = B[i]; if (b && b.ph === 'over') continue; all = false;
+            if (!Object.keys(pl).some(k => pl[k].tm === i) && !g.orphan.has(i)) { g.orphan.add(i); twMarkOver(i, b, now); }
+        }
+        if (all && !g.endSent) { g.endSent = 1; TW.ref.child('status').set('ended').catch(() => {}); }
+    }
+
+    /* ---------- 결과: 팀 순위 · 개인 기여도 ---------- */
+    function twShowResult() {
+        const g = TW.g; if (!TW.on || !g.inGame || g.resShown) return;
+        g.resShown = 1; showScreen('twResultScreen'); twLoadAll(); twRenderResult();
+        clearInterval(g.resI); g.resI = setInterval(() => { if (TW.on && TW.g === g) twRenderResult(); }, 1000);
+    }
+    function twLoadAll() {
+        const g = TW.g; if (TW.d.status !== 'ended' || g.allT || g.allLoading) return; g.allLoading = 1;
+        TW.ref.child('T').once('value').then(sn => { if (!TW.on || TW.g !== g) return; g.allT = sn.val() || {}; twRenderResult(); }).catch(() => { g.allLoading = 0; });
+    }
+    function twTitles(rows) {
+        const t = {}; const add = (r, s) => { if (r) (t[r.u] = t[r.u] || []).push(s); };
+        let best = null; rows.forEach(r => { if (r.k > 0 && (!best || r.k > best.k)) best = r; }); add(best, '🏅 처치왕');
+        best = null; rows.forEach(r => { if (r.k >= 5 && (!best || r.acc > best.acc || (r.acc === best.acc && r.k > best.k))) best = r; }); add(best, '🎯 정확왕');
+        best = null; rows.forEach(r => { if (r.sv >= 2 && (!best || r.sv > best.sv)) best = r; }); add(best, '🛟 구출왕');
+        best = null; rows.forEach(r => { if (r.bs >= 5 && (!best || r.bs > best.bs)) best = r; }); add(best, '🔥 연속왕');
+        return t;
+    }
+    function twContribRows(psObj) {
+        const ps = twObj(psObj), rows = Object.keys(ps).map(u => { const p = ps[u] || {}, k = p.k || 0, w = p.w || 0; return { u: u, n: p.n || twNameOf(u), k: k, sv: p.sv || 0, w: w, bs: p.bs || 0, ul: p.ul || 0, bh: p.bh || 0, acc: (k + w) > 0 ? Math.round(100 * k / (k + w)) : 0 }; });
+        rows.sort((a, b) => (b.k + b.sv) - (a.k + a.sv)); return rows;
+    }
+    function twContribDom(rows, who) {
+        const box = twEl('div', 'tw-contrib'); const tot = rows.reduce((s, r) => s + r.k, 0), mx = Math.max(1, ...rows.map(r => r.k + r.sv)), titles = twTitles(rows);
+        if (rows.length === 0) { box.appendChild(twEl('div', 'rs-empty', '아직 기록이 없어요.')); return box; }
+        rows.forEach(r => {
+            const row = twEl('div', 'tw-crow' + (r.u === TW.me ? ' me' : ''));
+            const top = twEl('div', 'tw-ctop'); top.appendChild(twEl('b', 'tw-cname', r.n + (r.u === TW.me ? ' (나)' : '')));
+            const tl = twEl('span', 'tw-titles'); (titles[r.u] || []).forEach(s => tl.appendChild(twEl('span', 'tw-title', s))); top.appendChild(tl); row.appendChild(top);
+            const bar = twEl('div', 'tw-cbar'); const fill = twEl('i'); fill.style.width = Math.round(100 * (r.k + r.sv) / mx) + '%'; fill.style.background = who !== undefined ? twColor(who) : ''; bar.appendChild(fill); row.appendChild(bar);
+            row.appendChild(twEl('div', 'tw-cnum', '처치 ' + r.k + (tot ? ' (팀의 ' + Math.round(100 * r.k / tot) + '%)' : '') + ' · 정확도 ' + r.acc + '% · 구출 ' + r.sv + ' · 최고 연속 ' + r.bs + (r.ul ? ' · 필살기 ' + r.ul : '') + (r.bh ? ' · 보스 ' + r.bh : '')));
+            box.appendChild(row);
+        });
+        return box;
+    }
+    function twRenderResult() {
+        const g = TW.g; if (!TW.on || !g.inGame) return;
+        const d = TW.d, cfg = d.cfg || {}, m = cfg.m || 0, B = twObj(d.B), now = twNow(), final = d.status === 'ended', pl = twPlayers();
+        document.getElementById('twResTitle').textContent = final ? '🏆 최종 결과' : '💥 우리 팀 성벽 붕괴!';
+        document.getElementById('twResNote').textContent = final ? '모든 팀이 끝났어요. 수고했어요!' : '다른 팀이 아직 지키는 중이에요. 순위는 계속 바뀌어요…';
+        const teams = []; for (let i = 0; i < m; i++) { const b = B[i]; teams.push({ i: i, b: b, ms: b ? (b.tm || 0) + (b.ph === 'play' ? Math.max(0, now - b.ts) : 0) : 0, over: !!(b && b.ph === 'over') }); }
+        teams.sort((a, b) => b.ms - a.ms);
+        const rk = document.getElementById('twResRank'); rk.textContent = '';
+        teams.forEach((t, r) => {
+            const row = twEl('div', 'tw-rrow' + (t.i === g.team ? ' me' : '') + (t.over ? '' : ' live')); row.style.borderColor = twColor(t.i);
+            row.appendChild(twEl('span', 'tw-rno', ['🥇', '🥈', '🥉'][r] || String(r + 1)));
+            const nm = twEl('b', 'tw-rname', twTeamName(t.i)); nm.style.color = twColor(t.i); row.appendChild(nm);
+            const names = Object.keys(pl).filter(k => pl[k].tm === t.i).map(k => pl[k].name).join(', '); row.appendChild(twEl('span', 'tw-rmem', names));
+            row.appendChild(twEl('span', 'tw-rwave', t.b ? '웨이브 ' + t.b.wv : ''));
+            row.appendChild(twEl('span', 'tw-rtime', formatTime(t.ms) + (t.over ? '' : ' ▶')));
+            rk.appendChild(row);
+        });
+        const tot = document.getElementById('twResTotal');
+        if (final && teams.length) { const sum = teams.reduce((s, t) => s + t.ms, 0); tot.textContent = '우리 반 전체가 지킨 시간 합계 ' + formatTime(sum) + ' · 팀 평균 ' + formatTime(sum / teams.length); tot.style.display = 'block'; }
+        else tot.style.display = 'none';
+        const mine = document.getElementById('twResMine'); mine.textContent = ''; mine.appendChild(twContribDom(twContribRows(g.T && g.T.ps), g.team));
+        document.getElementById('twResMineH').textContent = '🙌 ' + twTeamName(g.team) + ' 기여도';
+        const ms = Object.values(twObj(g.s && g.s.ms)), mb = document.getElementById('twResMiss'); mb.textContent = '';
+        if (ms.length === 0) mb.appendChild(twEl('div', 'rs-empty', '놓친 낱말이 없어요. 대단해요! 👏'));
+        ms.slice(-12).forEach(i => { const x = g.pool[i]; if (!x) return; const c = twEl('div', 'tw-miss'); c.appendChild(twEl('b', '', x.w)); c.appendChild(twEl('span', '', ' ' + (x.mq || x.m))); mb.appendChild(c); });
+        const ot = document.getElementById('twResOthers'); ot.textContent = '';
+        if (final && g.allT) {
+            const all = twObj(g.allT);
+            teams.forEach(t => { if (t.i === g.team) return; const det = twEl('details', 'tw-other'); const sm = twEl('summary', '', '🔎 ' + twTeamName(t.i) + ' 기여도 보기'); sm.style.color = twColor(t.i); det.appendChild(sm); det.appendChild(twContribDom(twContribRows((all[t.i] || {}).ps), t.i)); ot.appendChild(det); });
+        }
+        const host = d.host === TW.me;
+        document.getElementById('twResEnd').style.display = (host && !final) ? 'block' : 'none';
+        document.getElementById('twResAgain').style.display = (host && final) ? 'block' : 'none';
+    }
+
+    /* =====================================================================
+       🐲 보스 레이드 — 반 전체가 한 편이 되어 거대한 보스를 함께 쓰러뜨려요 (최대 30명)
+       · 같은 방 이름으로 모이면 방장이 보스 단계를 정하고 시작해요. 친구마다 '서로 다른' 낱말 문제가 나와요.
+       · 뜻을 보고 낱말을 정확히 치면 보스에게 피해! 보스 체력은 '모두의 피해 합계'라서 서버에서 서로 부딪히지 않아요.
+       · 보스는 일정 시간마다 성을 공격해요. 그 사이 반 전체가 정답을 충분히 모으면(방어 게이지) 막아내요.
+       · 체력 70% 방어막 · 40% 약점 노출(피해 2배) · 15% 격노(공격이 빨라짐) 이벤트가 있어요.
+       · 개인 기여도: 피해량·비율·정확도·연속·방패 파괴·약점 사냥·막타 + 칭호. 못 맞힌 낱말은 복습 목록으로 보여줘요.
+       · 방 안에서만 쓰는 값이라 Firebase 규칙을 바꿀 필요가 없어요 (survRooms_vocab/rd_<탄>_<방이름>).
+       ===================================================================== */
+    const RD_MAX = 30, RD_LEAD_MS = 4000, RD_WEAK_MS = 12000;
+    const RD_LV = [
+        { nm: '말랑 개구리왕', ic: '🐸', hp: 460, tl: 420000, w: 26000, qf: 1.6, ch: 10 },
+        { nm: '낱말 도깨비', ic: '👹', hp: 520, tl: 390000, w: 24000, qf: 2.3, ch: 10 },
+        { nm: '심해 먹물왕', ic: '🦑', hp: 580, tl: 360000, w: 22000, qf: 2.8, ch: 9 },
+        { nm: '불꽃 마왕', ic: '😈', hp: 650, tl: 330000, w: 20000, qf: 3.3, ch: 9 },
+        { nm: '전설의 용', ic: '🐉', hp: 740, tl: 300000, w: 18000, qf: 3.6, ch: 9 }
+    ];
+
+    const RD = {};
+    function rdGameFresh() {
+        return { inGame: 0, sig: '', tv: 0, pool: [], perm: [], queue: [], cur: null, curStart: 0, wrongCur: 0, lockUntil: 0, lockT: 0,
+            st: { dmg: 0, ok: 0, ng: 0, bs: 0, cur: 0, ps: 0, sd: 0, wd: 0, mi: [] }, lt: 0, psT: 0, lastFlush: 0, seenA: 0, seenE: {}, lastP: {},
+            heatS: [], heat: 1, tick: 0, resShown: 0, resI: 0, popN: 0, bossT: 0, boardSig: '', hintSig: '', startShown: 0, allSig: '' };
+    }
+    function rdFresh() {
+        return { on: 0, ref: null, stage: 1, code: '', me: '', off: RD.off || 0, lis: [], d: {}, loaded: 0, got: {}, syncT: 0, leaving: 0, rs: 0, mineP: null, endSent: 0, sent: {}, g: rdGameFresh() };
+    }
+    Object.assign(RD, rdFresh());
+
+    const rdNow = () => Date.now() + (RD.off || 0);
+    const rdFmt = ms => { const s = Math.max(0, Math.ceil(ms / 1000)); return Math.floor(s / 60) + ':' + String(s % 60).padStart(2, '0'); };
+    const rdFmtT = ms => { const s = Math.max(0, Math.floor(ms / 1000)); return Math.floor(s / 60) + '분 ' + String(s % 60).padStart(2, '0') + '초'; };
+    const rdNum = n => (Math.round(n) || 0).toLocaleString('en-US');
+    const rdLvOf = cfg => RD_LV[Math.max(1, Math.min(5, +((cfg || {}).lv) || 1)) - 1];
+    function rdPlayers() { const o = {}, pl = twObj(RD.d.players); Object.keys(pl).forEach(k => { const p = pl[k]; if (p && p.name) o[k] = p; }); return o; }
+    function rdParts() { const pl = rdPlayers(); return Object.keys(pl).filter(k => !pl[k].tv).sort(); }
+    function rdHash(s) { let h = 2166136261; for (let i = 0; i < s.length; i++) { h ^= s.charCodeAt(i); h = Math.imul(h, 16777619); } return h >>> 0; }
+    function rdQuota(cfg, nP) { const lv = rdLvOf(cfg); return Math.max(1, Math.ceil(Math.max(1, nP) * lv.qf * (lv.w / 26000))); }
+    function rdAKey(k) { return 'a' + String(k).padStart(3, '0'); }
+
+    /* ---------- 방 데이터에서 보스·성 상태를 계산 (모든 화면이 같은 식으로 계산해요) ---------- */
+    function rdCalc() {
+        const d = RD.d, cfg = d.cfg || {}, P = Object.assign({}, twObj(d.P)), E = twObj(d.E), A = twObj(d.A), g = RD.g, me = RD.me;
+        if (g.inGame && !g.tv && me) { const s = g.st, o = P[me] || {}; if (s.dmg >= (+o.dmg || 0)) P[me] = { n: o.n || (RD.mineP && RD.mineP.name) || '', dmg: s.dmg, ok: s.ok, ng: s.ng, bs: s.bs, ps: s.ps, sd: s.sd, wd: s.wd, lt: g.lt || o.lt || 0, mi: s.mi }; }
+        let D = 0, O = 0, NG = 0; Object.keys(P).forEach(k => { const p = P[k] || {}; D += +p.dmg || 0; O += +p.ok || 0; NG += +p.ng || 0; });
+        const max = +cfg.hp || 1; let absorbed = 0, shield = 0, shieldMax = 0;
+        ['e1', 'e3'].forEach(k => { const e = E[k]; if (e && e.S) { const a = Math.max(0, Math.min(+e.S, D - (+e.at || 0))); absorbed += a; if (+e.S - a > 0 && !shield) { shield = +e.S - a; shieldMax = +e.S; } } });
+        const eff = D - absorbed, hp = Math.max(0, max - eff);
+        const ak = Object.keys(A).sort(); let hits = 0; ak.forEach(k => { if (A[k] && A[k].hit) hits++; });
+        const last = ak.length ? A[ak[ak.length - 1]] : null, castle = Math.max(0, (+cfg.ch || 10) - hits);
+        return { P, E, A, ak, D, O, NG, max, hp, shield, shieldMax, last, nA: ak.length, hits, castle, rage: !!E.e3, weakT: E.e2 ? +E.e2.t : 0 };
+    }
+    const rdWeakOn = c => c.weakT && rdNow() >= c.weakT && rdNow() < c.weakT + RD_WEAK_MS;
+
+    /* ---------- 홈: 레이드 단추 ---------- */
+    function rdInitHome() {
+        const box = document.getElementById('rainRaidGrid'); if (!box) return;
+        box.textContent = '';
+        for (let s = 1; s <= TOTAL_MASTER_STAGES; s++) {
+            const lk = twStageLock(s);
+            const btn = twEl('button', 'day-btn tw-btn rd-btn'); btn.type = 'button';
+            btn.appendChild(document.createTextNode(s + '탄 레이드'));
+            btn.appendChild(twEl('div', 'daily-rate', lk ? '🔒 ' + lk : '반 전체 협동'));
+            if (lk) { btn.classList.add('locked-btn'); btn.addEventListener('click', () => alert('🔒 먼저 [' + lk + ']를 클리어하세요!')); }
+            else btn.addEventListener('click', () => rdJoin(s));
+            box.appendChild(btn);
+        }
+    }
+
+    /* ---------- 방 입장 · 나가기 ---------- */
+    function rdJoin(stage) {
+        if (!isFirebaseActive) { alert('서버 연결이 필요합니다.'); return; }
+        const raw = prompt('🐲 보스 레이드에 접속합니다.\n반 친구들과 같은 [방 이름]을 입력하세요. (예: 6-1반, 자유방)');
+        if (!raw || raw.trim() === '') return;
+        const code = cleanText(raw.replace(/[\.\#\$\[\]\/]/g, ''), 20);
+        if (code === '') { alert('방 이름에 사용할 수 없는 문자만 입력하셨습니다. 다른 이름으로 다시 시도해주세요.'); return; }
+        const me = getUserKey(); if (!me) return;
+        if (RD.on) rdLeave(false);
+        if (TW.on) twLeave(false);
+        const ref = getDB().ref('survRooms_vocab/rd_' + stage + '_' + code);
+        ref.transaction(data => {
+            data = data || {};
+            const pl = {}; Object.keys(data.players || {}).forEach(k => { const p = data.players[k]; if (p && p.name) pl[k] = p; });
+            const n = Object.keys(pl).length;
+            if (n === 0) data = { host: me, status: 'waiting', cfg: { lv: 1 } };
+            else if (!(data.host && pl[data.host])) data.host = Object.keys(pl).sort()[0];
+            if (pl[me]) { data.players = pl; return data; }
+            const back = data.status === 'playing' && data.mem && data.mem[me] ? 1 : 0;
+            if (data.status === 'playing' && !back) return;
+            if (n >= RD_MAX) return;
+            const used = new Set(Object.values(pl).map(p => p.color)); let ci = 0;
+            while (used.has(getPlayerColor(ci))) ci++;
+            pl[me] = { name: userProfile.studentName, color: getPlayerColor(ci), order: n, tv: back && data.mem[me] === 2 ? 1 : 0 };
+            data.players = pl; if (!data.status) data.status = 'waiting'; if (!data.host) data.host = me;
+            return data;
+        }, (err, committed, snap) => {
+            if (err) { alert('입장 중 오류가 발생했습니다. 다시 시도해주세요.'); return; }
+            if (!committed) { const d = (snap && snap.val()) || {}; alert(d.status === 'playing' ? '진행 중인 레이드입니다!' : '방이 꽉 찼습니다. (최대 ' + RD_MAX + '명)'); return; }
+            Object.assign(RD, rdFresh(), { on: 1, ref, stage, code, me });
+            RD.mineP = ((snap.val() || {}).players || {})[me] || null;
+            rdAttach();
+        });
+    }
+    function rdShow(id) { showScreen(id); document.body.classList.toggle('sv-playing', id === 'rdGameScreen'); }
+    function rdAttach() {
+        const ref = RD.ref, me = RD.me;
+        try { ref.child('players/' + me).onDisconnect().remove(); } catch (e) {}
+        netStart();
+        getDB().ref('.info/serverTimeOffset').once('value').then(x => { RD.off = x.val() || 0; }).catch(() => {});
+        const keys = ['status', 'host', 'players', 'cfg', 't0', 'P', 'E', 'A', 'res'];
+        keys.forEach(key => {
+            const r = ref.child(key), fn = s => { if (!RD.on || RD.ref !== ref) return; RD.d[key] = s.val(); RD.got[key] = 1; if (Object.keys(RD.got).length >= keys.length) RD.loaded = 1; rdSync(); };
+            r.on('value', fn); RD.lis.push([r, fn]);
+        });
+        document.getElementById('rdLobbyTitle').textContent = '🐲 보스 레이드 · ' + RD.stage + '탄 · [' + RD.code + ']방';
+        rdShow('rdLobbyScreen');
+    }
+    function rdStopLoops() { const g = RD.g; clearInterval(g.tick); clearTimeout(g.psT); clearTimeout(g.lockT); clearInterval(g.resI); g.tick = 0; }
+    function rdDetach() {
+        rdStopLoops(); clearTimeout(RD.syncT);
+        RD.lis.forEach(p => { try { p[0].off('value', p[1]); } catch (e) {} });
+        document.body.classList.remove('sv-playing', 'rd-tv');
+        Object.assign(RD, rdFresh());
+    }
+    function rdLeave(ask) {
+        if (!RD.on) return;
+        if (ask && RD.g.inGame && RD.d.status === 'playing' && !confirm('레이드를 나갈까요? (친구들은 계속 해요)')) return;
+        rdFlush(1);
+        const ref = RD.ref, me = RD.me; RD.leaving = 1; rdDetach();
+        if (ref) twLeaveRef(ref, me);
+        goToHome();
+    }
+    function rdKicked(msg) { rdFlush(1); rdDetach(); goToHome(); setTimeout(() => alert(msg), 50); }
+    function rdNetEvt(up) {
+        if (!RD.on || !RD.ref || RD.leaving) return;
+        if (!up) return;
+        try { RD.ref.child('players/' + RD.me).onDisconnect().remove(); } catch (e) {}
+        rdRestore();
+    }
+    function rdRestore(n) {
+        if (RD.rs || !RD.on || !RD.ref || RD.leaving) return;
+        const ref = RD.ref, me = RD.me, mine = RD.mineP, tries = n || 0; let why = '';
+        RD.rs = 1;
+        ref.transaction(d => {
+            why = '';
+            if (!RD.on || RD.ref !== ref) { why = 'left'; return; }
+            if (!d) { why = 'gone'; return d; }
+            const pl = {}; Object.keys(d.players || {}).forEach(k => { const p = d.players[k]; if (p && p.name) pl[k] = p; });
+            if (pl[me]) { d.players = pl; return d; }
+            if (Object.keys(pl).length === 0) { why = 'gone'; return; }
+            if (!mine) { why = 'gone'; return; }
+            if (d.status === 'playing' && !(d.mem && d.mem[me])) { why = 'late'; return; }
+            pl[me] = { name: mine.name, color: mine.color, order: mine.order || 0, tv: mine.tv ? 1 : 0 };
+            d.players = pl; return d;
+        }, (err, ok) => {
+            RD.rs = 0;
+            if (!RD.on || RD.ref !== ref) return;
+            if (err) { if (tries < 2) setTimeout(() => rdRestore(tries + 1), 1500); return; }
+            if (!ok) { if (why === 'gone') rdKicked('방이 사라져서 나가졌어요. 다시 입장해 주세요.'); else if (why === 'late') rdKicked('끊긴 사이에 레이드가 시작돼서 나가졌어요.'); return; }
+            try { ref.child('players/' + me).onDisconnect().remove(); } catch (e) {}
+        });
+    }
+
+    /* ---------- 방 데이터가 바뀔 때마다 ---------- */
+    function rdSync() { if (!RD.on) return; clearTimeout(RD.syncT); RD.syncT = setTimeout(rdSync0, 0); }
+    function rdSync0() {
+        if (!RD.on || RD.leaving) return;
+        const d = RD.d, me = RD.me, g = RD.g;
+        if (!RD.loaded) return;
+        if (d.status == null) { rdKicked('방이 사라져서 나가졌어요. 다시 입장해 주세요.'); return; }
+        const pl = rdPlayers();
+        if (!pl[me]) { rdRestore(); return; }
+        RD.mineP = pl[me];
+        if (d.host && !pl[d.host]) attemptHostMigration(RD.ref);
+        if (d.status === 'waiting') {
+            if (g.inGame) rdBackToLobby();
+            if (!document.getElementById('rdLobbyScreen').classList.contains('active')) rdShow('rdLobbyScreen');
+            rdRenderLobby(); return;
+        }
+        if (d.status === 'playing') {
+            if (d.t0 == null || !d.cfg || !d.cfg.hp) return;
+            if (!g.inGame || g.sig !== String(d.t0)) rdEnterGame();
+            else rdPaint();
+            return;
+        }
+        if (d.status === 'ended') {
+            if (!g.inGame) { rdRenderLobby(); if (!document.getElementById('rdLobbyScreen').classList.contains('active')) rdShow('rdLobbyScreen'); return; }
+            if (!g.resShown) rdShowResult(); else rdRenderResult();
+        }
+    }
+
+    /* ---------- 대기실 ---------- */
+    function rdRenderLobby() {
+        const d = RD.d, pl = rdPlayers(), me = RD.me, host = d.host === me, lvN = Math.max(1, Math.min(5, +((d.cfg || {}).lv) || 1)), lv = RD_LV[lvN - 1];
+        const keys = Object.keys(pl).sort((a, b) => (pl[a].order || 0) - (pl[b].order || 0)), parts = keys.filter(k => !pl[k].tv), tvs = keys.filter(k => pl[k].tv);
+        const sel = document.getElementById('rdLv');
+        if (sel.options.length === 0) RD_LV.forEach((l, i) => { const o = document.createElement('option'); o.value = String(i + 1); o.textContent = (i + 1) + '단계 · ' + l.ic + ' ' + l.nm; sel.appendChild(o); });
+        sel.value = String(lvN); sel.disabled = !host;
+        document.getElementById('rdLobbyBoss').textContent = lv.ic;
+        document.getElementById('rdLobbyBossNm').textContent = lv.nm;
+        const hpTot = Math.max(1, parts.length) * lv.hp;
+        document.getElementById('rdLobbyInfo').textContent = '참여 ' + parts.length + '명 · 보스 체력 약 ' + rdNum(hpTot) + ' · 제한 시간 ' + rdFmt(lv.tl) + ' · 성벽 ' + lv.ch;
+        const box = document.getElementById('rdLobbyList'); box.textContent = '';
+        keys.forEach(k => {
+            const c = twEl('span', 'lobby-player' + (k === me ? ' me' : '')); const dot = twEl('span', 'land-color-dot'); dot.style.background = pl[k].color || '#888';
+            c.appendChild(dot); c.appendChild(document.createTextNode(pl[k].name + (k === d.host ? ' 👑' : '') + (pl[k].tv ? ' 📺' : '') + (k === me ? ' (나)' : ''))); box.appendChild(c);
+        });
+        const tvb = document.getElementById('rdBtnTv'); tvb.textContent = pl[me] && pl[me].tv ? '📺 TV 화면으로 보는 중 (누르면 참여로 바꿔요)' : '📺 나는 TV 화면으로 볼래요 (선생님용)';
+        tvb.disabled = d.status !== 'waiting';
+        const ended = d.status === 'ended';
+        document.getElementById('rdLobbyHost').style.display = host ? 'flex' : 'none';
+        const gm = document.getElementById('rdLobbyGuest'); gm.style.display = host ? 'none' : 'block';
+        gm.textContent = ended ? '지난 레이드가 끝났어요. 방장이 다시 시작할 때까지 기다려주세요…' : '방장이 레이드를 시작할 때까지 기다려주세요…';
+        document.getElementById('rdBtnStart').disabled = ended || parts.length === 0;
+        const ag = document.getElementById('rdBtnLobbyAgain'); ag.style.display = (host && ended) ? 'block' : 'none';
+    }
+    function rdSetLv() {
+        if (!RD.on || RD.d.host !== RD.me) return;
+        const lv = Math.max(1, Math.min(5, +document.getElementById('rdLv').value || 1));
+        RD.ref.child('cfg/lv').set(lv).catch(() => {});
+    }
+    function rdToggleTv() {
+        if (!RD.on || RD.d.status !== 'waiting') return;
+        const p = rdPlayers()[RD.me]; RD.ref.child('players/' + RD.me + '/tv').set(p && p.tv ? 0 : 1).catch(() => {});
+    }
+    function rdStart() {
+        if (!RD.on || RD.d.host !== RD.me) return;
+        const t0 = rdNow() + RD_LEAD_MS, seed = Math.floor(Math.random() * 2147483647);
+        RD.ref.transaction(d => {
+            if (!d) return d; if (d.status !== 'waiting') return;
+            const pl = {}; Object.keys(d.players || {}).forEach(k => { const p = d.players[k]; if (p && p.name) pl[k] = p; });
+            const keys = Object.keys(pl), parts = keys.filter(k => !pl[k].tv); if (parts.length === 0) return;
+            const lvN = Math.max(1, Math.min(5, +((d.cfg || {}).lv) || 1)), lv = RD_LV[lvN - 1];
+            const mem = {}; keys.forEach(k => { mem[k] = pl[k].tv ? 2 : 1; });
+            d.players = pl; d.mem = mem; d.cfg = { lv: lvN, seed: seed, n: parts.length, hp: parts.length * lv.hp, ch: lv.ch, tl: lv.tl, w: lv.w, qf: lv.qf };
+            d.t0 = t0; d.status = 'playing'; delete d.P; delete d.E; delete d.A; delete d.res;
+            return d;
+        }, (err, ok) => { if (err || !ok) { if (RD.on) alert('시작하지 못했어요. 잠시 뒤 다시 눌러 주세요.'); } });
+    }
+    function rdAgain() {
+        if (!RD.on || RD.d.host !== RD.me) return;
+        RD.ref.transaction(d => { if (!d) return d; if (d.status !== 'ended') return; d.status = 'waiting'; delete d.P; delete d.E; delete d.A; delete d.res; delete d.t0; delete d.mem; return d; });
+    }
+
+    /* ---------- 전투 시작 ---------- */
+    function rdBackToLobby() {
+        rdStopLoops(); RD.g = rdGameFresh(); document.body.classList.remove('rd-tv');
+        rdShow('rdLobbyScreen'); rdRenderLobby();
+    }
+    function rdEnterGame() {
+        const d = RD.d, me = RD.me;
+        if (RD.g.inGame) rdBackToLobby();
+        const g = RD.g, mine = rdPlayers()[me];
+        g.inGame = 1; g.sig = String(d.t0); g.tv = mine && mine.tv ? 1 : 0;
+        g.pool = rawWords.slice((RD.stage - 1) * MASTER_WORDS_PER_STAGE, RD.stage * MASTER_WORDS_PER_STAGE);
+        const N = g.pool.length, idx = []; for (let i = 0; i < N; i++) idx.push(i);
+        const r = twRng(((d.cfg.seed >>> 0) ^ rdHash(me)) >>> 0); for (let i = N - 1; i > 0; i--) { const j = Math.floor(r() * (i + 1)); const t = idx[i]; idx[i] = idx[j]; idx[j] = t; }
+        g.queue = idx;
+        const o = twObj(d.P)[me]; if (o && !g.tv) { g.st = { dmg: +o.dmg || 0, ok: +o.ok || 0, ng: +o.ng || 0, bs: +o.bs || 0, cur: 0, ps: +o.ps || 0, sd: +o.sd || 0, wd: +o.wd || 0, mi: Object.values(twObj(o.mi)).map(Number) }; g.lt = +o.lt || 0; }
+        const c = rdCalc(); g.seenA = c.nA; Object.keys(c.E).forEach(k => { g.seenE[k] = 1; }); Object.keys(c.P).forEach(k => { g.lastP[k] = +(c.P[k] || {}).dmg || 0; });
+        const lv = rdLvOf(d.cfg);
+        document.getElementById('rdTitle').textContent = '🐲 ' + lv.nm + ' · ' + RD.stage + '탄';
+        document.getElementById('rdBossIc').textContent = lv.ic;
+        document.body.classList.toggle('rd-tv', !!g.tv);
+        document.getElementById('rdMe').style.display = g.tv ? 'none' : '';
+        document.getElementById('rdBoard').style.display = g.tv ? '' : 'none';
+        const inp = document.getElementById('rdInput'); inp.value = ''; inp.readOnly = true;
+        document.getElementById('rdBanner').textContent = '';
+        rdShow('rdGameScreen');
+        if (!g.tv) rdNextWord();
+        clearInterval(g.tick); g.tick = setInterval(rdTick, 200);
+        rdPaint();
+    }
+
+    /* ---------- 내 문제 · 입력 ---------- */
+    function rdNextWord() {
+        const g = RD.g; if (g.tv) return;
+        if (g.queue.length === 0) { const idx = []; for (let i = 0; i < g.pool.length; i++) idx.push(i); for (let i = idx.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); const t = idx[i]; idx[i] = idx[j]; idx[j] = t; } g.queue = idx; }
+        const i = g.queue.shift(); g.cur = { i: i, w: g.pool[i].w, bad: 0 }; g.curStart = Date.now(); g.wrongCur = 0; g.hintSig = '';
+        rdPaintQ();
+    }
+    function rdPaintQ() {
+        const g = RD.g; if (!g.cur) return;
+        const x = g.pool[g.cur.i], hint = g.wrongCur > 0 || Date.now() - g.curStart > 8000;
+        const sig = g.cur.i + '|' + (hint ? 1 : 0); if (g.hintSig === sig) return; g.hintSig = sig;
+        document.getElementById('rdQM').textContent = x.mq || x.m;
+        document.getElementById('rdQH').textContent = hint ? '💡 초성 힌트: ' + getChoseongHint(x.w) : '글자 수: ' + Array.from(x.w.replace(/\s/g, '')).length + '글자';
+    }
+    function rdLock(ms) {
+        const g = RD.g, inp = document.getElementById('rdInput'); g.lockUntil = Date.now() + ms; inp.readOnly = true; inp.value = '';
+        inp.placeholder = '잠깐 쉬어요…'; clearTimeout(g.lockT);
+        g.lockT = setTimeout(() => { if (!RD.on || RD.g !== g) return; inp.readOnly = false; inp.placeholder = '뜻에 맞는 낱말을 입력하고 엔터'; if (document.getElementById('rdGameScreen').classList.contains('active')) inp.focus(); }, ms);
+    }
+    function rdMiss(i) { const s = RD.g.st; if (s.mi.indexOf(i) < 0 && s.mi.length < 15) s.mi.push(i); }
+    function rdKey(e) { if (e.key === 'Enter') rdSubmit(); }
+    function rdSubmit() {
+        const g = RD.g, inp = document.getElementById('rdInput');
+        if (!RD.on || !g.inGame || g.tv || !g.cur || Date.now() < g.lockUntil || RD.d.status !== 'playing' || rdNow() < +RD.d.t0) return;
+        const val = normalizeForCompare(inp.value); if (!val) return;
+        if (val === normalizeForCompare(g.cur.w)) rdCorrect(); else rdWrong();
+    }
+    function rdWrong() {
+        const g = RD.g, s = g.st, inp = document.getElementById('rdInput');
+        s.ng++; s.cur = 0; g.wrongCur++; g.cur.bad = 1; rdMiss(g.cur.i); rainSfx('no');
+        inp.classList.add('shake'); setTimeout(() => inp.classList.remove('shake'), 300);
+        rdLock(1500); g.hintSig = ''; rdPaintQ(); rdPaintMe(); rdSave();
+    }
+    function rdPass() {
+        const g = RD.g; if (!RD.on || !g.inGame || g.tv || !g.cur || Date.now() < g.lockUntil || RD.d.status !== 'playing' || rdNow() < +RD.d.t0) return;
+        const s = g.st; s.ps++; s.cur = 0; rdMiss(g.cur.i);
+        if (g.queue.indexOf(g.cur.i) < 0) g.queue.splice(Math.min(g.queue.length, 6), 0, g.cur.i);
+        rainSfx('tap'); rdLock(2000); rdNextWord(); rdPaintMe(); rdSave();
+    }
+    function rdCorrect() {
+        const g = RD.g, s = g.st, c = rdCalc(), inp = document.getElementById('rdInput');
+        s.ok++; s.cur++; if (s.cur > s.bs) s.bs = s.cur;
+        const weak = rdWeakOn(c), dmg = Math.round((10 + Math.min(10, s.cur)) * g.heat * (weak ? 2 : 1));
+        s.dmg += dmg; if (c.shield > 0) s.sd += dmg; if (weak) s.wd += dmg; g.lt = rdNow();
+        if (g.cur.bad && g.queue.indexOf(g.cur.i) < 0) g.queue.splice(Math.min(g.queue.length, 8), 0, g.cur.i);
+        inp.value = ''; rainSfx('ok');
+        rdPop('-' + dmg + (weak ? ' 🎯' : '') + (c.shield > 0 ? ' 🛡️' : ''), '', 1); rdHitBoss();
+        rdNextWord(); rdSave(); rdPaint();
+    }
+    function rdSave() {
+        const g = RD.g; if (g.psT) return;
+        const wait = Math.max(0, 350 - (Date.now() - g.lastFlush));
+        g.psT = setTimeout(() => { g.psT = 0; rdFlush(); }, wait);
+    }
+    function rdFlush(now) {
+        const g = RD.g; if (!RD.on || !RD.ref || !RD.me || g.tv || !g.inGame) return;
+        if (now) { clearTimeout(g.psT); g.psT = 0; }
+        const s = g.st; g.lastFlush = Date.now();
+        try { RD.ref.child('P/' + RD.me).set({ n: (RD.mineP && RD.mineP.name) || '', dmg: s.dmg, ok: s.ok, ng: s.ng, bs: s.bs, ps: s.ps, sd: s.sd, wd: s.wd, lt: g.lt || 0, mi: s.mi.length ? s.mi : null }); } catch (e) {}
+    }
+
+    /* ---------- 화면 그리기 ---------- */
+    function rdPop(text, cls, mine) {
+        const box = document.getElementById('rdPops'); if (!box || box.childNodes.length > 14) return;
+        const p = twEl('span', 'rd-pop ' + (cls || '') + (mine ? ' mine' : ''), text);
+        p.style.left = (mine ? 38 + Math.random() * 24 : 8 + Math.random() * 84) + '%'; p.style.top = (mine ? 40 : 20 + Math.random() * 50) + '%';
+        box.appendChild(p); setTimeout(() => { try { p.remove(); } catch (e) {} }, 1000);
+    }
+    function rdHitBoss() {
+        const g = RD.g, b = document.getElementById('rdBoss'); if (!b || Date.now() - g.bossT < 160) return; g.bossT = Date.now();
+        b.classList.remove('hit'); void b.offsetWidth; b.classList.add('hit');
+    }
+    function rdBanner(t, ms) {
+        const b = document.getElementById('rdBanner'); if (!b) return; b.textContent = t; b.classList.toggle('on', !!t);
+        clearTimeout(rdBanner.t); if (t && ms) rdBanner.t = setTimeout(() => { b.classList.remove('on'); }, ms);
+    }
+    function rdPaintMe() {
+        const g = RD.g, c = rdCalc(), me = RD.me; if (g.tv) return;
+        const rows = Object.keys(c.P).map(k => ({ k, d: +(c.P[k] || {}).dmg || 0 })).sort((a, b) => b.d - a.d), pos = rows.findIndex(r => r.k === me) + 1;
+        const share = c.D > 0 ? Math.round(g.st.dmg / c.D * 100) : 0;
+        document.getElementById('rdMInfo').textContent = '내 피해 ' + rdNum(g.st.dmg) + ' (' + share + '%) · 정답 ' + g.st.ok + ' · 연속 ' + g.st.cur + ' · 반 ' + (pos || '-') + '위 / ' + rows.length + '명';
+    }
+    function rdTick() {
+        const g = RD.g; if (!RD.on || RD.g !== g || !g.inGame || RD.leaving) return;
+        const now = rdNow(), c = rdCalc();
+        // 열기(반 전체 정답 속도) : 최근 10초 동안 1인당 분당 정답 수
+        if (!g.heatS.length || now - g.heatS[g.heatS.length - 1][0] >= 1000) { g.heatS.push([now, c.O]); while (g.heatS.length > 14) g.heatS.shift(); }
+        const old = g.heatS.find(x => now - x[0] <= 10500) || g.heatS[0], span = Math.max(3000, now - old[0]), nP = Math.max(1, rdParts().length);
+        const r = (c.O - old[1]) / (span / 60000) / nP; g.heat = r >= 12 ? 2 : r >= 8 ? 1.5 : r >= 5 ? 1.2 : 1;
+        if (RD.d.status === 'playing') {
+            if (!g.tv && now >= +RD.d.t0) { const inp = document.getElementById('rdInput'); if (inp.readOnly && Date.now() >= g.lockUntil && !g.startShown) { g.startShown = 1; inp.readOnly = false; inp.placeholder = '뜻에 맞는 낱말을 입력하고 엔터'; inp.focus(); } }
+            if (RD.d.host === RD.me) rdHostTick(c, now);
+        }
+        if (!g.tv) rdPaintQ();
+        rdPaint(c);
+    }
+    function rdPaint(c0) {
+        const g = RD.g; if (!g.inGame) return;
+        const c = c0 || rdCalc(), cfg = RD.d.cfg || {}, lv = rdLvOf(cfg), now = rdNow(), t0 = +RD.d.t0, ended = RD.d.status === 'ended', el = Math.max(0, now - t0);
+        const q = id => document.getElementById(id);
+        q('rdTime').textContent = now < t0 ? '⏱ 시작 ' + Math.ceil((t0 - now) / 1000) : '⏱ ' + rdFmt(Math.max(0, (+cfg.tl || 0) - el));
+        const pct = c.hp / c.max * 100;
+        q('rdHpFill').style.width = pct + '%'; q('rdHpText').textContent = '보스 체력 ' + Math.ceil(pct) + '%  (' + rdNum(c.hp) + ')';
+        q('rdHpBar').classList.toggle('low', pct <= 30);
+        const sh = q('rdShBar'); sh.style.display = c.shield > 0 ? 'block' : 'none';
+        if (c.shield > 0) { q('rdShFill').style.width = (c.shield / c.shieldMax * 100) + '%'; q('rdShText').textContent = '🛡️ 방어막 ' + Math.ceil(c.shield / c.shieldMax * 100) + '% — 정답으로 부숴요!'; }
+        q('rdBoss').classList.toggle('shielded', c.shield > 0); q('rdBoss').classList.toggle('rage', c.rage);
+        const cs = q('rdCastle'); cs.textContent = '🏰 ' + '❤️'.repeat(c.castle) + '🖤'.repeat(Math.max(0, (+cfg.ch || 10) - c.castle));
+        const weak = rdWeakOn(c); const ev = q('rdEvt');
+        ev.textContent = c.shield > 0 ? '🛡️ 방어막' : weak ? '🎯 약점! 피해 ×2 (' + Math.ceil((c.weakT + RD_WEAK_MS - now) / 1000) + '초)' : c.rage ? '🔥 격노' : '⚔️ 전투 중'; ev.className = 'rd-chip evt' + (weak ? ' weak' : c.shield > 0 ? ' sh' : c.rage ? ' rg' : '');
+        q('rdHeat').textContent = '🔥 열기 ×' + g.heat; q('rdHeat').className = 'rd-chip' + (g.heat > 1 ? ' hot' : '');
+        const w = lv.w * (c.rage ? 0.6 : 1), prev = c.last ? +c.last.t : t0, nx = c.last ? +c.last.nx : t0 + lv.w;
+        const frac = Math.max(0, Math.min(1, (now - prev) / Math.max(1, nx - prev))), cnt = c.O - (c.last ? +c.last.so || 0 : 0), Q = rdQuota(cfg, rdParts().length);
+        q('rdAtkT').style.width = (frac * 100) + '%'; q('rdAtkL').textContent = now < t0 ? '곧 시작!' : '💥 보스 공격까지 ' + Math.max(0, Math.ceil((nx - now) / 1000)) + '초';
+        q('rdAtkD').style.width = Math.min(100, cnt / Q * 100) + '%'; q('rdDefBar').classList.toggle('ok', cnt >= Q); q('rdDefText').textContent = '🛡️ 방어 ' + Math.min(cnt, 999) + ' / ' + Q + (cnt >= Q ? ' ✔' : '');
+        // 새 공격 · 새 이벤트 알림
+        if (c.nA > g.seenA) { for (let i = g.seenA; i < c.nA; i++) { const a = c.A[c.ak[i]] || {}; if (!ended) { if (a.hit) { rdBanner('💥 보스의 공격! 성벽 -1', 1800); rainSfx('hurt'); cs.classList.remove('hit'); void cs.offsetWidth; cs.classList.add('hit'); } else { rdBanner('🛡️ 방어 성공! 보스의 공격을 막았어요', 1800); rainSfx('ok'); } } } g.seenA = c.nA; }
+        if (!ended) {
+            if (c.E.e1 && !g.seenE.e1) { g.seenE.e1 = 1; rdBanner('🛡️ 보스가 방어막을 쳤어요! 정답을 모아 부숴요!', 3000); rainSfx('pop'); }
+            if (c.E.e2 && !g.seenE.e2) { g.seenE.e2 = 1; rdBanner('🎯 약점 노출! 12초 동안 피해 2배!', 3000); rainSfx('pop'); }
+            if (c.E.e3 && !g.seenE.e3) { g.seenE.e3 = 1; rdBanner('🔥 보스가 격노했어요! 공격이 빨라져요!', 3200); rainSfx('hurt'); }
+            if (now >= t0 && now < t0 + 1200 && !g.seenE.go) { g.seenE.go = 1; rdBanner('⚔️ 시작! 힘을 모아요!', 1500); }
+        }
+        // 다른 친구들의 공격 효과
+        const keys = Object.keys(c.P); let n = 0;
+        keys.forEach(k => { const dm = +(c.P[k] || {}).dmg || 0, old = g.lastP[k] || 0; if (dm > old && k !== RD.me) { if (n < 4) { n++; if (g.tv) rdPop((c.P[k].n || '') + ' -' + (dm - old), 'tvp') ; else if (n < 3) rdPop('-' + (dm - old), 'other'); rdHitBoss(); } } g.lastP[k] = Math.max(old, dm); });
+        if (g.tv) rdPaintBoard(c); else rdPaintMe();
+    }
+    function rdPaintBoard(c) {
+        const g = RD.g, pl = rdPlayers(), box = document.getElementById('rdBoard'), parts = rdParts();
+        const rows = parts.map(k => ({ k, n: pl[k].name, col: pl[k].color, d: +((c.P[k] || {}).dmg) || 0 })).sort((a, b) => b.d - a.d), mx = Math.max(1, rows[0] ? rows[0].d : 1);
+        const sig = rows.map(r => r.k + ':' + r.d).join('|'); if (sig === g.boardSig) return; g.boardSig = sig;
+        box.textContent = '';
+        rows.forEach((r, i) => {
+            const t = twEl('div', 'rd-tile' + (g.lastTile && g.lastTile[r.k] !== undefined && g.lastTile[r.k] < r.d ? ' flash' : '')); t.style.borderColor = r.col || '';
+            t.appendChild(twEl('b', 'rd-tn', (i < 3 ? ['🥇', '🥈', '🥉'][i] : '') + r.n)); t.appendChild(twEl('span', 'rd-td', rdNum(r.d)));
+            const bar = twEl('div', 'rd-tb'), fi = twEl('i'); fi.style.width = (r.d / mx * 100) + '%'; fi.style.background = r.col || ''; bar.appendChild(fi); t.appendChild(bar); box.appendChild(t);
+        });
+        g.lastTile = {}; rows.forEach(r => { g.lastTile[r.k] = r.d; });
+    }
+
+    /* ---------- 방장: 이벤트 · 보스 공격 · 끝 ---------- */
+    function rdHostTick(c, now) {
+        const d = RD.d, cfg = d.cfg || {}, lv = rdLvOf(cfg), t0 = +d.t0; if (now < t0 || d.status !== 'playing') return;
+        const ref = RD.ref, thr = [0.7, 0.4, 0.15];
+        thr.forEach((th, i) => {
+            const key = 'e' + (i + 1); if (c.E[key] || RD.sent[key] || c.hp > th * c.max) return; RD.sent[key] = 1;
+            const ev = i === 1 ? { t: now, kind: 'weak' } : { t: now, kind: i === 0 ? 'shield' : 'rage', S: Math.round(c.max * (i === 0 ? 0.08 : 0.07)), at: c.D };
+            ref.child('E/' + key).transaction(cur => cur ? undefined : ev, err => { if (err) RD.sent[key] = 0; });
+        });
+        const nx = c.last ? +c.last.nx : t0 + lv.w;
+        if (now >= nx && c.hp > 0 && c.castle > 0 && RD.sent.a !== c.nA + 1) {
+            RD.sent.a = c.nA + 1;
+            const nP = Math.max(1, rdParts().length), Q = rdQuota(cfg, nP), cnt = c.O - (c.last ? +c.last.so || 0 : 0), hit = cnt < Q ? 1 : 0;
+            const val = { t: now, so: c.O, c: cnt, q: Q, hit: hit, nx: now + lv.w * (c.rage ? 0.6 : 1) };
+            ref.child('A/' + rdAKey(c.nA + 1)).transaction(cur => cur ? undefined : val, err => { if (err) RD.sent.a = 0; });
+        }
+        const el = now - t0; let why = '';
+        if (c.hp <= 0) why = 'win'; else if (c.castle <= 0) why = 'castle'; else if (el >= (+cfg.tl || 0)) why = 'time';
+        if (why && !RD.endSent) {
+            RD.endSent = 1; let fin = '', lt = -1; Object.keys(c.P).forEach(k => { const x = +(c.P[k] || {}).lt || 0; if (x > lt) { lt = x; fin = k; } });
+            const res = { r: why === 'win' ? 'win' : 'lose', why: why, t: Math.min(el, +cfg.tl || el), fin: why === 'win' ? fin : '', hp: Math.ceil(c.hp), cs: c.castle };
+            ref.transaction(dd => { if (!dd) return dd; if (dd.status !== 'playing') return; dd.res = res; dd.status = 'ended'; return dd; }, () => { RD.endSent = 0; });
+        }
+    }
+
+    /* ---------- 결과 ---------- */
+    function rdShowResult() {
+        const g = RD.g; if (!RD.on || !g.inGame || g.resShown) return;
+        g.resShown = 1; rdFlush(1); clearInterval(g.tick); g.tick = 0;
+        rdShow('rdResultScreen'); document.body.classList.remove('rd-tv');
+        const res = RD.d.res || {}; try { rainSfx(res.r === 'win' ? 'win' : 'lose'); if (res.r === 'win' && window.vqFx && window.vqFx.confetti) window.vqFx.confetti(60); } catch (e) {}
+        rdRenderResult();
+    }
+    function rdRows(c) {
+        const pl = rdPlayers(), P = c.P, rows = [];
+        Object.keys(P).forEach(k => { const p = P[k] || {}, ok = +p.ok || 0, ng = +p.ng || 0, ps = +p.ps || 0; rows.push({ u: k, n: p.n || (pl[k] && pl[k].name) || '친구', col: (pl[k] && pl[k].color) || '#64748B', d: +p.dmg || 0, ok, ng, ps, acc: ok + ng > 0 ? Math.round(ok / (ok + ng) * 100) : 0, bs: +p.bs || 0, sd: +p.sd || 0, wd: +p.wd || 0, mi: Object.values(twObj(p.mi)).map(Number) }); });
+        rows.sort((a, b) => b.d - a.d || b.ok - a.ok); return rows;
+    }
+    function rdTitles(rows, fin) {
+        const t = {}, add = (r, s) => { if (r) (t[r.u] = t[r.u] || []).push(s); };
+        const best = (f, ok) => { let b = null; rows.forEach(r => { if (ok(r) && (!b || f(r) > f(b))) b = r; }); return b; };
+        add(best(r => r.d, r => r.d > 0), '🏅 딜러왕'); add(best(r => r.acc * 1000 + r.ok, r => r.ok + r.ng >= 10), '🎯 정확왕'); add(best(r => r.bs, r => r.bs >= 5), '🔥 연속왕');
+        add(best(r => r.sd, r => r.sd > 0), '🛡️ 방패 파괴왕'); add(best(r => r.wd, r => r.wd > 0), '🎯 약점 사냥꾼'); if (fin) add(rows.find(r => r.u === fin), '⚔️ 막타!');
+        return t;
+    }
+    function rdRenderResult() {
+        const d = RD.d, c = rdCalc(), res = d.res || {}, cfg = d.cfg || {}, lv = rdLvOf(cfg), me = RD.me, host = d.host === me;
+        const rows = rdRows(c), titles = rdTitles(rows, res.fin), tot = c.D || 1, win = res.r === 'win';
+        const sig = JSON.stringify([res, rows.map(r => [r.u, r.d, r.ok, r.ng]), host]); if (RD.g.allSig === sig) return; RD.g.allSig = sig;
+        document.getElementById('rdResTitle').textContent = win ? '🎉 보스 처치 성공!' : '😢 아쉽게 실패…';
+        const why = win ? lv.nm + '를 ' + rdFmtT(res.t || 0) + ' 만에 쓰러뜨렸어요! 성벽 ' + (res.cs != null ? res.cs : c.castle) + '/' + (cfg.ch || 10) + ' 남음'
+            : res.why === 'castle' ? '성벽이 무너졌어요. 보스 체력 ' + Math.ceil(c.hp / c.max * 100) + '% 남음' : '시간이 다 됐어요. 보스 체력 ' + Math.ceil(c.hp / c.max * 100) + '% 남음';
+        const note = document.getElementById('rdResNote'); note.textContent = why; note.className = 'tw-note rd-resnote ' + (win ? 'win' : 'lose');
+        const okAll = rows.reduce((a, r) => a + r.ok, 0), ngAll = rows.reduce((a, r) => a + r.ng, 0);
+        document.getElementById('rdResClass').textContent = '우리 반 전체 · 정답 ' + okAll + '개 · 정확도 ' + (okAll + ngAll ? Math.round(okAll / (okAll + ngAll) * 100) : 0) + '% · 총 피해 ' + rdNum(c.D) + ' · 참여 ' + rows.length + '명';
+        const mine = rows.find(r => r.u === me), mb = document.getElementById('rdResMine'); mb.textContent = '';
+        const mineH = document.getElementById('rdResMineH'); mineH.style.display = mine ? '' : 'none'; mb.style.display = mine ? '' : 'none';
+        if (mine) {
+            const rank = rows.indexOf(mine) + 1, box = twEl('div', 'tw-crow me rd-mine');
+            const top = twEl('div', 'tw-ctop'); top.appendChild(twEl('span', 'tw-cname', mine.n + ' · ' + rank + '위 / ' + rows.length + '명')); (titles[mine.u] || []).forEach(s => top.appendChild(twEl('span', 'tw-title', s))); box.appendChild(top);
+            const bar = twEl('div', 'tw-cbar'), fi = twEl('i'); fi.style.width = Math.max(2, mine.d / tot * 100) + '%'; bar.appendChild(fi); box.appendChild(bar);
+            box.appendChild(twEl('div', 'rd-big', '내 피해 ' + rdNum(mine.d) + ' · 반 전체의 ' + (mine.d / tot * 100).toFixed(1) + '%'));
+            box.appendChild(twEl('div', 'tw-cnum', '정답 ' + mine.ok + '개 · 오답 ' + mine.ng + '번 · 넘김 ' + mine.ps + '번 · 정확도 ' + mine.acc + '% · 최고 연속 ' + mine.bs + '연속 · 방패 깨기 ' + rdNum(mine.sd) + ' · 약점 일격 ' + rdNum(mine.wd)));
+            mb.appendChild(box);
+        }
+        const rk = document.getElementById('rdResRank'); rk.textContent = '';
+        rows.forEach((r, i) => {
+            const b = twEl('div', 'tw-crow' + (r.u === me ? ' me' : '')); const top = twEl('div', 'tw-ctop');
+            top.appendChild(twEl('span', 'tw-rno', i < 3 ? ['🥇', '🥈', '🥉'][i] : (i + 1) + '위')); const nm = twEl('span', 'tw-cname', r.n); nm.style.color = r.col; top.appendChild(nm);
+            (titles[r.u] || []).forEach(s => top.appendChild(twEl('span', 'tw-title', s))); b.appendChild(top);
+            const bar = twEl('div', 'tw-cbar'), fi = twEl('i'); fi.style.width = Math.max(1, r.d / tot * 100) + '%'; fi.style.background = r.col; bar.appendChild(fi); b.appendChild(bar);
+            b.appendChild(twEl('div', 'tw-cnum', '피해 ' + rdNum(r.d) + ' (' + (r.d / tot * 100).toFixed(1) + '%) · 정답 ' + r.ok + ' · 정확도 ' + r.acc + '% · 최고 연속 ' + r.bs)); rk.appendChild(b);
+        });
+        // 놓친 낱말: 반 전체에서 많이 틀린 순서 + 내가 놓친 것
+        const cnt = {}; rows.forEach(r => r.mi.forEach(i => { cnt[i] = (cnt[i] || 0) + 1; }));
+        const pool = rawWords.slice((RD.stage - 1) * MASTER_WORDS_PER_STAGE, RD.stage * MASTER_WORDS_PER_STAGE);
+        const mk = (idxs, box) => { box.textContent = ''; if (!idxs.length) { box.appendChild(twEl('div', 'tw-cnum', '놓친 낱말이 없어요! 👏')); return; } idxs.forEach(i => { if (!pool[i]) return; const s = twEl('span', 'tw-miss'); s.appendChild(twEl('b', '', pool[i].w)); s.appendChild(document.createTextNode(' — ' + pool[i].m)); box.appendChild(s); }); };
+        mk(Object.keys(cnt).map(Number).sort((a, b) => cnt[b] - cnt[a]).slice(0, 10), document.getElementById('rdResMissAll'));
+        mk(mine ? mine.mi : [], document.getElementById('rdResMiss'));
+        document.getElementById('rdResAgain').style.display = host ? 'block' : 'none';
     }
 
     function joinLandGrabRoom(stage) {
