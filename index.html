@@ -775,86 +775,135 @@ body.tw-on .rain-hp .lbl { display: inline; }
 .tw-h { font-size: 1.2rem; }
 }
 
-/* ===== 🐲 보스 레이드 ===== */
+/* ===== 보스 레이드 — 어둡고 단순한 전투 화면 (글씨 크고 대비 높게) ===== */
 #rainStageScreen .rd-btn { --md-c: var(--c-surv); --md-s: var(--s-surv); }
-.rd-screen { padding: 0 0 12px; }
-.rd-top { display: flex; align-items: center; gap: 10px; padding: 8px 12px; background: var(--surface-2); border-bottom: 2px solid var(--line); }
-.rd-title { flex: 1; font-size: 1.2rem; font-weight: 900; color: var(--ink); }
-.rd-time { font-size: 1.25rem; font-weight: 900; font-variant-numeric: tabular-nums; color: var(--ink); }
-.rd-stage { position: relative; padding: 8px 12px 6px; }
-.rd-banner { min-height: 0; height: 0; overflow: hidden; text-align: center; font-size: 1.2rem; font-weight: 900; color: var(--warn-soft-ink); background: var(--warn-soft); border: 3px solid var(--warn); border-radius: 12px; opacity: 0; transition: opacity .2s; }
-.rd-banner.on { height: auto; padding: 8px 10px; margin-bottom: 6px; opacity: 1; }
-.rd-boss-wrap { position: relative; height: 150px; display: flex; align-items: center; justify-content: center; border-radius: 16px; background: linear-gradient(180deg, var(--sky), var(--surface-2)); border: 3px solid var(--line-2); overflow: hidden; }
-.rd-boss { font-size: 96px; line-height: 1; filter: drop-shadow(0 6px 0 rgba(0,0,0,.18)); transition: filter .2s; }
-.rd-boss.hit { animation: rdHit .22s; }
-.rd-boss.shielded { filter: drop-shadow(0 0 14px #38BDF8) drop-shadow(0 0 4px #38BDF8); }
-.rd-boss.rage { filter: drop-shadow(0 0 16px #EF4444) saturate(1.5); animation: rdRage 1s infinite; }
-@keyframes rdHit { 0% { transform: scale(1); } 40% { transform: scale(.9) rotate(-4deg); } 100% { transform: scale(1); } }
-@keyframes rdRage { 50% { transform: scale(1.06); } }
+.rd-dark {
+  --bg: #070B14; --surface: #0F1729; --surface-2: #131D33; --surface-3: #1B2845;
+  --line: #243350; --line-2: #4A5F8A; --ink: #FFFFFF; --ink-2: #E8EEF9; --ink-3: #B9C6DC;
+  --brand: #60A5FA; --brand-d: #93C5FD; --brand-ink: #06122B; --brand-soft: #16294D; --brand-soft-ink: #E0ECFF;
+  --ok: #34D399; --ok-ink: #04251A; --ok-soft: #0E3023; --ok-soft-ink: #C9F7DE;
+  --bad: #FB7185; --bad-ink: #2A0710; --bad-soft: #3A1520; --bad-soft-ink: #FFD5DB;
+  --warn: #FBBF24; --warn-soft: #3A2D0B; --warn-soft-ink: #FFE9A8;
+  --primary: #60A5FA; --border: #243350;
+  background: var(--bg); color: var(--ink); border-radius: 10px;
+}
+.rd-dark .top-bar { background: var(--surface); border-bottom: 1px solid var(--line); color: var(--ink); border-radius: 10px 10px 0 0; }
+.rd-dark .screen-title { color: var(--ink); letter-spacing: .02em; }
+.rd-dark .stop-btn { background: transparent; color: var(--ink-2); border: 1px solid var(--line-2); border-radius: 6px; font-weight: 700; }
+.rd-dark h3, .rd-dark h4 { color: var(--ink); }
+.rd-dark .land-lobby-box { background: transparent; color: var(--ink); }
+.rd-dark .land-lobby-header { color: var(--ink); font-weight: 800; }
+.rd-dark .lobby-select { background: var(--surface-2); color: var(--ink); border: 1px solid var(--line-2); border-radius: 6px; font-weight: 700; }
+.rd-dark .lobby-player { background: var(--surface-2); color: var(--ink); border: 1px solid var(--line); border-radius: 6px; font-weight: 700; }
+.rd-dark .lobby-player.me { border-color: var(--brand); }
+.rd-dark .sv-rules { background: var(--surface-2); color: var(--ink-2); border: 1px solid var(--line); border-left: 4px solid var(--brand); border-radius: 6px; line-height: 1.6; }
+.rd-dark .btn-lobby-start { background: var(--brand); color: var(--brand-ink); border: 0; border-radius: 6px; font-weight: 900; letter-spacing: .02em; }
+.rd-dark .btn-lobby-start:disabled { background: var(--surface-3); color: var(--ink-3); }
+.rd-dark #rdLobbyGuest { color: var(--ink-2) !important; }
+.rd-lobby-boss { display: flex; align-items: center; gap: 16px; padding: 12px 16px; margin-bottom: 12px; border-radius: 8px; border: 1px solid var(--line); background: var(--surface); }
+.rd-lobby-boss .ic { width: 72px; height: 72px; flex: none; }
+.rd-lobby-boss .ic .rd-svg { width: 72px; height: 72px; }
+.rd-lobby-boss .nm { font-size: 1.5rem; font-weight: 900; color: var(--ink); letter-spacing: .01em; }
+.rd-lobby-info { margin-top: 2px; font-size: 1.05rem; font-weight: 600; color: var(--ink-3); }
+.rd-lobby-tv { width: 100%; margin: 12px 0; padding: 12px; border-radius: 6px; font-size: 1.05rem; font-weight: 800; color: var(--ink); background: transparent; border: 1px dashed var(--line-2); cursor: pointer; }
+
+.rd-screen { padding: 0 0 14px; }
+.rd-top { display: flex; align-items: center; gap: 10px; padding: 10px 14px; background: var(--surface); border-bottom: 1px solid var(--line); border-radius: 10px 10px 0 0; }
+.rd-title { flex: 1; min-width: 0; font-size: 1.02rem; font-weight: 800; letter-spacing: .04em; color: var(--ink-2); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.rd-time { font-size: 1.9rem; font-weight: 900; line-height: 1; font-variant-numeric: tabular-nums; color: var(--ink); }
+.rd-stage { position: relative; padding: 10px 14px 6px; }
+.rd-banner { height: 0; overflow: hidden; text-align: left; font-size: 1.25rem; font-weight: 800; color: #FDE68A; background: var(--surface-2); border: 1px solid #FBBF24; border-left: 6px solid #FBBF24; border-radius: 4px; opacity: 0; transition: opacity .18s; }
+.rd-banner.on { height: auto; padding: 9px 12px; margin-bottom: 8px; opacity: 1; }
+.rd-boss-wrap { position: relative; height: 170px; display: flex; align-items: center; justify-content: center; border-radius: 8px; overflow: hidden; border: 1px solid var(--line);
+  background: radial-gradient(circle at 50% 55%, rgba(96,165,250,.16), transparent 62%), linear-gradient(var(--surface), var(--bg)); }
+.rd-boss { display: flex; align-items: center; justify-content: center; width: 130px; height: 130px; border-radius: 50%; }
+.rd-svg { width: 124px; height: 124px; overflow: visible; filter: drop-shadow(0 0 10px var(--bc)); transition: filter .2s; }
+.rd-svg * { fill: var(--bc); fill-opacity: .12; stroke: var(--bc); stroke-width: 3.5; stroke-linejoin: round; stroke-linecap: round; }
+.rd-svg .f { fill-opacity: 1; stroke: none; }
+.rd-boss.hit { animation: rdHit .2s; }
+.rd-boss.shielded { box-shadow: 0 0 0 3px #22D3EE, 0 0 22px 4px rgba(34,211,238,.55); }
+.rd-boss.rage .rd-svg { --bc: #F43F5E !important; filter: drop-shadow(0 0 16px #F43F5E); }
+.rd-boss.rage { animation: rdRage 1s infinite; }
+@keyframes rdHit { 0% { transform: scale(1); } 40% { transform: scale(.92); filter: brightness(1.7); } 100% { transform: scale(1); } }
+@keyframes rdRage { 50% { transform: scale(1.05); } }
 .rd-pops { position: absolute; inset: 0; pointer-events: none; }
-.rd-pop { position: absolute; font-size: 1.35rem; font-weight: 900; color: #fff; text-shadow: 0 2px 0 #0A1020, 0 0 6px #0A1020; animation: rdPop 1s forwards; white-space: nowrap; }
-.rd-pop.mine { font-size: 1.9rem; color: #FFD43B; }
-.rd-pop.other { opacity: .8; font-size: 1.05rem; }
-.rd-pop.tvp { font-size: 1.5rem; color: #BFE3FF; }
-@keyframes rdPop { 0% { transform: translateY(0) scale(.7); opacity: 0; } 15% { opacity: 1; transform: translateY(-8px) scale(1.1); } 100% { transform: translateY(-48px); opacity: 0; } }
-.rd-bar { position: relative; height: 26px; margin-top: 6px; border-radius: 999px; overflow: hidden; background: var(--surface-3); border: 3px solid var(--line-2); }
-.rd-bar > i { position: absolute; left: 0; top: 0; bottom: 0; display: block; border-radius: 999px; }
-.rd-bar > span { position: relative; z-index: 1; display: block; text-align: center; font-size: .95rem; font-weight: 900; line-height: 20px; color: var(--ink); text-shadow: 0 0 3px var(--surface); }
-#rdHpFill { background: #DC2626; transition: width .25s; }
-.rd-bar.low #rdHpFill { background: #F97316; }
-#rdShFill { background: #38BDF8; transition: width .25s; }
-#rdAtkT { background: #F59E0B; transition: width .2s linear; }
-#rdAtkD { background: #3B82F6; transition: width .25s; }
-.rd-bar.ok #rdAtkD { background: #16A34A; }
-.rd-row { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; margin-top: 6px; }
-.rd-castle { font-size: 1.1rem; font-weight: 900; padding: 2px 8px; border-radius: 10px; background: var(--surface); border: 2px solid var(--line-2); letter-spacing: 1px; }
+.rd-pop { position: absolute; font-size: 1.4rem; font-weight: 900; color: #fff; text-shadow: 0 1px 3px #000, 0 0 8px #000; animation: rdPop 1s forwards; white-space: nowrap; }
+.rd-pop.mine { font-size: 2rem; color: #FBBF24; }
+.rd-pop.other { opacity: .75; font-size: 1.05rem; }
+.rd-pop.tvp { font-size: 1.5rem; color: #93C5FD; }
+@keyframes rdPop { 0% { transform: translateY(0) scale(.8); opacity: 0; } 15% { opacity: 1; transform: translateY(-8px) scale(1.08); } 100% { transform: translateY(-50px); opacity: 0; } }
+.rd-bar { position: relative; height: 30px; margin-top: 8px; border-radius: 4px; overflow: hidden; background: var(--surface-3); border: 1px solid var(--line-2); }
+.rd-bar > i { position: absolute; left: 0; top: 0; bottom: 0; display: block; }
+.rd-bar > span { position: relative; z-index: 1; display: block; text-align: center; font-size: 1.05rem; font-weight: 800; line-height: 28px; color: #fff; text-shadow: 0 1px 2px rgba(0,0,0,.9); letter-spacing: .01em; }
+#rdHpFill { background: linear-gradient(90deg, #DC2626, #EF4444); transition: width .25s; }
+.rd-bar.low #rdHpFill { background: linear-gradient(90deg, #EA580C, #F97316); }
+#rdShBar { height: 26px; }
+#rdShBar > span { line-height: 24px; font-size: 1rem; }
+#rdShFill { background: #0891B2; transition: width .25s; }
+.rd-row { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin-top: 10px; }
+.rd-castle { display: inline-flex; align-items: center; gap: 4px; padding: 5px 10px; border-radius: 4px; background: var(--surface-2); border: 1px solid var(--line-2); }
+.rd-castle .rd-lab { margin-right: 6px; font-size: 1rem; font-weight: 800; color: var(--ink-2); }
+.rd-castle i { display: block; width: 12px; height: 22px; border-radius: 2px; }
+.rd-castle i.on { background: #E8EEF9; }
+.rd-castle i.off { background: #2A3B61; }
 .rd-castle.hit { animation: rdShake .4s; border-color: var(--bad); }
 @keyframes rdShake { 20%,60% { transform: translateX(-6px); } 40%,80% { transform: translateX(6px); } }
-.rd-chip { padding: 3px 11px; border-radius: 999px; border: 3px solid var(--line-2); background: var(--surface); font-size: 1rem; font-weight: 800; color: var(--ink); }
-.rd-chip.hot { background: var(--warn-soft); border-color: var(--warn); color: var(--warn-soft-ink); }
-.rd-chip.evt.sh { background: #D6EDFB; border-color: #0369A1; color: #0A3F63; }
-.rd-chip.evt.weak { background: #FFE8D4; border-color: #C2410C; color: #7C2D0A; }
-.rd-chip.evt.rg { background: var(--bad-soft); border-color: var(--bad); color: var(--bad-soft-ink); }
-.rd-atk { margin-top: 6px; }
-.rd-atk-l { font-size: 1rem; font-weight: 800; color: var(--ink-2); }
-.rd-me { padding: 4px 12px 0; }
-.rd-q { padding: 12px 14px; border-radius: 16px; background: var(--surface); border: 3px solid var(--brand); }
-.rd-qm { font-size: 1.45rem; font-weight: 900; line-height: 1.5; color: var(--ink); word-break: keep-all; }
-.rd-qh { margin-top: 6px; font-size: 1.1rem; font-weight: 800; color: var(--brand); }
-.rd-minfo { margin: 8px 0 6px; font-size: 1rem; font-weight: 800; color: var(--ink-2); }
+.rd-chip { padding: 5px 12px; border-radius: 4px; border: 1px solid var(--line-2); background: var(--surface-2); font-size: 1rem; font-weight: 800; color: var(--ink); letter-spacing: .01em; }
+.rd-chip.hot { border-color: #FBBF24; color: #FDE68A; }
+.rd-chip.evt.sh { border-color: #22D3EE; color: #A5F3FC; }
+.rd-chip.evt.weak { border-color: #FB923C; color: #FED7AA; }
+.rd-chip.evt.rg { border-color: #F43F5E; color: #FECDD3; }
+.rd-atk { margin-top: 10px; }
+.rd-atk-l { font-size: 1.05rem; font-weight: 800; color: var(--ink-2); }
+.rd-atk .rd-bar { height: 22px; margin-top: 5px; }
+.rd-atk .rd-bar > span { line-height: 20px; font-size: .95rem; }
+#rdAtkT { background: #F59E0B; transition: width .2s linear; }
+#rdAtkD { background: #2563EB; transition: width .25s; }
+.rd-bar.ok #rdAtkD { background: #059669; }
+.rd-me { padding: 6px 14px 0; }
+.rd-q { padding: 14px 16px; border-radius: 6px; background: var(--surface-2); border: 1px solid var(--line-2); border-left: 5px solid var(--brand); }
+.rd-qm { font-size: 1.7rem; font-weight: 800; line-height: 1.5; color: #fff; word-break: keep-all; }
+.rd-qh { margin-top: 8px; font-size: 1.15rem; font-weight: 700; color: #93C5FD; letter-spacing: .02em; }
+.rd-minfo { margin: 10px 0 8px; font-size: 1.02rem; font-weight: 700; color: var(--ink-3); }
 .rd-in { display: flex; gap: 8px; }
-.rd-in input { flex: 1; min-width: 0; padding: 12px 14px; font-size: 1.4rem; font-weight: 800; border-radius: 14px; border: 3px solid var(--line-2); background: var(--surface); color: var(--ink); }
-.rd-in input:focus { outline: none; border-color: var(--brand); box-shadow: 0 0 0 3px var(--brand-soft); }
-.rd-in input.shake { animation: rdShake .3s; border-color: #ef4444; }
-.rd-in button { padding: 0 16px; border-radius: 14px; font-size: 1.05rem; font-weight: 900; color: var(--ink); background: var(--surface-2); border: 3px solid var(--line-2); cursor: pointer; }
-.rd-board { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 8px; padding: 6px 12px; }
-.rd-tile { padding: 8px 10px; border-radius: 12px; background: var(--surface); border: 3px solid var(--line-2); color: var(--ink); }
-.rd-tile.flash { background: var(--warn-soft); }
+.rd-in input { flex: 1; min-width: 0; height: 58px; padding: 0 16px; font-size: 1.55rem; font-weight: 800; border-radius: 6px; border: 2px solid var(--line-2); background: #0A1121; color: #fff; }
+.rd-in input::placeholder { color: #7F93B6; font-weight: 600; }
+.rd-in input:focus { outline: none; border-color: var(--brand); box-shadow: 0 0 0 3px rgba(96,165,250,.28); }
+.rd-in input.shake { animation: rdShake .3s; border-color: var(--bad); }
+.rd-in button { padding: 0 18px; border-radius: 6px; font-size: 1.05rem; font-weight: 800; color: var(--ink); background: var(--surface-3); border: 1px solid var(--line-2); cursor: pointer; }
+.rd-board { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 8px; padding: 8px 14px; }
+.rd-tile { padding: 8px 10px; border-radius: 6px; background: var(--surface); border: 1px solid var(--line); color: var(--ink); border-left-width: 4px; }
+.rd-tile.flash { background: var(--surface-3); border-color: #FBBF24; }
 .rd-tn { display: block; font-size: 1.05rem; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-.rd-td { font-size: 1.25rem; font-weight: 900; font-variant-numeric: tabular-nums; }
-.rd-tb { height: 8px; margin-top: 4px; border-radius: 999px; background: var(--surface-3); overflow: hidden; }
+.rd-td { font-size: 1.3rem; font-weight: 900; font-variant-numeric: tabular-nums; }
+.rd-tb { height: 6px; margin-top: 5px; border-radius: 2px; background: var(--surface-3); overflow: hidden; }
 .rd-tb i { display: block; height: 100%; }
-body.rd-tv .rd-boss-wrap { height: 230px; }
-body.rd-tv .rd-boss { font-size: 150px; }
-body.rd-tv .rd-title, body.rd-tv .rd-time { font-size: 1.7rem; }
-body.rd-tv .rd-bar { height: 40px; }
-body.rd-tv .rd-bar > span { font-size: 1.3rem; line-height: 34px; }
-body.rd-tv .rd-banner.on, body.rd-tv .rd-chip, body.rd-tv .rd-atk-l, body.rd-tv .rd-castle { font-size: 1.5rem; }
-body.rd-tv .rd-tn { font-size: 1.3rem; } body.rd-tv .rd-td { font-size: 1.6rem; }
-.rd-lobby-boss { display: flex; align-items: center; gap: 14px; padding: 10px 14px; margin-bottom: 10px; border-radius: 14px; border: 3px solid var(--line-2); background: var(--surface-2); }
-.rd-lobby-boss .ic { font-size: 64px; line-height: 1; }
-.rd-lobby-boss .nm { font-size: 1.4rem; font-weight: 900; color: var(--ink); }
-.rd-lobby-info { font-size: 1.05rem; font-weight: 700; color: var(--ink-2); }
-.rd-lobby-tv { width: 100%; margin: 10px 0; padding: 10px; border-radius: 12px; font-size: 1.05rem; font-weight: 800; color: var(--ink); background: var(--surface-2); border: 3px dashed var(--line-2); cursor: pointer; }
-.rd-resnote { font-size: 1.3rem; padding: 10px 12px; border-radius: 12px; }
-.rd-resnote.win { background: var(--ok-soft); color: var(--ok-soft-ink); }
-.rd-resnote.lose { background: var(--bad-soft); color: var(--bad-soft-ink); }
-.rd-big { margin: 4px 0; font-size: 1.35rem; font-weight: 900; color: var(--ink); }
-.rd-mine { border-width: 3px; }
+body.rd-tv .rd-boss-wrap { height: 250px; }
+body.rd-tv .rd-boss { width: 190px; height: 190px; } body.rd-tv .rd-svg { width: 180px; height: 180px; }
+body.rd-tv .rd-title { font-size: 1.5rem; } body.rd-tv .rd-time { font-size: 2.8rem; }
+body.rd-tv .rd-bar { height: 42px; } body.rd-tv .rd-bar > span { font-size: 1.4rem; line-height: 40px; }
+body.rd-tv .rd-banner.on, body.rd-tv .rd-chip, body.rd-tv .rd-atk-l { font-size: 1.6rem; }
+body.rd-tv .rd-castle i { width: 18px; height: 30px; } body.rd-tv .rd-castle .rd-lab { font-size: 1.4rem; }
+body.rd-tv .rd-tn { font-size: 1.35rem; } body.rd-tv .rd-td { font-size: 1.7rem; }
+.rd-resnote { font-size: 1.35rem; padding: 12px 14px; border-radius: 4px; font-weight: 800; }
+.rd-resnote.win { background: var(--ok-soft); color: var(--ok-soft-ink); border-left: 6px solid #34D399; }
+.rd-resnote.lose { background: var(--bad-soft); color: var(--bad-soft-ink); border-left: 6px solid #FB7185; }
+.rd-dark .tw-total { background: var(--surface-2); color: var(--ink-2); border: 1px solid var(--line); border-radius: 6px; font-weight: 700; line-height: 1.6; }
+.rd-dark .tw-h { color: var(--ink); font-size: 1.2rem; letter-spacing: .02em; border-bottom: 1px solid var(--line); padding-bottom: 6px; }
+.rd-dark .tw-crow { background: var(--surface); border: 1px solid var(--line); border-radius: 6px; color: var(--ink); }
+.rd-dark .tw-crow.me { border-color: var(--brand); box-shadow: inset 4px 0 0 var(--brand); }
+.rd-dark .tw-cname { font-weight: 900; }
+.rd-dark .tw-cnum { color: var(--ink-3); font-weight: 600; }
+.rd-dark .tw-cbar { background: var(--surface-3); border-radius: 2px; }
+.rd-dark .tw-cbar i { background: var(--brand); }
+.rd-dark .tw-rno { color: var(--ink-2); font-weight: 900; min-width: 2.4em; }
+.rd-dark .tw-title { background: transparent; color: #FDE68A; border: 1px solid #FBBF24; border-radius: 3px; font-weight: 800; letter-spacing: .02em; }
+.rd-dark .tw-miss { background: var(--surface-2); color: var(--ink); border: 1px solid var(--line); border-radius: 4px; }
+.rd-big { margin: 6px 0; font-size: 1.4rem; font-weight: 900; color: #fff; }
 @media (max-width: 720px) {
-  .rd-boss-wrap { height: 110px; } .rd-boss { font-size: 70px; }
-  .rd-qm { font-size: 1.25rem; } .rd-board { grid-template-columns: repeat(2, 1fr); }
-  .rd-title { font-size: 1.05rem; }
+  .rd-boss-wrap { height: 132px; } .rd-boss { width: 100px; height: 100px; } .rd-svg { width: 92px; height: 92px; }
+  .rd-qm { font-size: 1.4rem; } .rd-board { grid-template-columns: repeat(2, 1fr); }
+  .rd-time { font-size: 1.6rem; } .rd-in input { height: 54px; font-size: 1.4rem; }
 }
 </style>
 <!--
@@ -1074,7 +1123,7 @@ body.rd-tv .rd-tn { font-size: 1.3rem; } body.rd-tv .rd-td { font-size: 1.6rem; 
         <div class="section-heading tw-heading"><h2>👥 팀전 디펜스 (친구들과 함께)</h2></div>
         <p class="tw-desc">같은 방에 들어와 팀을 나누면, 팀이 <b>같은 하늘 · 같은 성</b>을 함께 지켜요. 팀이 성을 지킨 시간으로 순위가 정해지고, 개인 기여도도 볼 수 있어요.</p>
         <div class="day-grid" id="rainTeamGrid"></div>
-        <div class="section-heading tw-heading"><h2>🐲 보스 레이드 (반 전체 협동)</h2></div>
+        <div class="section-heading tw-heading"><h2>보스 레이드 · 반 전체 협동</h2></div>
         <p class="tw-desc">반 친구 모두(최대 30명)가 한 편이 되어 <b>거대한 보스</b>를 함께 쓰러뜨려요. 친구마다 다른 낱말 문제가 나오고, 정답이 쌓일수록 보스 체력이 줄어요. 끝나면 <b>개인 기여도</b>와 칭호가 나와요.</p>
         <div class="day-grid" id="rainRaidGrid"></div>
     </div>
@@ -1598,30 +1647,30 @@ body.rd-tv .rd-tn { font-size: 1.3rem; } body.rd-tv .rd-td { font-size: 1.6rem; 
         </div>
     </div>
 
-    <!-- 🐲 보스 레이드 대기실 -->
-    <div id="rdLobbyScreen" class="screen">
+    <!-- 보스 레이드 대기실 -->
+    <div id="rdLobbyScreen" class="screen rd-dark">
         <div class="top-bar"><span class="screen-title" id="rdLobbyTitle">보스 레이드 대기실</span><button class="stop-btn" onclick="rdLeave(false)">나가기</button></div>
         <div class="land-lobby-box">
-            <div class="rd-lobby-boss"><span class="ic" id="rdLobbyBoss">🐸</span><div><div class="nm" id="rdLobbyBossNm"></div><div class="rd-lobby-info" id="rdLobbyInfo"></div></div></div>
+            <div class="rd-lobby-boss"><span class="ic" id="rdLobbyBoss"></span><div><div class="nm" id="rdLobbyBossNm"></div><div class="rd-lobby-info" id="rdLobbyInfo"></div></div></div>
             <div class="land-lobby-header"><span>보스 단계</span><div class="land-lobby-controls"><select id="rdLv" class="lobby-select" onchange="rdSetLv()"></select></div></div>
             <h4>참여한 친구들</h4><div class="lobby-player-list" id="rdLobbyList"></div>
             <button type="button" class="rd-lobby-tv" id="rdBtnTv" onclick="rdToggleTv()"></button>
-            <div class="sv-rules">반 전체가 <b>같은 보스</b>를 공격해요. 뜻을 보고 낱말을 정확히 치면 피해! 틀리면 1.5초 쉬어요. 보스가 공격하기 전에 반 전체가 정답을 모으면 <b>방어</b>해요.<br>체력 70% 방어막 · 40% 약점 노출(피해 2배) · 15% 격노! 선생님은 📺 TV 화면으로 보면서 응원할 수 있어요.</div>
-            <div class="lobby-actions" id="rdLobbyHost"><button class="btn-lobby-start" id="rdBtnStart" onclick="rdStart()">⚔️ 레이드 시작!</button></div>
-            <div class="lobby-actions"><button class="btn-lobby-start" id="rdBtnLobbyAgain" style="display:none;" onclick="rdAgain()">🔁 다시 하기</button></div>
+            <div class="sv-rules">반 전체가 <b>같은 보스</b>를 공격해요. 뜻을 보고 낱말을 정확히 치면 피해! 틀리면 1.5초 쉬어요. 보스가 공격하기 전에 반 전체가 정답을 모으면 <b>방어</b>해요.<br>체력 70% 방어막 · 40% 약점 노출(피해 2배) · 15% 격노! 선생님은 TV 화면으로 보면서 응원할 수 있어요.</div>
+            <div class="lobby-actions" id="rdLobbyHost"><button class="btn-lobby-start" id="rdBtnStart" onclick="rdStart()">레이드 시작</button></div>
+            <div class="lobby-actions"><button class="btn-lobby-start" id="rdBtnLobbyAgain" style="display:none;" onclick="rdAgain()">다시 하기</button></div>
             <div id="rdLobbyGuest" style="display:none; text-align:center; padding:15px; font-weight:bold; color:var(--primary);">방장이 레이드를 시작할 때까지 기다려주세요...</div>
         </div>
     </div>
 
-    <!-- 🐲 보스 레이드 전투 -->
-    <div id="rdGameScreen" class="screen rd-screen">
-        <div class="rd-top"><span class="rd-title" id="rdTitle">보스 레이드</span><span class="rd-time" id="rdTime">⏱ 0:00</span><button class="stop-btn" onclick="rdLeave(true)">나가기</button></div>
+    <!-- 보스 레이드 전투 -->
+    <div id="rdGameScreen" class="screen rd-screen rd-dark">
+        <div class="rd-top"><span class="rd-title" id="rdTitle">보스 레이드</span><span class="rd-time" id="rdTime">0:00</span><button class="stop-btn" onclick="rdLeave(true)">나가기</button></div>
         <div class="rd-stage">
             <div class="rd-banner" id="rdBanner" role="status"></div>
-            <div class="rd-boss-wrap"><div class="rd-boss" id="rdBoss"><span id="rdBossIc">🐸</span></div><div class="rd-pops" id="rdPops"></div></div>
+            <div class="rd-boss-wrap"><div class="rd-boss" id="rdBoss"><span id="rdBossIc"></span></div><div class="rd-pops" id="rdPops"></div></div>
             <div class="rd-bar" id="rdHpBar"><i id="rdHpFill"></i><span id="rdHpText"></span></div>
             <div class="rd-bar" id="rdShBar" style="display:none;"><i id="rdShFill"></i><span id="rdShText"></span></div>
-            <div class="rd-row"><span class="rd-castle" id="rdCastle"></span><span class="rd-chip" id="rdHeat">🔥 열기 ×1</span><span class="rd-chip evt" id="rdEvt"></span></div>
+            <div class="rd-row"><span class="rd-castle" id="rdCastle"></span><span class="rd-chip" id="rdHeat">열기 ×1</span><span class="rd-chip evt" id="rdEvt"></span></div>
             <div class="rd-atk"><div class="rd-atk-l" id="rdAtkL"></div><div class="rd-bar atk"><i id="rdAtkT"></i></div><div class="rd-bar def" id="rdDefBar"><i id="rdAtkD"></i><span id="rdDefText"></span></div></div>
         </div>
         <div class="rd-board" id="rdBoard" style="display:none;"></div>
@@ -1632,17 +1681,17 @@ body.rd-tv .rd-tn { font-size: 1.3rem; } body.rd-tv .rd-td { font-size: 1.6rem; 
         </div>
     </div>
 
-    <!-- 🐲 보스 레이드 결과 -->
-    <div id="rdResultScreen" class="screen">
+    <!-- 보스 레이드 결과 -->
+    <div id="rdResultScreen" class="screen rd-dark">
         <div class="top-bar"><span class="screen-title" id="rdResTitle">결과</span><button class="stop-btn" onclick="rdLeave(false)">나가기</button></div>
         <div class="tw-res-box">
             <p class="tw-note" id="rdResNote"></p>
             <div class="tw-total" id="rdResClass" style="display:block;"></div>
-            <h3 class="tw-h" id="rdResMineH">🙌 나의 기여도</h3><div id="rdResMine"></div>
-            <h3 class="tw-h">🏆 우리 반 기여도 순위</h3><div id="rdResRank"></div>
-            <h3 class="tw-h">📝 내가 놓친 낱말 (복습!)</h3><div id="rdResMiss"></div>
-            <h3 class="tw-h">📚 우리 반이 많이 놓친 낱말</h3><div id="rdResMissAll"></div>
-            <div class="lobby-actions"><button class="btn-lobby-start" id="rdResAgain" style="display:none;" onclick="rdAgain()">🔁 다시 도전하기</button></div>
+            <h3 class="tw-h" id="rdResMineH">나의 기여도</h3><div id="rdResMine"></div>
+            <h3 class="tw-h">우리 반 기여도 순위</h3><div id="rdResRank"></div>
+            <h3 class="tw-h">내가 놓친 낱말 (복습)</h3><div id="rdResMiss"></div>
+            <h3 class="tw-h">우리 반이 많이 놓친 낱말</h3><div id="rdResMissAll"></div>
+            <div class="lobby-actions"><button class="btn-lobby-start" id="rdResAgain" style="display:none;" onclick="rdAgain()">다시 도전하기</button></div>
         </div>
     </div>
 
@@ -3984,7 +4033,7 @@ body.rd-tv .rd-tn { font-size: 1.3rem; } body.rd-tv .rd-td { font-size: 1.6rem; 
     }
 
     /* =====================================================================
-       🐲 보스 레이드 — 반 전체가 한 편이 되어 거대한 보스를 함께 쓰러뜨려요 (최대 30명)
+       보스 레이드 — 반 전체가 한 편이 되어 거대한 보스를 함께 쓰러뜨려요 (최대 30명)
        · 같은 방 이름으로 모이면 방장이 보스 단계를 정하고 시작해요. 친구마다 '서로 다른' 낱말 문제가 나와요.
        · 뜻을 보고 낱말을 정확히 치면 보스에게 피해! 보스 체력은 '모두의 피해 합계'라서 서버에서 서로 부딪히지 않아요.
        · 보스는 일정 시간마다 성을 공격해요. 그 사이 반 전체가 정답을 충분히 모으면(방어 게이지) 막아내요.
@@ -3994,12 +4043,22 @@ body.rd-tv .rd-tn { font-size: 1.3rem; } body.rd-tv .rd-td { font-size: 1.6rem; 
        ===================================================================== */
     const RD_MAX = 30, RD_LEAD_MS = 4000, RD_WEAK_MS = 12000;
     const RD_LV = [
-        { nm: '말랑 개구리왕', ic: '🐸', hp: 460, tl: 420000, w: 26000, qf: 1.6, ch: 10 },
-        { nm: '낱말 도깨비', ic: '👹', hp: 520, tl: 390000, w: 24000, qf: 2.3, ch: 10 },
-        { nm: '심해 먹물왕', ic: '🦑', hp: 580, tl: 360000, w: 22000, qf: 2.8, ch: 9 },
-        { nm: '불꽃 마왕', ic: '😈', hp: 650, tl: 330000, w: 20000, qf: 3.3, ch: 9 },
-        { nm: '전설의 용', ic: '🐉', hp: 740, tl: 300000, w: 18000, qf: 3.6, ch: 9 }
+        { nm: '파수꾼', c: '#38BDF8', hp: 460, tl: 420000, w: 26000, qf: 1.6, ch: 10 },
+        { nm: '강철 골렘', c: '#34D399', hp: 520, tl: 390000, w: 24000, qf: 2.3, ch: 10 },
+        { nm: '심해 군주', c: '#A78BFA', hp: 580, tl: 360000, w: 22000, qf: 2.8, ch: 9 },
+        { nm: '화염 군주', c: '#FB923C', hp: 650, tl: 330000, w: 20000, qf: 3.3, ch: 9 },
+        { nm: '종말의 용', c: '#F43F5E', hp: 740, tl: 300000, w: 18000, qf: 3.6, ch: 9 }
     ];
+    // 보스 문장(엠블럼): 단순한 선과 면으로만 그린 SVG
+    const RD_SVG = [
+        '<polygon points="60,8 106,34 106,86 60,112 14,86 14,34"/><polygon points="60,28 90,45 90,75 60,92 30,75 30,45"/><circle cx="60" cy="60" r="11" class="f"/>',
+        '<polygon points="30,14 90,14 108,40 108,92 80,110 40,110 12,92 12,40"/><rect x="34" y="46" width="20" height="12" class="f"/><rect x="66" y="46" width="20" height="12" class="f"/><line x1="38" y1="82" x2="82" y2="82"/>',
+        '<circle cx="60" cy="48" r="30"/><circle cx="60" cy="48" r="9" class="f"/><path d="M34 70 C26 90 36 106 50 108"/><path d="M46 76 C42 94 50 108 60 112"/><path d="M74 76 C78 94 70 108 60 112"/><path d="M86 70 C94 90 84 106 70 108"/>',
+        '<path d="M60 6 C72 30 100 44 94 78 C90 102 72 114 60 114 C48 114 30 102 26 78 C20 44 48 30 60 6Z"/><path d="M60 46 C66 60 80 66 76 84 C74 96 66 100 60 100 C54 100 46 96 44 84 C40 66 54 60 60 46Z" class="f"/>',
+        '<polygon points="60,6 74,40 112,28 88,60 112,92 74,80 60,114 46,80 8,92 32,60 8,28 46,40"/><circle cx="60" cy="60" r="12" class="f"/>'
+    ];
+    function rdBossSvg(lvN) { const l = RD_LV[Math.max(1, Math.min(5, lvN)) - 1]; return '<svg viewBox="0 0 120 120" class="rd-svg" style="--bc:' + l.c + '" aria-hidden="true">' + RD_SVG[Math.max(1, Math.min(5, lvN)) - 1] + '</svg>'; }
+
 
     const RD = {};
     function rdGameFresh() {
@@ -4045,8 +4104,8 @@ body.rd-tv .rd-tn { font-size: 1.3rem; } body.rd-tv .rd-td { font-size: 1.6rem; 
             const lk = twStageLock(s);
             const btn = twEl('button', 'day-btn tw-btn rd-btn'); btn.type = 'button';
             btn.appendChild(document.createTextNode(s + '탄 레이드'));
-            btn.appendChild(twEl('div', 'daily-rate', lk ? '🔒 ' + lk : '반 전체 협동'));
-            if (lk) { btn.classList.add('locked-btn'); btn.addEventListener('click', () => alert('🔒 먼저 [' + lk + ']를 클리어하세요!')); }
+            btn.appendChild(twEl('div', 'daily-rate', lk ? '잠김 · ' + lk : '반 전체 협동'));
+            if (lk) { btn.classList.add('locked-btn'); btn.addEventListener('click', () => alert('먼저 [' + lk + ']를 클리어하세요!')); }
             else btn.addEventListener('click', () => rdJoin(s));
             box.appendChild(btn);
         }
@@ -4055,7 +4114,7 @@ body.rd-tv .rd-tn { font-size: 1.3rem; } body.rd-tv .rd-td { font-size: 1.6rem; 
     /* ---------- 방 입장 · 나가기 ---------- */
     function rdJoin(stage) {
         if (!isFirebaseActive) { alert('서버 연결이 필요합니다.'); return; }
-        const raw = prompt('🐲 보스 레이드에 접속합니다.\n반 친구들과 같은 [방 이름]을 입력하세요. (예: 6-1반, 자유방)');
+        const raw = prompt('보스 레이드에 접속합니다.\n반 친구들과 같은 [방 이름]을 입력하세요. (예: 6-1반, 자유방)');
         if (!raw || raw.trim() === '') return;
         const code = cleanText(raw.replace(/[\.\#\$\[\]\/]/g, ''), 20);
         if (code === '') { alert('방 이름에 사용할 수 없는 문자만 입력하셨습니다. 다른 이름으로 다시 시도해주세요.'); return; }
@@ -4097,7 +4156,7 @@ body.rd-tv .rd-tn { font-size: 1.3rem; } body.rd-tv .rd-td { font-size: 1.6rem; 
             const r = ref.child(key), fn = s => { if (!RD.on || RD.ref !== ref) return; RD.d[key] = s.val(); RD.got[key] = 1; if (Object.keys(RD.got).length >= keys.length) RD.loaded = 1; rdSync(); };
             r.on('value', fn); RD.lis.push([r, fn]);
         });
-        document.getElementById('rdLobbyTitle').textContent = '🐲 보스 레이드 · ' + RD.stage + '탄 · [' + RD.code + ']방';
+        document.getElementById('rdLobbyTitle').textContent = 'BOSS RAID · ' + RD.stage + '탄 · [' + RD.code + ']방';
         rdShow('rdLobbyScreen');
     }
     function rdStopLoops() { const g = RD.g; clearInterval(g.tick); clearTimeout(g.psT); clearTimeout(g.lockT); clearInterval(g.resI); g.tick = 0; }
@@ -4179,18 +4238,18 @@ body.rd-tv .rd-tn { font-size: 1.3rem; } body.rd-tv .rd-td { font-size: 1.6rem; 
         const d = RD.d, pl = rdPlayers(), me = RD.me, host = d.host === me, lvN = Math.max(1, Math.min(5, +((d.cfg || {}).lv) || 1)), lv = RD_LV[lvN - 1];
         const keys = Object.keys(pl).sort((a, b) => (pl[a].order || 0) - (pl[b].order || 0)), parts = keys.filter(k => !pl[k].tv), tvs = keys.filter(k => pl[k].tv);
         const sel = document.getElementById('rdLv');
-        if (sel.options.length === 0) RD_LV.forEach((l, i) => { const o = document.createElement('option'); o.value = String(i + 1); o.textContent = (i + 1) + '단계 · ' + l.ic + ' ' + l.nm; sel.appendChild(o); });
+        if (sel.options.length === 0) RD_LV.forEach((l, i) => { const o = document.createElement('option'); o.value = String(i + 1); o.textContent = (i + 1) + '단계 · ' + l.nm; sel.appendChild(o); });
         sel.value = String(lvN); sel.disabled = !host;
-        document.getElementById('rdLobbyBoss').textContent = lv.ic;
+        document.getElementById('rdLobbyBoss').innerHTML = rdBossSvg(lvN);
         document.getElementById('rdLobbyBossNm').textContent = lv.nm;
         const hpTot = Math.max(1, parts.length) * lv.hp;
         document.getElementById('rdLobbyInfo').textContent = '참여 ' + parts.length + '명 · 보스 체력 약 ' + rdNum(hpTot) + ' · 제한 시간 ' + rdFmt(lv.tl) + ' · 성벽 ' + lv.ch;
         const box = document.getElementById('rdLobbyList'); box.textContent = '';
         keys.forEach(k => {
             const c = twEl('span', 'lobby-player' + (k === me ? ' me' : '')); const dot = twEl('span', 'land-color-dot'); dot.style.background = pl[k].color || '#888';
-            c.appendChild(dot); c.appendChild(document.createTextNode(pl[k].name + (k === d.host ? ' 👑' : '') + (pl[k].tv ? ' 📺' : '') + (k === me ? ' (나)' : ''))); box.appendChild(c);
+            c.appendChild(dot); c.appendChild(document.createTextNode(pl[k].name + (k === d.host ? ' · 방장' : '') + (pl[k].tv ? ' · TV' : '') + (k === me ? ' (나)' : ''))); box.appendChild(c);
         });
-        const tvb = document.getElementById('rdBtnTv'); tvb.textContent = pl[me] && pl[me].tv ? '📺 TV 화면으로 보는 중 (누르면 참여로 바꿔요)' : '📺 나는 TV 화면으로 볼래요 (선생님용)';
+        const tvb = document.getElementById('rdBtnTv'); tvb.textContent = pl[me] && pl[me].tv ? 'TV 화면으로 보는 중 — 누르면 참여로 바꿔요' : 'TV 화면으로 보기 (선생님용)';
         tvb.disabled = d.status !== 'waiting';
         const ended = d.status === 'ended';
         document.getElementById('rdLobbyHost').style.display = host ? 'flex' : 'none';
@@ -4243,9 +4302,9 @@ body.rd-tv .rd-tn { font-size: 1.3rem; } body.rd-tv .rd-td { font-size: 1.6rem; 
         g.queue = idx;
         const o = twObj(d.P)[me]; if (o && !g.tv) { g.st = { dmg: +o.dmg || 0, ok: +o.ok || 0, ng: +o.ng || 0, bs: +o.bs || 0, cur: 0, ps: +o.ps || 0, sd: +o.sd || 0, wd: +o.wd || 0, mi: Object.values(twObj(o.mi)).map(Number) }; g.lt = +o.lt || 0; }
         const c = rdCalc(); g.seenA = c.nA; Object.keys(c.E).forEach(k => { g.seenE[k] = 1; }); Object.keys(c.P).forEach(k => { g.lastP[k] = +(c.P[k] || {}).dmg || 0; });
-        const lv = rdLvOf(d.cfg);
-        document.getElementById('rdTitle').textContent = '🐲 ' + lv.nm + ' · ' + RD.stage + '탄';
-        document.getElementById('rdBossIc').textContent = lv.ic;
+        const lv = rdLvOf(d.cfg), cfgLv = Math.max(1, Math.min(5, +d.cfg.lv || 1));
+        document.getElementById('rdTitle').textContent = 'BOSS RAID · ' + RD.stage + '탄 · ' + lv.nm;
+        document.getElementById('rdBossIc').innerHTML = rdBossSvg(+cfgLv);
         document.body.classList.toggle('rd-tv', !!g.tv);
         document.getElementById('rdMe').style.display = g.tv ? 'none' : '';
         document.getElementById('rdBoard').style.display = g.tv ? '' : 'none';
@@ -4269,7 +4328,7 @@ body.rd-tv .rd-tn { font-size: 1.3rem; } body.rd-tv .rd-td { font-size: 1.6rem; 
         const x = g.pool[g.cur.i], hint = g.wrongCur > 0 || Date.now() - g.curStart > 8000;
         const sig = g.cur.i + '|' + (hint ? 1 : 0); if (g.hintSig === sig) return; g.hintSig = sig;
         document.getElementById('rdQM').textContent = x.mq || x.m;
-        document.getElementById('rdQH').textContent = hint ? '💡 초성 힌트: ' + getChoseongHint(x.w) : '글자 수: ' + Array.from(x.w.replace(/\s/g, '')).length + '글자';
+        document.getElementById('rdQH').textContent = hint ? '초성 힌트  ' + getChoseongHint(x.w) : '글자 수  ' + Array.from(x.w.replace(/\s/g, '')).length;
     }
     function rdLock(ms) {
         const g = RD.g, inp = document.getElementById('rdInput'); g.lockUntil = Date.now() + ms; inp.readOnly = true; inp.value = '';
@@ -4303,7 +4362,7 @@ body.rd-tv .rd-tn { font-size: 1.3rem; } body.rd-tv .rd-td { font-size: 1.6rem; 
         s.dmg += dmg; if (c.shield > 0) s.sd += dmg; if (weak) s.wd += dmg; g.lt = rdNow();
         if (g.cur.bad && g.queue.indexOf(g.cur.i) < 0) g.queue.splice(Math.min(g.queue.length, 8), 0, g.cur.i);
         inp.value = ''; rainSfx('ok');
-        rdPop('-' + dmg + (weak ? ' 🎯' : '') + (c.shield > 0 ? ' 🛡️' : ''), '', 1); rdHitBoss();
+        rdPop('-' + dmg, '', 1); rdHitBoss();
         rdNextWord(); rdSave(); rdPaint();
     }
     function rdSave() {
@@ -4357,28 +4416,28 @@ body.rd-tv .rd-tn { font-size: 1.3rem; } body.rd-tv .rd-td { font-size: 1.6rem; 
         const g = RD.g; if (!g.inGame) return;
         const c = c0 || rdCalc(), cfg = RD.d.cfg || {}, lv = rdLvOf(cfg), now = rdNow(), t0 = +RD.d.t0, ended = RD.d.status === 'ended', el = Math.max(0, now - t0);
         const q = id => document.getElementById(id);
-        q('rdTime').textContent = now < t0 ? '⏱ 시작 ' + Math.ceil((t0 - now) / 1000) : '⏱ ' + rdFmt(Math.max(0, (+cfg.tl || 0) - el));
+        q('rdTime').textContent = now < t0 ? '시작 ' + Math.ceil((t0 - now) / 1000) : rdFmt(Math.max(0, (+cfg.tl || 0) - el));
         const pct = c.hp / c.max * 100;
         q('rdHpFill').style.width = pct + '%'; q('rdHpText').textContent = '보스 체력 ' + Math.ceil(pct) + '%  (' + rdNum(c.hp) + ')';
         q('rdHpBar').classList.toggle('low', pct <= 30);
         const sh = q('rdShBar'); sh.style.display = c.shield > 0 ? 'block' : 'none';
-        if (c.shield > 0) { q('rdShFill').style.width = (c.shield / c.shieldMax * 100) + '%'; q('rdShText').textContent = '🛡️ 방어막 ' + Math.ceil(c.shield / c.shieldMax * 100) + '% — 정답으로 부숴요!'; }
+        if (c.shield > 0) { q('rdShFill').style.width = (c.shield / c.shieldMax * 100) + '%'; q('rdShText').textContent = '방어막 ' + Math.ceil(c.shield / c.shieldMax * 100) + '%  ·  정답으로 부수세요'; }
         q('rdBoss').classList.toggle('shielded', c.shield > 0); q('rdBoss').classList.toggle('rage', c.rage);
-        const cs = q('rdCastle'); cs.textContent = '🏰 ' + '❤️'.repeat(c.castle) + '🖤'.repeat(Math.max(0, (+cfg.ch || 10) - c.castle));
+        const cs = q('rdCastle'); const tc = +cfg.ch || 10, csig = c.castle + '/' + tc; if (cs.dataset.sig !== csig) { cs.dataset.sig = csig; cs.textContent = ''; cs.appendChild(twEl('span', 'rd-lab', '성벽')); for (let i = 0; i < tc; i++) cs.appendChild(twEl('i', i < c.castle ? 'on' : 'off')); }
         const weak = rdWeakOn(c); const ev = q('rdEvt');
-        ev.textContent = c.shield > 0 ? '🛡️ 방어막' : weak ? '🎯 약점! 피해 ×2 (' + Math.ceil((c.weakT + RD_WEAK_MS - now) / 1000) + '초)' : c.rage ? '🔥 격노' : '⚔️ 전투 중'; ev.className = 'rd-chip evt' + (weak ? ' weak' : c.shield > 0 ? ' sh' : c.rage ? ' rg' : '');
-        q('rdHeat').textContent = '🔥 열기 ×' + g.heat; q('rdHeat').className = 'rd-chip' + (g.heat > 1 ? ' hot' : '');
+        ev.textContent = c.shield > 0 ? '방어막' : weak ? '약점 노출  피해 ×2  (' + Math.ceil((c.weakT + RD_WEAK_MS - now) / 1000) + '초)' : c.rage ? '격노' : '전투 중'; ev.className = 'rd-chip evt' + (weak ? ' weak' : c.shield > 0 ? ' sh' : c.rage ? ' rg' : '');
+        q('rdHeat').textContent = '열기 ×' + g.heat; q('rdHeat').className = 'rd-chip' + (g.heat > 1 ? ' hot' : '');
         const w = lv.w * (c.rage ? 0.6 : 1), prev = c.last ? +c.last.t : t0, nx = c.last ? +c.last.nx : t0 + lv.w;
         const frac = Math.max(0, Math.min(1, (now - prev) / Math.max(1, nx - prev))), cnt = c.O - (c.last ? +c.last.so || 0 : 0), Q = rdQuota(cfg, rdParts().length);
-        q('rdAtkT').style.width = (frac * 100) + '%'; q('rdAtkL').textContent = now < t0 ? '곧 시작!' : '💥 보스 공격까지 ' + Math.max(0, Math.ceil((nx - now) / 1000)) + '초';
-        q('rdAtkD').style.width = Math.min(100, cnt / Q * 100) + '%'; q('rdDefBar').classList.toggle('ok', cnt >= Q); q('rdDefText').textContent = '🛡️ 방어 ' + Math.min(cnt, 999) + ' / ' + Q + (cnt >= Q ? ' ✔' : '');
+        q('rdAtkT').style.width = (frac * 100) + '%'; q('rdAtkL').textContent = now < t0 ? '곧 시작' : '보스 공격까지 ' + Math.max(0, Math.ceil((nx - now) / 1000)) + '초';
+        q('rdAtkD').style.width = Math.min(100, cnt / Q * 100) + '%'; q('rdDefBar').classList.toggle('ok', cnt >= Q); q('rdDefText').textContent = '방어 ' + Math.min(cnt, 999) + ' / ' + Q + (cnt >= Q ? '  완료' : '');
         // 새 공격 · 새 이벤트 알림
-        if (c.nA > g.seenA) { for (let i = g.seenA; i < c.nA; i++) { const a = c.A[c.ak[i]] || {}; if (!ended) { if (a.hit) { rdBanner('💥 보스의 공격! 성벽 -1', 1800); rainSfx('hurt'); cs.classList.remove('hit'); void cs.offsetWidth; cs.classList.add('hit'); } else { rdBanner('🛡️ 방어 성공! 보스의 공격을 막았어요', 1800); rainSfx('ok'); } } } g.seenA = c.nA; }
+        if (c.nA > g.seenA) { for (let i = g.seenA; i < c.nA; i++) { const a = c.A[c.ak[i]] || {}; if (!ended) { if (a.hit) { rdBanner('보스의 공격  성벽 -1', 1800); rainSfx('hurt'); cs.classList.remove('hit'); void cs.offsetWidth; cs.classList.add('hit'); } else { rdBanner('방어 성공  보스의 공격을 막았습니다', 1800); rainSfx('ok'); } } } g.seenA = c.nA; }
         if (!ended) {
-            if (c.E.e1 && !g.seenE.e1) { g.seenE.e1 = 1; rdBanner('🛡️ 보스가 방어막을 쳤어요! 정답을 모아 부숴요!', 3000); rainSfx('pop'); }
-            if (c.E.e2 && !g.seenE.e2) { g.seenE.e2 = 1; rdBanner('🎯 약점 노출! 12초 동안 피해 2배!', 3000); rainSfx('pop'); }
-            if (c.E.e3 && !g.seenE.e3) { g.seenE.e3 = 1; rdBanner('🔥 보스가 격노했어요! 공격이 빨라져요!', 3200); rainSfx('hurt'); }
-            if (now >= t0 && now < t0 + 1200 && !g.seenE.go) { g.seenE.go = 1; rdBanner('⚔️ 시작! 힘을 모아요!', 1500); }
+            if (c.E.e1 && !g.seenE.e1) { g.seenE.e1 = 1; rdBanner('방어막 전개  정답을 모아 부수세요', 3000); rainSfx('pop'); }
+            if (c.E.e2 && !g.seenE.e2) { g.seenE.e2 = 1; rdBanner('약점 노출  12초 동안 피해 2배', 3000); rainSfx('pop'); }
+            if (c.E.e3 && !g.seenE.e3) { g.seenE.e3 = 1; rdBanner('격노  보스의 공격이 빨라집니다', 3200); rainSfx('hurt'); }
+            if (now >= t0 && now < t0 + 1200 && !g.seenE.go) { g.seenE.go = 1; rdBanner('전투 시작  힘을 모으세요', 1500); }
         }
         // 다른 친구들의 공격 효과
         const keys = Object.keys(c.P); let n = 0;
@@ -4392,7 +4451,7 @@ body.rd-tv .rd-tn { font-size: 1.3rem; } body.rd-tv .rd-td { font-size: 1.6rem; 
         box.textContent = '';
         rows.forEach((r, i) => {
             const t = twEl('div', 'rd-tile' + (g.lastTile && g.lastTile[r.k] !== undefined && g.lastTile[r.k] < r.d ? ' flash' : '')); t.style.borderColor = r.col || '';
-            t.appendChild(twEl('b', 'rd-tn', (i < 3 ? ['🥇', '🥈', '🥉'][i] : '') + r.n)); t.appendChild(twEl('span', 'rd-td', rdNum(r.d)));
+            t.appendChild(twEl('b', 'rd-tn', (i + 1) + '  ' + r.n)); t.appendChild(twEl('span', 'rd-td', rdNum(r.d)));
             const bar = twEl('div', 'rd-tb'), fi = twEl('i'); fi.style.width = (r.d / mx * 100) + '%'; fi.style.background = r.col || ''; bar.appendChild(fi); t.appendChild(bar); box.appendChild(t);
         });
         g.lastTile = {}; rows.forEach(r => { g.lastTile[r.k] = r.d; });
@@ -4439,15 +4498,15 @@ body.rd-tv .rd-tn { font-size: 1.3rem; } body.rd-tv .rd-td { font-size: 1.6rem; 
     function rdTitles(rows, fin) {
         const t = {}, add = (r, s) => { if (r) (t[r.u] = t[r.u] || []).push(s); };
         const best = (f, ok) => { let b = null; rows.forEach(r => { if (ok(r) && (!b || f(r) > f(b))) b = r; }); return b; };
-        add(best(r => r.d, r => r.d > 0), '🏅 딜러왕'); add(best(r => r.acc * 1000 + r.ok, r => r.ok + r.ng >= 10), '🎯 정확왕'); add(best(r => r.bs, r => r.bs >= 5), '🔥 연속왕');
-        add(best(r => r.sd, r => r.sd > 0), '🛡️ 방패 파괴왕'); add(best(r => r.wd, r => r.wd > 0), '🎯 약점 사냥꾼'); if (fin) add(rows.find(r => r.u === fin), '⚔️ 막타!');
+        add(best(r => r.d, r => r.d > 0), '딜러왕'); add(best(r => r.acc * 1000 + r.ok, r => r.ok + r.ng >= 10), '정확왕'); add(best(r => r.bs, r => r.bs >= 5), '연속왕');
+        add(best(r => r.sd, r => r.sd > 0), '방패 파괴왕'); add(best(r => r.wd, r => r.wd > 0), '약점 사냥꾼'); if (fin) add(rows.find(r => r.u === fin), '막타');
         return t;
     }
     function rdRenderResult() {
         const d = RD.d, c = rdCalc(), res = d.res || {}, cfg = d.cfg || {}, lv = rdLvOf(cfg), me = RD.me, host = d.host === me;
         const rows = rdRows(c), titles = rdTitles(rows, res.fin), tot = c.D || 1, win = res.r === 'win';
         const sig = JSON.stringify([res, rows.map(r => [r.u, r.d, r.ok, r.ng]), host]); if (RD.g.allSig === sig) return; RD.g.allSig = sig;
-        document.getElementById('rdResTitle').textContent = win ? '🎉 보스 처치 성공!' : '😢 아쉽게 실패…';
+        document.getElementById('rdResTitle').textContent = win ? '보스 처치 성공' : '레이드 실패';
         const why = win ? lv.nm + '를 ' + rdFmtT(res.t || 0) + ' 만에 쓰러뜨렸어요! 성벽 ' + (res.cs != null ? res.cs : c.castle) + '/' + (cfg.ch || 10) + ' 남음'
             : res.why === 'castle' ? '성벽이 무너졌어요. 보스 체력 ' + Math.ceil(c.hp / c.max * 100) + '% 남음' : '시간이 다 됐어요. 보스 체력 ' + Math.ceil(c.hp / c.max * 100) + '% 남음';
         const note = document.getElementById('rdResNote'); note.textContent = why; note.className = 'tw-note rd-resnote ' + (win ? 'win' : 'lose');
@@ -4466,7 +4525,7 @@ body.rd-tv .rd-tn { font-size: 1.3rem; } body.rd-tv .rd-td { font-size: 1.6rem; 
         const rk = document.getElementById('rdResRank'); rk.textContent = '';
         rows.forEach((r, i) => {
             const b = twEl('div', 'tw-crow' + (r.u === me ? ' me' : '')); const top = twEl('div', 'tw-ctop');
-            top.appendChild(twEl('span', 'tw-rno', i < 3 ? ['🥇', '🥈', '🥉'][i] : (i + 1) + '위')); const nm = twEl('span', 'tw-cname', r.n); nm.style.color = r.col; top.appendChild(nm);
+            top.appendChild(twEl('span', 'tw-rno', (i + 1) + '위')); const nm = twEl('span', 'tw-cname', r.n); nm.style.color = r.col; top.appendChild(nm);
             (titles[r.u] || []).forEach(s => top.appendChild(twEl('span', 'tw-title', s))); b.appendChild(top);
             const bar = twEl('div', 'tw-cbar'), fi = twEl('i'); fi.style.width = Math.max(1, r.d / tot * 100) + '%'; fi.style.background = r.col; bar.appendChild(fi); b.appendChild(bar);
             b.appendChild(twEl('div', 'tw-cnum', '피해 ' + rdNum(r.d) + ' (' + (r.d / tot * 100).toFixed(1) + '%) · 정답 ' + r.ok + ' · 정확도 ' + r.acc + '% · 최고 연속 ' + r.bs)); rk.appendChild(b);
@@ -4474,7 +4533,7 @@ body.rd-tv .rd-tn { font-size: 1.3rem; } body.rd-tv .rd-td { font-size: 1.6rem; 
         // 놓친 낱말: 반 전체에서 많이 틀린 순서 + 내가 놓친 것
         const cnt = {}; rows.forEach(r => r.mi.forEach(i => { cnt[i] = (cnt[i] || 0) + 1; }));
         const pool = rawWords.slice((RD.stage - 1) * MASTER_WORDS_PER_STAGE, RD.stage * MASTER_WORDS_PER_STAGE);
-        const mk = (idxs, box) => { box.textContent = ''; if (!idxs.length) { box.appendChild(twEl('div', 'tw-cnum', '놓친 낱말이 없어요! 👏')); return; } idxs.forEach(i => { if (!pool[i]) return; const s = twEl('span', 'tw-miss'); s.appendChild(twEl('b', '', pool[i].w)); s.appendChild(document.createTextNode(' — ' + pool[i].m)); box.appendChild(s); }); };
+        const mk = (idxs, box) => { box.textContent = ''; if (!idxs.length) { box.appendChild(twEl('div', 'tw-cnum', '놓친 낱말이 없습니다')); return; } idxs.forEach(i => { if (!pool[i]) return; const s = twEl('span', 'tw-miss'); s.appendChild(twEl('b', '', pool[i].w)); s.appendChild(document.createTextNode(' — ' + pool[i].m)); box.appendChild(s); }); };
         mk(Object.keys(cnt).map(Number).sort((a, b) => cnt[b] - cnt[a]).slice(0, 10), document.getElementById('rdResMissAll'));
         mk(mine ? mine.mi : [], document.getElementById('rdResMiss'));
         document.getElementById('rdResAgain').style.display = host ? 'block' : 'none';
